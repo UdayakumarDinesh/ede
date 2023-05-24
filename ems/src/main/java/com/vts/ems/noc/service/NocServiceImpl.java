@@ -399,6 +399,24 @@ public class NocServiceImpl implements NocService {
 			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
 	
 		//Notification
+			EMSNotification notification1 = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
+			{
+				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification1.setNotificationUrl("Passport.htm");
+				notification1.setNotificationMessage("Noc Passpaort Request Approved");
+				notification1.setNotificationBy(EmpNo);
+				
+				notification1.setNotificationDate(LocalDate.now().toString());
+				notification1.setIsActive(1);
+				notification1.setCreatedBy(userId);
+				notification1.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification1);		
+				
+			}
+			
+			
 		EMSNotification notification = new EMSNotification();
 		if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
 		{
@@ -407,6 +425,8 @@ public class NocServiceImpl implements NocService {
 			notification.setNotificationMessage("Noc Passpaort Request Approved");
 			notification.setNotificationBy(EmpNo);
 		}
+		
+		
 		else if(action.equalsIgnoreCase("A") )
 		{
 			if( noc.getNocStatusCodeNext().equalsIgnoreCase("VGI")) 
@@ -941,5 +961,12 @@ public class NocServiceImpl implements NocService {
 	
 		return dao.getNocApprovedList(empNo,fromdate,todate);
 	}
+	
+	@Override
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception {
+		
+		return dao.getEmpNameDesig(EmpNo);
+	}
+
 }
 

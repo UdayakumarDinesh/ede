@@ -18,6 +18,7 @@ import com.vts.ems.Admin.Service.AdminService;
 import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Tour.dao.TourDao;
 import com.vts.ems.Tour.dto.TourApplyDto;
+import com.vts.ems.Tour.model.TourAdvance;
 import com.vts.ems.Tour.model.TourApply;
 import com.vts.ems.Tour.model.TourOnwardReturn;
 import com.vts.ems.Tour.model.TourTransaction;
@@ -80,8 +81,27 @@ public class TourServiceImpl implements TourService {
 			apply.setInitiatedDate(dto.getInitiatedDate());
 			apply.setRemarks(dto.getRemarks());
 			apply.setTourStatusCode(dto.getTourStatusCode());
+			apply.setTourApplPreviousId(0l);
 		Long TourApplyId = dao.AddTourapply(apply);
-		
+		if(dto.getAdvancePropsed().equalsIgnoreCase("Y") && TourApplyId >0 ) {
+			TourAdvance touradvance = new TourAdvance();
+				touradvance.setTourFare(dto.getTourFare());
+				touradvance.setTourfareFrom(dto.getTourfareFrom());
+				touradvance.setTourfareTo(dto.getTourfareTo());
+				touradvance.setBoardingDays(dto.getBoardingDays());
+				touradvance.setBoardingPerDay(dto.getBoardingPerDay());
+				touradvance.setPerDayAllowance(dto.getPerDayAllowance());
+				touradvance.setAllowanceDays(dto.getAllowanceDays());
+				touradvance.setAllowanceFromDate(dto.getAllowanceFromDate());
+				touradvance.setAllowanceToDate(dto.getAllowanceToDate());
+				touradvance.setStatus(dto.getTourStatusCode());
+				touradvance.setIsActive(dto.getIsActive());
+				touradvance.setCreatedBy(dto.getCreatedBy());
+				touradvance.setCreatedDate(dto.getCreatedDate());
+				touradvance.setTourApplyId(TourApplyId);
+				
+				 dao.AddTouradvance(touradvance);
+		}
 		
 		for(int i=0;i<dto.getTourDates().length;i++) {
 			TourOnwardReturn tourdetails = new TourOnwardReturn(); 
@@ -142,12 +162,13 @@ public class TourServiceImpl implements TourService {
 						if(action!=null && action.equalsIgnoreCase("Edit")) {
 							/* Tour Edit */
 							Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTourAlreadyPresentForSameEmpidAndSameDates(tourid, empno,fromdate,todate);
+							System.out.println("Count 2 : "+checkTDAlreadyPresentForSameEmpidAndSameDate);
 							if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
 								Result[0]="You Can Apply";
 								Result[1]="Pass";
 								return Result;
 								} else {
-										Result[0]="TD Already Present For Same Period";
+										Result[0]="Tour Already Present For Same Period";
 										Result[1]="Fail";
 										Result[2]=String.valueOf(checkTDAlreadyPresentForSameEmpidAndSameDate);
 										return Result;
@@ -155,12 +176,14 @@ public class TourServiceImpl implements TourService {
 						}else {
 							/* First Tour Apply */
 							Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTDAlreadyPresentForSameEmpidAndSameDates(empno,fromdate,todate);
+							System.out.println("Count 1 : "+checkTDAlreadyPresentForSameEmpidAndSameDate);
+							
 							if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
 								Result[0]="You Can Apply";
 								Result[1]="Pass";
 								return Result;
 								} else {
-										Result[0]="TD Already Present For Same Period";
+										Result[0]="Tour Already Present For Same Period";
 										Result[1]="Fail";
 										Result[2]=String.valueOf(checkTDAlreadyPresentForSameEmpidAndSameDate);
 										return Result;
@@ -198,11 +221,7 @@ public class TourServiceImpl implements TourService {
 	
 	@Override
 	public Long EditTourApply(TourApplyDto dto)throws Exception
-	{
-		
-//		String fromdate = 
-//		Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTourAlreadyPresentForSameEmpidAndSameDates(dto.getTourApplyId(), dto.getEmpNo(),dto.getStayFrom(),dto.getStayTo());
-//		
+	{		
 		
 		TourApply apply = dao.getTourApplyData(dto.getTourApplyId());
 		apply.setStayFrom(dto.getStayFrom());
@@ -218,6 +237,44 @@ public class TourServiceImpl implements TourService {
 		apply.setModifiedDate(dto.getModifiedDate());
 		apply.setInitiatedDate(sdtf.format(new Date()));
 		apply.setRemarks(dto.getRemarks());
+		
+		if(dto.getAdvancePropsed().equalsIgnoreCase("Y")){
+			TourAdvance  advance = new TourAdvance();
+			advance.setTourFare(dto.getTourFare());
+			advance.setTourfareFrom(dto.getTourfareFrom());
+			advance.setTourfareTo(dto.getTourfareFrom());
+			advance.setBoardingDays(dto.getBoardingDays());
+			advance.setBoardingPerDay(dto.getBoardingPerDay());
+			advance.setPerDayAllowance(dto.getPerDayAllowance());
+			advance.setAllowanceDays(dto.getAllowanceDays());
+			advance.setAllowanceFromDate(dto.getAllowanceFromDate());
+			advance.setAllowanceToDate(dto.getAllowanceToDate());
+			advance.setTourApplyId(dto.getTourApplyId());
+			System.out.println("Hiiiii     :"+advance.getTourApplyId());
+			TourAdvance touradvdata = dao.GetTourAdvanceData(advance.getTourApplyId());
+			if(touradvdata!=null ){
+				System.out.println("Hiiiii   2222  :"+advance.getTourApplyId());
+				touradvdata.setTourFare(dto.getTourFare());
+				touradvdata.setTourfareFrom(dto.getTourfareFrom());
+				touradvdata.setTourfareTo(dto.getTourfareFrom());
+				touradvdata.setBoardingDays(dto.getBoardingDays());
+				touradvdata.setBoardingPerDay(dto.getBoardingPerDay());
+				touradvdata.setPerDayAllowance(dto.getPerDayAllowance());
+				touradvdata.setAllowanceDays(dto.getAllowanceDays());
+				touradvdata.setAllowanceFromDate(dto.getAllowanceFromDate());
+				touradvdata.setAllowanceToDate(dto.getAllowanceToDate());
+				touradvdata.setTourApplyId(dto.getTourApplyId());
+				touradvdata.setTourAdvanceId(dto.getTourAdvanceId());
+				touradvdata.setModifiedBy(dto.getModifiedBy());
+				touradvdata.setModifiedDate(dto.getModifiedDate());
+				dao.UpdateTourAdvance(touradvdata);
+			}else {
+				System.out.println("Hiiiii  123   :"+advance.getTourApplyId());
+				advance.setCreatedBy(dto.getModifiedBy());
+				advance.setCreatedDate(dto.getModifiedDate());
+				dao.AddTouradvance(advance);
+			}
+		}
 		Long tourapplyid = dao.UpdateTourApply(apply); 
 		
 		int details = dao.DeleteOnwardReturnData(dto.getTourApplyId());
@@ -573,10 +630,108 @@ public class TourServiceImpl implements TourService {
 	{
 		return dao.GetTourDetails(tourapplyid);
 	}
+	@Override
+	public Object[] GetTourAdvanceDetails(String tourapplyid)throws Exception
+	{
+		return dao.GetTourAdvanceDetails(tourapplyid);
+	}
 	
 	@Override
 	public List<Object[]> getTourOnwardReturnDetails(String tourapplyid)throws Exception
 	{
 		return dao.getTourOnwardReturnDetails(tourapplyid);
 	}
+	
+	@Override
+	public Long checkTourAlreadyPresentForSameEmpidAndSameDates(String tourid, String empid,String DepartureDate,String ArrivalDate)throws Exception
+	{
+		String fromdate = DateTimeFormatUtil.RegularToSqlDate(DepartureDate);
+		String todate = DateTimeFormatUtil.RegularToSqlDate(ArrivalDate);
+		return dao.checkTourAlreadyPresentForSameEmpidAndSameDates( tourid,  empid, fromdate, todate);
+	}
+
+	@Override
+	public long checkTourCount(String empno, String DepartureDate, String ArrivalDate) throws Exception {
+		String fromdate = DateTimeFormatUtil.RegularToSqlDate(DepartureDate);
+		String todate = DateTimeFormatUtil.RegularToSqlDate(ArrivalDate);
+		return dao.checkTDAlreadyPresentForSameEmpidAndSameDates(empno,fromdate,todate);
+	}
+	
+	@Override
+	public Long ModifyTourApply(TourApplyDto dto)throws Exception
+	{
+		long result =  dao.UpdateTourAppply(dto);
+		
+		if(result>0) {
+			TourApply apply = new TourApply();
+			apply.setTourNo(dto.getTourNo().replace("/", "_"));
+			apply.setStayFrom(dto.getStayFrom());
+			apply.setStayTo(dto.getStayTo());
+			apply.setStayPlace(dto.getStayPlace());
+			apply.setPurpose(dto.getPurpose());
+			apply.setAirTravJust(dto.getAirTravJust());
+			apply.setAdvancePropsed(dto.getAdvancePropsed());
+			apply.setEmpNo(dto.getEmpNo());
+			apply.setDivisionId(dto.getDivisionId());
+			apply.setEarliestTime(dto.getEarliestTime());
+			apply.setEarliestDate(dto.getEarliestDate());
+			apply.setEarliestPlace(dto.getEarliestPlace());
+			apply.setCreatedBy(dto.getCreatedBy());
+			apply.setCreatedDate(dto.getCreatedDate());
+			apply.setIsActive(dto.getIsActive());
+			apply.setInitiatedDate(dto.getInitiatedDate());
+			apply.setRemarks(dto.getRemarks());
+			apply.setTourStatusCode(dto.getTourStatusCode());
+			
+			
+		Long TourApplyId = dao.AddTourapply(apply);
+		
+		
+			for(int i=0;i<dto.getTourDates().length;i++) {
+				TourOnwardReturn tourdetails = new TourOnwardReturn(); 
+					tourdetails.setTourApplyId(TourApplyId);
+					tourdetails.setTourDate(DateTimeFormatUtil.dateConversionSql(dto.getTourDates()[i]));
+					tourdetails.setTourTime(dto.getTourTimes()[i]);
+					tourdetails.setModeId(Long.parseLong(dto.getModeofTravel()[i]));
+					tourdetails.setFromCityId(Long.parseLong(dto.getFromCity()[i]));
+					tourdetails.setToCityId(Long.parseLong(dto.getToCity()[i]));
+				dao.AddTourOnwardReturn(tourdetails);
+			}
+			
+			// Tour Transaction 
+			TourTransaction transaction = new TourTransaction();
+				transaction.setActionBy(dto.getEmpNo());
+				transaction.setActionDate(dto.getInitiatedDate());
+				transaction.setTourApplyId(TourApplyId);
+				transaction.setTourStatusCode("INI");
+				transaction.setTourRemarks(dto.getRemarks());
+			
+			dao.AddTourTransaction(transaction);
+		
+		  return TourApplyId;
+		  
+		}else {
+			
+			return result;
+		}
+	}
+	
+	@Override	
+	public List<Object[]> GetTourAdvanceList(String empno)throws Exception
+	{
+		return dao.GetTourAdvanceList(empno);
+	}
+	@Override
+	public TourAdvance  GetTourAdvanceData(Long tourid) throws Exception
+	{
+		return dao.GetTourAdvanceData(tourid);
+	}
+	
+	@Override
+	public Object[] GetPAAndFA()throws Exception
+	{
+		return dao.GetPAAndFA();
+	}
+
+
 }

@@ -58,7 +58,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<li class="breadcrumb-item "><a href="TourProgram.htm"> Tour </a></li>
-						<li class="breadcrumb-item active " aria-current="page">Edit Tour Program </li>
+						<li class="breadcrumb-item active " aria-current="page">Modify Tour Program </li>
 					</ol>
 				</div>
 			</div>
@@ -73,7 +73,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 							<div class="card-header" style="height: 43px;"> <h4>Tour Application  	<span id="sp" style=" float: right;"></span></h4>
 							</div>					
 							<div class="card-body">
-					<form action="TourApplyList.htm" method="POST" autocomplete="off" id="TourRequestForm">
+					<form action="TourModify.htm" method="POST" autocomplete="off" id="TourRequestForm">
 								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 								    <div class="form-group">
 								        <div class="row">
@@ -112,7 +112,10 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 											</div>
 											 <div class="col-md-3">
 												 <label >Required Advance Amt : <span class=" mandatory ">*</span></label>
-												  <input  type="text" <%if(apply!=null && apply.getAdvancePropsed()>0){%>value="<%=apply.getAdvancePropsed()%>" <%}%> name="reqadvamt"  id="reqadvamt" class=" form-control input-sm " placeholder="Enter Amount"     maxlength="12" required="required">                     	
+												 <select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" name="reqadvamt"  id="reqadvamt" onchange="HideTourAdv()" data-live-search="true" data-container="body" >
+													     <option value="N" <%if(apply!=null && apply.getAdvancePropsed().equalsIgnoreCase("N")){%>selected="selected" <%}%>>No</option>
+							                             <option value="Y" <%if(apply!=null && apply.getAdvancePropsed().equalsIgnoreCase("Y")){%>selected="selected" <%}%>>Yes</option>
+							                     </select> 
 											 </div>
 											 <div class="col-md-4">	
 											 		<label>Remarks : </label>
@@ -212,8 +215,8 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 	         		 <button type="button" class="btn btn-sm submit-btn" style="background-color: #417ccd;" id="tour" name="check" value="submit" onclick="TourCheck()">Check Tour</button> 	
 	         </div>
 	         <div align="center">
-	        	 <input type="hidden" name="tourapplyid" <%if(apply!=null && apply.getTourApplyId()!=null){%> value="<%=apply.getTourApplyId()%>" <%}%>>
-	        	 <input type="hidden" name="Action"  value="SubmitEdit" >
+	        	 <input type="hidden" name="tourapplyid" <%if(apply!=null && apply.getTourApplyId()!=null){%> value="SubmitModify/<%=apply.getTourApplyId()%>" <%}%>>
+	        	 <input type="hidden" name="tourno" <%if(apply!=null && apply.getTourNo()!=null){%> value="<%=apply.getTourNo()%>" <%}%>>
 	         	<button type="button" class="btn btn-sm submit-btn" id="submitbtn" name="Action1" value="SubmitEdit1" onclick="TourApply()">Submit</button>	         	
 	         </div>
 		</form>		 

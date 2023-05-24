@@ -675,7 +675,27 @@ public class NocDaoImpl implements NocDao {
 		return (List<Object[]>)query.getResultList();
 	}
 	
-	
+	private static final String NAMEANDDESIG = "SELECT DISTINCT a.EmpNo,a.EmpName,b.Designation,d.PayLevel,c.BasicPay,c.Title FROM employee a,employee_desig b,employee_details c,pis_pay_level d WHERE a.DesigId=b.DesigId AND a.IsActive=1 AND a.EmpNo=c.EmpNo AND d.PayLevelId=c.PayLevelId AND a.EmpNo=:EmpNo LIMIT 1";
+	@Override
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception
+	{
+		try {
+			
+			Query query= manager.createNativeQuery(NAMEANDDESIG);
+			query.setParameter("EmpNo", EmpNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getEmpNameDesig " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
 }
 	
 

@@ -23,6 +23,7 @@ public class TourApply {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long TourApplyId;
 	private String TourNo;
+	private Long TourApplPreviousId;
 	private String EmpNo;
 	private Long DivisionId;
 	private String Purpose;
@@ -34,7 +35,7 @@ public class TourApply {
 	private Date StayTo;
 	private String StayPlace;
 	private String AirTravJust;
-	private int AdvancePropsed;
+	private String AdvancePropsed;
 	private int AdvanceIssued;
 	private String TourStatusCode;
 	private String FundsAvailable;

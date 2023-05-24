@@ -113,7 +113,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					  <tbody>
 						<tr>
 						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(MobFormData!=null && MobFormData[8]!=null){ %> <%=MobFormData[8] %> <%} %> </td>
-						  <td style="border: 0;width:17%;">To &emsp;: &nbsp;P&A Dept</td>
+						  <td style="border: 0;width:17%;">To : &nbsp;&nbsp;P&A Dept</td>
 						 </tr>					
 						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <%if(MobFormData!=null && MobFormData[1]!=null){ %> <%=MobFormData[1] %> <%} %></td> </tr>
 						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; 
@@ -158,7 +158,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   </div>
 				   <br><br>
 				   <div style="width:100%;text-align: right;margin-left:-5%;"> </div>	
-				   <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
+				   <div style="border:0px;width: 100%; text-align: right;"> Incharge - P&A 
 				   <br>	
 				   <br>
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
@@ -199,12 +199,14 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   		</div> --%>
 					   <div align="left">
 						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					   </div>
-				   	
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MobileFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
+						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					   
+					   <button style="margin-top: -9%" type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MobileFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
 							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
 						</button>
+					   </div>
+				   	
+				   	
 					<%} %>
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>

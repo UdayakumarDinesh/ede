@@ -133,12 +133,23 @@ public class TourController {
 			String earlistdate = req.getParameter("EarliestDate");
 			String earlistplace  = req.getParameter("EarliestPlace");
 			String remarks = req.getParameter("Remarks");
-
+			
 			String[]  tourdates = req.getParameterValues("DepDate");
 			String[]  tourtimes = req.getParameterValues("tourtime");
 			String[]  modeoftravel = req.getParameterValues("modeoftravel");
 			String[]  fromcity = req.getParameterValues("fromcity");
 			String[]  tocity = req.getParameterValues("tocity");
+			
+			/* TOUR ADVANCE DETAILS */
+			String fareamount = req.getParameter("tourfare");
+			String Farefromdate = req.getParameter("farefromdate");
+			String faretodate = req.getParameter("faretodate");
+			String boardingdays = req.getParameter("boardingdays");
+			String chargeperday = req.getParameter("boardingperday");
+			String allowanceperday = req.getParameter("allowanceperday");
+			String allowancedays = req.getParameter("allowancenoday");
+			String allowancefromdate = req.getParameter("allowancefromdate");
+			String allowancetodate = req.getParameter("allowancetodate");
 			
 			TourApplyDto applydto = new TourApplyDto();
 			applydto.setStayFrom(DateTimeFormatUtil.dateConversionSql(depdate));
@@ -147,9 +158,6 @@ public class TourController {
 			applydto.setPurpose(purpose);
 			if(airtraveljust!=null){
 				applydto.setAirTravJust(airtraveljust);
-			}
-			if(reqadvamt!=null) {
-				applydto.setAdvancePropsed(Integer.parseInt(reqadvamt));
 			}
 			applydto.setEmpNo(empno);
 			applydto.setDivisionId(divisionid);
@@ -167,13 +175,34 @@ public class TourController {
 			applydto.setModeofTravel(modeoftravel);
 			applydto.setFromCity(fromcity);
 			applydto.setToCity(tocity);
-			
-			Long count  = service.AddTourApply(applydto);
-			if (count != 0) {
-				redir.addAttribute("result", "Tour program Initiated successfully");
-			} else {
-				redir.addAttribute("resultfail", "Tour program Initiated  Unsuccessfull");
+			if(reqadvamt!=null && reqadvamt.equalsIgnoreCase("N")) {
+				applydto.setAdvancePropsed(reqadvamt);
 			}
+			if(reqadvamt!=null && reqadvamt.equalsIgnoreCase("Y")) {
+				applydto.setAdvancePropsed(reqadvamt);
+				/* TOUR ADVANCE DETAILS */
+				applydto.setTourFare(Integer.parseInt(fareamount));
+				applydto.setTourfareFrom(DateTimeFormatUtil.dateConversionSql(Farefromdate));
+				applydto.setTourfareTo(DateTimeFormatUtil.dateConversionSql(faretodate));
+				applydto.setBoardingDays(Integer.parseInt(boardingdays));
+				applydto.setBoardingPerDay(Integer.parseInt(chargeperday));
+				applydto.setPerDayAllowance(Integer.parseInt(allowanceperday));
+				applydto.setAllowanceDays(Integer.parseInt(allowancedays));
+				applydto.setAllowanceFromDate(DateTimeFormatUtil.dateConversionSql(allowancefromdate));
+				applydto.setAllowanceToDate(DateTimeFormatUtil.dateConversionSql(allowancetodate));
+			}
+			Long result = service.checkTourCount((String) ses.getAttribute("EmpNo"),depdate,arrdate);
+			if(result > 0) {
+				redir.addAttribute("resultfail", "Tour Already Present For Same Period");
+			}else {
+				Long count  = service.AddTourApply(applydto);
+				if (count != 0) {
+					redir.addAttribute("result", "Tour program Initiated successfully");
+				} else {
+					redir.addAttribute("resultfail", "Tour program Initiated  Unsuccessfull");
+				}
+			}
+			
 			
 			return "redirect:/TourApplyList.htm";
 		} catch (Exception e) {
@@ -197,7 +226,11 @@ public class TourController {
 			
 			if(action!=null && action.equalsIgnoreCase("EDIT")){
 				String tourid = actval.split("/")[1];
-				req.setAttribute("TourApply", service.getTourApplyData(Long.parseLong(tourid)));			
+				TourApply tour = service.getTourApplyData(Long.parseLong(tourid));
+				if(tour!=null && tour.getAdvancePropsed().equalsIgnoreCase("Y")) {
+					req.setAttribute("touradvancedetails", service.GetTourAdvanceData(Long.parseLong(tourid)));
+				}
+				req.setAttribute("TourApply", tour);			
 				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnData(Long.parseLong(tourid)));
 				req.setAttribute("ModeOfTravelList", service.GetModeofTravel());
 				req.setAttribute("CityList", service.GetCityList());
@@ -243,6 +276,18 @@ public class TourController {
 				String fromcity[] = req.getParameterValues("fromcity");
 				String tocity[] = req.getParameterValues("tocity");
 				
+				/* TOUR ADVANCE DETAILS */
+				String fareamount = req.getParameter("tourfare");
+				String Farefromdate = req.getParameter("farefromdate");
+				String faretodate = req.getParameter("faretodate");
+				String boardingdays = req.getParameter("boardingdays");
+				String chargeperday = req.getParameter("boardingperday");
+				String allowanceperday = req.getParameter("allowanceperday");
+				String allowancedays = req.getParameter("allowancenoday");
+				String allowancefromdate = req.getParameter("allowancefromdate");
+				String allowancetodate = req.getParameter("allowancetodate");
+				String advanceid = req.getParameter("touradvanceid");
+				
 				TourApplyDto applydto = new TourApplyDto();
 				applydto.setTourApplyId(Long.parseLong(tourid));
 				applydto.setStayFrom(DateTimeFormatUtil.dateConversionSql(departure));
@@ -251,9 +296,6 @@ public class TourController {
 				applydto.setPurpose(purpose);
 				if(airtraveljusti!=null){
 					applydto.setAirTravJust(airtraveljusti);
-				}
-				if(reqadvamt!=null) {
-					applydto.setAdvancePropsed(Integer.parseInt(reqadvamt));
 				}
 				applydto.setEarliestTime(earliesttime);
 				applydto.setEarliestDate(DateTimeFormatUtil.dateConversionSql(earliestdate));
@@ -267,15 +309,37 @@ public class TourController {
 				applydto.setModeofTravel(modeoftravel);
 				applydto.setFromCity(fromcity);
 				applydto.setToCity(tocity);
-				
-				
-				long count = service.EditTourApply(applydto);
-				if (count != 0) {
-					redir.addAttribute("result", "Tour program Update successfully");
-				} else {
-					redir.addAttribute("resultfail", "Tour program Update Unsuccessfull");
+				if(reqadvamt!=null && reqadvamt.equalsIgnoreCase("N")) {
+					applydto.setAdvancePropsed(reqadvamt);
+				}
+				if(reqadvamt!=null && reqadvamt.equalsIgnoreCase("Y")) {
+					applydto.setAdvancePropsed(reqadvamt);
+					/* TOUR ADVANCE DETAILS */
+					applydto.setTourAdvanceId(Long.parseLong(advanceid));
+					applydto.setTourFare(Integer.parseInt(fareamount));
+					applydto.setTourfareFrom(DateTimeFormatUtil.dateConversionSql(Farefromdate));
+					applydto.setTourfareTo(DateTimeFormatUtil.dateConversionSql(faretodate));
+					applydto.setBoardingDays(Integer.parseInt(boardingdays));
+					applydto.setBoardingPerDay(Integer.parseInt(chargeperday));
+					applydto.setPerDayAllowance(Integer.parseInt(allowanceperday));
+					applydto.setAllowanceDays(Integer.parseInt(allowancedays));
+					applydto.setAllowanceFromDate(DateTimeFormatUtil.dateConversionSql(allowancefromdate));
+					applydto.setAllowanceToDate(DateTimeFormatUtil.dateConversionSql(allowancetodate));
 				}
 				
+				Long result = service.checkTourAlreadyPresentForSameEmpidAndSameDates(tourid, (String) ses.getAttribute("EmpNo"),departure,arrivaldate);
+
+				if(result>0) {
+					redir.addAttribute("resultfail", "Tour Already Present For Same Period");
+				}else {
+				
+					long count = service.EditTourApply(applydto);
+					if (count != 0) {
+						redir.addAttribute("result", "Tour program Update successfully");
+					} else {
+						redir.addAttribute("resultfail", "Tour program Update Unsuccessfull");
+					}
+				}
 				return "redirect:/TourApplyList.htm";
 			}else if(action!=null && action.equalsIgnoreCase("Revoke")){
 				String UserId =req.getUserPrincipal().getName();
@@ -296,9 +360,12 @@ public class TourController {
 			}else if(action!=null && action.equalsIgnoreCase("Preview")) {
 				String tourapplyid = actval.split("/")[1];
 				Object[] details = service.GetTourDetails(tourapplyid);
+				Object[] touradvancedetails = service.GetTourAdvanceDetails(tourapplyid);
 				req.setAttribute("tourdetails", details);
+				req.setAttribute("touradvancedetails", touradvancedetails);
 				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
 				req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
+				req.setAttribute("tourstatisdetails", service.TourStatusDetails(tourapplyid));
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				
 				return "tour/TourDetailsPreview";
@@ -368,11 +435,7 @@ public class TourController {
 			String empno = (String) ses.getAttribute("EmpNo");
 			String DepartureDate = request.getParameter("DepartureDate");
 			String ArrivalDate = request.getParameter("ArrivalDate");
-			System.out.println("tourid     :"+tourid);
-			System.out.println("action     :"+action);
-			System.out.println("empno     :"+empno);
-			System.out.println("DepartureDate     :"+DepartureDate);
-			System.out.println("ArrivalDate     :"+ArrivalDate);
+			
 			Result= service.checkTDAlreadyPresentForSameEmpidAndSameDates( empno, DepartureDate, ArrivalDate , action , tourid);
 			
 		} catch (Exception e) {
@@ -415,6 +478,7 @@ public class TourController {
 			String empno  = (String)ses.getAttribute("EmpNo");
 			List<Object[]> approvallist = service.GetTourApprovalList(empno);
 			List<Object[]> Canceledlist = service.GetTourCancelList(empno);
+			req.setAttribute("FAPAdetails", service.GetPAAndFA());
 			req.setAttribute("approvallist", approvallist);
 			req.setAttribute("canceledlist", Canceledlist);
 			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
@@ -538,6 +602,18 @@ public class TourController {
 						redir.addAttribute("resultfail","Tour Cancel Unsuccessful");
 					}
 					return "redirect:/TourSanctionedlist.htm";
+			}else if(action!=null && "Preview".equalsIgnoreCase(act)) {
+				String tourapplyid = action.split("/")[1];
+				Object[] details = service.GetTourDetails(tourapplyid);
+				Object[] touradvancedetails = service.GetTourAdvanceDetails(tourapplyid);
+				req.setAttribute("tourdetails", details);
+				req.setAttribute("touradvancedetails", touradvancedetails);
+				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
+				req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
+				req.setAttribute("tourstatisdetails", service.TourStatusDetails(tourapplyid));
+				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+
+				return "tour/TourCancelPreview";
 			}else {
 
 				String Empno = (String) ses.getAttribute("EmpNo");
@@ -633,7 +709,8 @@ public class TourController {
 			req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
 			req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			
+			req.setAttribute("Labmaster", nocservice.getLabMasterDetails().get(0));
+			req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="TourProposal";
 		
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
@@ -654,7 +731,7 @@ public class TourController {
 	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 	         
 	        res.setContentType("application/pdf");
-	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 	       
 	       
 	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
@@ -696,14 +773,13 @@ public class TourController {
 				req.setAttribute("lablogo",getLabLogoAsBase64());
 				if (action!=null &&  actval.equalsIgnoreCase("Cancel"))
 				{
+					System.out.println(tourapplyid);
 					Object[] details=service.GetTourDetails(tourapplyid);
 					req.setAttribute("tourdetails",details );
 					req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
 					req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
 					
 					return "tour/TourCancelMovementOrder";
-					
-
 				}else {
 					Object[] details = service.GetTourDetails(tourapplyid);
 					req.setAttribute("tourdetails", details);
@@ -723,8 +799,9 @@ public class TourController {
 	@RequestMapping(value = "TourModify.htm" , method = { RequestMethod.POST , RequestMethod.GET})
 	public String TourModify(HttpServletRequest req, HttpServletResponse res ,HttpSession ses, RedirectAttributes redir)throws Exception
 	{
+		String Username = (String) ses.getAttribute("Username");
 		String UserId =req.getUserPrincipal().getName();
-		logger.info(new Date() +"Inside TourApplyReport.htm "+UserId);
+		logger.info(new Date() +"Inside TourModify.htm "+UserId);
 		try {
 			String action = req.getParameter("tourapplyid");
 			String actval = action.split("/")[0];
@@ -739,6 +816,73 @@ public class TourController {
 				req.setAttribute("CityList", service.GetCityList());
 			    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 
+			}else if(action!=null && actval!=null && actval.equalsIgnoreCase("SubmitModify")){
+				
+				
+				String reason = req.getParameter("reasonforamend");
+				String tourno = req.getParameter("tourno");
+				String departure=req.getParameter("DepartureDate");
+				String arrivaldate=req.getParameter("ArrivalDate");
+				String pos = req.getParameter("POS");
+				String purpose = req.getParameter("Purpose");
+				String airtraveljusti = req.getParameter("airtraveljusti");
+				String reqadvamt = req.getParameter("reqadvamt");
+				String remarks = req.getParameter("Remarks");
+				String earliesttime = req.getParameter("EarliestTime");
+				String earliestdate = req.getParameter("EarliestDate");
+				String earliestplace = req.getParameter("EarliestPlace");
+				String tourid = tourapplyid;
+				
+				String depdate[] = req.getParameterValues("DepDate");
+				String tourtime[] = req.getParameterValues("tourtime");
+				String modeoftravel[] = req.getParameterValues("modeoftravel");
+				String fromcity[] = req.getParameterValues("fromcity");
+				String tocity[] = req.getParameterValues("tocity");
+				
+				TourApplyDto applydto = new TourApplyDto();
+				applydto.setTourNo(tourno);
+				applydto.setTourApplyId(Long.parseLong(tourid));
+				applydto.setStayFrom(DateTimeFormatUtil.dateConversionSql(departure));
+				applydto.setStayTo(DateTimeFormatUtil.dateConversionSql(arrivaldate));
+				applydto.setStayPlace(pos);
+				applydto.setPurpose(purpose);
+				if(airtraveljusti!=null){
+					applydto.setAirTravJust(airtraveljusti);
+				}
+				if(reqadvamt!=null) {
+					applydto.setAdvancePropsed(reqadvamt);
+				}
+				applydto.setEarliestTime(earliesttime);
+				applydto.setEarliestDate(DateTimeFormatUtil.dateConversionSql(earliestdate));
+				applydto.setEarliestPlace(earliestplace);
+				applydto.setCreatedBy(Username);
+				applydto.setCreatedDate(sdtf.format(new Date()));
+				applydto.setInitiatedDate(sdtf.format(new Date()));
+				applydto.setRemarks(remarks);
+				applydto.setTourDates(depdate);
+				applydto.setTourTimes(tourtime);
+				applydto.setModeofTravel(modeoftravel);
+				applydto.setFromCity(fromcity);
+				applydto.setToCity(tocity);
+				
+				Long result = service.checkTourAlreadyPresentForSameEmpidAndSameDates(tourid, (String) ses.getAttribute("EmpNo"),departure,arrivaldate);
+
+				if(result>0) {
+					redir.addAttribute("resultfail", "Tour Already Present For Same Period");
+					
+				}else {
+				
+					long count = service.ModifyTourApply(applydto);
+					if (count != 0) {
+						redir.addAttribute("result", "Tour program Update successfully");
+					} else {
+						redir.addAttribute("resultfail", "Tour program Update Unsuccessfull");
+					}
+				}
+				return "redirect:/TourApplyList.htm";
+			
+			} else {
+				
 			}
 			return "tour/TourModify";
 		} catch (Exception e) {
@@ -747,5 +891,118 @@ public class TourController {
 			return "static/Error";
 		}
 	}
+	@RequestMapping(value = "TourAdvancelist.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+	public String GetTourAdvance(HttpServletRequest req, HttpServletResponse res ,HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside TourAdvancelist.htm "+UserId);
+		try {
+			String empno  = ses.getAttribute("EmpNo").toString();
+			List<Object[]> advance = service.GetTourAdvanceList(empno);
+			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
+			req.setAttribute("advancelist", advance);
+			ses.setAttribute("SidebarActive","TourAdvancelist_htm");
+				return "tour/TourAdvanceList";
+			
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside TourAdvancelist.htm "+UserId, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "TourPreviewlist.htm" , method = {RequestMethod.POST,RequestMethod.GET})
+	public String GetTourPreview(HttpServletRequest req, HttpServletResponse res ,HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String UserId =req.getUserPrincipal().getName();
+		logger.info(new Date() +"Inside TourPreviewlist.htm "+UserId);
+		try {
+			String actval = req.getParameter("Action");
+			String  action= null;
+			if(actval!=null) {
+				action=actval.split("/")[0];
+			}
+			String tourapplyid = actval.split("/")[1];
+			Object[] details = service.GetTourDetails(tourapplyid);
+			req.setAttribute("tourdetails", details);
+			req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
+			req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			return "tour/TourAdvancePreview";
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside TourPreviewlist.htm "+UserId, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "DownloadTourCancel.htm")
+	public void TourCancelDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside DownloadTourProposal.htm "+UserId);
+		
+		try {	
+			String actval = req.getParameter("Action");
+			String tourapplyid = actval.split("/")[1];
+			Object[] details = service.GetTourDetails(tourapplyid);
+			req.setAttribute("tourdetails", details);
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("Labmaster", nocservice.getLabMasterDetails().get(0));
+			req.setAttribute("lablogo",getLabLogoAsBase64());
+			String filename="Tour Cancel";
+		
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("pagePart","3" );
+			
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+	        req.getRequestDispatcher("/view/tour/TourCancelPrint.jsp").forward(req, customResponse);
+
+			
+			String html = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+	       
+	       
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
+	        
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+	       	
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside DownloadTourProposal.htm "+UserId, e); 
+		}
+	}
+	
 }
 

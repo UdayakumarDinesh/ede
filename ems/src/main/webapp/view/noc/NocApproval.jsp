@@ -40,6 +40,8 @@ body{
 	String tab   = (String)request.getAttribute("tab");
 	String fromdate = (String)request.getAttribute("fromdate");
 	String todate   = (String)request.getAttribute("todate");
+	Object[] empData=(Object[])request.getAttribute("EmpData");
+	List<Object[]> ApprovedList=(List<Object[]>)request.getAttribute("ApprovedList");
 	
 %>
 
@@ -47,7 +49,8 @@ body{
 <div class="card-header page-top ">
 	<div class="row">
 		<div class="col-md-5">
-			<h5>NOC Approval List</h5>
+			<h5>NOC Approval <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 		</div>
 			<div class="col-md-7 ">
 				<ol class="breadcrumb ">
@@ -174,6 +177,13 @@ body{
 		  <li class="nav-item"  style="width: 50%;">
 		    <div class="nav-link" style="text-align: center;" id="pills-imm-property-tab" data-toggle="pill" data-target="#pills-imm-property" role="tab" aria-controls="pills-imm-property" aria-selected="false">
 		    	 <span>Approved</span> 
+		    	 <span class="badge badge-danger badge-counter count-badge" style="margin-left: 0px;">
+				   		 <%if(ApprovedList.size()>99){ %>
+				   			99+
+				   		<%}else{ %>
+				   			<%=ApprovedList.size() %>
+						<%} %>			   			
+				  </span> 
 		    </div>
 		  </li>
 		</ul>
@@ -251,25 +261,24 @@ body{
  
 	<!-- Approved List -->	
 	
-		<div class="tab-pane fade" id="pills-imm-property" role="tabpanel" aria-labelledby="pills-imm-property-tab">	
-		<div class="card-body main-card " >	
+		<div class="tab-pane fade" id="pills-imm-property" role="tabpanel" aria-labelledby="pills-imm-property-tab">
 		
-		 <form method="post" action="IntimationApprovals.htm" >
+			<form method="post" action="NocApproval.htm" >
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="hidden" name="tab" value="closed"/>
-					<div class="row w-100" style="margin-top: 10px;margin-bottom: 10px;">
+					<div class="row w-100" style="margin-top: -7px;margin-bottom: 10px;">
 						<div class="col-md-12" style="float: right;">
-							<table style="float: right;">
-								<tr>
-									<td> From Date :&nbsp; </td>
+							<table style="float: right;" >
+								<tr >
+									<td style="margin-right:50px;"> From Date :&nbsp; </td>
 							        <td> 
-										<input type="text" class="form-control input-sm mydate" onchange="this.form.submit()"  readonly="readonly"  <%if(fromdate!=null){%>
+										<input type="text" class="form-control input-sm mydate" onchange="this.form.submit()"   readonly="readonly"  <%if(fromdate!=null){%>
 								        value="<%=DateTimeFormatUtil.SqlToRegularDate(fromdate)%>" <%}%> value=""  id="fromdate" name="fromdate"  required="required"   > 
 									</td>
 									<td></td>
 									<td >To Date :&nbsp;</td>
 									<td>					
-										<input type="text"  class="form-control input-sm mydate" onchange="this.form.submit()"  readonly="readonly" <%if(todate!=null){%>
+										<input type="text"  class="form-control input-sm mydate" onchange="this.form.submit()"   	readonly="readonly" <%if(todate!=null){%>
 								         value="<%=DateTimeFormatUtil.SqlToRegularDate(todate)%>" <%}%>  value=""  id="todate" name="todate"  required="required"  > 							
 									</td>
 									<!-- <td>					
@@ -281,7 +290,7 @@ body{
 					 </div>
 		</form> 
 		
-		
+		<div class="card-body main-card " >	
 		<div class="row" >
 		 <div class="col-md-12">
 		
@@ -295,23 +304,25 @@ body{
 					   <th style="width:0%">SN</th>
 					   <th style="width:50%">Employee Name</th>
                        <th style="width:15%">Type</th>
-                       <th style="width:25%">Action</th>
+                       <th style="width:15%">Remarks</th>
 					  
                   	</tr>
 				</thead>
                  <tbody>
+                    <% int SN1=0;
+                       for(Object[] obj:ApprovedList){ %>
                        
                         <tr>
                              
-                            <td style="text-align: center;"></td>
-                            <td ></td>
-                            <td ></td>
-                            <td ></td>
+                            <td style="text-align: center;"><%=++SN1%></td>
+                            <td ><%=obj[2] %></td>
+                            <td ><%=obj[3] %></td>
+                            <td ><%=obj[5] %></td>
                         </tr>
                        
                           
                    </tbody>
-   
+   <%} %>
                  </table>
                 <!-- </div>  -->      
                </form>

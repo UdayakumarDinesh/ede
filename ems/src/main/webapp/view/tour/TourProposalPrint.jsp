@@ -18,7 +18,6 @@
 	Object[] ApprovalEmp=(Object[])request.getAttribute("ApprovalEmp"); 
 	SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 	%>
-	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
 	
 <style type="text/css">
 
@@ -51,12 +50,6 @@
 					margin-right: 10px;
 				}
 
-				@top-right {
-					content: "";
-					margin-top: 30px;
-					margin-right: 10px;
-				}
-
 				@top-left {
 					margin-top: 30px;
 					margin-left: 10px;
@@ -64,22 +57,7 @@
 					
 				}
 
-				@top-center {
-					margin-top: 30px;
-					content: "";
-
-				}
-
-				@bottom-center {
-					margin-bottom: 30px;
-					content: "";
-				}
-				
-				
-
 			}
-
-
 body
 {
 	font-size:14px !important;
@@ -89,6 +67,7 @@ body
 </style>
 </head>
 <body>
+	 <jsp:include page="../static/LetterHead.jsp"></jsp:include>
 
 <div class="center">
 								<table style="width:100%;margin-top:30px; border: 1px solid black; border-collapse: collapse; text-align: center;">
@@ -124,14 +103,11 @@ body
 									<tr>	
 										<td> <b> Brief details of the proposed tour program :</b></td>
 									</tr>
-									<tr>	
-										<th style="text-align: left;"> 1) Employee proposed to be deputed:</th>
-									</tr>
+									
 								</table>
 								<table style="width: 100%; margin-top: 10px; border: 1px solid black; border-collapse: collapse;">
 									<thead>
 										<tr>
-											<th style="border: 1px solid black; border-collapse: collapse;"> SN </th>
 											<th style="border: 1px solid black; border-collapse: collapse;"> Name </th>
 											<th style="border: 1px solid black; border-collapse: collapse;">Emp No</th>
 											<th style="border: 1px solid black; border-collapse: collapse;"> DOB</th>
@@ -142,7 +118,6 @@ body
 									</thead>
 									<tbody>
 										<tr>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;">1</td>
 											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[4]%>(<%=tourdetails[3]%>)</td>
 											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[2]%></td>
 											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[5].toString())%></td>
@@ -154,7 +129,7 @@ body
 								</table>
 								<table style="width: 100%;margin-top: 10px;">
 									<tr>
-										<th colspan="3" style="text-align: left;">2) Earliest presence required at destination</th>
+										<th colspan="3" style="text-align: left;">1) Earliest presence required at destination</th>
 									</tr>
 									<tr style="text-align: center;">
 										<td>a)Time : <%=time.format(tourdetails[11])%></td>										
@@ -162,7 +137,7 @@ body
 										<td>Place :<%=tourdetails[12]%></td>
 									</tr>
 									<tr >
-											<th colspan="3" style="text-align: left;">3)Proposed journey details :</th>
+											<th colspan="3" style="text-align: left;">2)Proposed journey details :</th>
 										</tr>
 								</table>
 								
@@ -194,7 +169,7 @@ body
 								
 								<table style="margin-top: 10px; width: 100%;">
 									<tr>
-										<td colspan="3" style="text-align: left;"><b>4)Period of stay :</b>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
+										<td colspan="3" style="text-align: left;"><b>3)Period of stay :</b>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
 										From : &nbsp;&nbsp; &nbsp;&nbsp; <%=DateTimeFormatUtil.fromDatabaseToActual(tourdetails[13].toString()) %>&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
 										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										
@@ -202,67 +177,26 @@ body
 										</td>
 									</tr>
 									<tr>	
-										<td style="text-align: left;"><b>5)Place of stay :</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<td style="text-align: left;"><b>4)Place of stay :</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 										 <%=tourdetails[15]%>
 										 </td>
 									</tr>
-									<tr>
-										<td colspan="3"> <b>6)Justification for Air Travel of non-entitled employee (if applicable):</b> &nbsp; &nbsp;&nbsp;<%=tourdetails[16]%> </td>
+									<tr >
+										<td colspan="3"> <b>5)Justification for Air Travel of non-entitled employee (if applicable):</b> &nbsp; &nbsp;&nbsp;<%if(tourdetails[16]!=null){ %> <%=tourdetails[16]%> <%}else{%> ---<%}%></td>
 									</tr>
-									<tr>
-										<td ><b>7)Amount of Travelling Advance proposed :&nbsp; &nbsp;&nbsp; Rs.</b><%=tourdetails[17]%></td>
-									</tr>
-									</table>
-									<table style="width: 100%; margin-top: 6px; border: 1px solid black; border-collapse: collapse;">
-									<tr> 
-										<th style="border: 1px solid black; border-collapse: collapse;"> SN</th>
-										<th style="border: 1px solid black; border-collapse: collapse;">Particulars</th>
-										<th style="border: 1px solid black; border-collapse: collapse;">Amount</th>
-									</tr>
-									<tr>
-										<td style="border: 1px solid black; border-collapse: collapse;">1</td>
-										<td style="border: 1px solid black; border-collapse: collapse;">Air/Train/Bus fare(to & from)<br>(single fate @ Rs. )</td>
-										<td style="border: 1px solid black; border-collapse: collapse;">---</td>
-									</tr>
-									<tr>
-										<td style="border: 1px solid black; border-collapse: collapse;">2</td>
-										<td style="border: 1px solid black; border-collapse: collapse;">
-											<b style="text-decoration: underline;">Daily Allowance </b><br>
-											Boarding Charges for ...................Days<br>
-											(@Rs. ...............................per day)<br>
-											Daily Allowance at Rs. ................per day <br>
-											for ..............days from .............. to .................
-											
-										</td>
-										<td style="border: 1px solid black; border-collapse: collapse;"></td>
-									</tr>
-									<tr>
-									 	<td colspan="2" style="text-align:right; border: 1px solid black; border-collapse: collapse;"><b>Total :</b></td>
-									 	<td style="border: 1px solid black; border-collapse: collapse;"></td>
+									<tr >
+										<td ><b>6)Amount of Travelling Advance proposed :&nbsp; &nbsp;&nbsp; </b><%if(tourdetails[17]!=null && tourdetails[17].toString().equalsIgnoreCase("Y")){%> Yes <%}else{%> No <%}%></td>
 									</tr>
 									</table>
-									<table style="margin-top: 6px; ">
-									<tr>
-										<td colspan="3">The above proposal is put up for approval I Undertake that:</td>
-									</tr>
 									
-									<tr>
-										<td colspan="3"> &nbsp; &nbsp;&nbsp;1. I have to render statement of expenses towards adjustment of the advance paid to me before asking for payment of further advance and in any case within 15 days of completion of my tour.</td>
-									</tr>
-									<tr>
-										<td colspan="3"> &nbsp; &nbsp; 	2. I have to refund to the STARC any excess of TA advance amount immediately on completion of the tour.</td>
-									</tr>
-									<tr>
-										<td colspan="3">&nbsp; &nbsp; 	3. I have read / have been explained the TA rules applicable to me. <br><br></td>
-									</tr>
-									
-									<tr>
+									<table style="margin-top: 6px; width: 100%;" >
+									<tr style="margin-top: 20px;">
 										<td colspan="2"> 
 											Signature of the employee <br>
 											Name : &nbsp;&nbsp;<%=tourdetails[4]%>(<%=tourdetails[3]%>)
 										 </td>
 										
-										<td style="text-align: right;">  
+										<td style="text-align: right; margin-left: 10px;">  
 											Signature of Dept. Incharge <br>
 											Name : &nbsp;&nbsp;<%if(tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("VDH") || 
 											tourdetails[19].toString().equalsIgnoreCase("ABD") || tourdetails[19].toString().equalsIgnoreCase("RDG") ||
@@ -273,13 +207,13 @@ body
 											 <%=ApprovalEmp[0]%>
 											<%}%>
 										</td>
-									</tr>
+									</tr >
 									<%if(tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("ABD") ||
 										  	tourdetails[19].toString().equalsIgnoreCase("RBF") || tourdetails[19].toString().equalsIgnoreCase("ABF") || 
 										    tourdetails[19].toString().equalsIgnoreCase("RBP") || tourdetails[19].toString().equalsIgnoreCase("ABP") ||
 										    tourdetails[19].toString().equalsIgnoreCase("RBC") || tourdetails[19].toString().equalsIgnoreCase("ABC") ||
 										    tourdetails[19].toString().equalsIgnoreCase("REV") ){%>
-									<tr class="break">
+									<tr class="break" style="margin-top: 40px;">
 										<td colspan="3">
 										Signature of DGM<br>
 										Name : &nbsp;&nbsp;<%=ApprovalEmp[1] %><br>
@@ -338,10 +272,88 @@ body
 									</tr>	
 								<%}%>
 								</table>
-																	
-								</div>
+											
+							
+							<%if(tourdetails[17]!=null && tourdetails[17].toString().equalsIgnoreCase("Y")){%>
+							
+							<!-- TOUR Advance -->
+							<table style="width: 100%; margin-top: 5px; border: 1px solid black; border-collapse: collapse;">
+							<tr>
+								<td style="width:20%; text-align: center; border: 1px solid black; border-collapse: collapse;"> <b style="font-weight: 600;font-size: 1.5rem;">STARC</b> <br><b>BANGALORE</b></td>
+								<td style="width:60%; text-align: center; border: 1px solid black; border-collapse: collapse;"> <b>APPLICATION FOR ADVANCE OF TRAVELLING ALLOWANCE </b></td>
+								<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse;"><b>SITAR-BNG-P&A-001 <br> Date of issue :  </b></td>
+								<td style="width:10%; text-align: center; border: 1px solid black; border-collapse: collapse;"> <b>REV. : 02  issue : 01 <br> Page 1 of 2 </b></td>
+							</tr>
+							<tr>
+								<td colspan="2" style=" border: 1px solid black; border-collapse: collapse;">&nbsp;  Name  :- &nbsp;&nbsp;<%=tourdetails[4]%>(<%=tourdetails[3]%>)</td>
+								<td style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Emp No  :- &nbsp;&nbsp; <%=tourdetails[2]%></td>
+								<td style=" border: 1px solid black; border-collapse: collapse;">&nbsp;  Grade   :-  &nbsp;&nbsp; <%=tourdetails[24]%></td>
+							</tr>	
+							<tr>
+								<td colspan="2" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Basic Pay   :- <%=tourdetails[8]%></td>
+								<td colspan="2" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Level in the Pay Matrix</td>
+							</tr>	
+							<tr>
+								<td colspan="2" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Place of visit / Tour   :- <%=tourdetails[12]%></td>
+								<td colspan="2" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Mobile No   :-  <%=tourdetails[6]%></td>
+							</tr>	
+							<tr>
+								<td colspan="4" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Movement Order Ref . No :- <%if(tourdetails[1]!=null){%>  <%=tourdetails[1]%> <%}else{%> ---<%}%></td>
+							</tr>			
+							<tr>
+								<td colspan="4" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">  Departure From 
+								 <% if(list!=null && list.size()>0){
+										for(Object[] obj:list){%>
+									<b>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<%=obj[2]%>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;On&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<%=DateTimeFormatUtil.fromDatabaseToActual(obj[0].toString())%>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									 	at &nbsp;&nbsp;&nbsp;<%=time.format(obj[1])%></b>
+								<% break;}}%> 
 								
-							</div>
-
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" style="padding: 6px; border: 1px solid black; border-collapse: collapse;">
+								 	<b style="padding-left: 500px;">Rs.____________P. &nbsp;&nbsp;&nbsp;</b><br>
+							
+									<b style="padding-left: 40px;"> 1. Air / Train /...................................../ Bus fare(to & from)</b>
+									<p style="padding-left: 55px;">(Single fare @ Rs. .............................................)</p>
+									<b style="padding-left: 40px;">2. Daily Allowance</b>
+									<p style="padding-left: 55px;"> i) &nbsp;&nbsp;&nbsp;&nbsp;  Boarding Charges for .......................Days<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (@ Rs. ..........................per Day)<br>
+									ii)&nbsp;&nbsp;&nbsp;&nbsp;Daily Allowance at Rs. ......................per Day<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;for .............days from ...................to ..............</p>
+									<b style="padding-left: 40px;"> 3.  Taxi / Auto / Bus fare from ............. to ................</b><br>
+									<b style="padding-left: 500px;"> Total ______________ &nbsp;&nbsp;&nbsp;</b><br>
+									
+									<p style="margin-left: 10px;">I Undertake that:</p>
+									  <p style="margin-left: 30px;">  1.  I have to render statement of expenses towards adjustment of the paid advance paid to me before  asking for payment of further advance and in any case within 15 days of completion of my tour.
+									<br>2. I have to refund to the STARCany excess of TA advance amount immediately on completion of the tour.<br>
+									    3. I have read / have been explained the TA rules applicable to me.</p><br><br>
+									    
+									<b style=" margin-left: 10px;">Date: </b><b style=" padding-left: 400px;">Signature of the employee</b>	    
+								
+									<hr style=" margin-top: 35px;">
+								
+									<b style=" margin-left: 10px;">Forwarded to P & A Dept. for necessary action</b>	<br><br>
+							
+									<b style=" margin-left: 10px;margin-top: 40px;"> Date :</b> <b style=" padding-left: 450px;">Sign. of DGM <br> Name :</b>
+									<hr style=" margin-top: 50px;">
+									<b style="text-decoration: underline; margin-left: 165px; margin-bottom: 10px"> FOR ADMINISTATION USE ONLY </b>
+									<p>An advance of Rs. .........................(Ruppes....................................only) May be released to Dr. / Mr. / Ms. .............................Emp No................ 
+									</p>
+									<b style=" padding-left: 480px;">()<br>
+									Incharge-P&A
+									</b><br>
+									<b>Forwarded to F&A Dept. for Necessary Action</b>  -->
+								</td>
+							</tr>
+						</table>
+						
+						<%}%>				
+					</div>
+				</div>
 </body>
 </html>

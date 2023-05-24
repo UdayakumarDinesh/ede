@@ -73,13 +73,14 @@ body{
 	List<Object[]> PassportList=(List<Object[]>)request.getAttribute("NOCPASSPORTLIST");
 	
 	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
-	
+	Object[] empData=(Object[])request.getAttribute("EmpData");
    %>
 
 	<div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-4">
-				<h5>NOC Passport</h5>
+				<h5>NOC Passport <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+						</b></small></h5>
 			</div>
 			<div class="col-md-8 ">
 				<ol class="breadcrumb ">

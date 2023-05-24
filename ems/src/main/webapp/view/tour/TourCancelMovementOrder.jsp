@@ -11,8 +11,8 @@
 <jsp:include page="../../view/static/dependancy.jsp"></jsp:include>
         
 <spring:url value="/webresources/css/Header.css" var="Header" />
-<%-- 	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
- --%>
+ 	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+ 
 <title>Tour Report</title>
 <style type="text/css">
 

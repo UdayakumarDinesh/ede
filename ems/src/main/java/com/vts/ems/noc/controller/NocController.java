@@ -149,6 +149,7 @@ public class NocController {
 				}
 			 req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
 			 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
+			 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			 
 			 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 			 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
@@ -171,13 +172,16 @@ public class NocController {
 		
 	    String UserId=(String)ses.getAttribute("Username");
 		String EmpId =  ses.getAttribute("EmpId").toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date()+"Inside PassportAdd.htm "+UserId);
 		try {
 			
 			  
 			  req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 			  req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
+			  
 			 req.setAttribute("EmpId", EmpId);
+			 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			  return "noc/AddEditPassport";
 					 
 		} catch (Exception e) 
@@ -194,12 +198,14 @@ public class NocController {
 		
 	    String UserId=(String)ses.getAttribute("Username");
 		String EmpId =  ses.getAttribute("EmpId").toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		logger.info(new Date()+"Inside PassportEdit.htm "+UserId);
 		try {
 			
 			  
 			  req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 			  req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
+			  req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			  String NocPassportId=req.getParameter("NocPassportId");
 			  NocPassport passport=service.getNocPassportId(Long.parseLong(NocPassportId));
 			  req.setAttribute("passport",passport);
@@ -348,6 +354,7 @@ public class NocController {
 		
 	    String UserId=(String)ses.getAttribute("Username");
 		String EmpId =  ses.getAttribute("EmpId").toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
 		String LoginType=(String)ses.getAttribute("LoginType").toString();
 		logger.info(new Date()+"Inside PassportPreview.htm "+UserId);
 		try {
@@ -358,9 +365,11 @@ public class NocController {
 			System.out.println("isApproval---"+isApproval);
 			
 			NocPassport passport=service.getNocPassportId(Long.parseLong(passportid));
+			req.setAttribute("CeoName", service.GetCeoName());		
 			req.setAttribute("NOCPassportRemarkHistory",service.getPassportRemarksHistory(passportid) );
 			req.setAttribute("passport",passport);
 			req.setAttribute("isApproval", isApproval);
+			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 //			req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 //			req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));	
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
@@ -537,7 +546,8 @@ public class NocController {
 				 req.setAttribute("tab", req.getParameter("tab"));
 				 req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				 req.setAttribute("ApprovedList", service.NocApprovedList(EmpNo,fromdate,todate));
-				
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 
 				return "noc/NocApproval";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside NocApproval.htm"+Username, e);
@@ -703,6 +713,8 @@ public class NocController {
 					}
 				 req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
 				 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 
 				 
 				 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				 req.setAttribute("NocProcAbraodList",service.getProcAbroadList(EmpNo));
@@ -731,6 +743,8 @@ public class NocController {
 				 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 				 req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
 				 req.setAttribute("EmpId", EmpId);
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 
 				 return "noc/AddEditProcAbroad";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside ProcAbroadAdd.htm"+Username, e);
@@ -745,8 +759,7 @@ public class NocController {
 		{
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 			String EmpNo = (String) ses.getAttribute("EmpNo");
-	    	
-			String Username = (String) ses.getAttribute("Username");
+	    	String Username = (String) ses.getAttribute("Username");
 		
 			logger.info(new Date() +"Inside ProcAbroadEdit.htm"+Username);		
 			try {				
@@ -758,6 +771,8 @@ public class NocController {
 				 req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
 				 req.setAttribute("EmpId", EmpId);
 				 req.setAttribute("ProcAbroad", ProcAbroad);
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 
 				 return "noc/AddEditProcAbroad";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside ProcAbroadEdit.htm"+Username, e);
@@ -963,6 +978,7 @@ public class NocController {
 		
 	    String UserId=(String)ses.getAttribute("Username");
 	String EmpId =  ses.getAttribute("EmpId").toString();
+	String EmpNo =  ses.getAttribute("EmpNo").toString();
 	String LoginType=(String)ses.getAttribute("LoginType").toString();
 	logger.info(new Date()+"Inside ProcAbroadPreview.htm "+UserId);
 	try {
@@ -974,6 +990,7 @@ public class NocController {
 		req.setAttribute("isApproval", isApproval);
 	//		req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 	//		req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));	
+		 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 		req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 		req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId) );
 		
