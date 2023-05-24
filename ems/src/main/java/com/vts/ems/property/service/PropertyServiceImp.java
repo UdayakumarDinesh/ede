@@ -336,11 +336,15 @@ public class PropertyServiceImp implements PropertyService{
 			
 			List<String> PandAs = pidao.GetPandAAdminEmpNos();
 			String CEO = pidao.GetCEOEmpNo();
+            List<String> DGMs = pidao.GetDGMEmpNos();
+			
+			DivisionMaster formEmpDivisionMaster = pidao.GetDivisionData(emp.getDivisionId());
 			
 			if(action.equalsIgnoreCase("A"))
 			{
 				// First time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")||
+				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
 				{
 					movable.setPisStatusCode("FWD");
 					if(CEO.equalsIgnoreCase(formempno)) 
@@ -354,9 +358,13 @@ public class PropertyServiceImp implements PropertyService{
 					{
 						movable.setPisStatusCodeNext("APR");
 					}
-					else
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 					{
 						movable.setPisStatusCodeNext("VPA");
+					}
+					else
+					{
+						movable.setPisStatusCodeNext("VDG");
 					}
 				}
 				
@@ -364,7 +372,11 @@ public class PropertyServiceImp implements PropertyService{
 				else
 				{
 					movable.setPisStatusCode(pisStatusCodeNext);					
-					if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						movable.setPisStatusCodeNext("VPA");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
 					{
 						movable.setPisStatusCodeNext("APR");
 					}
@@ -383,7 +395,11 @@ public class PropertyServiceImp implements PropertyService{
 			else if(action.equalsIgnoreCase("R"))
 			{
 				// Setting PisStatusCode
-				if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					movable.setPisStatusCode("RDG");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
 				{
 					movable.setPisStatusCode("RPA");
 				}
@@ -396,10 +412,14 @@ public class PropertyServiceImp implements PropertyService{
 				if(CEO.equalsIgnoreCase(formempno) || PandAs.contains(formempno) || loginType.equalsIgnoreCase("P") ) 
 				{ 
 					movable.setPisStatusCodeNext("APR");					
-				}		
-				else
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
 				{
 					movable.setPisStatusCodeNext("VPA");
+				}
+				else
+				{
+					movable.setPisStatusCodeNext("VDG");
 				}
 				movable.setRemarks(remarks);
 				dao.editMovableProperty(movable);
@@ -415,6 +435,8 @@ public class PropertyServiceImp implements PropertyService{
 					                              .build();
 			dao.addMovablePropertyTransaction(transaction);
 			
+			String DGMEmpNo = pidao.GetEmpDGMEmpNo(formempno);
+			
 			//Notification
 			EMSNotification notification = new EMSNotification();
 			if(action.equalsIgnoreCase("A") && movable.getMovStatus().equalsIgnoreCase("A"))
@@ -426,7 +448,11 @@ public class PropertyServiceImp implements PropertyService{
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
-				if(movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				if( movable.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
 				{
 					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
 				}

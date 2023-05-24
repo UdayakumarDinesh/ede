@@ -664,7 +664,8 @@ public class PropertyController {
 			
 			long count = service.movablePropForward(movPropertyId, Username, action, remarks, EmpNo, LoginType);
 			
-			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
+			if( pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")||
+			    pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
 			{
 				if(count>0) {
 					redir.addAttribute("result", "Movable Property Application Sent For Verification Successfully");

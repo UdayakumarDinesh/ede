@@ -151,12 +151,24 @@ public class PassController {
 		String UserId = (String) ses.getAttribute("Username");
 		logger.info(new Date() +"Inside CONTROLLER passPrint "+UserId);		
 		try {
-		 
-	        String intimationId=req.getParameter("intimationId");
-	        String result=req.getParameter("passId");
-			
-			List<Object[]> intimation=service.getIntimationDetails(intimationId,result+"");
-	        List<Object[]> visitorList=service.getPassVisitorList(intimationId,result+"");
+			String intimationId="";
+			 String passId="";
+		    String passAction = req.getParameter("passAction");		   
+		    String download = req.getParameter("Download");	
+		    if(download!=null && "Y".equalsIgnoreCase(download)) {
+		    	if(passAction!=null) {
+		    		String[] result = passAction.split("#");
+		    		intimationId = result[1];
+		    		passId = result[0];
+		    	}
+		    }
+		    else {
+	        intimationId=req.getParameter("intimationId");
+	        passId=req.getParameter("passId");
+		    }
+		    
+			List<Object[]> intimation=service.getIntimationDetails(intimationId,passId+"");
+	        List<Object[]> visitorList=service.getPassVisitorList(intimationId,passId+"");
 	        req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 	        req.setAttribute("LabDetails",service.LabInfo());
 			req.setAttribute("passDetails",intimation );

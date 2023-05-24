@@ -339,7 +339,7 @@ List<String> DHs = (List<String>)request.getAttribute("DHEmpNos");
 								 <div class="col-md-3" style="margin-left:-1%;">			
 								<!--  <input class="form-control" name="spermission"  id="specialPermission"  maxlength="255" placeholder="Enter max 255 characters" > -->
 								  <select class="form-control col-lg-12 spermission" id="options" name="spermission" multiple required >
-								    <option value="Not Applicable" >Not Applicable</option>
+								    <option value="Not Applicable" selected>Not Applicable</option>
 								    <option  value="Laptop">Laptop</option>
 								    <option value="Mobile">Mobile</option>
 								    <option value="Pendrive">Pendrive</option>
@@ -865,74 +865,47 @@ $( "#tdate" ).daterangepicker({
 <script type="text/javascript">
 
 $(document).ready(function() {
-$('#options').multiselect({
-includeSelectAllOption: true,
-enableFiltering: true,
-maxHeight: 200,
-buttonWidth: '100%',
-numberDisplayed: 7,
-buttonText: function(options, select) {
-    if (options.length === 0) {
-      return 'None selected';
-    } else if (options.length > 7) {
-      return options.length + ' options selected';
-    } else {
-      var labels = [];
-      options.each(function() {
-        labels.push($(this).html());
-      });
-      return labels.join(', ');
-    }
-  },
-/* onChange: function(option, checked) {
-	
-	  if(checked) {
-	    // Option selected
-	    if($(option).val()=="Not Applicable"){
-	    	console.log('Option selected: ' + $(option).val());
-	    	
-	    	const laptop = $('#2').val();
-	    	console.log('Option selected: ' +laptop);
-	    	laptop.disabled = true;
-	    	
-	    }
-	  } else {
-	    // Option deselected
-	    console.log('Option deselected: ' + $(option).val());
-	  }
-	} */
-	
-	/* onChange: function(option, checked, select) {
-	    if (option.val() === 'Not Applicable') {
-	      var otherOptions = select.find('option').not(':selected');
-	      otherOptions.prop('disabled', checked);
+	$('#options').multiselect({
+	includeSelectAllOption: false,
+	enableFiltering: true,
+	maxHeight: 200,
+	buttonWidth: '100%',
+	numberDisplayed: 7,
+	buttonText: function(options, select) {
+	    if (options.length === 0) {
+	      return 'Not Applicable';
+	    } else if (options.length > 7) {
+	      return options.length + ' options selected';
+	    } else {
+	      var labels = [];
+	      options.each(function() {
+	        labels.push($(this).html());
+	      });
+	      return labels.join(', ');
 	    }
 	  },
-	  onSelectAll: function(checked, select) {
-	    if (checked) {
-	      var notApplicableOption = select.find('option[value="Not Applicable"]');
-	      notApplicableOption.prop('disabled', true);
-	    } else {
-	      var allOptions = select.find('option');
-	      allOptions.prop('disabled', false);
-	    }
-	  } */
-});
-});
-
-$('select').on('change', function() {
-	  var selectedValue = $(this).val();
-	  var notApplicableOption = $(this).find('option[value="Not Applicable"]');
-	  var otherOptions = $(this).find('option').not(':selected');
 	  
-	  if (selectedValue === 'Not Applicable') {
-	    otherOptions.prop('disabled', true);
-	  } else {
-	    otherOptions.prop('disabled', false);
-	  }
+	  onChange: function(element, checked) {		 
+	      if ($(element).val() === 'Not Applicable') {
+	        $('#options option:not(:selected)').prop('disabled', checked);
+	        $('#options').multiselect('refresh');
+	        
+	        if (checked) {
+	          $('#options').multiselect('deselectAll', false); // Deselect all other options
+	          $('#options').multiselect('select', 'Not Applicable'); // Select the "Not Applicable" option
+	        }
+	      } else {
+	        $('#options option[value="Not Applicable"]').prop('disabled', false);
+	        $('#options').multiselect('refresh');
+	      }
+	    }
+	  });
 
-	  notApplicableOption.prop('disabled', false);
+	  // Disable remaining options by default	  
+	  $('#options option:not(:selected)').prop('disabled', true);
+	  $('#options').multiselect('refresh');
 	});
+
 </script>
 </body>
 </html>

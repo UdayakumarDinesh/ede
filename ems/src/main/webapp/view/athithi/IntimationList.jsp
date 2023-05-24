@@ -17,7 +17,7 @@
 
 .trup
 		{
-			padding:5px 10px 0px 10px ;			
+			padding:5px 10px 5px 10px ;			
 			border-top-left-radius : 5px; 
 			border-top-right-radius: 5px;
 			font-size: 14px;
@@ -67,7 +67,7 @@
 			</div>
 	</div>	
 	<div class="page card dashboard-card">
-  <div class="card-body" align="center">
+  <div class="card-body">
 
 		<div align="center">
 <%	String ses=(String)request.getParameter("result"); 
@@ -89,17 +89,13 @@
 	<%} %>
 </div>
    <div class="card-body"  >
-  		
+  		<div align="center" style="margin-top: -3%;margin-bottom: 1%;"> 
+			<a class="btn btn-sm btn-info" href="NewIntimation.htm"  >Generate Pass</a>
+			</div>
 
 			<div class="card shadow-nohover">	
 				<div class="card-body">
-					<div align="center"> 
-						
-						<a class="btn btn-sm btn-info" href="NewIntimation.htm"  >Generate Pass</a>
-						
-					</div>
-					<hr>
-					<form action="" id="empForm">
+					<form action="#" id="empForm">
 				    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<div class="table-responsive">			
 							<table class="table table-bordered table-hover table-striped table-condensed" id="myTable">
@@ -126,7 +122,10 @@
 								    <td style="text-align: center;width: 21%;"><%=sdf1.format(obj[5])%>&nbsp; to &nbsp;<%=sdf1.format(obj[6])%></td>
 					              <%--   <td><%=obj[7]%> </td> --%>
 					                 <td><%=obj[9]%> </td>
-					                 <td><%=obj[8]%> </td>
+					                 <td>
+					                 <%if(!obj[8].toString().isEmpty()){%><%=obj[8]%><%}else{ %>Not Applicable <%} %>
+					                 </td>
+					                
 					                 <td>
 					                 <%if(obj[13]!=null){%>
 								  
@@ -154,28 +153,20 @@
 								           <i class="fa-solid fa-eye"></i>
 								        </button>
 								       <% if(obj[16]!=null) {%> 
-								       <button type="submit" class="btn btn-sm" formaction="passPrint" formtarget="blank" formmethod="GET" data-toggle="tooltip" data-placement="top" title="Download">
+								       <button type="submit" class="btn btn-sm" formaction="passPrint" name="passAction" value="<%=obj[16]%>#<%=obj[0]%>" formtarget="blank" formmethod="GET" data-toggle="tooltip" data-placement="top" title="Download">
 								          <i style="color: #019267" class="fa-solid fa-download"></i>
 								       </button>
 								       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-								       <input type="hidden" value="<%=obj[16]%>" name="passId">
-								       <input type="hidden" value="<%=obj[0]%>" name="intimationId">
+								       <input type="hidden" value="Y" name="Download">
+								       <%-- <input type="hidden" value="<%=obj[16]%>" name="passId"> --%>
+                                       <%--<input type="hidden" value="<%=obj[0]%>" name="intimationId"> --%>
 								       <%} %>
+								       <%if(obj[11]!=null && !obj[11].toString().equalsIgnoreCase("G") && !obj[15].toString().equalsIgnoreCase("REV")) {%>
 								       <button type="submit" class="btn btn-sm" name="intimationId" value="<%=obj[0] %>" formaction="VisitorPassRevoke.htm" onclick="return confirm('Are you sure to revoke this pass?');" formmethod="post" data-toggle="tooltip" data-placement="top" title="Revoke Submission">
 													<i class="fa-solid fa-backward" style="color: #333C83"></i>
-												</button>
-                                      </td>
-					                 <%--  <td style="width: 10%;" align="center">
-					                    <%					                    
-					                    if(!obj[8].toString().contains("Not Applicable")) {
-					                    if(toUserStatus.contains(obj[15].toString())){
-					                    %>
-					                    <input type="hidden" name="intimationId" value="<%=obj[0]%>">
-					                       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="VpIntimationApprovalSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" data-toggle="tooltip" data-placement="top" title="Forward">
-							                 <i class="fa-solid fa-forward" style="color: #125B50"></i>
-						                 </button>
-					                    <%} }%>					                  
-					                  </td> --%>
+									  </button>
+									  <%} %>
+                                      </td>					 
 									</tr>
 								<%}%>
 								<%} %>
@@ -223,7 +214,7 @@
 	               		<tr>
 	               		<%if( !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
 	                		<td class="trup" style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
-	                			User <br> <%=session.getAttribute("EmpName")%>
+	                			User - <%=session.getAttribute("EmpName")%>
 	                		</td>
 	                		<td rowspan="2" >
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
@@ -231,7 +222,7 @@
 	               			<%} %>
 	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
 	               			<td class="trup"  style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
-	                			DGM <br> <%=EmpApprFlow[1]%>
+	                			DGM - <%=EmpApprFlow[1]%>
 	                		</td>
 	                		
 	                		<td rowspan="2">
@@ -240,7 +231,7 @@
 	               		 <%} %>	                		                		
 	                		<%if(CeoName!=null){ %>
 	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
-	                			CEO <br> <%=EmpApprFlow[4]%>
+	                			CEO - <%=EmpApprFlow[4]%>
 	                		</td> 
 	                		<%} %>
 	               		

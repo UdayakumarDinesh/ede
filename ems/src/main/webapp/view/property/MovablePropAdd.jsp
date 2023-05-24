@@ -23,7 +23,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 <div class="card-header page-top">
 		<div class="row">
 				<div class="col-md-7">
-				<h5>Immovable Property Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+				<h5>Movable Property Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			   </div>
 			<div class="col-md-5">
@@ -65,72 +65,35 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				       <label>Mode:<span class="mandatory">*</span></label>
 				       <select name="mode" id="mode" class="form-control input-sm select2" required>
 			               <option value="Purchase/Sale">Purchase/Sale</option>
-			               <option value="Gift" >Gift</option>
-			               <option value="Mortgage" >Mortgage</option>
-			               <option value="Lease" >Lease</option>
-			               <option value="Others" >Others</option>
+			               <option value="Gift">Gift</option>
+			               <option value="Mortgage">Mortgage</option>
+			               <option value="Lease">Lease</option>
+			               <option value="Others">Others</option>
 			           </select>
 				   </div>
-				   <div class="col-md-4">
-				       <label>Description:</label>
-				       <input class="form-control" type="text" name="description" maxlength="500" placeholder="Enter Incase of Cultivable or Irrigated land">
-				    </div>                
-			     </div>
-			     <br>
-			     <div class="row">
-			      <div class="col-md-4">
-				       <label>Location:<span class="mandatory">*</span></label>
-				       <input class="form-control" type="text" name="location" id="location" maxlength="225" placeholder="Municipal No, Village, Taluk" required>
-				     </div> 			       
-			        <div class="col-md-2">
-			          <label>District:<span class="mandatory">*</span></label>
-			          <input class="form-control" type="text" name="district" id="district" placeholder="Enter District" required>
-			        </div>
-			        <div class="col-md-2">
-                        <div class="form-group">
-                            <label>Pincode:<span class="mandatory">*</span></label>
-                            <input type="text" class="form-control input-sm"  name="pincode" id="CityPinTextBox" maxlength="6" placeholder="Enter PIN" onblur="checknegative(this)">
-                        </div>
-                    </div>
-			         <div class="col-md-4">
-                        <div class="form-group">
-                          <label>State:<span class="mandatory">*</span></label>
-                           <select id="state" name="state" class="form-control input-sm selectpicker" data-live-search="true" required>
-                                <option disabled="disabled" value="" selected="selected"> Select</option>
-								<%if(States!=null){ 
-								for (Object[] O : States) {%>								
-								<option value="<%=O[1]%>"   ><%=O[1]%></option>
-								<%}}%>
-							</select>
-                       </div>
-                    </div>	 			        
-			        
-                   
-				  
-			     </div>
-			     <div class="row">
-			        <div class="col-md-2">			         
-			            <label>Property Price:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="price" id="price" maxlength="225" placeholder="Enter price" onblur="checknegative(this)" required>
-			        </div>
-			        <div class="col-md-2">
-				       <label>Ownership:<span class="mandatory">*</span></label>
-				        <select name="ownership" class="form-control input-sm select2" required>
-			               <option value="F" >Freehold</option>
-			               <option value="L" >LeaseHold</option>
+				   <div class="col-md-2" id="desc">
+				       <label>Description:<span class="mandatory">*</span></label>
+				       <select name="description" id="description" class="form-control input-sm select2" required>
+			               <option value="Four Wheeler">Four Wheeler</option>
+			               <option value="Two Wheeler">Two Wheeler</option>
+			               <option value="Refrigerator">Refrigerator</option>
+			               <option value="TV">TV</option>
+			               <option value="PC">PC</option>
+			               <option value="Jewellery">Jewellery</option>
+			               <option value="Loans">Loans</option>
+			               <option value="Insurance Policies Premium">Insurance Policies Premium</option>
+			               <option value="Shares">shares</option>
+			               <option value="Securities">Securities</option>
+			               <option value="Debentures">Debentures</option>
+			               <option value="Other Items">Other Items</option>
 			           </select>
-				    </div>
-			        <div class="col-md-4">			         
-			            <label>Ownership Particulars:</label>
-			           <input class="form-control" type="text" name="osParticulars" id="osParticulars" maxlength="500" placeholder="Enter only if transaction is  not exclusive" >
-			        </div>
-			        <div class="col-md-4">			         
-			            <label>Share of each member:</label>
-			           <input class="form-control" type="text" name="osShare" id="osShare" maxlength="225" placeholder="Enter only if transaction is not exclusive" >
-			        </div>
+				    </div> 
+				    <div class="col-md-2" id="model" >			         
+			            <label>Make & Model:<span class="mandatory" >*</span></label>
+			            <input class="form-control" type="text" name="makeAndModel" id="makeAndModel" maxlength="225" placeholder="Enter Regstr.No" required>
+			        </div>	               
 			     </div>
-			      <br>
-			     
+			     <br>			    
 			     <div class="row">     
 			        <div class="col-md-2">
 			            <label>Is Party Related?<span class="mandatory" >*</span></label>
@@ -177,19 +140,11 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			        </div>	
 			     </div>	
 			     <br>
-                 <div class="row">
-			        <div class="col-md-2" id="interest">
-			           <label>Applicant Interest :<span class="mandatory" >*</span></label>
-			           <select  name="applicantInterest" id="applicantInterest" class="form-control input-sm select2" onchange="showcents()" required>
-			               <option value="F" >Full Property</option>
-			               <option value="P" >Part In Property</option>
-			           </select>
-			        </div>
-			        <div class="col-md-2" id="extent" >			         
-			            <label>Extent :<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="partialInterest" id="partialInterest" maxlength="225">
-			        </div>
-			        
+                 <div class="row">	
+                    <div class="col-md-2">			         
+			            <label>Property Price:<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="price" id="price" maxlength="225" placeholder="Enter price" onblur="checknegative(this)" required>
+			        </div>			       
 			        <div class="col-md-2" id="finance">
 			           <label>Source for finance:<span class="mandatory" >*</span></label>
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
@@ -235,12 +190,8 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 function CommentsModel(){
 	
 	var transState = $('#transState').val();
-	var location = $('#location').val();
-	var district = $('#district').val();
-	var state = $('#state').val();
-	var pincode = $('#CityPinTextBox').val();
-	var applicantInterest = $('#applicantInterest').val();
-	var partialInterest = $('#partialInterest').val();
+	var description = $('#description').val();
+	var makeAndModel = $('#makeAndModel').val();
 	var price = $('#price').val();
 	var financeSource = $('#financeSource').val();
 	var otherSource = $('#otherSource').val();
@@ -250,32 +201,9 @@ function CommentsModel(){
 	var partyAddress = $('#partyAddress').val();	
 	var transArrangement = $('#transArrangement').val();	
 	var dealingNature = $('#dealingNature').val();	
-	var osParticulars = $('#osParticulars').val().trim();	
-	var osShare = $('#osShare').val().trim();	
 	
-	if(location==null || location=="" || location=="null"){
-		alert('Enter Location Details!');
-		return false;
-	}else if(district==null || district=="" || district=="null" ){
-		alert('Enter District Details!');
-		return false;
-	}else if(state==null || state=="" || state=="null" ){
-		alert('Select State Details!');
-		return false;
-	}else if(pincode==null || pincode=="" || pincode=="null" ){
-		alert('Enter Pincode Details!');
-		return false;
-	}else if(osParticulars.length>0 && osShare.length==0){
-		alert("Enter Share Of Each Member too!");	
-		return false;
-	}else if(osParticulars.length==0 && osShare.length>0){
-		alert("Enter Ownership Particulars too!");	
-		return false;
-	}else if(applicantInterest=="P" && (partialInterest==null || partialInterest=="" || partialInterest=="null") ){
-		alert('Enter Extent Details!');
-		return false;
-	}else if(price==null || price=="" || price=="null" ){
-		alert('Enter Property Price!');
+    if( (description=="Four Wheeler" || description=="Two Wheeler") && (makeAndModel==null || makeAndModel=="" || makeAndModel=="null") ){
+		alert('Enter Registration Details!');
 		return false;
 	}else if(financeSource=="Other sources" && (otherSource==null || otherSource=="" || otherSource=="null") ){
 		alert('Enter Other Source Details!');
@@ -294,6 +222,9 @@ function CommentsModel(){
 		return false;
 	}else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
 		alert('Enter Nature of dealing Details!');
+		return false;
+	}else if(price==null || price=="" || price=="null" ){
+		alert('Enter Property Price!');
 		return false;
 	}else{
 		if(confirm('Are You Sure to submit')){
@@ -378,16 +309,20 @@ function checknegative(str) {
 		$('#sitarSanction').hide();
 	});
 
-	  $("#applicantInterest").change(function(){
-		var interest = $('#applicantInterest').val();
-		  if(interest=="P"){
-			$('#extent').show();
-			}
-		  else{
-			$('#extent').hide();
-			}
+	$("#description").change(function(){
+		var makeAndModel = $('#description').val();
+		if(makeAndModel=="Four Wheeler" || makeAndModel=="Two Wheeler" ){
+			$('#model').show();
+			$('#model').addClass("col-md-2");
+			$('#desc').removeClass("col-md-4");
+		}
+		else{
+			$('#model').hide();
+			$('#desc').removeClass("col-md-2");
+			$('#desc').addClass("col-md-4");
+		}
+			
 	});
-
 	$("#transState").change(function(){
 		var acquire = $('#transState').val();
 		var otherSource = $('#financeSource').val();
@@ -455,19 +390,6 @@ function checknegative(str) {
 			$('#sitarSanction').hide();			
 			}
 	});
-
-	/* function showFinanceSource(){
-	  var acquire = $('#transState').val();
-		
-	  if(acquire=="A"){
-	     $('#finance').css("display","block");
-		$('#sanction').css("display","none");
-	 
-		}else{
-			$('#finance').css("display","none");
-			$('#sanction').css("display","block");
-		}
-	} */
 
 </script> 
 </body>

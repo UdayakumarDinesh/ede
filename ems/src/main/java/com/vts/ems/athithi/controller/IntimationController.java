@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -229,7 +230,7 @@ public class IntimationController {
 			
 			NewIntimation intimation =new NewIntimation();
 			intimation.setIntimationByEmpNo(ses.getAttribute("EmpNo").toString());
-			intimation.setCreateBy(ses.getAttribute("EmpId").toString());
+			intimation.setCreateBy(UserId);
 			intimation.setCompnayId(req.getParameter("company"));
 			intimation.setVisitors(req.getParameterValues("visitors"));
 			intimation.setDuration(req.getParameter("duration"));
@@ -456,6 +457,7 @@ public class IntimationController {
 		logger.info(new Date() +"Inside VisitorPassPreview.htm "+Username);
 		try {
 			    String intimationId = req.getParameter("intimationId");
+			    System.out.println(intimationId+"***************************");
 				
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				String CEO = piservice.GetCEOEmpNo();
@@ -554,6 +556,7 @@ public class IntimationController {
 	        intimation.setOfficer(req.getParameter("officer"));
 	        intimation.setPurpose(req.getParameter("purpose"));
 	        intimation.setForeigner(req.getParameter("foreigner"));
+	        intimation.setModifiedBy(UserId);
 //			intimation.setSpermission(req.getParameter("spermission"));	       
 	        String[] sp = req.getParameterValues("spermission");
 	        
@@ -576,10 +579,12 @@ public class IntimationController {
 	        		  sPermission += ",";
 	        	  } 
 	        }
+	        intimation.setSpermission(sPermission);
 	        }else {
 	        	intimation.setVpStatus("A");
         		intimation.setPisStatusCode("APR");
         		intimation.setPisStatusCodeNext("APR");
+        		intimation.setSpermission("Not Applicable");
 	        }
 	        intimation.setSpermission(sPermission);
 			Long result=service.editNewIntimation(intimation);

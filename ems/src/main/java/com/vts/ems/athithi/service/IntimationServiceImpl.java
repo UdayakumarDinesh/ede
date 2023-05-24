@@ -386,7 +386,7 @@ public class IntimationServiceImpl implements IntimationService {
 	        inti.setVpStatus(intimation.getVpStatus());
 	        inti.setPisStatusCode(intimation.getPisStatusCode());
 	        inti.setPisStatusCodeNext(intimation.getPisStatusCodeNext());
-	        inti.setModifiedBy(intimation.getCreateBy());
+	        inti.setModifiedBy(intimation.getModifiedBy());
 	        inti.setModifiedDate(sdf1.format(new java.util.Date()));
 	        
 		    Long newIntimationId=dao.editNewIntimation(inti);
@@ -399,7 +399,7 @@ public class IntimationServiceImpl implements IntimationService {
 		    	IntimationEmp newVisitor =new IntimationEmp();
 		    	newVisitor.setCompanyEmpId(Long.parseLong(visitor));
 		    	newVisitor.setInitmationId(newIntimationId);
-		    	newVisitor.setCreatedBy(intimation.getCreateBy());
+		    	newVisitor.setCreatedBy(intimation.getModifiedBy());
 		    	newVisitor.setCreatedDate(sdf1.format(new java.util.Date())); 
 		    	newVisitor.setIsActive(1);
 		    	dao.addVisitor(newVisitor);

@@ -914,7 +914,7 @@ $( "#tdate" ).daterangepicker({
 
 $(document).ready(function() {
 $('#options').multiselect({
-includeSelectAllOption: true,
+includeSelectAllOption: false,
 enableFiltering: true,
 maxHeight: 200,
 buttonWidth: '100%',

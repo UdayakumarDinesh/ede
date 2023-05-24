@@ -73,6 +73,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				  <ol class="breadcrumb ">
 				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
 				    <li class="breadcrumb-item"><a href="IntimationList.htm">Visitor Pass</a></li>
+				    <li class="breadcrumb-item active">Visitor Pass Form</li>
 				  </ol>
 				</nav>
 			</div>			
@@ -145,15 +146,15 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
                <div align="center">
          <table style="border: 1px solid black;">
                  <tr  >
-                  <td style="width: 20rem; text-align: left;border: 0;"> Receiving Officer : <td>
-                  <td style="width: 19rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[9]!=null) {%> <%=VpFormData[9] %><%} %>&nbsp;(<%=VpFormData[14]%>)</b> <td>                  
-                  <td style="width: 19rem; text-align: left;border: 0;"> Expected Time : <td>
-                  <td style="width: 10rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[7]!=null) {%><%=VpFormData[7] %><%} %></b> <td>
+                  <td style="width: 20rem; text-align: left;border: 0;"> Receiving Officer : </td>
+                  <td style="width: 19rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[9]!=null) {%> <%=VpFormData[9] %><%} %>&nbsp;(<%=VpFormData[14]%>)</b></td>                
+                  <td style="width: 19rem; text-align: left;border: 0;"> Expected Time : </td>
+                  <td style="width: 10rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[7]!=null) {%><%=VpFormData[7] %><%} %></b> </td>
                 </tr>
                 <tr  >
-                     <td style="width:17rem; text-align: left;border: 0;"> Intimated By : <td>
-                     <td style="width:10rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[1]!=null) {%><%=VpFormData[1] %><%} %></b> <td>     
-                     <td style="width: 19rem; text-align: left;border: 0;"> Foreigner : <td>
+                     <td style="width:17rem; text-align: left;border: 0;"> Intimated By : </td>
+                     <td style="width:10rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[1]!=null) {%><%=VpFormData[1] %><%} %></b> </td>     
+                     <td style="width: 19rem; text-align: left;border: 0;"> Foreigner : </td>
                   <td style="width: 10rem; text-align: left;border: 0;"><b>
                   <%if(VpFormData!=null ) {
                 	  if(VpFormData[15]!=null && "Y".equalsIgnoreCase(VpFormData[15].toString())){
@@ -161,26 +162,26 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
                   Yes<%}else if(VpFormData[15]!=null && "N".equalsIgnoreCase(VpFormData[15].toString())) {%>
                   No<%} else{%>NA <%}} %>
                   </b> 
-                  <td>
+                  </td>
                                         
                 </tr>
                  <tr  >
-                  <td style="width:17rem; text-align: left;border: 0;"> Company: <td>
+                  <td style="width:17rem; text-align: left;border: 0;"> Company: </td>
                      <td style="width:29rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[3]!=null) {%> <%=VpFormData[3] %><%} %>
-                                                                  <%if(VpFormData!=null && VpFormData[4]!=null) {%> <%="("+VpFormData[4]+")" %><%} %> </b> <td>                  
+                                                                  <%if(VpFormData!=null && VpFormData[4]!=null) {%> <%="("+VpFormData[4]+")" %><%} %> </b> </td>                  
                 </tr>
                  <tr  >
-                  <td style="width:17rem; text-align: left;border: 0;"> Purpose of Visit : <td>
-                  <td style="width:29rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[13]!=null) {%> <%=VpFormData[13] %><%} %></b> <td>                  
+                  <td style="width:17rem; text-align: left;border: 0;"> Purpose of Visit : </td>
+                  <td style="width:29rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[13]!=null) {%> <%=VpFormData[13] %><%} %></b> </td>                  
                 </tr>
                  <tr  >
-                  <td style="width:17rem; text-align: left;border: 0;"> Special Permission: <td>
-                  <td style="width:29rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[8]!=null) {%> <%=VpFormData[8] %><%} %></b> <td>                  
+                  <td style="width:17rem; text-align: left;border: 0;"> Special Permission: </td>
+                  <td style="width:29rem; text-align: left;border: 0;"><b><%if(VpFormData!=null && VpFormData[8]!=null) {%> <%=VpFormData[8] %><%} %></b> </td>                  
                 </tr> 
                 
                 <tr>
-                  <td style="width:17rem; text-align: left;border: 0;"> Visitor/s : <td>
-                   <td style="width:29rem; text-align: left;border: 0;"><td>                  
+                  <td style="width:17rem; text-align: left;border: 0;"> Visitor/s : </td>
+                   <td style="width:29rem; text-align: left;border: 0;"></td>                  
                 </tr> 
                 <%for(Object[] visitor:visitorList ){ %>
 						<tr>
@@ -224,7 +225,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 							</div>
 							<%} %>
 					   </div>
-					   
+
 					   <% if(VpFormData!=null && toUserStatus.contains(VpFormData[10].toString())) { %>
 				   		<%-- <div align="left">
 				   			 <%if(HomFormData[6]!=null){ %> <span style="color: red">Remarks :</span> <%=HomFormData[6] %> <%} %>
@@ -278,6 +279,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 							 Return
 						</button>
 					<%} }%>
+					<%if(( CEO.equalsIgnoreCase(empData[0].toString()) || (VpFormData!=null &&  VpFormData[10].toString().equalsIgnoreCase("APR")) && (!VpFormData[8].toString().isEmpty())) ) {%>
                       <div class="row" style="margin-top: 5%;">
                          <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
                       </div>
@@ -288,7 +290,8 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<% break;} %>
 				   		<%} %> </div>
-                      </div>							                    
+                      </div>	
+                      <%} %>						                    
 			   </div>	
 			    <input type="hidden" name="intimationId" value="<%if(VpFormData!=null && VpFormData[0]!=null){ %><%=VpFormData[0]%><%}%>">   
 			</form>

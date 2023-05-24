@@ -26,6 +26,8 @@ public class NewIntimation {
 	private String PisStatusCode;
 	private String PisStatusCodeNext;
 	private String VpStatus;
+	private String ModifiedBy;
+	private String ModifiedDate;
 	
 	public String getCreateBy() {
 		return createBy;
