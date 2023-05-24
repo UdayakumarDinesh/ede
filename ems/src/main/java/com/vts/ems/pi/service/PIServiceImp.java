@@ -1058,5 +1058,11 @@ public class PIServiceImp implements PIService{
 		return dao.GetApprovalFlowEmp(empno);
 	}
 
+	@Override
+	public long AddNotifications(EMSNotification notification) throws Exception {
+		
+		return dao.AddNotifications(notification);
+	}
+
 	
 }

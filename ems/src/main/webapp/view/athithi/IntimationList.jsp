@@ -123,11 +123,11 @@
 					              <%--   <td><%=obj[7]%> </td> --%>
 					                 <td><%=obj[9]%> </td>
 					                 <td>
-					                 <%if(!obj[8].toString().isEmpty()){%><%=obj[8]%><%}else{ %>Not Applicable <%} %>
+					                 <%if(obj[8]!=null){%><%=obj[8]%><%} %>
 					                 </td>
 					                
 					                 <td>
-					                 <%if(obj[13]!=null){%>
+					                 <%if(obj[13]!=null && (obj[8]!=null && !obj[8].toString().contains("Not Applicable") ) ){%>
 								  
 								 	<%if(obj[11]!=null && obj[11].toString().equalsIgnoreCase("A") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="VpIntimationTransStatus.htm" value="<%=obj[0] %>" name="intimationid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
@@ -143,7 +143,11 @@
 								    	</button>
 							    	<%} %>  
 								 
-								<%} %>
+								<%}else{ %>
+								      <button type="button" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="intimationid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: red; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; Not Applicable <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+								    	<%} %>
 					                  </td>					                  
 					                  <td style="text-align: left;width: 13%;">	
 					                  <%if(toUserStatus.contains(obj[15].toString())) {%>

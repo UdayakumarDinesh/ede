@@ -34,6 +34,7 @@ import com.vts.ems.athithi.model.CompanyEmployee;
 import com.vts.ems.athithi.model.Intimation;
 import com.vts.ems.athithi.model.VpIntimationTrans;
 import com.vts.ems.athithi.service.IntimationService;
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.property.model.PisMovableProperty;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -229,7 +230,7 @@ public class IntimationController {
 		try {
 			
 			NewIntimation intimation =new NewIntimation();
-			intimation.setIntimationByEmpNo(ses.getAttribute("EmpNo").toString());
+			intimation.setIntimationByEmpNo(EmpNo);
 			intimation.setCreateBy(UserId);
 			intimation.setCompnayId(req.getParameter("company"));
 			intimation.setVisitors(req.getParameterValues("visitors"));
@@ -268,6 +269,27 @@ public class IntimationController {
         		intimation.setPisStatusCodeNext("APR");
 	        }
 	        intimation.setSpermission(sPermission);
+	        if(sp==null || sp.length<0) {
+	        	intimation.setSpermission("Not Applicable");
+	        }
+	        if(intimation.getVpStatus().equalsIgnoreCase("A")) {
+	        	String RecEmpNo = service.GetReceptionistEmpNo();
+	             
+				//Notification
+				EMSNotification notification = new EMSNotification();
+				
+				Object[] emp = piservice.getEmpNameDesig(EmpNo);
+				notification.setEmpNo(RecEmpNo);
+				notification.setNotificationUrl("pendingIntimations.htm");
+				notification.setNotificationMessage("Visitor Pass Request from "+emp[1].toString());
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(UserId);
+				notification.setCreatedDate(sdtf.format(new java.util.Date()));
+			
+				piservice.AddNotifications(notification);
+	        }
 			Long result=service.addNewIntimation(intimation);
 			
 			if(result>0) {
@@ -457,7 +479,6 @@ public class IntimationController {
 		logger.info(new Date() +"Inside VisitorPassPreview.htm "+Username);
 		try {
 			    String intimationId = req.getParameter("intimationId");
-			    System.out.println(intimationId+"***************************");
 				
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				String CEO = piservice.GetCEOEmpNo();

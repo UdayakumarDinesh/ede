@@ -19,7 +19,15 @@ public class Pass {
 	  private Long InitimationId;
 	  private String PassNo;
 	  private Date PassDate;
-	  private String CreatedBy;
+	  private int IsActive;
+	  
+	public int getIsActive() {
+		return IsActive;
+	}
+	public void setIsActive(int isActive) {
+		IsActive = isActive;
+	}
+	private String CreatedBy;
 	  private String CreatedDate;
 	  private String ModifiedBy;
 	  private String ModifiedDate;

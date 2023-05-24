@@ -1,7 +1,7 @@
 <%@page import="com.vts.ems.pis.model.Employee"%>
 <%@page import="com.vts.ems.leave.model.LeaveRegister"%>
-<%@page import="com.ibm.icu.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
+    <%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -18,6 +18,8 @@
 <body>
 <% 
 Object[] empData=(Object[])request.getAttribute("EmpData");
+SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
+SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 %>
 
 <div class="card-header page-top ">
@@ -83,11 +85,14 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 				                 <td><%=intimation[9]%></td>
 				                 <td><%=intimation[7]%> </td>
 				                 <td>
+				                 
+				                 <%-- <%if(!sdf1.format(intimation[5].toString()).equalsIgnoreCase(sdf.format(new Date()).toString())) {%> --%>
 				                 <form action="intimationDetails.htm" method="post">
 				                 <input type="hidden" name="intimationId" value="<%=intimation[0]%>">
 				                 <button type="submit" class="btn btn-primary btn-sm">Create Pass</button>
 				                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				                 </form>
+				                 <%-- <%} %> --%>
 				                 </td>
 								</tr>
 							<%}%>

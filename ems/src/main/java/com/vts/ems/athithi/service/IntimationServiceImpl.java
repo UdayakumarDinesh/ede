@@ -407,6 +407,12 @@ public class IntimationServiceImpl implements IntimationService {
 		
 		return newIntimationId;
 	}
+
+	@Override
+	public String GetReceptionistEmpNo() throws Exception {
+		
+		return dao.GetReceptionistEmpNo();
+	}
 	
 
 }

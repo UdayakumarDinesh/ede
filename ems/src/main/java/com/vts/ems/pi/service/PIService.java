@@ -4,6 +4,7 @@ import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
+import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.model.PisAddressPerTrans;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.model.PisHometown;
@@ -85,5 +86,6 @@ public interface PIService {
 	public List<Object[]> mobNumberRemarksHistory(String MobileNumberId) throws Exception;
 	public List<Object[]> hometownRemarksHistory(String HometownId) throws Exception;
 	public Object[] GetApprovalFlowEmp(String empno) throws Exception;
+	public long AddNotifications(EMSNotification notification) throws Exception;
 	
 }

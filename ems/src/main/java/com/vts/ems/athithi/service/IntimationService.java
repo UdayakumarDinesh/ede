@@ -29,6 +29,6 @@ public interface IntimationService {
 	public List<Object[]> visitorPassVisitorsForm(String IntimationId) throws Exception;
 	public long visitorPassUserRevoke(String intimationId,String Username,String EmpNo)throws Exception;
 	public Long editNewIntimation(NewIntimation intimation) throws Exception;
-	
+	public String GetReceptionistEmpNo() throws Exception;
 	
 }

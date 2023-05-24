@@ -22,6 +22,14 @@ public class PassEmp {
 	  private String TimeIn;
 	  private String TimeOut;
 	  private Date PassDate;
+	  private int IsActive;
+	  
+    public int getIsActive() {
+		return IsActive;
+	}
+	public void setIsActive(int isActive) {
+		IsActive = isActive;
+	}
 	private String CreatedBy;
 	  private String CreatedDate;
 	  private String ModifiedBy;
