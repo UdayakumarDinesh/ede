@@ -279,7 +279,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 							 Return
 						</button>
 					<%} }%>
-					<%if(( CEO.equalsIgnoreCase(empData[0].toString()) || (VpFormData!=null &&  VpFormData[10].toString().equalsIgnoreCase("APR")) && (!VpFormData[8].toString().isEmpty())) ) {%>
+					<%if(( CEO.equalsIgnoreCase(empData[0].toString()) || (VpFormData!=null &&  VpFormData[10].toString().equalsIgnoreCase("APR"))) ) {%>
                       <div class="row" style="margin-top: 5%;">
                          <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
                       </div>
