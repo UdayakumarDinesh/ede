@@ -183,11 +183,13 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					   <div align="left">
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					   </div>
-				   	
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="HometownFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
+					  
+					   <button style="margin-top: -10%" type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="HometownFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
 							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
 						</button>
+					   </div>
+				   	
+				   		
 					<%} %>
 					
 					<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
