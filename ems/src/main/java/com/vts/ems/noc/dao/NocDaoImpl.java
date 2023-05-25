@@ -33,7 +33,7 @@ public class NocDaoImpl implements NocDao {
 	@PersistenceContext
 	EntityManager manager;
 
-	private static final String EMPDATA="SELECT e.EmpName,ed.Designation ,dm.DivisionName ,res.res_addr,per.per_addr,e.EmpNo FROM employee e, employee_desig ed,division_master dm,pis_address_res res,pis_address_per per WHERE ed.DesigId=e.DesigId  AND e.divisionid=dm.divisionid AND res.Empid=e.Empid AND per.Empid=e.Empid AND res.ResAdStatus='A' AND per.PerAdStatus='A' AND  e.EmpId=:EmpId";
+	private static final String EMPDATA="SELECT e.EmpName,ed.Designation ,dm.DivisionName ,res.res_addr,per.per_addr,e.EmpNo,res.city AS res_city,res.state AS res_state,res.pin AS res_pin,per.city AS per_city,per.state AS per_state,per.pin AS per_pin FROM employee e, employee_desig ed,division_master dm,pis_address_res res,pis_address_per per WHERE ed.DesigId=e.DesigId  AND e.divisionid=dm.divisionid AND res.Empid=e.Empid AND per.Empid=e.Empid AND res.ResAdStatus='A' AND per.PerAdStatus='A' AND  e.EmpId=:EmpId";
 	@Override
 	public Object[] getNocEmpList(String EmpId) throws Exception {
 		
@@ -692,6 +692,28 @@ public class NocDaoImpl implements NocDao {
 			
 		}catch (Exception e) {
 			logger.error(new Date()  + "Inside DAO getEmpNameDesig " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+
+	private static final String EMPTITLE="SELECT empd.title FROM employee_details empd,noc_passport n WHERE n.EmpNo = empd.EmpNo AND n.isActive='1' AND  n.NocPassportId=:passportid";
+	@Override
+	public Object[] getEmpTitleDetails(String passportid) throws Exception {
+		
+    try {
+			
+			Query query= manager.createNativeQuery(EMPTITLE);
+			query.setParameter("passportid", passportid);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getEmpTitleDetails " + e);
 			e.printStackTrace();
 			return null;
 		}		

@@ -3,6 +3,7 @@
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vts.ems.noc.model.NocPassport"%> 
+  <%@page import="com.vts.ems.pis.model.*"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
@@ -32,24 +33,27 @@ body{
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
 	String Empid=(String)request.getAttribute("EmpId");
 	Object[] empData=(Object[])request.getAttribute("EmpData");
+	
+	Passport pispassport=(Passport)request.getAttribute("pispassport");
+	
   
   %>
 
 <div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-5">
 			<% if(passport!=null){ %>
 			
-			  <h5>Passport Edit <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+			  <h5>NOC Passport Edit <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			 <%}
 			else { %>
-			 <h5>Passport Add <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+			 <h5>NOC Passport Add <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			 <%} %>
 			
 			</div>
-			<div class="col-md-8 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="Passport.htm">Passport List</a></li>
@@ -125,7 +129,7 @@ body{
 			     </div>
 			
 			
-			            <div class="col-md-3">
+			            <div class="col-md-2">
 			                <label>Name</label> 
 			            	<input type="text" name="Name" value="<%=NocEmpList[0] %>" class="form-control input-sm" readonly >
 			            </div>			
@@ -142,9 +146,9 @@ body{
 			                    class=" form-control input-sm " readonly
 			                     >
 			            </div>
-			             <div class="col-md-3">
+			             <div class="col-md-4">
 			                <label>Present  Address </label>
-			                <input type="text" id="" name="Present"    value="<%=NocEmpList[3] %>"
+			                <input type="text" id="" name="Present"    value="<%=NocEmpList[3] %>,<%=NocEmpList[6] %>,<%=NocEmpList[7] %> <%=NocEmpList[8] %>"
 			                    class=" form-control input-sm " readonly
 			                    >
 			            </div>
@@ -155,14 +159,14 @@ body{
 			        <div class="row">
 			          <div class="col-md-3">
 			                <label> Permanent Address </label>
-			                <input type="text" id="" name="Permanent"    value="<%=NocEmpList[4] %>"
+			                <input type="text" id="" name="Permanent"    value="<%=NocEmpList[4] %>,<%=NocEmpList[9] %>,<%=NocEmpList[10] %> <%=NocEmpList[11] %>"
 			                    class=" form-control input-sm " readonly
 			                    >
 			            </div>
 			            
 			             <div class="col-md-2">
 			                <label>Relation Of </label>
-			                <select name="RelationType" class="form-control select2"  required="required">
+			                <select  name="RelationType" class="form-control select2"  id="reltype" >
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                    <option value="F" <%if(passport!=null){ if(passport.getRelationType().toString().equals("F")){%> selected  <% }}%>>Father</option>
 			                    <option value="H" <%if(passport!=null){ if(passport.getRelationType().toString().equals("H")){%> selected  <% }}%>>Husband</option>
@@ -172,20 +176,20 @@ body{
 			            
 			              <div class="col-md-2">
 			                <label>Relative Name </label>
-			                <input type="text" id="" name="RelationName"   value="<%if(passport!=null){ %><%=passport.getRelationName() %><%} %>"
+			                <input type="text" id="relativename" name="RelationName"   value="<%if(passport!=null){ %><%=passport.getRelationName() %><%} %>"
 			                   class=" form-control input-sm "  required="required" >
 			                    
 			            </div>
 			            <div class="col-md-2">
 			                <label>Relative Occupation </label>
-			                <input type="text" id="" name="RelationOccupation"   value="<%if(passport!=null){ %><%=passport.getRelationOccupation()%><%} %>"
+			                <input type="text" id="relativeoccup" name="RelationOccupation"   value="<%if(passport!=null){ %><%=passport.getRelationOccupation()%><%} %>"
 			                    class="form-control input-sm "  required="required">
 			                   
 			            </div>
 			            
 			             <div class="col-md-3">
 			                <label>Relative Address </label>
-			                <input type="text" id="" name="RelationAddress"  value="<%if(passport!=null){ %><%=passport.getRelationAddress()%><%} %>"  required="required"
+			                <input type="text" id="relativeaddres" name="RelationAddress"  value="<%if(passport!=null){ %><%=passport.getRelationAddress()%><%} %>"  required="required"
 			                    class="form-control input-sm " >
 			             
 			            </div>
@@ -202,7 +206,7 @@ body{
 			                <label> Details of blood / close relations working in foreign embassy / firms in India / Abroad 
                               </label>
                              <div class="col-md-13" style="margin-left:1px;">  
-			                <input type="text" name="RelationAbroad"     value="<%if(passport!=null){ %><%=passport.getRelationAbroad()%><%} %>"
+			                <input type="text" name="RelationAbroad"     value="<%if(passport!=null){ %><%=passport.getRelationAbroad()%><%}else{%>NA<%} %>"
 			                    class="form-control input-sm "  required="required"  >
 			                   
 			                    </div>
@@ -212,8 +216,8 @@ body{
 			                <label> Details of employment during last ten years  </label>
                             
                              <div class="col-md-13" style="margin-left:0px;">  
-			                <input type="text" name="EmployementDetails"     value="<%if(passport!=null){ %><%=passport.getEmployementDetails()%><%} %>"
-			                    class="form-control input-sm "  required="required"  >
+			                <input type="text" name="EmployementDetails"     value="<%if(passport!=null){ %><%=passport.getEmployementDetails()%><%} else{%>NA<%} %>"
+			                    class="form-control input-sm "   required="required"  >
 			                   
 			                   </div>
 			              </div>
@@ -223,12 +227,7 @@ body{
 			          </div>
 			    </div> 
 			    
-			    
-			       
-			        
-			    
-			  
-			         <div class="form-group" >
+			    <div class="form-group" >
 			  
 			        <div class="row">
 			         <% if( EmpPassport!=null) { %>
@@ -264,10 +263,7 @@ body{
 			         
 			       <%} %>
 			      
-			       
-			       
-			      
-			         <div class="col-md-2" id="ptype">
+			        <div class="col-md-2" id="ptype">
 			                <label>Passport Type</label><br>
                               <select  name="PassportType" class="form-control select2"  data-live-search="true" style="width:200px;">
                               
@@ -295,7 +291,7 @@ body{
 			             <div class="col-md-2" id="pno">
 	                    
 	                            <label>Passport No:</label>
-	                            <input id="passportno" type="text"  class="form-control input-sm "   name="PassportNo"  maxlength="6"   onblur="checknegative(this)">
+	                            <input id="passportno" type="text"  class="form-control input-sm "  name="PassportNo"  maxlength="6"   onblur="checknegative(this)">
 	                    
                     </div>
                     
@@ -319,8 +315,8 @@ body{
 			    	
 			        <div class="col-md-3" style="margin-left:25px;">
 			                <label> Details of passport lost,if any</label>
-			                <input type="text" id="" name="LostPassport"    value="<%if(passport!=null){ %><%=passport.getLostPassport()%><%} %>" 
-			                    class=" form-control input-sm " >
+			                <input type="text" id="" name="LostPassport"    value="<%if(passport!=null){ %><%=passport.getLostPassport()%><%} else{%>NA<%} %>" 
+			                    class=" form-control input-sm "  required="required" >
 			              
 			       </div>
 			       
@@ -334,7 +330,7 @@ body{
 			       
 			        <div class="col-md-2">
 			                <label> Passport Type Required </label>
-			                <select name="Passporttype" class="form-control select2"  required="required">
+			                <select name="Passporttype" class="form-control select2"  id="Passporttype" >
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                    <option value="Ordinary" <%if(passport!=null){ if(passport.getPassportType().toString().equalsIgnoreCase("Ordinary")){%> selected  <% }}%>>Ordinary</option>
 			                    <option value="Official" <%if(passport!=null){ if(passport.getPassportType().toString().equalsIgnoreCase("Official")){%> selected  <% }}%>>Official</option>
@@ -383,7 +379,7 @@ body{
 			     
 			 <div class="col-12" align="center">
 			       
-			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Submit')">Submit</button>
+			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit"  onclick=" return message()"  >Submit</button>
 			    	<input type="hidden" name="NocPassportId" value="<% if(passport!=null){%><%=passport.getNocPassportId() %><%} %>">
 			    	
 			</div>
@@ -487,7 +483,7 @@ window.onload = function() {
 	 }
 	   
 	     var select=$('#passporttype').val()
-	     console.log("select--"+select);
+	     
 	     if(select=="New" || select==undefined){
 	    	 
 	    	 $('#ptype').hide();
@@ -532,9 +528,9 @@ window.onload = function() {
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		//"minDate" :new Date(), 
-		<%if(passport!=null && passport.getFromDate()!=null){ %>
-		"startDate" : new Date("<%=passport.getFromDate()%>"),
-		<%}%>
+		<% if(pispassport!=null && pispassport.getValidFrom()!=null){ %>
+		"startDate" : new Date("<%=pispassport.getValidFrom()%>"),
+		<% } %>
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
@@ -548,9 +544,9 @@ window.onload = function() {
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
 		"minDate" :$('#pisfromdate').val(),    
-		<%if(passport!=null && passport.getToDate()!=null){ %>
-		"startDate" : new Date("<%=passport.getToDate()%>"),
-		<%}%>
+		<% if(pispassport!=null && pispassport.getValidTo()!=null){ %>
+		"startDate" : new Date("<%=pispassport.getValidTo()%>"),
+		<% } %>
 		"cancelClass" : "btn-default",
 		showDropdowns : true,
 		locale : {
@@ -581,6 +577,13 @@ window.onload = function() {
 	    	 $('#validtill').show();
 	    	
 	    }
+	    if(selectedValue=="Renewal"){
+	    	
+	    	
+	    	$('#passportno').attr('required', true);
+	    	
+	    }
+	    
 	    
 	    });
 	  });
@@ -617,6 +620,59 @@ function setInputFilter(obj, inputFilter) {
 	    }
 	  });
 	}
+
+function message()
+{
+	
+	var x = confirm("Are you sure To Submit?");
+	
+	if(x){
+		
+		
+		 var relationtype =$("#reltype").val();
+		 var relativename =$("#relativename").val();
+		 
+		 var relativeoccupation =$("#relativeoccup").val();
+		 var relativeaddres=$("#relativeaddres").val();
+		 var Passporttyperequired=$("#Passporttype").val();
+		 
+		 
+		 if(relationtype==null || relationtype=="" || relationtype=="null"){
+			 alert("Enter Relation Of");
+		       event.preventDefault();
+		       return false;
+		}
+		if(relativename==null || relativename=="" || relativename=="null"){
+			 alert("Enter Relative Name!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(relativeoccupation==null || relativeoccupation=="" || relativeoccupation=="null"){
+			 alert("Enter Relative Occupation!");
+		       event.preventDefault();
+		       return false;
+		}
+	
+		if(relativeaddres==null || relativeaddres=="" || relativeaddres=="null"){
+			 alert("Enter Relative Address!");
+		       event.preventDefault();
+		       return false;
+		}
+		if(Passporttyperequired==null ||  Passporttyperequired=="" || Passporttyperequired=="null"){
+			 alert("Enter Passport Type Required!");
+		       event.preventDefault();
+		       return false;
+		}
+		
+		
+		return true;
+		  
+	  }else{
+	 return false;
+	 
+	  }
+}
+
 
 
 

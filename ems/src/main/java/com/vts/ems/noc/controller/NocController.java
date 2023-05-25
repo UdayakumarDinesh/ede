@@ -51,6 +51,7 @@ import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadDto;
 import com.vts.ems.noc.service.NocService;
 import com.vts.ems.pis.model.Passport;
+import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
@@ -73,6 +74,9 @@ public class NocController {
 	
 	@Autowired
 	NocService service;
+	
+	@Autowired
+	PisService service1;
 	
 	@Value("${EMSFilesPath}")
 	private String emsfilespath;
@@ -207,8 +211,11 @@ public class NocController {
 			  req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
 			  req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			  String NocPassportId=req.getParameter("NocPassportId");
+			  Passport pispassport = service1.getPassportData(EmpId);
 			  NocPassport passport=service.getNocPassportId(Long.parseLong(NocPassportId));
 			  req.setAttribute("passport",passport);
+			  req.setAttribute("pispassport",pispassport);
+			  
 			  return "noc/AddEditPassport";
 					 
 		} catch (Exception e) 
@@ -289,6 +296,19 @@ public class NocController {
 			logger.info(new Date()+"Inside PassportEditSubmit.htm "+UserId);
 			try {
 				
+				
+	            Passport pport= new Passport();
+				
+				pport.setEmpId(EmpId);
+				pport.setPassportType(req.getParameter("PassportType"));
+				pport.setStatus(req.getParameter("Status"));
+				pport.setPassportNo(req.getParameter("PassportNo"));
+				pport.setValidFrom(DateTimeFormatUtil.dateConversionSql(req.getParameter("ValidFrom")));
+				pport.setValidTo(DateTimeFormatUtil.dateConversionSql(req.getParameter("ValidTo")));
+				pport.setCreatedBy(UserId);
+				pport.setCreatedDate(sdf.format(new Date()));
+				
+				
 				String NocPassportId = req.getParameter("NocPassportId");
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .NocPassportId(Long.parseLong(NocPassportId))
@@ -307,7 +327,7 @@ public class NocController {
 					     .ToDate(sdf.format(rdf.parse(req.getParameter("todate"))))
 				         .build();
 				
-				long save=service.NOCPassportUpdate(dto,UserId);
+				long save=service.NOCPassportUpdate(dto,UserId,pport);
 				  
 				  if (save > 0) {
 		  				
@@ -362,10 +382,12 @@ public class NocController {
 			
 			String passportid=req.getParameter("Passportid");
 			String isApproval = req.getParameter("isApproval");
-			System.out.println("isApproval---"+isApproval);
 			
+			String CEO = service.GetCEOEmpNo();
+			List<String> PandAs = service.GetPandAAdminEmpNos();
 			NocPassport passport=service.getNocPassportId(Long.parseLong(passportid));
-			req.setAttribute("CeoName", service.GetCeoName());		
+			req.setAttribute("CeoName", service.GetCeoName());
+			
 			req.setAttribute("NOCPassportRemarkHistory",service.getPassportRemarksHistory(passportid) );
 			req.setAttribute("passport",passport);
 			req.setAttribute("isApproval", isApproval);
@@ -375,6 +397,9 @@ public class NocController {
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			req.setAttribute("NocPassportFormDetails", service.getPassportFormDetails(passportid));
 			req.setAttribute("LoginType", LoginType);
+			req.setAttribute("CEOempno", CEO);
+			req.setAttribute("PandAsEmpNos", PandAs);
+			 
 			 return "noc/passportpreview";
 					 
 		} catch (Exception e) 
@@ -450,7 +475,7 @@ public class NocController {
 			logger.info(new Date() +"Inside NOCPassportTransactionStatus.htm "+UserId);
 			try {
 				String passportid=req.getParameter("PassportId");
-				System.out.println("passportid---"+req.getParameter("PassportId"));
+				
 				req.setAttribute("TransactionList", service.NOCPassportTransactionList(passportid));
 				
 				return "noc/NocTranscationStatus";
@@ -472,7 +497,7 @@ public class NocController {
 			try {
 				
 				String passportid=req.getParameter("passportid");
-				System.out.println("passportid---"+req.getParameter("passportid"));
+				
 				String action = req.getParameter("Action");
 				String remarks = req.getParameter("remarks");
 				
@@ -519,11 +544,13 @@ public class NocController {
 			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
 			String EmpNo = (String) ses.getAttribute("EmpNo");
 	    	String Username = (String) ses.getAttribute("Username");
+	    	String LoginType=(String)ses.getAttribute("LoginType");
 			ses.setAttribute("formmoduleid", "34");			
 			ses.setAttribute("SidebarActive","NocApproval_htm");	
 			logger.info(new Date() +"Inside NocApproval.htm"+Username);		
 			try {				
 				
+				System.out.println("LoginType---"+LoginType);
 				String fromdate = req.getParameter("fromdate");
 				String todate = req.getParameter("todate");
 				
@@ -541,12 +568,14 @@ public class NocController {
 					todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 				}
 	
+			
 				 req.setAttribute("fromdate", fromdate);
 				 req.setAttribute("todate", todate);
 				 req.setAttribute("tab", req.getParameter("tab"));
 				 req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				 req.setAttribute("ApprovedList", service.NocApprovedList(EmpNo,fromdate,todate));
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 req.setAttribute("LoginType",LoginType);
 				 
 				return "noc/NocApproval";
 			}catch (Exception e) {
@@ -637,6 +666,7 @@ public class NocController {
 				    req.setAttribute("lablogo",getLabLogoAsBase64());
 				    req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				    req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
+				    req.setAttribute("Emptitle", service.getEmpTitleDetails(passportid));
 				    String path = req.getServletContext().getRealPath("/view/temp");
 				    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 					req.getRequestDispatcher("/view/noc/NocPassportCertificate.jsp").forward(req, customResponse);

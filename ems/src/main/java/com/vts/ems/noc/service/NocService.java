@@ -35,7 +35,7 @@ public interface NocService {
 
 	public NocPassport getNocPassportId(long NocPassportId )throws Exception;
 
-	public long NOCPassportUpdate(NocPassportDto dto, String userId)throws Exception;
+	public long NOCPassportUpdate(NocPassportDto dto, String userId,Passport pport )throws Exception;
 
 	public Object[] getPassportFormDetails(String passportid)throws Exception;
 
@@ -68,7 +68,9 @@ public interface NocService {
 	public List<Object[]> getPassportRemarksHistory(String passportid)throws Exception;
 
 	public List<Object[]> NocApprovedList(String empNo, String fromdate, String todate)throws Exception;
-	public Object[] getEmpNameDesig(String EmpNo) throws Exception;		
+	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
+
+	public Object[] getEmpTitleDetails(String passportid)throws Exception;		
 
 	
 

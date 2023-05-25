@@ -74,15 +74,16 @@ body{
 	
 	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
 	Object[] empData=(Object[])request.getAttribute("EmpData");
+	
    %>
 
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-5">
 				<h5>NOC Passport <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			</div>
-			<div class="col-md-8 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
@@ -198,9 +199,8 @@ body{
 						<button type="submit" class="btn btn-sm edit-btn" formaction="PassportEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCPassport)">EDIT</button>
 						<!-- <button type="submit" class="btn btn-sm delete-btn" formaction="" name="action" value="DELETECIR" Onclick="Delete(NOCPassport)">DELETE</button> -->
 						
-						
-						
 					</div>
+					
 				</div>
 
 			</form>
@@ -316,7 +316,7 @@ function Edit(NOCPassport)
 	var fields = $("input[name='NocPassportId']").serializeArray();
 
 	if (fields.length === 0) {
-		alert("Please Select Atleast One Passport ");
+		alert("Please Select Atleast One Noc Passport ");
         event.preventDefault();
 		return false;
 	}
@@ -347,7 +347,7 @@ function Delete(NOCPassport){
 
 function message(){
 	
-	alert("Permanent and Residential address is mandatory before applying NOC for Passport");
+	alert("Approval of Permanent and Residential address is mandatory before applying NOC for Passport");
 	event.preventDefault();
 	return false;
 	

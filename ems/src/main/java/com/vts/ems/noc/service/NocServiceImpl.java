@@ -129,7 +129,14 @@ public class NocServiceImpl implements NocService {
 	}
 
 	@Override
-	public long NOCPassportUpdate(NocPassportDto dto, String userId) throws Exception {
+	public long NOCPassportUpdate(NocPassportDto dto, String userId,Passport pport) throws Exception {
+		
+		long count = dao.GetPassportCount(pport.getEmpId());
+        if(count==0 && !pport.getPassportNo().isEmpty()) {
+      	  
+      	  dao.AddPassport(pport);
+        }
+		
 		
 		
 		NocPassport noc =dao.getNocPassportId(dto.getNocPassportId());
@@ -403,8 +410,8 @@ public class NocServiceImpl implements NocService {
 			if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
 			{
 				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				notification1.setNotificationUrl("Passport.htm");
-				notification1.setNotificationMessage("Noc Passpaort Request Approved");
+				notification1.setNotificationUrl("NocApproval.htm?tab=closed");
+				notification1.setNotificationMessage("NOC Passpaort Request Approved For <br>"+emp.getEmpName());
 				notification1.setNotificationBy(EmpNo);
 				
 				notification1.setNotificationDate(LocalDate.now().toString());
@@ -422,7 +429,7 @@ public class NocServiceImpl implements NocService {
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("Passport.htm");
-			notification.setNotificationMessage("Noc Passpaort Request Approved");
+			notification.setNotificationMessage("NOC Passpaort Request Approved");
 			notification.setNotificationBy(EmpNo);
 		}
 		
@@ -451,14 +458,14 @@ public class NocServiceImpl implements NocService {
 			}
 			
 			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved Noc Passport Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationMessage("Recieved NOC Passport Change Request From <br>"+emp.getEmpName());
 			notification.setNotificationBy(EmpNo);
 		}
 		else if(action.equalsIgnoreCase("R"))
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("Passport.htm");
-			notification.setNotificationMessage("Noc Passport Request Returned");
+			notification.setNotificationMessage("NOC Passport Request Returned");
 			notification.setNotificationBy(EmpNo);
 		}
 		
@@ -890,7 +897,7 @@ public class NocServiceImpl implements NocService {
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("ProceedingAbroad.htm");
-			notification.setNotificationMessage("Noc Proceeding Abroad Request Approved");
+			notification.setNotificationMessage("NOC Proceeding Abroad Request Approved");
 			notification.setNotificationBy(empNo);
 		}
 		else if(action.equalsIgnoreCase("A") )
@@ -917,14 +924,14 @@ public class NocServiceImpl implements NocService {
 			}
 			
 			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved Noc Proceeding Abroad Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationMessage("Recieved NOC Proceeding Abroad Change Request From <br>"+emp.getEmpName());
 			notification.setNotificationBy(empNo);
 		}
 		else if(action.equalsIgnoreCase("R"))
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("ProceedingAbroad.htm");
-			notification.setNotificationMessage("Noc Proceeding Abroad Request Returned");
+			notification.setNotificationMessage("NOC Proceeding Abroad Request Returned");
 			notification.setNotificationBy(empNo);
 		}
 		
@@ -966,6 +973,12 @@ public class NocServiceImpl implements NocService {
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception {
 		
 		return dao.getEmpNameDesig(EmpNo);
+	}
+
+	@Override
+	public Object[] getEmpTitleDetails(String passportid) throws Exception {
+		
+		return dao.getEmpTitleDetails(passportid) ;
 	}
 
 }

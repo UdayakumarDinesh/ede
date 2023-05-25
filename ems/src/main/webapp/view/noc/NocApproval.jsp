@@ -42,7 +42,18 @@ body{
 	String todate   = (String)request.getAttribute("todate");
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	List<Object[]> ApprovedList=(List<Object[]>)request.getAttribute("ApprovedList");
+	String LoginType=(String)request.getAttribute("LoginType");
 	
+	
+	
+	String status="";
+	for(Object[] obj:PendingList){ 
+	
+	status=obj[5].toString();
+	System.out.println("status--"+status);
+	}
+	 
+	 
 %>
 
 
@@ -175,7 +186,7 @@ body{
 		    </div>
 		  </li>
 		  <li class="nav-item"  style="width: 50%;">
-		    <div class="nav-link" style="text-align: center;" id="pills-imm-property-tab" data-toggle="pill" data-target="#pills-imm-property" role="tab" aria-controls="pills-imm-property" aria-selected="false">
+		    <div class="nav-link " style="text-align: center;" id="pills-imm-property-tab" data-toggle="pill" data-target="#pills-imm-property" role="tab" aria-controls="pills-imm-property" aria-selected="false">
 		    	 <span>Approved</span> 
 		    	 <span class="badge badge-danger badge-counter count-badge" style="margin-left: 0px;">
 				   		 <%if(ApprovedList.size()>99){ %>
@@ -240,11 +251,7 @@ body{
 						 		
 						 	<%} %>	
 						 
-						 	<% if(obj[5].toString().equalsIgnoreCase("APR")){ %>
-						 	     <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Certificate">
-												<i style="color: #5C469C" class="fa fa-envelope"></i>
-								</button> 
-						 	 <%} %>
+						 	
 						 	</td>
                             
                         </tr>
@@ -304,7 +311,9 @@ body{
 					   <th style="width:0%">SN</th>
 					   <th style="width:50%">Employee Name</th>
                        <th style="width:15%">Type</th>
-                       <th style="width:15%">Remarks</th>
+                       <th style="width:15%">Status</th>
+                       <th style="width:15%">Action</th>
+                       
 					  
                   	</tr>
 				</thead>
@@ -317,12 +326,52 @@ body{
                             <td style="text-align: center;"><%=++SN1%></td>
                             <td ><%=obj[2] %></td>
                             <td ><%=obj[3] %></td>
-                            <td ><%=obj[5] %></td>
+                            <td >
+                            
+                          
+								  
+								 	<%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" formmethod="GET"  name="PassportId" value="<%=obj[4] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
+								    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+								    	
+							    	<%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[4] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+								    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    		
+							    		
+							    	<%} 
+							    	else{%>
+							    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[4] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+								    		&nbsp;<%=obj[8] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+							    		
+							    	
+							    	<%} %>  
+                            
+                            </td>
+                           
+                            <td style="text-align:center;">
+                            
+                             <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCPrint.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+								</button> 
+                            
+                            
+                            <% if(LoginType.toString().equalsIgnoreCase("P") && obj[5].toString().equalsIgnoreCase("A")){ %>
+						 	     <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Certificate">
+												<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+								</button> 
+						 	   
+						 	<%} %>
+						 	
+						 	 </td>
                         </tr>
-                       
+                  <%} %>
                           
                    </tbody>
-   <%} %>
+ 
                  </table>
                 <!-- </div>  -->      
                </form>

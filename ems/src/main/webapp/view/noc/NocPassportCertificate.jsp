@@ -115,7 +115,7 @@
 	   SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
        SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
        LocalDate date = LocalDate.now(); 
-    
+       Object[] title = (Object[])request.getAttribute("Emptitle");
     
 	%>
 
@@ -150,7 +150,7 @@
 	
 	      <div style="margin-left: 10px;text-align: justify;width:650px; text-justify: inter-word;font-size: 18px;" align="left">
 				
-		Mr.&nbsp;<span class="text-blue" style="text-decoration: underline;"><%=obj[1] %></span> son of / Daughter of Mr. <%if(obj[35]!=null){ %> <span class="text-blue" style="text-decoration: underline;"><%=obj[35] %></span><%} else if(obj[12].toString().equalsIgnoreCase("F")){ %><span class="text-blue" style="text-decoration: underline;"><%=obj[13] %></span><%} %>&nbsp;who is an Indian national,is employed in this office 
+		Mr.&nbsp;<span class="text-blue" style="text-decoration: underline;"><%=obj[1] %></span> son of / Daughter of  Mr. <%if(obj[35]!=null){ %> <span class="text-blue" style="text-decoration: underline;"><%=obj[35] %></span><%} else{ %><span class="text-blue"> NA </span> <%} %>&nbsp;who is an Indian national,is employed in this office 
           as from &nbsp;<span class="text-blue"style="text-decoration: underline;font-size:16px;" ><%=rdf.format(sdf.parse(obj[21].toString())) %></span>&nbsp; till <span class="text-blue" style="text-decoration: underline;font-size:16px;"> <%=rdf.format(sdf.parse(obj[22].toString())) %></span> &nbsp;date.This office has no objection for obtaining his Passport.	   			
 			   			
 				   																			
