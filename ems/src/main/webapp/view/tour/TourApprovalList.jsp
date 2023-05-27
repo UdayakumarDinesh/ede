@@ -13,6 +13,11 @@
 <meta charset="ISO-8859-1">
 <title>Tour Approval</title>
 <style type="text/css">
+body{
+ overflow-x: hidden;
+
+}
+
   .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20rem; }
   .toggle.ios .toggle-handle { border-radius: 20rem; }
 
@@ -45,6 +50,28 @@
     opacity: 0.35;
   }
 }
+
+
+#button {
+   float: left;
+   width: 80%;
+   padding: 5px;
+   background: #dcdfe3;
+   color: black;
+   font-size: 17px;
+   border:none;
+   border-left: none;
+   cursor: pointer;
+}
+
+.dataTables_length 
+{
+	margin-right: 410px;
+}
+.dataTables_info
+{
+	margin-right: 410px;
+}
 </style>
 </head>
 <body>
@@ -54,14 +81,16 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 Object[] fapadetails = (Object[])request.getAttribute("FAPAdetails");
 List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
 List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
-List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+/* List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
 List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
+ */
 
-
+List<Object[]> approvedlist = (List<Object[]>)request.getAttribute("approvedlist");
 String fromdate = (String)request.getAttribute("fromdate");
 String todate = (String)request.getAttribute("todate");
-String empno= (String)request.getAttribute("empno");
 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+int totalcount = approvallist.size() + canceledlist.size();
+String tab   = (String)request.getAttribute("tab");
 
 %>
 <div class="card-header page-top ">
@@ -72,7 +101,7 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 			<div class="col-md-6">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-					<li class="breadcrumb-item "><a href="TourProgram.htm">Tour</a></li>
+					<li class="breadcrumb-item "><a href="TourApprovallist.htm">Tour </a></li>
 					<li class="breadcrumb-item active " aria-current="page">Tour Approval</li>
 				</ol>
 			</div>
@@ -93,256 +122,219 @@ SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
 			</div>
 		<%} %>
 	</div>		
-<div class="container-fluid">		
+
+	<div class="row w-100" style="margin-bottom: 10px;">
+		<div class="col-12">
+         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background-color: #E1E5E8;padding:0px;">
+		  <li class="nav-item" style="width: 50%;"  >
+		    <div class="nav-link active" style="text-align: center; cursor: pointer;" id="pills-mov-property-tab" data-toggle="pill" data-target="#pills-mov-property" role="tab" aria-controls="pills-mov-property" aria-selected="true">
+			   <span>Pending</span> 
+				<span class="badge badge-danger badge-counter count-badge" style="margin-left: 0px;">
+				   	    <%if(totalcount>99){ %>
+				   			99+
+				   		<%}else{ %>
+				   			<%=totalcount %>
+						<%} %>	 		   			
+				  </span> 
+		    </div>
+		  </li>
+		  <li class="nav-item"  style="width: 50%;">
+		    <div class="nav-link" style="text-align: center; cursor: pointer;" id="pills-imm-property-tab" data-toggle="pill" data-target="#pills-imm-property" role="tab" aria-controls="pills-imm-property" aria-selected="false">
+		    	 <span>Approved</span> 
+		    </div>
+		  </li>
+		</ul>
+	   </div>
+	</div>	
 <div class="card">
 
    <div class="card-body" align="center" >
-	    <div class="row" style="margin-top:7px;"> 
-	    <div class="col-md-12">
-
-<div class="card">
-      <div class="card-header" align="left">
-        <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse0" id="applcollapse"><span  style="font-size:14px">
-          
-          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"></i> 
-           <span class="badge badge-danger badge-counter badge-success" id="blink"><% if(approval!=null){ %>  <%=approval.size()%> <%}else{ %> 0 <%} %></span>
-          Applied Tour  For Approval </span></a>
-        </h5>
-      </div>
-	<div id="collapse0" class="card-collapse collapse in" style="padding: 10px;">
-	<form action="DeptInchApproval.htm" method="post">
-	        <table  class="table table-bordered table-hover table-striped table-condensed" style="padding: 10px;">
-	            <thead>
-	                <tr>
-	                    <th>Name &amp; Designation </th>
-	                    <th>From : To</th>
-	                    <th>Applied On</th>
-	                    <th>Last Action</th>
-	                    <th>Comment</th>
-	                    <th>
-	                    All <input type="checkbox" id="ghapp"  onclick="changemyapp('ghapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	            <%int count=0; 
-	            if(approval!=null){
-	            for(Object[] ls:approval){
-	            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
-	                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
-	                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
-	            %>
-	             <tr>
-	             
-	                    <td style="text-align:center;"><%= ls[1]%><br> <%=ls[2]%></td>
-	                    <td style="text-align:center;"><%=stayfromdate%><br><%=staytodate%></td>
-	                    <td style="text-align:center;"><%=ls[5]%><br>for <%=noofdays%> Day(s)</td> 
-	                    <td style="text-align:left;"> <%=ls[8] %></td>
-	                    <td style="text-align:center;"><textarea name="<%=ls[0]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
-	                    <td > <input type="hidden" name="EmpNo<%=ls[0]%>" value="<%=ls[9]%>">
-	        				<!-- CBY:checkbox yes -->
-					        <span class="app ghapp">
-							<label for="ResponseSaidCBY<%=count%>">App</label> 
-							<input type="checkbox" class="ghapp"  id="ResponseSaidCBY<%=count%>" name="approve" value="<%=ls[0]%>_<%=ls[7]%>" onclick="changemyclick('<%=count%>')" >
-					        </span>
-					        
-					         <!-- CBY:checkbox No -->
-					        <span class="disapp ghappdis" style="margin-right: -10px;"> 
-							<label for="ResponseSaidCBN<%=count%>">DisApp</label> 
-							<input type="checkbox" class="ghappdis" id="ResponseSaidCBN<%=count%>" name="reject" value="<%=ls[0]%>_<%=ls[7]%>"  onclick="changemyclick('<%=count%>')" >
-					         </span> 
-	           		   </td>
-	           </tr>
-	           <% ++count; }}%> <!-- if closed -->
-	           </tbody>
-	     </table>
-	      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-	 </form>
-	</div>
-</div>
-	   <%if(fapadetails!=null && fapadetails[1]!=null && fapadetails[1].toString().equalsIgnoreCase(session.getAttribute("EmpNo").toString())){%>
-<div class="card" style="margin-top: 10px;">
-      <div class="card-header" align="left">
-        <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" id="applcollapse1"><span  style="font-size:14px">
-          
-          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> 
-         
-          </i> 
-           <span class="badge badge-danger badge-counter badge-success" id="blink2"><% if(fAndAdeptlist!=null){ %>  <%=fAndAdeptlist.size()%> <%}else{ %> 0 <%} %></span>
-          Applied Tour To F & A Department for Approval</span></a>
-        </h5>
-      </div>
-<div id="collapse1" class="card-collapse collapse in" style="padding: 10px;">
-
-
-<form action="DeptInchApproval.htm" method="post">
    
-        <table  class="table table-bordered table-hover table-striped table-condensed" style="padding: 10px;">
-            <thead>
-                <tr>
-                    <th>Name &amp; Designation </th>
-                    <th>From : To</th>
-                    <th>Applied On</th>
-                    <th>Forward By</th>
-                    <th>Funds Availability</th>
-                    <th>Comment</th>
-                    <th>
-                    All <input type="checkbox" id="FAapp"  onclick="changemyapp1('FAapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
-                </tr>
-            </thead>
-            <tbody>
-            <%int count1=0; 
-            if(fAndAdeptlist!=null){
-            for(Object[] ls:fAndAdeptlist){
-            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
-                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
-                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
-            %>
-             <tr>
-                    <td style="text-align:center;"><%= ls[1]%><br> <%=ls[2]%></td>
-                    <td style="text-align:center;"><%=stayfromdate%><br><%=staytodate%></td>
-                    <td style="text-align:center;"><%=ls[5]%><br>for <%=noofdays%> Day(s)</td> 
-                    <td style="text-align:left;"> <%=ls[8] %></td>
-                    <td style="text-align:center;">	
-						<input name="Funds<%=ls[0]%>" id="funds<%=ls[0]%>" value="false" onchange="funds('<%=ls[0]%>', this)"  type="checkbox" data-toggle="toggle" data-style="ios" data-onstyle="primary" data-offstyle="danger" data-width="105" data-height="15" data-on="<i class='fa fa-check' aria-hidden='true'></i> Yes" data-off="<i class='fa fa-times' aria-hidden='true'></i> No" >
-					</td>
-                    <td style="text-align:center;"><textarea name="<%=ls[0]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
-                    <td> 
-        				<!-- CBY:checkbox yes -->
-				        <span class="app FAapp">
-						<label for="ResponseSaidCBY<%=count%>">App</label> 
-						<input type="checkbox" class="FAapp"  id="ResponseSaidCBY<%=count1%>" name="approve" value="<%=ls[0]%>_<%=ls[7]%>" onclick="changemyclick('<%=count1%>')" >
-				        </span>
-				        
-				         <!-- CBY:checkbox No -->
-				        <span class="disapp ghappdis" style="margin-right: -10px;"> 
-						<label for="ResponseSaidCBN<%=count%>">DisApp</label> 
-						<input type="checkbox" class="ghappdis" id="ResponseSaidCBN<%=count1%>" name="reject" value="<%=ls[0]%>_<%=ls[7]%>"  onclick="changemyclick('<%=count1%>')" >
-				         </span> 
-           		   </td>
-           </tr>
-           <% ++count1; }}%> 
-           </tbody>
-     </table>
-      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
- </form>
-</div>
-</div>
-<%}%>
-<div class="card" style="margin-top: 10px;">
-      <div class="card-header" align="left">
-        <h5>
-          <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" id="applcollapse2"><span  style="font-size:14px">
-          
-          <i class="fa fa-envelope" aria-hidden="true"   style="font-size:20px"> </i> 
-           <span class="badge badge-danger badge-counter badge-success" id="blink3"><% if(canceledlist!=null){ %>  <%=canceledlist.size()%> <%}else{ %> 0 <%} %></span>
-          Canceled Tour  For Approval </span></a>
-        </h5>
-      </div>
-	<div id="collapse2" class="card-collapse collapse in" style="padding: 10px;">
-	<form action="CancelApproval.htm" method="post">
-	        <table  class="table table-bordered table-hover table-striped table-condensed" style="padding: 10px;">
-	            <thead>
-	                <tr>
-	                    <th>Name &amp; Designation </th>
-	                    <th>From : To</th>
-	                    <th>Applied On</th>
-	                    <th>Last Action</th>
-	                    <th>Comment</th>
-	                    <th>
-	                    All <input type="checkbox" id="CAapp"  onclick="changemyapp2('CAapp')" ><button  class="btn btn-success btn-sm "  type="Submit" name="GH_ApprovalApplied" value="GH_ApprovalApplied" style="float: right;">Submit</button></th>
-	                </tr>
-	            </thead>
-	            <tbody>
-	            <%int count2=0; 
-	            if(canceledlist!=null){
-	            for(Object[] ls:canceledlist){
-	            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
-	                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
-	                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
-	            %>
-	             <tr>
-	             
-	                    <td style="text-align:center;"><%= ls[1]%><br> <%=ls[2]%></td>
-	                    <td style="text-align:center;"><%=stayfromdate%><br><%=staytodate%></td>
-	                    <td style="text-align:center;"><%=ls[5]%><br>for <%=noofdays%> Day(s)</td> 
-	                    <td style="text-align:left;"> <%=ls[8] %></td>
-	                    <td style="text-align:center;"><textarea name="<%=ls[0]%>"  rows="1" cols="20"  maxlength="90"></textarea></td>
-	                    <td > <input type="hidden" name="EmpNo<%=ls[0]%>" value="<%=ls[9]%>">
-	        				<!-- CBY:checkbox yes -->
-					        <span class="app CAapp">
-							<label for="ResponseSaidCBY<%=count2%>">App</label> 
-							<input type="checkbox" class="CAapp"  id="ResponseSaidCBY<%=count2%>" name="approve" value="<%=ls[0]%>_<%=ls[7]%>" onclick="changemyclick('<%=count2%>')" >
-					        </span>
-					        
-					         <!-- CBY:checkbox No -->
-					        <span class="disapp ghappdis" style="margin-right: -10px;"> 
-							<label for="ResponseSaidCBN<%=count2%>">DisApp</label> 
-							<input type="checkbox" class="ghappdis" id="ResponseSaidCBN<%=count2%>" name="reject" value="<%=ls[0]%>_<%=ls[7]%>"  onclick="changemyclick('<%=count2%>')" >
-					         </span> 
-	           		   </td>
-	           </tr>
-	           <% ++count2; }}%> <!-- if closed -->
-	           </tbody>
-	     </table>
-	      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-	 </form>
-	</div>
-</div>
+   <div class="container-fluid">
+<div class="tab-content" id="pills-tabContent">
+   <div class="tab-pane fade show active" id="pills-mov-property" role="tabpanel" aria-labelledby="pills-mov-property-tab">
+<div class="card-body main-card " >	
+<form action="##" method="post">
+             <div class="table-responsive">
+         
+		        <table  class="table table-bordered table-hover table-striped table-condensed" style="padding: 10px;" id="myTable2">
+		            <thead>
+		                <tr style="background-color: #0e6fb6; color: white;">
+		                	<th >SN</th>
+		                    <th >Name &amp; Designation </th>
+		                    <th >From : To</th>
+		                    <th >Applied On</th>
+		                    <th >Last Action</th>
+		                    <th >Action</th>
+		                </tr>
+		            </thead>
+		            <tbody>
+		            <%int count=0; 
+		            if(approvallist!=null){
+		            for(Object[] ls:approvallist){
+		            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
+		                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
+		                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
+		            %>
+		             <tr>	
+		             		<td style="text-align:center;"> <%=++count%></td>
+		                    <td style="text-align:center;"> <%=ls[1]%> <br> <%=ls[2]%></td>
+		                    <td style="text-align:center;"> <%=stayfromdate%> <br> <%=staytodate%></td>
+		                    <td style="text-align:center;"> <%=ls[5]%> <br> for <%=noofdays%> Day(s)</td> 
+		                    <td style="text-align:left;">   <%=ls[8] %> </td>
+		                    <td style="text-align:center;"> 
+		                    <button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=ls[0]%>"  formaction="TourApplyList.htm" formmethod="POST"  data-toggle="tooltip" data-placement="top" title="View Form" >
+									 <i class="fa-solid fa-eye"></i>
+							</button>
+		           		   </td>
+		           </tr>
+		           <%  }}%> <!-- if closed -->
+		           
+		             <%
+		            if(canceledlist!=null){
+		            for(Object[] ls:canceledlist){
+		            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
+		                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
+		                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
+		            %>
+		             <tr>
+		             		<td style="text-align:center;"> <%=++count%></td>
+		                    <td style="text-align:center;"><%= ls[1]%><br> <%=ls[2]%></td>
+		                    <td style="text-align:center;"><%=stayfromdate%><br><%=staytodate%></td>
+		                    <td style="text-align:center;"><%=ls[5]%><br>for <%=noofdays%> Day(s)</td> 
+		                    <td style="text-align:left;"> <%=ls[8] %></td>
+		                    <td style="text-align:center;">
+		                     <button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=ls[0]%>"  formaction="TourCancel.htm"  formmethod="POST"  data-toggle="tooltip" data-placement="top" title="View Form" >
+									 <i class="fa-solid fa-eye"></i>
+							</button>
+		                    
+		           		   </td>
+		           </tr>
+		           <% }}%> <!-- if closed -->
+		           </tbody>
+		     </table>
+		      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
+		
+        </div>
+     </form>
+     </div>	
+   </div>
+   
+   <!-- Approved List -->	
+		<div class="tab-pane fade" id="pills-imm-property" role="tabpanel" aria-labelledby="pills-imm-property-tab">	
+		<div class="card-body main-card " >	
+		
+		<form method="post" action="TourApprovallist.htm" >
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<input type="hidden" name="tab" value="closed"/>
+					<div class="row w-100" style="margin-top: 10px;margin-bottom: 10px;">
+						<div class="col-md-12" style="float: right;">
+							<table style="float: right;">
+								<tr>
+									<td> From Date :&nbsp; </td>
+							        <td> 
+										<input type="text" class="form-control input-sm mydate" onchange="this.form.submit()"   readonly="readonly"  <%if(fromdate!=null){%>
+								        value="<%=DateTimeFormatUtil.SqlToRegularDate(fromdate)%>" <%}%>   id="fromdate" name="fromdate"  required="required"   > 
+									</td>
+									<td></td>
+									<td >To Date :&nbsp;</td>
+									<td>					
+										<input type="text"  class="form-control input-sm mydate" onchange="this.form.submit()"   readonly="readonly" <%if(todate!=null){%>
+								         value="<%=DateTimeFormatUtil.SqlToRegularDate(todate)%>" <%}%>    id="todate" name="todate"  required="required"  > 							
+									</td>
+									
+								</tr>
+							</table>
+					 	</div>
+					 </div>
+		</form>
+		<div class="row" >
+		 <div class="col-md-12">
+		
+		<form action="" method="POST" id="circularForm">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+             <div class="table-responsive">
+              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable1">
+				<thead>
+					<tr style="background-color: #0e6fb6; color: white;">
+					   <th style="width:5%">   SN</th>
+					   <th style="width:15%">  TourNo</th>
+					   <th style="width:20%">  Date </th>
+					   <th style="width:20%;"> Applied On</th>
+					   <th style="width:20%">  Employee Name</th>
+                       <th style="width:20%">  Approved Date</th>
+                  	</tr>
+				</thead>
+                 <tbody>
+                       <% int SNA1=0;
+                          for(Object[] form:approvedlist ){
+                        	  String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(form[3].toString());
+                              String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(form[4].toString());
+                              String  applydate=DateTimeFormatUtil.fromDatabaseToActual(form[5].toString());
+                              long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(form[3].toString(), form[4].toString());
+                       %>
+                        <tr>                           
+                            <td style="text-align: center;"> <%=++SNA1%>    </td>
+                            <td style="text-align: center;"> <%if(form[1]!=null){%> <%=form[1]%> <%}else{%> -- <%}%> </td>
+                            <td style="text-align: center;"> <%=stayfromdate%> To <%=staytodate%></td>
+                            <td style="text-align: center;"> <%=applydate %><br/> for <%=noofdays%> Day(s)</td> 
+                            <td style="text-align: center;"> <%=form[2]%> </td>
+                            <td style="text-align: center;"> <%= DateTimeFormatUtil.fromDatabaseToActual(form[8].toString())%></td> 
+                        </tr>
+                       <%} %> 
+                          
+                   </tbody>
+   
+                 </table>
+                </div>       
+               </form>
+               </div>
+               </div>
+               </div>				
+			  </div>
+   </div>
+</div>	
+<script type="text/javascript">
+	
+	$("#myTable1").DataTable({
+	    "lengthMenu": [ 50, 75, 100],
+	    "pagingType": "simple"
 
-	   </div>
-	   </div>			
-	</div>	
-	<script type="text/javascript">
-	<%if(approval!=null && approval.size()>0){%>   $('#applcollapse').click(); <%}%>
-	<%if(fAndAdeptlist!=null && fAndAdeptlist.size()>0){%> $('#applcollapse1').click(); <%}%>
-	<%if(canceledlist!=null && canceledlist.size()>0){%> $('#applcollapse2').click(); <%}%>
-	function changemyclick(a)
-	{
-		document.getElementById("ResponseSaidCBY"+a).onchange = function () {
-		  if (document.getElementById("ResponseSaidCBN"+a).checked) {
-			             document.getElementById("ResponseSaidCBN"+a).checked = false;
-	          }
-	       }
-	  document.getElementById("ResponseSaidCBN"+a).onchange = function () {
-		       if (document.getElementById("ResponseSaidCBY"+a).checked) {
-			    document.getElementById("ResponseSaidCBY"+a).checked = false;
-	         }
-	     }
-	}
-	function changemyapp(a)
-	{
-		$('.'+a+'dis input[type=checkbox]').prop('checked',false); 
-		if(document.getElementById(a).checked) {
-			$('.'+a+' input[type=checkbox]').prop('checked',true); 
-		} else {
-			$('.'+a+' input[type=checkbox]').prop('checked',false); 
-		} 
-	}
+	});
+	$("#myTable2").DataTable({
+	    "lengthMenu": [ 50, 75, 100],
+	    "pagingType": "simple"
+
+	});
 	
-	function changemyapp1(a)
-	{
-		$('.'+a+'dis input[type=checkbox]').prop('checked',false); 
-		if(document.getElementById(a).checked) {
-			$('.'+a+' input[type=checkbox]').prop('checked',true); 
-		} else {
-			$('.'+a+' input[type=checkbox]').prop('checked',false); 
-		} 
-	}
-	
-	function changemyapp2(a)
-	{
-		$('.'+a+'dis input[type=checkbox]').prop('checked',false); 
-		if(document.getElementById(a).checked) {
-			$('.'+a+' input[type=checkbox]').prop('checked',true); 
-		} else {
-			$('.'+a+' input[type=checkbox]').prop('checked',false); 
-		} 
-	}
-	function funds(val, val1){
-		$("#funds"+val).val($(val1).prop('checked'));
-	}
+	$('#fromdate').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		/* "minDate" :datearray,   */
+		<%--  "startDate" : new Date('<%=fromdate%>'),  --%>
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+		
+		$('#todate').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			<%-- "startDate" : new Date('<%=todate%>'), --%> 
+			"minDate" :$("#fromdate").val(),  
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
+			<%if(tab!=null && tab.equals("closed")){%>
+				$('#pills-imm-property-tab').click();
+			<%}%>
 	</script>
 </div>
 </div> 	

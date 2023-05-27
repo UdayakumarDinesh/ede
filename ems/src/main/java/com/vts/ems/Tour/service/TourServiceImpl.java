@@ -66,6 +66,8 @@ public class TourServiceImpl implements TourService {
 		TourApply apply = new TourApply();
 			apply.setStayFrom(dto.getStayFrom());
 			apply.setStayTo(dto.getStayTo());
+			apply.setEJPFrom(dto.getEJPFrom());
+			apply.setEJPTo(dto.getEJPTo());
 			apply.setStayPlace(dto.getStayPlace());
 			apply.setPurpose(dto.getPurpose());
 			apply.setAirTravJust(dto.getAirTravJust());
@@ -79,12 +81,13 @@ public class TourServiceImpl implements TourService {
 			apply.setCreatedDate(dto.getCreatedDate());
 			apply.setIsActive(dto.getIsActive());
 			apply.setInitiatedDate(dto.getInitiatedDate());
-			apply.setRemarks(dto.getRemarks());
 			apply.setTourStatusCode(dto.getTourStatusCode());
 			apply.setTourApplPreviousId(0l);
 		Long TourApplyId = dao.AddTourapply(apply);
 		if(dto.getAdvancePropsed().equalsIgnoreCase("Y") && TourApplyId >0 ) {
 			TourAdvance touradvance = new TourAdvance();
+				
+				touradvance.setTotalProposedAmt(dto.getTotalProposedAmount());
 				touradvance.setTourFare(dto.getTourFare());
 				touradvance.setTourfareFrom(dto.getTourfareFrom());
 				touradvance.setTourfareTo(dto.getTourfareTo());
@@ -100,7 +103,7 @@ public class TourServiceImpl implements TourService {
 				touradvance.setCreatedDate(dto.getCreatedDate());
 				touradvance.setTourApplyId(TourApplyId);
 				
-				 dao.AddTouradvance(touradvance);
+			dao.AddTouradvance(touradvance);
 		}
 		
 		for(int i=0;i<dto.getTourDates().length;i++) {
@@ -120,7 +123,6 @@ public class TourServiceImpl implements TourService {
 			transaction.setActionDate(dto.getInitiatedDate());
 			transaction.setTourApplyId(TourApplyId);
 			transaction.setTourStatusCode("INI");
-			transaction.setTourRemarks(dto.getRemarks());
 		
 		dao.AddTourTransaction(transaction);
 		
@@ -236,7 +238,7 @@ public class TourServiceImpl implements TourService {
 		apply.setModifiedBy(dto.getModifiedBy());
 		apply.setModifiedDate(dto.getModifiedDate());
 		apply.setInitiatedDate(sdtf.format(new Date()));
-		apply.setRemarks(dto.getRemarks());
+		
 		
 		if(dto.getAdvancePropsed().equalsIgnoreCase("Y")){
 			TourAdvance  advance = new TourAdvance();
@@ -293,22 +295,6 @@ public class TourServiceImpl implements TourService {
 		}
 		return tourapplyid;
 	}
-
-	@Override
-	public int ForwardTour(String tourapplyid , String empno)throws Exception
-	{
-		int result = dao.ForwardTour(tourapplyid , empno );
-		
-		TourTransaction transaction = new TourTransaction();
-		transaction.setActionBy(empno);
-		transaction.setActionDate(sdtf.format(new Date()));
-		transaction.setTourApplyId(Long.parseLong(tourapplyid));
-		transaction.setTourStatusCode("FWD");
-		
-		dao.AddTourTransaction(transaction);
-
-		return result;
-	}
 	
 	@Override
 	public List<Object[]> GetTourApprovalList(String empno)throws Exception
@@ -345,6 +331,7 @@ public class TourServiceImpl implements TourService {
 					}else if(status.equalsIgnoreCase("ABD")) {
 						//notification.setEmpNo("");
 						String funds=req.getParameter("Funds"+dto.getApprove()[i].split("_")[0]);
+						System.out.println("funds   : "+funds);
 						dto.setFunds(funds!=null && funds.equalsIgnoreCase("true")? "Y" : "N");
 						dto.setStatus("ABF");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
@@ -566,6 +553,11 @@ public class TourServiceImpl implements TourService {
 		return dao.TourCancelStatusDetails(tourapplyid);
 	}
 	@Override
+	public List<Object[]> TourCancelStatusDetailsTrack(String tourapplyid)throws Exception
+	{
+		return dao.TourCancelStatusDetailsTrack(tourapplyid);
+	}
+	@Override
 	public Object[] GetApprovalEmp(String empno)throws Exception
 	{
 		return dao.GetApprovalEmp(empno);
@@ -592,9 +584,9 @@ public class TourServiceImpl implements TourService {
 	}
 
 	@Override
-	public List<Object[]> GetSanctionList(String empno)throws Exception
+	public List<Object[]> GetSanctionList(String empno , String from , String todate)throws Exception
 	{
-		return dao.GetSanctionList(empno);
+		return dao.GetSanctionList(empno,from,todate);
 	}
 	
 	@Override
@@ -680,7 +672,7 @@ public class TourServiceImpl implements TourService {
 			apply.setCreatedDate(dto.getCreatedDate());
 			apply.setIsActive(dto.getIsActive());
 			apply.setInitiatedDate(dto.getInitiatedDate());
-			apply.setRemarks(dto.getRemarks());
+			
 			apply.setTourStatusCode(dto.getTourStatusCode());
 			
 			
@@ -704,7 +696,7 @@ public class TourServiceImpl implements TourService {
 				transaction.setActionDate(dto.getInitiatedDate());
 				transaction.setTourApplyId(TourApplyId);
 				transaction.setTourStatusCode("INI");
-				transaction.setTourRemarks(dto.getRemarks());
+				
 			
 			dao.AddTourTransaction(transaction);
 		
@@ -717,9 +709,9 @@ public class TourServiceImpl implements TourService {
 	}
 	
 	@Override	
-	public List<Object[]> GetTourAdvanceList(String empno)throws Exception
+	public List<Object[]> GetTourApprovedList(String empno , String fromdate , String todate )throws Exception
 	{
-		return dao.GetTourAdvanceList(empno);
+		return dao.GetTourApprovedList(empno, fromdate , todate);
 	}
 	@Override
 	public TourAdvance  GetTourAdvanceData(Long tourid) throws Exception
@@ -732,6 +724,76 @@ public class TourServiceImpl implements TourService {
 	{
 		return dao.GetPAAndFA();
 	}
+	
+	@Override
+	public List<Object[]> GetPAndAList()throws Exception
+	{
+		return dao.GetPAndAList();
+	}
+	
+	@Override
+	public long UpdateIssueOrder(String tourapplyid , String  issueddate ,String  issueby ,String Username , String remraks)throws Exception
+	{
+		long result =  dao.UpdateIssueOrder(tourapplyid , issueddate , issueby , Username);
+		if(result>0) {
+			TourTransaction transaction=new TourTransaction();
+			transaction.setTourRemarks(remraks);
+	        transaction.setActionBy(issueby);
+	        transaction.setActionDate(sdtf.format(new Date()));
+	        transaction.setTourApplyId(Long.parseLong(tourapplyid));
+	        transaction.setTourStatusCode("MOI");
+	        long trns=dao.AddTourTransaction(transaction);
+		}
+		return result;
+	}
+	
+	@Override
+	public long UpdateTourAdvanceRelesed(String tourapplyid ,String empno, String tourAdvance ,String Username ,String remarks)throws Exception
+	{
+		long result =  dao.UpdateTourAdvanceRelesed(tourapplyid , tourAdvance , Username);
+		if(result>0) {
+			TourTransaction transaction=new TourTransaction();
+			transaction.setTourRemarks(remarks);
+	        transaction.setActionBy(empno);
+	        transaction.setActionDate(sdtf.format(new Date()));
+	        transaction.setTourApplyId(Long.parseLong(tourapplyid));
+	        transaction.setTourStatusCode("TAR");
+	        long trns=dao.AddTourTransaction(transaction);
+		}
+		return result;
+	}
+	
+	@Override
+	public int ForwardTour(String tourapplyid , String empno , String remarks)throws Exception
+	{
+		int result = dao.ForwardTour(tourapplyid , empno );
+		
+		TourTransaction transaction = new TourTransaction();
+		transaction.setActionBy(empno);
+		transaction.setActionDate(sdtf.format(new Date()));
+		transaction.setTourApplyId(Long.parseLong(tourapplyid));
+		transaction.setTourStatusCode("FWD");
+		transaction.setTourRemarks(remarks);
+		dao.AddTourTransaction(transaction);
+
+		return result;
+	}
+	@Override
+	public int CancelForwardTour(String tourapplyid , String empno , String remarks)throws Exception
+	{
+		int result = dao.CancelForwardTour(tourapplyid , empno );
+		
+		TourTransaction transaction = new TourTransaction();
+		transaction.setActionBy(empno);
+		transaction.setActionDate(sdtf.format(new Date()));
+		transaction.setTourApplyId(Long.parseLong(tourapplyid));
+		transaction.setTourStatusCode("CBU");
+		transaction.setTourRemarks(remarks);
+		dao.AddTourTransaction(transaction);
+
+		return result;
+	}
+	
 
 
 }

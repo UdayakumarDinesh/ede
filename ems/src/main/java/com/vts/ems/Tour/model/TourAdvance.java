@@ -33,6 +33,7 @@ public class TourAdvance {
 	private Date TourfareFrom;
 	private Date TourfareTo;
 	private String Status;
+	private int TotalProposedAmt;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

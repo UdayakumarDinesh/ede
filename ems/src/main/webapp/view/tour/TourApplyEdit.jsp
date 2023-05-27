@@ -13,6 +13,12 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <title>Insert title here</title>
 <style type="text/css">
+body{
+
+ overflow-x: hidden;
+  overflow-y: hidden;
+
+}
 .table thead th {
     color: white;
     background-color: #0e6fb6;
@@ -84,24 +90,62 @@ if(empdata!=null && empdata[4]!=null){
 												    </label>                    
 												</div>
 										     </div>
-										     <div class="col-md-3">					        	
+										     <div class="col-md-4">					        	
 									                <label>Place Of Stay :<span class=" mandatory ">*</span></label>
 									                <input type="text" <%if(apply!=null && apply.getStayPlace()!=null){%> value="<%=apply.getStayPlace()%>" <%}%> name="POS" id="pos" class=" form-control input-sm " maxlength="255"   placeholder="Place Of Stay "  required="required">
 											</div>
-											<div class="col-md-3">					        	
+											<div class="col-md-4">					        	
 									                <label>Purpose :<span class=" mandatory ">*</span></label>
 									                <input type="text" <%if(apply!=null && apply.getPurpose()!=null){%> value="<%=apply.getPurpose()%>" <%}%> name="Purpose" id="purpose" class=" form-control input-sm " maxlength="255"   placeholder="Enter Purpose "  required="required">
 											</div>
 									    
-									         <div class="col-md-2">
+										</div>
+									</div>
+							<div class="form-group">
+								        <div class="row">
+								        	<div class="col-md-3">
+										 		<label>EJP From :<span class="mandatory">*</span></label>
+												<div class=" input-group">
+												    <input <%if(apply!=null && apply.getEJPFrom()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( apply.getEJPFrom().toString())%>" <%}%> type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="EJPFROM" name="ejpfrom"  required="required"  > 
+												    <label class="input-group-addon btn" for="testdate">						      
+												    </label>                    
+												</div>
+										     </div>
+										     
+										     <div class="col-md-3">
+										 		<label>EJP To :<span class="mandatory">*</span></label>
+												<div class=" input-group">
+												    <input <%if(apply!=null && apply.getEJPTo()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( apply.getEJPTo().toString())%>" <%}%> type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="EJPTO" name="ejpto"  required="required"  > 
+												    <label class="input-group-addon btn" for="testdate">						      
+												    </label>                    
+												</div>
+										     </div>
+										     
+										<%if(paylevel >= 6){%>
+											 <div class="col-md-3">
+											 	<label>  Justification for Air Travel : </label>
+									    		 <div class=" input-group">
+											         <input type="text" value="" name="airtraveljusti" id="airtraveljusti" class=" form-control input-sm " maxlength="255"   placeholder="Enter Air Travel Justification  "  required="required">
+												</div>
+											</div>
+											<div class="col-md-3">
+												  <label >Advance Required : </label>
+												  <select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" id="isamtreq" name="reqadvamt" onchange="HideTourAdv()" data-live-search="true" data-container="body" >
+													     <option value="N" <%if(apply!=null && apply.getAdvancePropsed().equalsIgnoreCase("N")){%> selected="selected" <%}%>>No</option>
+							                             <option value="Y" <%if(apply!=null && apply.getAdvancePropsed().equalsIgnoreCase("Y")){%> selected="selected" <%}%>>Yes</option>
+							                       </select> 
+											 </div>
+										<%}else{%>
+											<div class="col-md-6">
 												 <label >Advance Required : </label>
 												  <select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" id="isamtreq" name="reqadvamt" onchange="HideTourAdv()" data-live-search="true" data-container="body" >
 													     <option value="N" <%if(apply!=null && apply.getAdvancePropsed().equalsIgnoreCase("N")){%> selected="selected" <%}%>>No</option>
 							                             <option value="Y" <%if(apply!=null && apply.getAdvancePropsed().equalsIgnoreCase("Y")){%> selected="selected" <%}%>>Yes</option>
 							                       </select> 
 											 </div>
-										</div>
-									</div>
+										<%}%>
+								        </div>
+								    </div>
 						<div id="advAmountreq" style="display: none;">
 						<input type="hidden" name="touradvanceid" <%if(touradvance!=null && touradvance.getTourAdvanceId()!=null){%> value="<%=touradvance.getTourAdvanceId()%>" <%}%>>
 						    <hr>
@@ -111,13 +155,13 @@ if(empdata!=null && empdata[4]!=null){
 								    	 <div class="col-md-1">	</div>
 								    	 
 								    	    <div class="col-md-3">
-									    		<label>  Total  : </label>
+									    		<label>  Total fare : </label>
 									    		 <div class=" input-group">
 												    <input  type="text"  name="tourfare"  id="tourfare" class=" form-control input-sm " placeholder="Enter Amount" <%if(touradvance!=null && touradvance.getTourFare()>0){%> value="<%=touradvance.getTourFare()%>" <%}%>  maxlength="12" required="required">                     
 												</div>
 									   		</div>
 								    	 
-								    		 <div class="col-md-3">	
+								    		 <div class="col-md-2">	
 									    		 <label> From Date :</label>
 									    		 <div class=" input-group">
 												    <input <%if(touradvance!=null && touradvance.getTourfareFrom()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( touradvance.getTourfareFrom().toString())%>" <%}%> type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="farefromdate" name="farefromdate"  required="required"  > 
@@ -126,7 +170,7 @@ if(empdata!=null && empdata[4]!=null){
 												</div>
 								    		 </div>
 								    		 
-								    		 <div class="col-md-3">	
+								    		 <div class="col-md-2">	
 									    		 <label> To Date :</label>
 									    		 <div class=" input-group">
 												    <input <%if(touradvance!=null && touradvance.getTourfareTo()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( touradvance.getTourfareTo().toString())%>" <%}%> type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="faretodate" name="faretodate"  required="required"  > 
@@ -134,6 +178,12 @@ if(empdata!=null && empdata[4]!=null){
 												    </label>                    
 												</div>
 								    		 </div>	
+								    		  <div class="col-md-3">
+									    		<label> Total Proposed Amt : </label>
+									    		 <div class=" input-group">
+												    <input <%if(touradvance!=null && touradvance.getTotalProposedAmt()>0){%> value="<%= touradvance.getTotalProposedAmt()%>" <%}%>  type="text"  name="totalproposed"  id="totalproposed" class=" form-control input-sm " placeholder="Enter Total Proposed Amount"     maxlength="12" required="required">                     
+												</div>
+									   		</div>
 								  </div>
 								</div>    
 								
@@ -191,44 +241,29 @@ if(empdata!=null && empdata[4]!=null){
 								<hr>
 								</div>
 								    <div class="form-group">
-								    	 <label> Earliest presence required at destination :</label><%if(paylevel >= 6){%> <label style="    margin-left: 335px;">Air Travel (if applicable) :</label>  <label style="margin-left: 100px;">Remarks :</label> <%}else{%><label style="margin-left: 450px;">Remarks :</label> <%}%>
+								    	 <label> Earliest presence required at destination :</label>
 								        <div class="row">
-								        	<div class="col-md-7">
-									        	<div class="row">
-										       		 <div class="col-md-3">	  	
-															<div class=" input-group">
-																<label>Time :<span class=" mandatory ">*</span></label>&nbsp;&nbsp;&nbsp;
-															     <input  class="form-control" id="earliesttime" placeholder="Start Time"   name="EarliestTime" <%if(apply!=null && apply.getEarliestTime()!=null){%> value="<%=apply.getEarliestTime()%>" <%}%>  maxlength="250" required="required">                     
-															</div>
-													 </div>
-													  <div class="col-md-4">			
-															<div class=" input-group" style="width: 184px;">
-															<label>Date :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;        	
-		  													<input type="text" class="form-control input-sm mydate" <%if(apply.getEarliestDate()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( apply.getEarliestDate().toString())%>" <%}%> readonly="readonly"  placeholder=""  id="earliestdate" name="EarliestDate"  required="required"  > 
-														    <label class="input-group-addon btn" for="testdate"></label>      													
-														    </div>
-													 </div>
-													  <div class="col-md-5">			
-															<div class=" input-group">
-																<label>Place :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        	
-															     <input  class=" form-control input-sm " id="earliestplace" placeholder="Place"   name="EarliestPlace" <%if(apply!=null && apply.getEarliestPlace()!=null){%> value="<%=apply.getEarliestPlace()%>" <%}%>  maxlength="250" required="required">                     
-															</div>
-													 </div>
-												 </div>
+								         <div class="col-md-2">	  </div>
+										     <div class="col-md-2">	  	
+													<div class=" input-group">
+														<label>Time :<span class=" mandatory ">*</span></label>&nbsp;&nbsp;&nbsp;
+														<input  class="form-control" id="earliesttime" placeholder="Start Time"   name="EarliestTime" <%if(apply!=null && apply.getEarliestTime()!=null){%> value="<%=apply.getEarliestTime()%>" <%}%>  maxlength="250" required="required">                     
+													</div>
 											 </div>
-											 <%if(paylevel >= 6){%>
-											 <div class="col-md-3">
-											         <input type="text" <%if(apply!=null && apply.getAirTravJust()!=null){%> value="<%=apply.getAirTravJust()%>" <%}%> name="airtraveljusti" id="airtraveljusti" class=" form-control input-sm " maxlength="255"   placeholder="Enter Air Travel Justification  "  required="required">
+											<div class="col-md-2">			
+												<div class=" input-group" style="width: 184px;">
+													<label>Date :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;        	
+		  											<input type="text" class="form-control input-sm mydate" <%if(apply.getEarliestDate()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( apply.getEarliestDate().toString())%>" <%}%> readonly="readonly"  placeholder=""  id="earliestdate" name="EarliestDate"  required="required"  > 
+													<label class="input-group-addon btn" for="testdate"></label>      													
+												</div>
 											</div>
-											<div class="col-md-2">
-													 <input  class=" form-control input-sm " id="Remarks" placeholder="Remarks"   name="Remarks" <%if(apply!=null && apply.getRemarks()!=null){%> value="<%=apply.getRemarks()%>" <%}%>  maxlength="250" required="required">                     	
+											<div class="col-md-3">			
+												<div class=" input-group">
+													<label>Place :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        	
+													<input  class=" form-control input-sm " id="earliestplace" placeholder="Place"   name="EarliestPlace" <%if(apply!=null && apply.getEarliestPlace()!=null){%> value="<%=apply.getEarliestPlace()%>" <%}%>  maxlength="250" required="required">                     
+												</div>
 											</div>
-											<%}else{%>
-											<div class="col-md-5">
-												<input  class=" form-control input-sm " id="Remarks" placeholder="Remarks"   name="Remarks" <%if(apply!=null && apply.getRemarks()!=null){%> value="<%=apply.getRemarks()%>" <%}%>  maxlength="250" required="required">                     	
-											</div>
-											<%}%>
-								        </div>
+										</div>
 								    </div> 				    
 				 <!-- td Onward --> 
 	         <div class="form-group">
@@ -370,9 +405,6 @@ $(function() {
 			"singleDatePicker" : true,
 			"linkedCalendars" : false,
 			"showCustomRangeLabel" : true,	
-			<%-- <%if(apply!=null&&apply.getDateOfTravel()!=null){%>
-			"startDate" : new Date("<%=apply.getDateOfTravel()%>"),
-			<%}%> --%>
 			"cancelClass" : "btn-default",
 			showDropdowns : true,
 			locale : {
@@ -535,7 +567,7 @@ $( "#doA" ).change(function() {
 	});
 });
 
-$('#farefromdate, #faretodate ,#allowancefromdate , #allowancetodate').daterangepicker({
+$('#farefromdate, #faretodate ,#allowancefromdate , #allowancetodate ,#EJPFROM , #EJPTO').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,	
@@ -605,9 +637,7 @@ function TourApply(){
 		var todate = $("#doA").val();
 		
 		var dayscount = getNumberOfDays(fromdate ,todate );
-		console.log("dayscount   :"+dayscount);
-		console.log("boardingdays   :"+boardingdays);
-		console.log("allowancenoday   :"+allowancenoday);
+		
 		if(tourfare.trim()=='' || tourfare==null || tourfare =='null' || tourfare == undefined){
 			alert("Enter the Air / Train / Bus Fare Amount!");
 		}else if(boardingdays.trim()=='' || boardingdays==null || boardingdays=='null' || boardingdays==undefined){
@@ -733,7 +763,7 @@ function getNumberOfDays(start, end) {
     // Calculating the no. of days between two dates
     const diffInDays = Math.round(diffInTime / oneDay);
 
-    return diffInDays;
+    return diffInDays+1;
 }
 </script>
 </html>

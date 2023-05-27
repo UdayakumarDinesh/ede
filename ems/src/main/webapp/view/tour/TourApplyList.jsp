@@ -1,3 +1,4 @@
+<%@page import="org.apache.commons.lang3.ArrayUtils"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.*"%>
   <%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
@@ -7,13 +8,21 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+<style type="text/css">
+body{
+
+ overflow-x: hidden;
+  overflow-y: hidden;
+
+}
+</style>
 <title>Tour Apply List</title>
 </head>
 <body>
 <%
 List<Object[]>  tourapplylist = (List<Object[]>)request.getAttribute("applylist");
 Object[] empdata = (Object[])request.getAttribute("Empdata");
-
+String[] status = new String[]{"FWD","RDH" ,"VDH" , "RDG" , "ABD" , "RBF" , "ABF" ,"RBP" , "ABP" , "RBC"}; 
 %>
 <div class="card-header page-top ">
 		<div class="row">
@@ -94,17 +103,17 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
 									  <td> 
 									   
-									   		<button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=hlo[7]%>"     data-toggle="tooltip" data-placement="top" title="View Form" >
+									   	<button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=hlo[7]%>"     data-toggle="tooltip" data-placement="top" title="View Form" >
 									 			<i class="fa-solid fa-eye"></i>
-									 		</button>
-									 		<button type="submit" class="btn btn-sm" name="Action" value="Download/<%=hlo[7]%>" formaction="DownloadTourProposal.htm" formmethod="get" formtarget="_blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
-															<i style="color: #019267" class="fa-solid fa-download"></i>
-											</button> 
+									 	</button>
+									 	<button type="submit" class="btn btn-sm" name="Action" value="Download/<%=hlo[7]%>" formaction="DownloadTourProposal.htm" formmethod="get" formtarget="_blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+										</button> 
 									   	
 									   <%if(hlo[6].toString().equalsIgnoreCase("INI")){%>
 									  		<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i> </button>
-								<%--        <button type="submit" class="btn btn-sm submit-btn" name="Action" value="ForwardTour/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Forward"><i class="fa fa-forward" aria-hidden="true"></i> </button>     --%>									  	<%}%>	
-									   <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
+								   	   <%}%>	
+									   <%if(ArrayUtils.contains(status, hlo[6].toString())){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
 									  	<%}%>
 									  	

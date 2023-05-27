@@ -34,6 +34,8 @@ public class TourApply {
 	private Date StayFrom;
 	private Date StayTo;
 	private String StayPlace;
+	private Date EJPFrom;
+	private Date EJPTo;
 	private String AirTravJust;
 	private String AdvancePropsed;
 	private int AdvanceIssued;

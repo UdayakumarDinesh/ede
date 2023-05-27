@@ -10,6 +10,12 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+<style type="text/css">
+body{
+ 	overflow-x: hidden;
+    overflow-y: hidden;
+}
+</style>
 <title>Tour Cancel Form</title>
 
 </head>
@@ -17,11 +23,11 @@
 
 	<%
 	String LabLogo = (String) request.getAttribute("LabLogo");
-
+	String empno = (String) session.getAttribute("EmpNo");
 	Object[] tourdetails = (Object[]) request.getAttribute("tourdetails");
 	Object[] touradvancedetails = (Object[])request.getAttribute("touradvancedetails");
 	List<Object[]> list = (List<Object[]>)request.getAttribute("Touronwarddetails");
-	List<Object[]> TourStatisDetails = (List<Object[]>)request.getAttribute("tourstatisdetails");
+	List<Object[]> statusdetails = (List<Object[]>)request.getAttribute("cancelstatustrack");
 	Object[] ApprovalEmp=(Object[])request.getAttribute("ApprovalEmp"); 
 	SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 	
@@ -103,16 +109,16 @@
 									</thead>
 									<tbody>
 										<tr>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[4]%>(<%=tourdetails[3]%>)</td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[2]%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[5].toString())%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[8]%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[6]%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[7]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;color: blue;"><%=tourdetails[4]%>(<%=tourdetails[3]%>)</td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;color: blue;"><%=tourdetails[2]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;color: blue;"><%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[5].toString())%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;color: blue;"><%=tourdetails[8]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;color: blue;"><%=tourdetails[6]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;color: blue;"><%=tourdetails[7]%></td>
 										</tr>
 									</tbody>
 								</table>
-								<p> THe above is put up for incurring cancellation charges of Rs. __________ / reimbursement of 
+								<p> The above is put up for incurring cancellation charges of Rs. __________ / reimbursement of 
 								Rs.___________ to the undersigned </p>
 								<p> The Invoice / cancelled ticket is enclosed  </p>
 								<p> Put up for Expenditure Sanction.</p>
@@ -128,7 +134,85 @@
 							</div>
 						</form>
 					</div>
+				
+				
+				<div class="card" style="width: 85%;">
+						   <div class="card-body">  
+							<div align="center" style="margin: 10px;">
+								<div class="row">
+									<div class="col-md-6">
+										<table>
+										<tr> <th>Name </th><th> Remarks</th></tr>
+										<%if(statusdetails!=null && statusdetails.size()>0){
+											for(Object[] obj : statusdetails){%>
+										
+											<tr> 
+												<td style="text-align: left; color: blue;"> <%=obj[2]%>(<%=obj[3]%>):</td> 
+												<td style="text-align: left;"><%if(obj[6]!=null){%> <%=obj[6]%> <%}else{%> -- <%}%></td>
+											</tr>											
+										
+										<% }}%>
+										</table>
+									</div>
+						<div class="col-md-6" style="margin-top: -10px;">
+						<%if(tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("CAD") || tourdetails[19].toString().equalsIgnoreCase("CDG") || tourdetails[19].toString().equalsIgnoreCase("CDF") || tourdetails[19].toString().equalsIgnoreCase("CDC") || tourdetails[19].toString().equalsIgnoreCase("CDP")){%>
+							<form action="TourCancelForward.htm" method="post">
+								    <div class="row" style="margin-top: 10px;">
+										<div class="col-md-4">
+											    <label style="font-weight: 600;"> Remarks  :</label>
+										</div>
+										<div class="col-md-6">
+												<textarea   name="remarks"  id="remarks" class=" form-control input-sm " placeholder="Enter Remarks......."     maxlength="250" required="required"></textarea>												                         
+										</div>
+									  </div>
+									  <div class="row" style="margin-top: 15px;">
+											<div class="col-md-5"></div>
+											 <div class="col-md-3">
+											 	<input type="hidden" name="tourapplyId" value="<%=tourdetails[0]%>">
+												<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="Action" onclick="return confirm('Are you sure to Submit?')"  data-toggle="tooltip" data-placement="top" title="Forward"> Forward</button>										
+											 </div>
+									   </div>						
+							          <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>								
+							</form>
+						<%}%>			
+						<%if( !tourdetails[2].toString().equalsIgnoreCase(empno) && tourdetails[19]!=null && (tourdetails[19].toString().equalsIgnoreCase("CAA") || tourdetails[19].toString().equalsIgnoreCase("CAG") || tourdetails[19].toString().equalsIgnoreCase("CAF") || tourdetails[19].toString().equalsIgnoreCase("CAC") || tourdetails[19].toString().equalsIgnoreCase("CBU"))){%>			
+						  <form action="CancelApproval.htm" method="post">
+						  			 <div class="row" style="margin-top: 10px;">
+										<div class="col-md-4">
+											    <label style="font-weight: 600;"> Remarks  :</label>
+										</div>
+										<div class="col-md-6">
+												<textarea   name="<%=tourdetails[0]%>"  id="remarks" class=" form-control input-sm " placeholder="Enter Remarks......."     maxlength="250" required="required"></textarea>												                         
+										</div>
+									  </div>
+						  			 <div class="row" style="margin-top: 15px;">
+											<div class="col-md-4"></div>
+											
+												<%if(tourdetails[19].toString().equalsIgnoreCase("ABP")){%>
+												<div class="col-md-2">
+													<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>"  onclick="return confirm('Are you sure to Submit?')" data-toggle="tooltip" data-placement="top" title="Forward"> Verify</button>
+												</div>
+												<div class="col-md-2">
+													<button style="margin-bottom: -10px; background-color: maroon;" type="submit" class="btn btn-sm submit-btn"  name="reject" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>" onclick="return confirm('Are you sure to Return?')" data-toggle="tooltip" data-placement="top" title="Return"> DisApprove </button>																								
+												</div>
+												<%}else{%>
+												<div class="col-md-2">
+													<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>" onclick="return confirm('Are you sure to Forward?')"  data-toggle="tooltip" data-placement="top" title="Forward"> Forward</button>										
+												</div>
+												<div class="col-md-2">
+													<button style="margin-bottom: -10px; background-color: maroon;" type="submit" class="btn btn-sm submit-btn"  name="reject" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>"  onclick="return confirm('Are you sure to Return?')" data-toggle="tooltip" data-placement="top" title="Return"> Return </button>																					
+												</div>
+												<%}%>
+									   </div>
+									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>										
+									</form>			
+								<%}%>
+								</div>
+				   </div>
+				  </div>
+				 </div>
 				</div>
+			</div>			
 			</div>
 		</div>
 	</div>

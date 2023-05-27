@@ -24,7 +24,6 @@ public interface TourService {
 	public TourApply getTourApplyData(Long tourid)throws Exception;
 	public List<TourOnwardReturn> getTourOnwardReturnData(Long tourid)throws Exception;
 	public Long EditTourApply(TourApplyDto dto)throws Exception;
-	public int ForwardTour(String tourapplyid , String empno)throws Exception;
 	public List<Object[]> GetTourApprovalList(String empno)throws Exception; 
 	public List<Object[]> GetTourCancelList(String empno)throws Exception;
 	public int GetDeptInchApproved(ApprovalDto dto ,HttpServletRequest req)throws Exception;
@@ -33,7 +32,7 @@ public interface TourService {
 	public List<Object[]> TourCancelStatusDetails(String tourapplyid)throws Exception;
 	public Object[] GetApprovalEmp(String empno)throws Exception;
 	public Long RevokeTour(ApprovalDto dto)throws Exception;
-	public List<Object[]> GetSanctionList(String empno)throws Exception;
+	public List<Object[]> GetSanctionList(String empno , String from , String todate)throws Exception;
 	public List<Object[]> GetCancelList(String empno)throws Exception;
 	public int CancelTour(ApprovalDto dto)throws Exception;
 	public List<Object[]> GetTourCancelList(String empno ,  String fromdate , String todate)throws Exception;
@@ -42,8 +41,16 @@ public interface TourService {
 	public List<Object[]> getTourOnwardReturnDetails(String tourapplyid)throws Exception;
 	public Long checkTourAlreadyPresentForSameEmpidAndSameDates(String tourid, String empid,String DepartureDate,String ArrivalDate)throws Exception;
 	public Long ModifyTourApply(TourApplyDto dto)throws Exception;
-	public List<Object[]> GetTourAdvanceList(String empno)throws Exception;
+	public List<Object[]> GetTourApprovedList(String empno , String fromdate , String todate )throws Exception;
 	public TourAdvance  GetTourAdvanceData(Long tourid) throws Exception;
 	public Object[] GetPAAndFA()throws Exception;
+	public List<Object[]> GetPAndAList()throws Exception;
+	public long UpdateIssueOrder(String tourapplyid , String  issueddate ,String  issueby ,String Username , String remraks)throws Exception;
+	public long UpdateTourAdvanceRelesed(String tourapplyid ,String empno, String tourAdvance ,String Username ,String remarks)throws Exception;
+	public int CancelForwardTour(String tourapplyid , String empno , String remarks)throws Exception;
+	public int ForwardTour(String tourapplyid , String empno , String remarks)throws Exception;
+	public List<Object[]> TourCancelStatusDetailsTrack(String tourapplyid)throws Exception;
 
+	
+	
 }

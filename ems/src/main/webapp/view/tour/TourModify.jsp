@@ -12,6 +12,12 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <title>Insert title here</title>
 <style type="text/css">
+
+body{
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+
 .table thead th {
     color: white;
     background-color: #0e6fb6;

@@ -7,6 +7,12 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
+<style type="text/css">
+body{
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
+</style>
 <title>Tour Apply List</title>
 </head>
 <body>
