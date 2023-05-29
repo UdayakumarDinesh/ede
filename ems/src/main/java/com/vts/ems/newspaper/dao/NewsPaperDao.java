@@ -4,6 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.model.EMSNotification;
+import com.vts.ems.newspaper.model.Newspaper;
+import com.vts.ems.newspaper.model.NewspaperApplyTransaction;
+import com.vts.ems.newspaper.model.NewspaperContingent;
+import com.vts.ems.newspaper.model.NewspaperContingentTrans;
+import com.vts.ems.pis.model.Employee;
 
 public interface NewsPaperDao {
 
@@ -17,17 +23,34 @@ public interface NewsPaperDao {
 	public List<Object[]> getNewspaperApprovalList() throws Exception;
 	public List<Object[]> getNewspaperClaimApprovedList() throws Exception;
 	public Object[] getNewspaperUserPrintData(String NewspaperId) throws Exception;
-	public int DeleteNewspaperClaim(String NewspaperId) throws Exception;
 	public int EditNewspaperClaim(String Empid, double ClaimAmount, String NewspaperId, double PayableAmount) throws Exception;
 	public Object[] getNewspaperEditDetails(String NewspaperId) throws Exception;
 	public Object[] getCheckNewspaperApproveOrNot(String NewspaperId) throws Exception;
 	public Object[] getCheckPeriodOfNewsAlreadyPresentOrNot(String Empid, String ClaimMonth, String ClaimYear)	throws Exception;
-	public long AddNewspaperClaim(String Empid, String ClaimMonth, String ClaimYear, double ClaimAmount,double RestrictedAmount, double PayableAmount, String PayLevelId) throws Exception;
+//	public long AddNewspaperClaim(String Empid, String ClaimMonth, String ClaimYear, double ClaimAmount,double RestrictedAmount, double PayableAmount, String PayLevelId) throws Exception;
 	public Object[] getPayLevelAndNewsRectrictAmt(String Empid) throws Exception;
 	public List<Object[]> getNewspaperClaimList(String empid) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
 	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
 	public List<Object[]> TelePhoneAllApprovedOrNot(String claimMonth, String claimYear)throws Exception;
+	public long addNewspaper(Newspaper newspaper) throws Exception;
+	public long addNewspaperTrans(NewspaperApplyTransaction newspaperTrans) throws Exception;
+	public List<String> GetEmpDGMEmpNo() throws Exception;
+	public long editNewspaper(Newspaper newspaper) throws Exception;
+	public Object[] empOnLogintype(String Logintype) throws Exception;
+	public String GetDGMEmpNo(String empno) throws Exception;
+	public Newspaper findNewspaperApply(long newspaperApplyId) throws Exception;
+	public Employee findEmpByEmpNo(String empNo) throws Exception ;
+	public long addNotification(EMSNotification notification) throws Exception;
+	public long addNewspaperContingent(NewspaperContingent newspaperContingent) throws Exception;
+	public long addNewspaperContingentTrans(NewspaperContingentTrans newspaperContingentTrans) throws Exception;
+	public List<Object[]> findDGMNewspaperList(String empNo) throws Exception;
+	public List<Object[]> findPONewspaperList() throws Exception;
+	public List<Object[]> findAONewspaperList() throws Exception;
+	public List<Object[]> findApprovedNewspaperList(String todate) throws Exception;
+	public List<Object[]> getNewspaperContingentList(String logintype,String fromdate,String todate) throws Exception;
+	public List<Object[]> NewspaperContingentClaimList(String contingentid) throws Exception;
+	
 	
 	
 	public List<Object[]> getDeviceList(String empid) throws Exception;
@@ -67,6 +90,8 @@ public interface NewsPaperDao {
 	public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleDataByMonth(String TeleForwardId,String teleId);//me added
+	
+	
 	
 
 }

@@ -7,6 +7,9 @@
 
 <!DOCTYPE html>
 <html>
+<%String name = (String) request.getAttribute("name"); 
+String empNo = (String) request.getAttribute("empNo");
+%>
 <head>
 <!--  Bootstrap -->
 <link rel="stylesheet"
@@ -47,53 +50,110 @@ tr, th, td {
 }
 
 .declare {
-	width: 620px;
+	width: 560px;
 	margin-top: 25px;
+	margin-left: 13px;
 	text-align: justify;
 }
 
-.decDiv {
-	display: flex;
-	justify-content: space-between;
-	font-weight: bold;
-	margin-top: 60px;
-}
-
-.note {
-	width: 620px;
-	margin-top: 30px;
-}
 
 .table3 tr, th, td {
 	border: 1px solid black;
 	padding: 0px;
 }
-.table3 tr{
+
+.table3 tr {
 	height: 10px;
 }
 
 .table3 td {
 	font-weight: normal;
 }
-.accDPT{
+
+.accDPT {
 	margin-top: 30px;
 }
+
 .table4 tr, th, td {
 	border: 1px solid black;
 	padding: 5px;
 }
+
 .table4 td {
 	font-weight: normal;
 }
 
-.table4 td:first-child:not(.exlude){
+.table4 td:first-child:not(.exlude) {
 	width: 45%;
 }
-.sign{
+
+.sign {
 	width: 620px;
 	text-align: right;
 	margin-top: 60px;
 }
+
+.break {
+	page-break-after: always;
+}
+
+@page {
+	size: 790px 1120px;
+	margin-top: 49px;
+	margin-left: 55px;
+	margin-right: 55px;
+	margin-buttom: 49px;
+	border: 2px solid black; @ bottom-right { counter-increment : page;
+	counter-reset: page 2;
+	content: "Page " counter(page) " of " counter(pages);
+	margin-bottom: 30px;
+	margin-right: 10px;
+}
+
+@
+top-right {
+	content: "";
+	margin-top: 30px;
+	margin-right: 10px;
+}
+
+@
+top-left {
+	margin-top: 30px;
+	margin-left: 10px;
+	content: "Empno : <%=empNo %>";
+}
+}
+div {
+	width: 650px !important;
+}
+
+body {
+	font-size: 15px !important;
+}
+
+table {
+	width: 650px !important;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	margin-left: 10px;
+	border-collapse: collapse;
+	text-align: left;
+}
+
+tr, th, td {
+	border: 1.5px solid black;
+	padding: 4px;
+}
+
+.blue {
+	color: blue;
+}
+.roww{
+	display: flex;
+	justify-content: space-between;
+}
+
 </style>
 
 <title>Newspaper Claim Print</title>
@@ -102,13 +162,13 @@ tr, th, td {
 
 
 	<%
-	String name = (String) request.getAttribute("name");
-	String empNo = (String) request.getAttribute("empNo");
-	String designation = (String) request.getAttribute("desig");
+
+	
+	String designation = (String) request.getAttribute("designation");
 	Object[] NewspaperUserPrintData = (Object[]) request.getAttribute("NewspaperUserPrintData");
-	LabMaster LabDetails = (LabMaster) request.getAttribute("LabDetails");
+	String LabLogo = (String) request.getAttribute("LabLogo");
 	String PayableRupee = "Not Available";
-	String AdmissibleRupee = "Not Available";
+	String RistrictedAmt = "Not Available";
 	String ClaimRupee = "Not Available";
 
 	/* String NewsClaimHeader =(String)request.getAttribute("NewsClaimHeader"); */
@@ -121,22 +181,22 @@ tr, th, td {
 		PayableRupee = IndianRupeeFormat.rupeeFormat(PayableAmountRsPaisA[0]);
 
 		String AdmissibleAmountRsPaisA[] = IndianRupeeFormat.getRupeePaisaSplit(NewspaperUserPrintData[3].toString());
-		AdmissibleRupee = IndianRupeeFormat.rupeeFormat(AdmissibleAmountRsPaisA[0]);
+		RistrictedAmt = IndianRupeeFormat.rupeeFormat(AdmissibleAmountRsPaisA[0]);
 
 	}
-	
-	
-	SimpleDateFormat dateFormat=new SimpleDateFormat("dd-MM-yyyy");
-	Date today=new Date();
-	
+
+	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	Date today = new Date();
 	%>
 
 
 	<div align="center">
-		<table height="110">
+		<table style="height: 100px;">
 			<tr>
-				<td class="text-center" rowspan="2"><span
-					style="font-size: 30px">STARC</span> <br>BANGALORE</td>
+				<td  rowspan="2">
+				<img style="width: 80px; height: 90px; margin: -43px 0 0 15px;" align="left" 
+					src="data:image/png;base64,<%=LabLogo%>">
+			</td>
 				<td class="text-center" width="300px" rowspan="2">CLAIM FORM
 					FOR <br>REIMBURSEMENT <br> OF RESIDENTIAL NEWSPAPERS TO <br>
 					EXECUTIVES
@@ -146,7 +206,7 @@ tr, th, td {
 				<td>Rev.: 04</td>
 			</tr>
 			<tr>
-				<td>Date of Issue: <br><%=dateFormat.format(today) %>
+				<td>Date of Issue: <br><%=dateFormat.format(today)%>
 				</td>
 				<td>Total<br> Pages-1
 				</td>
@@ -158,40 +218,72 @@ tr, th, td {
 				<tr>
 					<td>1.</td>
 					<td>Name of the Employee</td>
-					<td colspan="2"><%=name%></td>
+					<td colspan="2" class="blue"><%=name%></td>
 				</tr>
 				<tr>
 					<td>2.</td>
 					<td>Emp. No.</td>
-					<td colspan="2"><%=empNo%></td>
+					<td colspan="2" class="blue"><%=empNo%></td>
 				</tr>
 				<tr>
 					<td>3.</td>
 					<td>Designation</td>
-					<td colspan="2"><%=designation%></td>
+					<td colspan="2" class="blue"><%=designation%></td>
 				</tr>
 				<tr>
 					<td>4.</td>
 					<td>Grade & Level in the Pay Matrix</td>
-					<td><%if(NewspaperUserPrintData!=null){%><%=NewspaperUserPrintData[6]%><%}%></td>
-					<td><%if(NewspaperUserPrintData!=null){%><%=NewspaperUserPrintData[5]%><%}%></td>
+					<td style="text-align: center;" class="blue">
+						<%
+						if (NewspaperUserPrintData != null) {
+						%><%=NewspaperUserPrintData[6]%>
+						<%
+						}
+						%>
+					</td>
+					<td style="text-align: center;" class="blue">
+						<%
+						if (NewspaperUserPrintData != null) {
+						%><%=NewspaperUserPrintData[5]%>
+						<%
+						}
+						%>
+					</td>
 				</tr>
 				<tr>
 					<td height="40px">5.</td>
 					<td>Bi-annual & Year of claim</td>
-					<td class="exclude" colspan="2"><% if(NewspaperUserPrintData[0].toString().equalsIgnoreCase("JAN-JUN")){%> January-June <%=NewspaperUserPrintData[1]%> <%} if(NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")){%>July - December <%=NewspaperUserPrintData[1]%> <%} %></td>
+					<td class="exclude" colspan="2" class="blue">
+						<%
+						if (NewspaperUserPrintData[0].toString().equalsIgnoreCase("JAN-JUN")) {
+						%>
+						January-June <%=NewspaperUserPrintData[1]%> <%
+ }
+ if (NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")) {
+ %>July
+						- December <%=NewspaperUserPrintData[1]%> <%
+ }
+ %>
+					</td>
 					<%-- <td class="exclude"><% if(NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")){%>  <%=NewspaperUserPrintData[1]%> <%} else{%>-<%} %></td> --%>
 				</tr>
 				<tr>
 					<td>6.</td>
 					<td>Amount of Reimbursement @ ` 500/- p.m.</td>
-					<% String amt=AdmissibleRupee;
-						amt=amt.replace(",", "");
-					if(Integer.parseInt(amt)<=3000){ %>
-					<td colspan="2">Rs <%=AdmissibleRupee%> /-</td>
-					<%}else {%>
-					<td colspan="2">Rs 3000 /-</td>
-					<%} %>
+					<%
+					String amt = PayableRupee;
+					amt = amt.replace(",", "");
+					if (Integer.parseInt(amt) <= 3000) {
+					%>
+					<td colspan="2" class="blue">Rs <%=amt%> /-
+					</td>
+					<%
+					} else {
+					%>
+					<td colspan="2" class="blue">Rs 3,000 /-</td>
+					<%
+					}
+					%>
 				</tr>
 			</table>
 		</div>
@@ -203,54 +295,91 @@ tr, th, td {
 			claimed towards subscription of newspaper / s for the period. (iii)
 			The amount for which the reimbursement is being claimed has actually
 			been paid by me and has not/will not be claimed by any other source.
-			<div class="decDiv">
-				<div class="decDiv1">Date:</div>
+			
+				<p style=" display: inline; float: left; margin-top: 60px;" ><b>Date:</p>
 
-				<div style="margin-right: 80px;">
-					Signature of Employee <br> STARC Intercom No:
-				</div>
-			</div>
-		</div>
-		<div class="note">
-			<div align="left">Note:</div>
-				<table class="table3">
-					<tr>
-						<th>Name of the Quarter</th>
-						<th>Due date of claim submission (on or before)</th>
-					</tr>
-					<tr>
-						<td>January - June</td>
-						<td>15th of July</td>
-					</tr>
-					<tr>
-						<td>July - December</td>
-						<td>15th of January</td>
-					</tr>
-				</table>
-		</div>
+				<p style=" display: inline; float: right; margin-left: 440px; margin-top: 60px;">
+					Signature of Employee <br> STARC Intercom No: </b>
+				</p>
 
-		<div class="accDPT">
-			<div style="text-decoration: underline;font-weight: bold; margin-bottom: 20px;" >FOR ACCOUNTS DEPARTMENT USE</div>
-			<table class="table4">
+		</div>
+		<div style="margin-top: 120px;">
+			<div align="left" style="margin-left: 30px; ">Note:</div>
+			<table class="table3">
 				<tr>
-					<td>Claimed Amount</td>
-					<td><b>Rs <%=AdmissibleRupee%> /-</b></td>
+					<th>Name of the Quarter</th>
+					<th>Due date of claim submission (on or before)</th>
 				</tr>
 				<tr>
-					<td>Eligible Amount</td>
-					<td><b>Rs <%=PayableRupee%> /-</b></td>
+					<td>January - June</td>
+					<td>15th of July</td>
 				</tr>
 				<tr>
-					<td>Amount passed for payment </td>
-					<td></td>
+					<td>July - December</td>
+					<td>15th of January</td>
 				</tr>
 			</table>
 		</div>
-		<div class="sign"><b style="margin-right: 50px;">F&A Dept. / FO </b></div>
 
-		<input type="button"  class="btn btn-sm print-btn"  id="printPageButton" value="Print" onClick="window.print()">
+		<div class="accDPT">
+			<div
+				style="text-decoration: underline; font-weight: bold; margin-bottom: 20px;">FOR
+				ACCOUNTS DEPARTMENT USE</div>
+			<table class="table4">
+				<tr>
+					<td>Claimed Amount</td>
+					<td class="blue"><b>Rs <%=ClaimRupee%> /-
+					</b></td>
+				</tr>
+				<tr>
+					<td>Eligible Amount</td>
+					<td class="blue"><b>Rs <%=RistrictedAmt%> /-
+					</b></td>
+				</tr>
+				<tr>
+					<td>Amount passed for payment</td>
+					<%
+					String amt1 = PayableRupee;
+					amt1 = amt1.replace(",", "");
+					if (Integer.parseInt(amt1) <= 3000) {
+					%>
+					<td colspan="2" class="blue"><b>Rs <%=amt1%> /-</td>
+					<%
+					} else {
+					%>
+					<td colspan="2" class="blue">Rs 3000 /-</b></td>
+					<%
+					}
+					%>
+				</tr>
+			</table>
+		</div>
+		<div class="sign">
+			<b style="margin-right: 50px; ">F&A Dept. / FO </b>
+		</div>
+
+		<div class="roww" style="margin-top: 30px;">
+			<main ali style=" display: inline; float: left; text-align: left; margin-left: 20px;">
+				<% if(NewspaperUserPrintData[16] != null) { %>
+				<%=NewspaperUserPrintData[16] %> <%} %>, <br>
+				<% if(NewspaperUserPrintData[17] != null) { %>
+				<%=NewspaperUserPrintData[17] %> <%} %> <br>
+				<% if(NewspaperUserPrintData[15] != null) { %>
+				[Processed On : <%=NewspaperUserPrintData[15] %>] <%} %>
+
+			</main >
+			<main style=" display: inline; float: right; text-align: right;">
+				<% if(NewspaperUserPrintData[19] != null) { %>
+				<%=NewspaperUserPrintData[19] %> <%} %>, <br>
+				<% if(NewspaperUserPrintData[20] != null) { %>
+				<%=NewspaperUserPrintData[20] %> <%} %> <br>
+				<% if(NewspaperUserPrintData[18] != null) { %>
+				[Authorized On : <%=NewspaperUserPrintData[18] %>] <%} %>
+			</main >
+		</div>
+
+
 	</div>
-
 
 </body>
 </html>

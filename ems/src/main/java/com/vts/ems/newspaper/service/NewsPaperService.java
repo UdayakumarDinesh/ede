@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.newspaper.model.Newspaper;
+import com.vts.ems.pis.model.Employee;
 
 public interface NewsPaperService {
 
-	public long AddNewspaperClaim(String Empid, String ClaimMonth, String ClaimYear, String ClaimAmount, String RestrictedAmount, String PayLevelId)  throws Exception;
+	public long AddNewspaperClaim(String Empid, String ClaimMonth, String ClaimYear, String ClaimAmount, String RestrictedAmount, String PayLevelId, String username)  throws Exception;
 	public int EditNewspaperClaim(String Empid, String ClaimAmount, String NewspaperId, String RestrictedAmount)throws Exception;
 	public int NewsApproval(Map<String, String> map, String FromDate, String ToDate, String Empid) throws Exception;
 	public List<Object[]> getNewspaperClaimList(String empno) throws Exception;
@@ -19,12 +21,23 @@ public interface NewsPaperService {
 	public Object[] getNewspaperEditDetails(String NewspaperId) throws Exception;
 	public Object[] getNewspaperUserPrintData(String NewspaperId) throws Exception;
 	public Object[] getNewspaperApprovalPeriodEditDetails(String NewspaperBillId) throws Exception;
-	public int DeleteNewspaperClaim(String NewspaperId) throws Exception;
 	public int UpdateNewsPeriod(String empno, String NewspaperBillId, String FromDate, String ToDate) throws Exception;
 	public List<Object[]> getNewspaperReportPrintData(String NewspaperBillId) throws Exception;
 	public Object[] getNewspaperContingentBillPrintData(String NewspaperBillId) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
 	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
+	public List<String> GetEmpDGMEmpNo() throws Exception;
+	public long editNewspaper(Newspaper newspaper) throws Exception;
+	public long forwardNewspaper(long newspaperApplyId, String empNo, String remarks, String userName, String Action) throws Exception;
+	public List<Object[]> findDGMNewspaperList(String empNo) throws Exception;
+	public Object[] empOnLogintype(String Logintype) throws Exception;
+	public List<Object[]> findPONewspaperList() throws Exception;
+	public List<Object[]> findAONewspaperList() throws Exception;
+	public String GetDGMEmpNo(String empno) throws Exception;
+	public Employee findEmpByEmpNo(String empNo) throws Exception ;
+	public List<Object[]> findApprovedNewspaperList(String toDate) throws Exception;
+	public long ContingentGenerate(String[] CHSSApplyId, String Username, String logintype,String EmpId,String genTilldate ) throws Exception;
+	public List<Object[]> getNewspaperContingentList(String logintype,String fromdate,String todate) throws Exception;
 	
 	
 	

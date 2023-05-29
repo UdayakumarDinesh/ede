@@ -1,4 +1,4 @@
-<%@page import="java.time.LocalDate"%>
+<%@page import="java.time.LocalDate, java.util.Date, java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.master.model.LabMaster"%>
 <%@ page language="java" %>
 <!DOCTYPE html >
@@ -21,8 +21,13 @@ Object[] NewspaperEditDetails=(Object[])request.getAttribute("NewspaperEditDetai
 String LabCode =(String)request.getAttribute("LabCode");
 String NewsClaimHeader =(String)request.getAttribute("NewsClaimHeader");
 
+int todaymonth=(int)request.getAttribute("todaymonth");
+int TodayDate=(int)request.getAttribute("TodayDate");
+/*  int todaymonth=8;
+int TodayDate=16;  */
 LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
-
+Date today = new Date();
+SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 %>
 
 <div class="card-header page-top">
@@ -97,7 +102,7 @@ LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
 					       
 					       </table>
 					       </div>
-					    <div class="col-sm-2"></div>
+					    <div class="col-sm-2"></div><%=sdf.format(today)%>
 					  </div>
 					         <div class="col-sm-12">
 					     <br><br>
@@ -107,8 +112,10 @@ LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
 					         <%if(NewspaperEditDetails!=null){%>
 					              <option><%=NewspaperEditDetails[1]%></option>
 					         <%}else{ %>
-					         	<option>JAN-JUN</option>
-					            <option>JUL-DEC</option>
+					         	
+					         	<option <% if( todaymonth>7 || (TodayDate>15 && todaymonth==7) || (TodayDate<=15 && todaymonth==1)) {%>disabled <%} %>>JAN-JUN</option>
+					         	
+					            <option <% if( (todaymonth<7 && todaymonth>1) || (TodayDate<=15 && todaymonth==7) || (TodayDate>15 && todaymonth==1)) {%>disabled <%} %>>JUL-DEC</option>
 					         <%}%>
 					         </select>
 					

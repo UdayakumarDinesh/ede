@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -33,6 +35,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.itextpdf.html2pdf.HtmlConverter;
 import com.vts.ems.newspaper.service.NewPaperServiceImpl;
 import com.vts.ems.utils.CharArrayWriterResponse;
+import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
 
 // newspaper and Telephone claim controller
@@ -66,22 +69,26 @@ public class NewspaperController {
 
 	@Value("${ProjectFiles}")
 	private String LabLogoPath;
-	
-	
-	 public String getLabLogoAsBase64() throws IOException {
 
-			String path = LabLogoPath + "/images/lablogos/lablogo1.png";
-			try {
-				return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
-			} catch (FileNotFoundException e) {
-				System.err.println("File Not Found at Path " + path);
-			}
-			return "/print/.jsp";
+
+	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
+	SimpleDateFormat sdtf = DateTimeFormatUtil.getSqlDateAndTimeFormat();
+
+	public String getLabLogoAsBase64() throws IOException {
+
+		String path = LabLogoPath + "/images/lablogos/lablogo1.png";
+		try {
+			return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+		} catch (FileNotFoundException e) {
+			System.err.println("File Not Found at Path " + path);
+		}
+		return "/print/.jsp";
 	}
-	 
+
 	@Autowired
 	private NewPaperServiceImpl service;
-	
+
 	@Autowired
 	EmsFileUtils emsfileutils ;
 
@@ -95,8 +102,12 @@ public class NewspaperController {
 		String Username = (String) ses.getAttribute("Username");
 		logger.info(new Date() + "Inside NewspaperList.htm " + Username);
 		try {
+
 			List<Object[]> NewspaperClaimList = service.getNewspaperClaimList(sesEmpNo);
 			req.setAttribute("NewspaperClaimList", NewspaperClaimList);
+			req.setAttribute("DGM", service.findEmpByEmpNo(service.GetDGMEmpNo(sesEmpNo)).getEmpName());
+			req.setAttribute("PO", service.empOnLogintype("K")[1]);
+			req.setAttribute("AO", service.empOnLogintype("W")[1]);
 			ses.setAttribute("SidebarActive", "NewspaperList_htm");
 
 			return "newspaper/Newspaperlist";
@@ -137,6 +148,10 @@ public class NewspaperController {
 		String Username = (String) ses.getAttribute("Username");
 		String name = (String) ses.getAttribute("EmpName");
 		logger.info(new Date() + "Inside NewspaperView.htm " + Username);
+		Date date=new Date();
+		String todayDate=rdf.format(date);
+		int TodayMonth=DateTimeFormatUtil.getMonthFromRegularDate(todayDate);
+		int TodayDate = Integer.parseInt(todayDate.substring(0, 2));
 		try
 		{
 			Object[] PayLevelAndNewsRectrictAmt = service.getPayLevelAndNewsRectrictAmt(sesEmpNo);
@@ -146,6 +161,8 @@ public class NewspaperController {
 			req.setAttribute("LabDetails", service.getLabDetails());
 			req.setAttribute("LabCode",(String) ses.getAttribute("LabCode"));
 			req.setAttribute("NewsClaimHeader",NewsClaimHeader);
+			req.setAttribute("todaymonth", TodayMonth);
+			req.setAttribute("TodayDate", TodayDate);
 			return "newspaper/NewspaperClaim";
 		}
 		catch (Exception e)
@@ -179,7 +196,7 @@ public class NewspaperController {
 				} 
 				else 
 				{
-					long AddNewspaperClaimResult = service.AddNewspaperClaim(sesEmpNo, ClaimMonth, ClaimYear,ClaimAmount, RestrictedAmount, PayLevelId);
+					long AddNewspaperClaimResult = service.AddNewspaperClaim(sesEmpNo, ClaimMonth, ClaimYear,ClaimAmount, RestrictedAmount, PayLevelId, Username);
 					if(AddNewspaperClaimResult>0) 
 					{
 						mv.addObject("result", "Claim Added Successfully");
@@ -287,8 +304,60 @@ public class NewspaperController {
 		}
 	}
 
+	@RequestMapping(value = "NewspaperClaimPreview.htm", method = { RequestMethod.GET, RequestMethod.POST }) 
+	public String NewspaperClaimPreview(HttpServletRequest request,HttpSession ses, HttpServletResponse res) throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+
+
+		String empNo=(String)ses.getAttribute("EmpNo");//--me added
+		logger.info(new Date() + "Inside NewspaperClaimPreview.htm " + Username);
+
+		//		ModelAndView mv = new ModelAndView();
+		try {
+			String NewspaperId = request.getParameter("NewspaperId");
+			Object[] NewspaperUserPrintData = service.getNewspaperUserPrintData(NewspaperId);
+
+			//			mv.addObject("name", name);
+			//			mv.addObject("empNo", empNo);//-me added
+			//			mv.addObject("desig", designation);
+			//			mv.addObject("NewspaperUserPrintData", NewspaperUserPrintData);
+			//			mv.addObject("LabDetails", service.getLabDetails());
+			//			mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
+			//			mv.addObject("NewsClaimHeader",NewsClaimHeader);
+			//			mv.setViewName("newspaper/NewspaperUserClaimPrint");
+
+
+
+
+			request.setAttribute("NewspaperUserPrintData", NewspaperUserPrintData);
+			request.setAttribute("isApproval", request.getParameter("isApproval"));
+
+			request.setAttribute("LabDetails", service.getLabDetails());
+			request.setAttribute("LabCode", ses.getAttribute("LabCode"));
+			request.setAttribute("NewsClaimHeader", NewsClaimHeader);
+
+
+			request.setAttribute("LabLogo", getLabLogoAsBase64());
+
+
+			return "newspaper/NewspaperUserClaimPreview";
+
+
+		} 
+		catch (Exception e) 
+		{
+			logger.error(new Date() + " Inside NewspaperClaimPreview.htm " + Username, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+
+	}
+
+
+
 	@RequestMapping(value = "NewspaperPrint.htm", method = { RequestMethod.GET, RequestMethod.POST }) 
-	public ModelAndView NewspaperPrint(HttpServletRequest request,HttpSession ses) throws Exception
+	public String NewspaperPrint(HttpServletRequest request,HttpSession ses, HttpServletResponse res) throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String name = (String) ses.getAttribute("EmpName");
@@ -297,66 +366,138 @@ public class NewspaperController {
 		String empNo=(String)ses.getAttribute("EmpNo");//--me added
 		logger.info(new Date() + "Inside NewspaperPrint.htm " + Username);
 
-		ModelAndView mv = new ModelAndView();
+		//		ModelAndView mv = new ModelAndView();
 		try {
 			String NewspaperId = request.getParameter("NewspaperId");
 			Object[] NewspaperUserPrintData = service.getNewspaperUserPrintData(NewspaperId);
-			mv.addObject("name", name);
-			mv.addObject("empNo", empNo);//-me added
-			mv.addObject("desig", designation);
-			mv.addObject("NewspaperUserPrintData", NewspaperUserPrintData);
-			mv.addObject("LabDetails", service.getLabDetails());
-			mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
-			mv.addObject("NewsClaimHeader",NewsClaimHeader);
-			mv.setViewName("newspaper/NewspaperUserClaimPrint");
 
-			return mv;				
+			//			mv.addObject("name", name);
+			//			mv.addObject("empNo", empNo);//-me added
+			//			mv.addObject("desig", designation);
+			//			mv.addObject("NewspaperUserPrintData", NewspaperUserPrintData);
+			//			mv.addObject("LabDetails", service.getLabDetails());
+			//			mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
+			//			mv.addObject("NewsClaimHeader",NewsClaimHeader);
+			//			mv.setViewName("newspaper/NewspaperUserClaimPrint");
+
+
+
+			String filename="";
+			if( NewspaperId != null ) {
+				request.setAttribute("NewspaperUserPrintData", NewspaperUserPrintData);
+				filename="Newspaper_Claim_print";
+			}
+
+			request.setAttribute("name", name);
+			request.setAttribute("empNo", empNo);
+			request.setAttribute("designation", designation);
+			request.setAttribute("LabDetails", service.getLabDetails());
+			request.setAttribute("LabCode", ses.getAttribute("LabCode"));
+			request.setAttribute("NewsClaimHeader", NewsClaimHeader);
+
+
+			request.setAttribute("pagePart","3" );
+
+			request.setAttribute("view_mode", request.getParameter("view_mode"));
+			request.setAttribute("LabLogo", getLabLogoAsBase64());
+
+			String path=request.getServletContext().getRealPath("/view/temp");
+			request.setAttribute("path",path);
+
+			CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			request.getRequestDispatcher("/view/newspaper/NewspaperUserClaimPrint.jsp").forward(request, customResponse);
+
+			String html = customResponse.getOutput();        
+
+			HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+
+
+			emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+
+
+			File f=new File(path +File.separator+ filename+".pdf");
+			FileInputStream fis = new FileInputStream(f);
+			DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			res.setHeader("Content-Length",String.valueOf(f.length()));
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) >= 0) {
+				os.write(buffer, 0, len);
+			} 
+			os.close();
+			fis.close();
+
+			Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			Files.delete(pathOfFile);	
+
+			return "redirect:/NewspaperList.htm";
+
+
 		} 
 		catch (Exception e) 
 		{
 			logger.error(new Date() + " Inside NewspaperPrint.htm " + Username, e);
 			e.printStackTrace();
-			return new ModelAndView("static/Error");
+			return "static/Error";
 		}
 
 	}
 
-	@RequestMapping(value = "NewspaperDelete.htm", method = { RequestMethod.GET, RequestMethod.POST }) 
-	public ModelAndView NewspaperDelete(HttpServletRequest request,HttpSession ses) throws Exception
+	@RequestMapping(value = "NewspaperContingentAppro.htm", method = { RequestMethod.GET, RequestMethod.POST }) 
+	public ModelAndView PrepNewspaperContingentBill(HttpServletRequest req,HttpSession ses) throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() + "Inside NewspaperDelete.htm " + Username);
+		String LoginType = (String) ses.getAttribute("LoginType");
+		
+		logger.info(new Date() + "Inside NewspaperContingentAppro.htm " + Username);
 
 		ModelAndView mv = new ModelAndView();
 		try {
+			ses.setAttribute("SidebarActive", "NewspaperContingentAppro_htm");
+			
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
 
-			String NewspaperId = request.getParameter("NewspaperId");
+			LocalDate today=LocalDate.now();
 
-			Object[] CheckApproveOrNot = service.getCheckNewspaperApproveOrNot(NewspaperId);
-
-			if (CheckApproveOrNot != null) 
+			if(fromdate==null) 
 			{
-				int DeleteNewspaperResult = service.DeleteNewspaperClaim(NewspaperId);
-				if(DeleteNewspaperResult>0) {
-					mv.addObject("result", "Claim Delete Successfull");
-				}else {
-					mv.addObject("result", "Claim Delete Unsuccessfull");
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
 				}
-			} else {
-				mv.addObject("resultfail", "Claim Already Approved You Cannot Delete");
+				fromdate +="-04-01"; 
+				todate +="-03-31";
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 			}
 
-			mv.setViewName("redirect:/NewspaperList.htm");
-			return mv;
 
+//			req.setAttribute("ContingentList", service.getNewspaperApprovalList());
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("logintype", LoginType);
+			req.setAttribute("ContingentList", service.getNewspaperContingentList(LoginType, fromdate, todate));
+			
+			mv.setViewName("newspaper/NewspaperContingentBill");
+			return mv;
 		} catch (Exception e) {
-			logger.error(new Date() + " Inside NewspaperDelete.htm " + Username, e);
+			logger.error(new Date() + " Inside NewspaperContingentAppro.htm" + Username, e);
 			e.printStackTrace();
 			return new ModelAndView("static/Error");
 		}
 
 	}
-
 
 
 	@RequestMapping(value = "NewsApprovalPeriodEdit.htm", method = { RequestMethod.GET, RequestMethod.POST }) 
@@ -551,26 +692,188 @@ public class NewspaperController {
 	}
 
 
+	//	@RequestMapping(value = "NewspaperApproval.htm")
+	//	public ModelAndView newspaperapproval(HttpServletRequest request)  throws Exception
+	//	{
+	//		HttpSession ses= request.getSession(false);
+	//		String Username = (String) ses.getAttribute("Username");
+	//		logger.info(new Date() + "Inside NewspaperApproval.htm " + Username);
+	//		try {
+	//			ModelAndView mv = new ModelAndView("newspaper/NewspaperApproval");
+	//
+	//			List<Object[]> NewspaperApprovalList = service.getNewspaperApprovalList();
+	//			mv.addObject("NewspaperApprovalList", NewspaperApprovalList);
+	//			ses.setAttribute("SidebarActive", "NewspaperApproval_htm");
+	//			return mv;
+	//		} 
+	//		catch (Exception e) {
+	//			e.printStackTrace();
+	//			logger.error(new Date() + " Inside NewspaperApproval.htm " + Username, e);
+	//			return new ModelAndView("static/Error");
+	//		}
+	//
+	//	}
 	@RequestMapping(value = "NewspaperApproval.htm")
-	public ModelAndView newspaperapproval(HttpServletRequest request)  throws Exception
+	public String newspaperapproval(HttpServletRequest req)  throws Exception
 	{
-		HttpSession ses= request.getSession(false);
+		HttpSession ses= req.getSession(false);
 		String Username = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() + "Inside NewspaperApproval.htm " + Username);
-		try {
-			ModelAndView mv = new ModelAndView("newspaper/NewspaperApproval");
 
-			List<Object[]> NewspaperApprovalList = service.getNewspaperApprovalList();
-			mv.addObject("NewspaperApprovalList", NewspaperApprovalList);
+
+		try {
 			ses.setAttribute("SidebarActive", "NewspaperApproval_htm");
-			return mv;
+			List<String> DGMs = service.GetEmpDGMEmpNo();
+			String poEmpno=(String) service.empOnLogintype("K")[0];
+			String aoEmpno=(String) service.empOnLogintype("W")[0];
+			if(aoEmpno.equalsIgnoreCase(EmpNo)) {
+				req.setAttribute("NewspapepApproList", service.findAONewspaperList());
+				return "newspaper/NewspaperApprovalList";
+			} else if(poEmpno.equalsIgnoreCase(EmpNo)) {
+				req.setAttribute("NewspapepApproList", service.findPONewspaperList());
+				return "newspaper/NewspaperApprovalList";
+			} else if( DGMs.contains(EmpNo) ) {
+				req.setAttribute("NewspapepApproList", service.findDGMNewspaperList(EmpNo));
+				return "newspaper/NewspaperApprovalList";
+			} else {
+				return "newspaper/NewspaperApprovalList";
+			}
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() + " Inside NewspaperApproval.htm " + Username, e);
-			return new ModelAndView("static/Error");
+			return "static/Error";
 		}
 
+	}
+	
+	@RequestMapping(value = "NewspaperListToBill.htm")
+	public String newspaperapproved(HttpServletRequest req)  throws Exception
+	{
+		HttpSession ses= req.getSession(false);
+		String Username = (String) ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		logger.info(new Date() + "Inside NewspaperListToBill.htm " + Username);
+
+
+		try {
+			String poEmpno=(String) service.empOnLogintype("K")[0];
+			String todate = req.getParameter("todate");
+			
+			if(todate == null) 
+			{
+				if(LocalDate.now().getDayOfMonth()<20) {
+					todate = LocalDate.now().minusMonths(1).withDayOfMonth(20).toString();
+				}else
+				{
+					todate = LocalDate.now().withDayOfMonth(20).toString();
+				}
+				
+			}else {
+				todate = sdf.format(rdf.parse(todate));				
+			}
+			if(poEmpno.equalsIgnoreCase(EmpNo)) {
+				req.setAttribute("todate", todate);
+				req.setAttribute("NewspapepListToBill", service.findApprovedNewspaperList(todate));
+				
+			}
+			
+			return "newspaper/NewspaperListToBill";
+		} 
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + " Inside NewspaperListToBill.htm " + Username, e);
+			return "static/Error";
+		}
+
+	}
+	
+	@RequestMapping(value = "NewspaperContingentGenerate.htm", method = RequestMethod.POST)
+	public String CHSSContingentGenerate(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String EmpNO = (String) ses.getAttribute("EmpNO");
+		logger.info(new Date() +"Inside NewspaperContingentGenerate.htm "+Username);
+		try {
+
+			String NewspaperId[] = req.getParameterValues("NewspaperId");
+
+			String genTilldate = req.getParameter("genTilldate");		
+			
+			long count= service.ContingentGenerate(NewspaperId, Username, LoginType, EmpNO, genTilldate);
+//			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
+			
+				if (count > 0) {
+					redir.addAttribute("result", "Contingent Bill Generated Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Contingent Bill Generation Unsuccessful");	
+				}	
+			redir.addFlashAttribute("contingentid",String.valueOf(count));
+			
+			return "redirect:/NewspaperContingentAppro.htm";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingentGenerate.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+
+	@RequestMapping(value = "NewspaperForward.htm" ) 
+	public String NewspaperForward(HttpServletRequest req,HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		String Username = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() + "Inside NewspaperForward.htm " + Username) ;
+		try
+		{
+			String NewspaperId=req.getParameter("NewspaperId");
+			String remarks =req.getParameter("remarks");
+			String action = req.getParameter("Action");
+			if(action.equalsIgnoreCase("FWD") ) {
+				long res = service.forwardNewspaper(Long.parseLong(NewspaperId), EmpNo, remarks, Username, action);
+
+				if (res > 0) {
+					redir.addAttribute("result", "Newspaper Claim application Sent for Processing  Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Newspaper Claim application Sent for Processing Unsuccessful");	
+				}	
+
+				return "redirect:/NewspaperList.htm";
+			} else if(action.equalsIgnoreCase("DGM-A") || action.equalsIgnoreCase("PO-A") || action.equalsIgnoreCase("AO-A")) {
+				long res = service.forwardNewspaper(Long.parseLong(NewspaperId), EmpNo, remarks, Username, action);
+
+				if (res > 0) {
+					redir.addAttribute("result", "Newspaper Claim application Forwarded Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Newspaper Claim application Forwarding Unsuccessful");	
+				}
+
+				return "redirect:/NewspaperApproval.htm";
+			}else if( action.equalsIgnoreCase("PO-R") || action.equalsIgnoreCase("DGM-R") || action.equalsIgnoreCase("AO-R")) {
+				long res = service.forwardNewspaper(Long.parseLong(NewspaperId), EmpNo, remarks, Username, action);
+
+				if (res > 0) {
+					redir.addAttribute("result", "Newspaper Claim application(s) Returned Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Newspaper Claim application(s) Return Unsuccessful");	
+				}	
+
+				return "redirect:/NewspaperApproval.htm";
+			} else {
+				return "redirect:/NewspaperApproval.htm";
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			logger.error(new Date() + " Inside NewspaperForward.htm " + Username, e);
+			return "static/Error";
+		}
 	}
 
 
@@ -1260,7 +1563,7 @@ public class NewspaperController {
 
 	}
 
-	@RequestMapping(value="TelephoneContingentBill.htm",method=RequestMethod.POST)
+	@RequestMapping(value="TelephoneContingentBill.htm", method=RequestMethod.POST)
 	public ModelAndView TelephoneContingentBill(HttpServletRequest request,HttpSession ses, RedirectAttributes redir) throws Exception
 	{
 		String Username = (String) ses.getAttribute("Username");
@@ -1275,6 +1578,7 @@ public class NewspaperController {
 			request.setAttribute("TeleContingentVoucherNo", TeleContingentVoucherNo);
 			request.setAttribute("TelephoneAuthority", TelephoneAuthority);
 			request.setAttribute("PublicFundNo",PublicFundNo);
+
 			mv.setViewName("newspaper/TelephoneContingentBill");
 
 			return mv;
@@ -1453,7 +1757,7 @@ public class NewspaperController {
 		try {
 			String ClaimMonth = req.getParameter("ClaimMonth");
 			String ClaimYear = req.getParameter("ClaimYear");
-			
+
 
 			String filename="";
 			if( ClaimMonth != null && ClaimYear!= null ) {
@@ -1465,7 +1769,7 @@ public class NewspaperController {
 
 			req.setAttribute("view_mode", req.getParameter("view_mode"));
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-			
+
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
 
@@ -1477,7 +1781,7 @@ public class NewspaperController {
 			HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
 
 			res.setContentType("application/pdf");
-			res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+			res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
 
 
 			emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
@@ -1506,7 +1810,7 @@ public class NewspaperController {
 			return "static/Error";
 		}
 	}
-	
+
 	@RequestMapping(value="TelePhoneFinalAppPrint.htm",  method = {RequestMethod.POST,RequestMethod.GET})
 	public String TelePhineFinalPrint(HttpServletRequest req, HttpSession ses, HttpServletResponse res){
 		String Username=(String)ses.getAttribute("Username");
@@ -1515,7 +1819,7 @@ public class NewspaperController {
 		try {
 			String ClaimMonth = req.getParameter("ClaimMonth");
 			String ClaimYear = req.getParameter("ClaimYear");
-			
+
 
 			String filename="";
 			if( ClaimMonth != null && ClaimYear!= null ) {
@@ -1527,7 +1831,7 @@ public class NewspaperController {
 
 			req.setAttribute("view_mode", req.getParameter("view_mode"));
 			req.setAttribute("LabLogo", getLabLogoAsBase64());
-			
+
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
 
@@ -1568,5 +1872,5 @@ public class NewspaperController {
 			return "static/Error";
 		}
 	}
-	
+
 }

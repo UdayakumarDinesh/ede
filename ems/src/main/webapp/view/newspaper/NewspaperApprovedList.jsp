@@ -96,7 +96,7 @@ List<Object[]> NewspaperClaimApprovedList=(List<Object[]>)request.getAttribute("
 					<button type="submit" class="btn btn-warning"
 						formaction="NewsApprovalPeriodEdit.htm">Edit Approval
 						Period</button>
-					<button type="submit" class="btn btn-info"
+					<!-- <button type="submit" class="btn btn-info"
 						formaction="NewspaperReportPrint.htm" formtarget="blank">Print
 						Report</button>
 					<button type="submit" class="btn btn-info"
@@ -105,7 +105,7 @@ List<Object[]> NewspaperClaimApprovedList=(List<Object[]>)request.getAttribute("
 					<button type="submit" class="btn btn-info"
 						formaction="NewsPaperExpSancReport.htm" formtarget="blank">Expenditure
 						Sanction</button>
-
+ -->
 					<%}%>
 
 				</div>

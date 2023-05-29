@@ -89,7 +89,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 			EMSNotification notification = new EMSNotification();
 			notification.setEmpNo(DGM);
 			notification.setNotificationUrl("BankDetailapproval.htm");
-			notification.setNotificationMessage("Recieved Bank Detail Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationMessage("Received Bank Detail Change Request From <br>"+emp.getEmpName());
 			notification.setNotificationBy(empNo);
 			notification.setNotificationDate(LocalDate.now().toString());
 			notification.setIsActive(1);
@@ -142,7 +142,7 @@ public class BankDetailServiceImpl implements BankDetailService{
 		EMSNotification notification = new EMSNotification();
 		notification.setEmpNo(PAndA);
 		notification.setNotificationUrl("BankDetailapproval.htm");
-		notification.setNotificationMessage("Recieved Bank Detail Change Request From <br>"+emp.getEmpName());
+		notification.setNotificationMessage("Received Bank Detail Change Request From <br>"+emp.getEmpName());
 		notification.setNotificationBy(EmpNo);
 		notification.setNotificationDate(LocalDate.now().toString());
 		notification.setIsActive(1);

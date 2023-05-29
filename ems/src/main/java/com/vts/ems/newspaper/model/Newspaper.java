@@ -25,9 +25,11 @@ public class Newspaper {
 	private double ClaimAmount;
 	private double RestrictedAmount;
 	private double PayableAmount;
+	private String NewspaperStatusCode;
 	private int PayLevelId;
 	private String Remark;
-	private Date NewsAppliedDate;
+	private Date NewsAppliedDate;	
+	private long ContingentId;	
 	private int IsActive;
 	private String SubmitBy;
 	private String SubmitDate;

@@ -274,7 +274,7 @@ input:focus {
 								</div>
 
 								<button type="submit" class="btn btn-sm submit-btn"
-									id="finalSubmission" formaction="ForwodApp.htm" name="bankId"
+									id="finalSubmission" formaction="ForwodApp.htm" name="NewspaperId"
 									value="<%=oneBankDeatil[0]%>"
 									onclick="return confirm('Are You Sure To Submit?');">
 									<i class="fa-solid fa-forward" style="color: #125B50"></i>
