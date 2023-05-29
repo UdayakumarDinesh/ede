@@ -893,7 +893,6 @@ public class NewspaperController {
 				contingentid=(String)md.get("contingentid");
 				claim_view_mode=(String)md.get("claim_view_mode");
 			}
-			
 			if(claim_view_mode==null) {
 				claim_view_mode="A";
 			}
