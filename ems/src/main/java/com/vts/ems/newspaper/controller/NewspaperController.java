@@ -27,6 +27,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -876,6 +877,46 @@ public class NewspaperController {
 		}
 	}
 
+	
+	@RequestMapping(value = "NewspaperContingetBill.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String ContingetBill(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewspaperContingetBill.htm "+Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			String claim_view_mode=req.getParameter("claim_view_mode");
+			
+			if(contingentid==null) {
+				Map md=model.asMap();
+				contingentid=(String)md.get("contingentid");
+				claim_view_mode=(String)md.get("claim_view_mode");
+			}
+			
+			if(claim_view_mode==null) {
+				claim_view_mode="A";
+			}
+			
+			req.setAttribute("ContingentList", "");
+			req.setAttribute("contingentdata", "");
+			req.setAttribute("ApprovalAuth", "");
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("labdata", "");
+			req.setAttribute("contingentremarks", "");
+			req.setAttribute("onlyview","Y");
+			req.setAttribute("logintype",LoginType);
+			req.setAttribute("view_mode",claim_view_mode);
+
+			return "chss/ContingentBillView";
+			
+//			return "chss/ContingentBill";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingetBill.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 
 
 
