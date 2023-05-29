@@ -1,7 +1,5 @@
 package com.vts.ems.noc.model;
 
-import org.springframework.web.multipart.MultipartFile;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,6 +13,7 @@ public class NocProceedingAbroadDto {
 	private long NocProcId;
 	private String NocProcAbroadNo;
     private String EmpNo;
+    private String PassportExist;
     private String RelationType; 
     private String RelationName; 
     private String RelationOccupation;
@@ -28,17 +27,15 @@ public class NocProceedingAbroadDto {
     private String CountriesProposed;
     private String DepartureDate;
     private String VisitPurpose;
-    private long StayDuration;
+    private String StayDuration;
     private String ReturnDate;
     private String Going;
     private String FamilyDetails;
-    private long ExpectedAmount;
+    private String ExpectedAmount;
     private String FinancedBy;
-    private long AmountSpend;
-	private MultipartFile FormFile;
-    private String FilePath;
-    private String FileName;
-    private String NameNationality;
+    private String AmountSource;
+	private String Name;
+    private String Nationality;
     private String Relationship;
     private String RelationshipAddress;
     private String LostPassport;
@@ -51,9 +48,19 @@ public class NocProceedingAbroadDto {
     private String NocStatusCode;
     private String Remarks;
     private String NocStatusCodeNext;
+    private String WorkHandled;
+    private String VisitRecommended;
+    private String LeaveGranted;
+    private String InitiatedDate;
     private String ForwardedDate;
     private String ReturnedDate;
     private String ApprovedDate ;
+    private String ProcAbroadEntries;
+    private String ProcAbroadEntriesDetails;
+    private String EmployeeCaseDetails;
+    private String EmployeeDues;
+    private String PandAModifiedBy;
+    private String PandAModifiedDate;
     private String CreatedBy; 
     private String CreatedDate; 
     private String ModifiedBy; 

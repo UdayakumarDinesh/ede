@@ -11,8 +11,7 @@
 <html>
 <% 
 
-     
-  Object[] obj=(Object[])request.getAttribute("NocProcAbroadDetails");
+    Object[] obj=(Object[])request.getAttribute("NocProcAbroadDetails");
      
 %>
 <head>
@@ -54,7 +53,7 @@
 
 
 				@top-right {
-					content: "<%=obj[11]%>";
+					content: "<%=obj[17]%>";
 					margin-top: 30px;
 					margin-right: 10px;
 				}
@@ -62,7 +61,7 @@
 				@top-left {
 					margin-top: 30px;
 					margin-left: 10px;
-					content: "<%=obj[0] %>";
+					content: "";
 				}
 
 				@top-center {
@@ -155,7 +154,11 @@ td{
 {
 	color: blue;
 	font-weight:400px;
-}	 
+}
+.break1
+	 {
+	  	page-break-after:always;
+	 }	 
 </style>
 
 <title>NOC Proceeding Abroad </title>
@@ -168,6 +171,7 @@ td{
 	   SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
        SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
        String LabLogo = (String)request.getAttribute("lablogo");
+       Object[] Ceoname=(Object[])request.getAttribute("CeoName");
     
 	%>
 
@@ -176,19 +180,18 @@ td{
 		<table style="margin-left:10px; margin-top:15px;width:650px;">
 			<tr>
 				<td class="text-center" rowspan="2">
-					<img style="width: 80px; height: 80px;  margin-top: -40px;margin-left: 10px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
+					<img style="width: 70px; height: 60px;  margin-top: -30px;margin-left: 10px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></td>
 				<td class="text-center" width="300px" rowspan="2">APPLICATION FOR OBTAINING NO OBJECTION CERTIFICATE FOR PROCEEDING ABROAD  <br>
 				
 				</td>
-				<td>STARC -BNG -<br>P&A-042
+				<td>STARC -<%=obj[17] %>
 				</td>
-				<td>Rev.: 01</td>
+				
 			</tr>
 			<tr>
-				<td>Date of Issue: <br>
+				<td>Date of Issue : <% if (obj[54]!=null){%><%=rdf.format(sdf.parse(obj[54].toString())) %><%} %>
 				</td>
-				<td>Total<br> Pages-5
-				</td>
+				
 			</tr>
 		</table>
 		</div>
@@ -199,25 +202,24 @@ td{
 									<tbody>
 										
 										<tr>
-											<th>1.Name</th>
-											<th>2.EmpNo</th>
-											<th>3.Department</th>
-											<th>4.Designation</th>
+											<th style="width:250px;">1.Name</th>
+											<th style="width:0px;">2.EmpNo</th>
+											<th style="width:250px;">3.Designation</th>
+											<th style="width:50px;">4.Department</th>
 										</tr>
 									<tr>
 										
-											<td class="text-blue" style="text-transform: uppercase;"><%=obj[1] %></td>
+											
+											<td class="text-blue" style="text-transform: uppercase;text-align:left;"><%=obj[1] %></td>
 											<td class="text-blue" ><%=obj[0] %></td>
+											<td class="text-blue" style="text-align:left;" ><%=obj[2] %></td>
 											<td class="text-blue" ><%=obj[3] %></td>
-											<td class="text-blue" ><%=obj[2] %></td>
 									</tr>
 										
 									</tbody>
 								</table>
 								
 	<table style="margin-left:10px; margin-top:5px;border-collapse: collapse; width:650px;">
-	
-	
 	
 	<%-- <tr>
 	<td style="width:350px;text-align: left;border: 0;"><h4>1. Name (in BLOCK LETTERS) <span style="margin-left:80px"> :</span> </h4></td>
@@ -240,87 +242,95 @@ td{
 	</tr> --%>
 	
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;padding:-15;"><h4>&nbsp;&nbsp;5.  Applicants Residential Address  </h4></td>
-	<td  style="border: 0;padding:-15"></td>
+	<td style="width:350px;text-align: left;border: 0;padding:-15px;"><h4>&nbsp;&nbsp;5. Applicants Residential Address  </h4></td>
+	<td  style="border: 0;padding:-15px;"></td>
 	</tr>
 	
 	<tr>
-	<td style="width:350px;border: 0;padding:-15"><h4> (a) Present  <span style="margin-left:70px"> :</span> </h4></td>
-	<td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:-50px"><%=obj[4] %></span></td>
+	<td style="width:0px;border: 0;text-align: left;padding:-12px;"><h4>&nbsp;&nbsp;(a) Present &nbsp; &nbsp;&nbsp; &nbsp;:</h4></td>
+	<td class="text-blue" style="border: 0;text-align: justify;padding:-12px;"><span style="margin-left:-165px"><%=obj[4] %>,<%=obj[5] %>,<%=obj[6] %>,<%=obj[7] %></span></td>
 	</tr>
 	
 	<tr>
-	<td style="width:350px;border: 0;padding:-15"><h4> (b) Permanent  <span style="margin-left:50px"> :</span></h4></td>
-	<td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:-50px"><%=obj[5] %></span></td>
+	<td style="width:0px;border: 0;text-align: left;padding:-12px;"><h4>&nbsp; (b) Permanent : </h4></td>
+	<td class="text-blue" style="border: 0;text-align: justify;padding:-12px;"><span style="margin-left:-165px"><%=obj[5] %>,<%=obj[9] %>,<%=obj[10] %>,<%=obj[11] %></span></td>
 	</tr>
 	
 	
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;padding:-15"><h4>&nbsp;&nbsp;6. Detail of <% if(obj[12].toString().equalsIgnoreCase("F")){%>Father<%} else if(obj[12].toString().equalsIgnoreCase("H")){ %> Husband<%} 
-	else if (obj[12].toString().equalsIgnoreCase("G")){ %> Guardian <%} %> <br> 
+	<td style="width:350px;text-align: left;border: 0;padding:-15px;"><h4>&nbsp;&nbsp;6. Detail of <% if(obj[18].toString().equalsIgnoreCase("F")){%>Father<%} else if(obj[18].toString().equalsIgnoreCase("H")){ %> Husband<%} 
+	else if (obj[18].toString().equalsIgnoreCase("G")){ %> Guardian <%} %> <br> 
        </h4></td>
       
-    <td style="border: 0;padding:-15"></td>
+    <td style="border: 0;padding:-15px;"></td>
 	</tr>
 	
 	<tr>
-	<td style="width:350px;border: 0;padding:-15"><h4>  (a) Name <span style="margin-left:80px"> :</span></h4></td>
+	<td style="width:350px;border: 0;text-align: left;padding:-15px"><h4>&nbsp;  (a) Name <span style="margin-left:45px"> :</span></h4></td>
       
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:-50px"><%=obj[13] %></span></td>
+    <td class="text-blue" style="border: 0;text-align: justify;padding:-15px"><span style="margin-left:-150px"><%=obj[19] %></span></td>
 	</tr>
 	
 	<tr>
-	<td style="width:350px;border: 0;padding:-15"><h4>  (b) Occupation <span style="margin-left:40px"> :</span></h4></td>
+	<td style="width:350px;border: 0;text-align: left;padding:-15px;"><h4>&nbsp;  (b) Occupation <span style="margin-left:5px"> :</span></h4></td>
       
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:-50px"><%=obj[14]%></span></td>
+    <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:-150px"><%=obj[20]%></span></td>
 	</tr>
 	
 	<tr>
-	<td style="width:350px;border: 0;padding:-15"><h4>  (c) Address   <span style="margin-left:70px"> :</span></h4></td>
+	<td style="width:350px;border: 0;text-align: left;padding:-15px;"><h4>&nbsp;  (c) Address   <span style="margin-left:30px"> :</span></h4></td>
       
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:-50px"><%=obj[15] %></span></td>
+    <td class="text-blue" style="border: 0;text-align: justify;padding:-15px;"><span style="margin-left:-150px"><%=obj[21] %></span></td>
 	</tr>
+	</table>
 	
+	<table style="margin-left:15px; margin-top:5px;border-collapse: collapse; width:650px;">
 	<tr>
-	<td style="width:350px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;7. Details of blood / close relations <br>&nbsp;&nbsp;working in  foreign embassy / <span style="margin-left:25px;"> :</span><br>&nbsp;&nbsp;firms in India / Abroad 
-         </h4> </td>
+	<td style="width:750px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;7. Details of blood / close relations working in  foreign embassy / firms in India / Abroad 
+         : <span class="text-blue"><% if(obj[22].toString().equalsIgnoreCase("NA")){%><%=obj[22] %><%} %></span></h4> </td>
+    </tr>
     
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><% if (obj[16].toString().trim().length()>0){%><span style="margin-left:-50px"><%=obj[16] %></span><%}  else{ %> <span style="margin-left:-50px">N/A</span><%} %></td>
+    <%  if(!obj[22].toString().equalsIgnoreCase("NA")){%>
+    
+    <tr>
+    <td class="text-blue" style="border: 0;text-align: justify;padding:0"><%=obj[22] %></td>
 	</tr>
 	
+	<%} %>
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;text-align: justify;padding:-12"><h4>&nbsp;8. Details of employment during <span style="margin-left:10px"> :</span><br>&nbsp; last ten years  
+	<td style="width:350px;text-align: left;border: 0;text-align: justify;padding:-12"><h4>&nbsp;8. Details of employment during  last ten years : <span class="text-blue"><% if(obj[23].toString().equalsIgnoreCase("NA")){%><%=obj[23] %><%} %></span>
        </h4> </td>
+    </tr>
     
+    <%  if(!obj[23].toString().equalsIgnoreCase("NA")){%>
+    <tr>
       
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><% if (obj[17].toString().trim().length()>0){%><span style="margin-left:-50px"><%=obj[17] %></span><%}  else{ %><span style="margin-left:-50px">N/A</span><%} %></td>
+    <td class="text-blue" style="border: 0;text-align: justify;padding:0"><%=obj[23] %></td>
 	</tr>
 	
-	
+	<%} %>
 	<tr>
-	<td style="width:350px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;9. Are you involved in any court <br>&nbsp;/ police / vigilance case for <span style="margin-left:50px"> :</span><br>&nbsp; which your presence is required <br>&nbsp; in India
+	<td style="width:350px;text-align: justify;border: 0;padding:-15"><h4>&nbsp;9. Are you involved in any court / police / vigilance case for which your presence is required in &nbsp; India
 	
-      </h4></td>
+      : <span class="text-blue"><% if (obj[24].toString().equalsIgnoreCase("Y")){%>Yes<%} else{ %>No<%} %></span> </h4></td>
     
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><% if (obj[18].toString().equalsIgnoreCase("Y")){%><span style="margin-left:-50px" >YES </span><%} else{ %><span style="margin-left:-50px" > NO </span><%} %></td>
-	</tr>
-	
-	<tr>
-	<td style="width:350px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;10. Whether Annual Property  <br>&nbsp; Return of the previous year <span style="margin-left:35px"> :</span><br>&nbsp; has been filed 
-	
-	
-      </h4></td>
-    
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><% if (obj[19].toString().equalsIgnoreCase("Y")){%><span style="margin-left:-50px" >YES</span><%} else{ %><span style="margin-left:-50px" >NO </span><%} %></td>
+   
 	</tr>
 	
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;padding:-12"><h4>&nbsp;11. Details of passport held previously,<br>&nbsp; if any 	
-      </h4> </td>
+	<td style="width:350px;text-align: justify;border: 0;padding:-15"><h4>&nbsp;10. Whether Annual Property Return of the previous year has been filed 
+	: <span class="text-blue"><% if (obj[25].toString().equalsIgnoreCase("Y")){%>Yes<%} else{ %>No<%} %> </span></h4></td>
+	</tr>
     
-     <td style="border: 0;padding:-12"></td>
+  
+	<tr>
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4>&nbsp;11. Details of passport held previously, if any 	
+      : &nbsp;<% if(obj[12].toString().equalsIgnoreCase("NA") && obj[13].toString().equalsIgnoreCase("NA") && obj[14].toString().equalsIgnoreCase("NA") &&  obj[15].toString().equalsIgnoreCase("NA")){ %><span class="text-blue">NA</span><%} %> 	</h4> </td>
+    
+     <td style="border: 0;padding:-15"></td>
 	</tr>
 	
+	<% if(!obj[12].toString().equalsIgnoreCase("NA") && !obj[13].toString().equalsIgnoreCase("NA") &&  !obj[14].toString().equalsIgnoreCase("NA") && !obj[15].toString().equalsIgnoreCase("NA")){ %> 
 	<table style="margin-top: 5px;margin-left:15px;width:650px;">	
 									<tbody>
 										
@@ -332,33 +342,30 @@ td{
 										</tr>
 									<tr>
 										
-											<td class="text-blue" ><%=obj[6] %></td>
-											<td class="text-blue" ><%=obj[7] %></td>
-											<td class="text-blue" ><%=rdf.format(sdf.parse(obj[8].toString())) %></td>
-											<td class="text-blue" ><%=rdf.format(sdf.parse(obj[9].toString())) %></td>
+											<td class="text-blue" ><%=obj[12] %></td>
+											<td class="text-blue" ><%=obj[13] %></td>
+											<td class="text-blue" ><%=rdf.format(sdf.parse(obj[14].toString())) %></td>
+											<td class="text-blue" ><%=rdf.format(sdf.parse(obj[15].toString())) %></td>
 									</tr>
 										
 									</tbody>
 	</table>
+	<%} %>
 	
+	</table>
 
-	<table style="margin-left:10px; margin-top:0px;font-family:FontAwesome; width:650px;"> 
+	<table style="margin-left:15px; margin-top:0px;font-family:FontAwesome; width:650px;"> 
 	
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;padding:0;"><h4>12. Details of passport lost, if any <span style="margin-left:5px"> :</span>
+	<td style="width:350px;text-align: left;border: 0;padding:-12;"><h4>12. Details of passport lost, if any :  <span class="text-blue"><% if(obj[26].toString().equals("NA")){%>NA<%} %></span>
        </h4></td>
-    
-    <td class="text-blue" style="border: 0;text-align: justify;padding:0;"><% if(!obj[37].toString().equals("")){%><span style="margin-left:-100px" ><%=obj[37] %></span><%} else{ %><span style="margin-left:-100px" >N/A<%} %></span></td>
+    </tr>
+    <% if(!obj[26].toString().equals("NA")){%>
+    <tr>
+    <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"></td>
 	</tr>
+	<%} %>
 	
-	</table>
-	
-	
-	</table>
-	
-	<h1 class="break"></h1>
-	
-	<table style="margin-left:10px; margin-top:-15px;font-family:FontAwesome; width:650px;"> 
 	
 	<%-- <tr>
 	<td style="width:350px;text-align: left;border: 0;"><h4>&nbsp;11. Details of passport held previously,<br> if any 	
@@ -403,282 +410,317 @@ td{
 	 
 	
 	<tr>
-	<td style="width:400px;text-align: justify; border: 0;padding:-12;"><h4>&nbsp; 13. Have you visited any foreign country before? <span style="margin-left:8px;">:</span>
+	<td style="width:400px;text-align: justify; border: 0;padding:-15px;;"><h4> &nbsp;13. Have you visited any foreign country before? 
 	
-	   </h4></td>
-      
+	   : <span class="text-blue"><% if (obj[27].toString().equalsIgnoreCase("Y")){%>Yes<%} else{ %>No<%} %></span></h4></td>
+      </tr>
     
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><% if (obj[20].toString().equalsIgnoreCase("Y")){%><span style="margin-left:5px" >YES</span><%} else{ %><span style="margin-left:5px" >NO</span><%} %></td>
-	</tr>
+   
 	
-	<% if (obj[20].toString().equalsIgnoreCase("Y")){%>
+	<% if (obj[27].toString().equalsIgnoreCase("Y")){ %>
 	<tr>
-	<td style="width:400px;border: 0;text-align: justify;padding:-12;"><h4>&nbsp; a) Details of such visits to include countries visited <span style="margin-left:-2px;">:</span><br>&nbsp; with details of dates
+	<td style="width:750px;border: 0;text-align: left;padding:-15px;"><h4> &nbsp;a) Details of such visits to include countries visited with details of dates :
 	
 	   </h4></td>
-      
-    <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><% if(obj[21].toString().trim().length()>0){ %><span style="margin-left:5px" ><%=obj[21] %></span><%} %></td>
+     </tr>
+    
+    <tr> 
+       <td class="text-blue" style="border: 0;text-align: justify;padding:0;"><%=obj[28] %></td>
 	</tr>
+	
   <%} %>
 	
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-12;"><h4>&nbsp;14. Countries proposed to be visited <span style="margin-left:100px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15px;"><h4>&nbsp;14. Countries proposed to be visited : <span class="text-blue"><%=obj[29] %></span>
 	   </h4></td>
-      
+     </tr> 
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><span style="margin-left:5px" ><%=obj[22] %></span></td>
-	</tr>
+     <%-- <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><span style="margin-left:5px" ><%=obj[29] %></span></td>
+	</tr> --%>
 	
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-15"><h4>&nbsp;15. Date of departure  <span style="margin-left:205px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4>&nbsp;15. Date of departure : <span class="text-blue"><%=rdf.format(sdf.parse(obj[30].toString())) %></span>
 	   </h4></td>
-      
+      </tr>
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-15;"><span style="margin-left:5px" ><%=rdf.format(sdf.parse(obj[23].toString())) %></span></td>
-	</tr>
+    <%--  <td class="text-blue" style="border: 0;text-align: justify;padding:-15;"><span style="margin-left:5px" ><%=rdf.format(sdf.parse(obj[30].toString())) %></span></td>
+	</tr> --%>
+	
 	
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-12;"><h4>&nbsp;16. Purpose of visit<span style="margin-left:217px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15;"><h4> &nbsp;16. Purpose of visit : <span class="text-blue"><%=obj[31] %></span>
 	   </h4></td>
-      
+     </tr> 
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><span style="margin-left:5px" ><%=obj[24] %></span></td>
-	</tr>
+     <%-- <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><span style="margin-left:5px" ><%=obj[31] %></span></td>
+	</tr> --%>
 	
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-12;"><h4>&nbsp;17. Probable duration of stay at each country <span style="margin-left:40px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15;"><h4>&nbsp;17. Probable duration of stay at each country : <span class="text-blue"><%=obj[32] %></span>
 	   </h4></td>
-      
+      </tr>
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><span style="margin-left:5px" ><%=obj[25] %></span></td>
-	</tr>
+   <%--   <td class="text-blue" style="border: 0;text-align: justify;padding:-12;"><span style="margin-left:5px" ><%=obj[32] %></span></td>
+	</tr> --%>
 	
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;18. Probable date of return<span style="margin-left:160px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;18. Probable date of return : <span class="text-blue"><%=rdf.format(sdf.parse(obj[33].toString())) %></span>
 	   </h4></td>
-      
+     </tr>
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px" ><%=rdf.format(sdf.parse(obj[26].toString())) %></span></td>
-	</tr>
+    <%--  <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px" ><%=rdf.format(sdf.parse(obj[33].toString())) %></span></td>
+	</tr> --%>
 	
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;19. Going <span style="margin-left:280px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;19. Going : <span class="text-blue"><% if(obj[34].toString().equalsIgnoreCase("A")) {%>Alone<%} else {%>With Family<%} %> </span>
 	   </h4></td>
+      </tr>
       
-      <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><% if(obj[27].toString().equalsIgnoreCase("A")) {%><span style="margin-left:5px" >Alone</span><%} else {%><span style="margin-left:5px" >Family</span><%} %></td>
+    <%--   <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><% if(obj[34].toString().equalsIgnoreCase("A")) {%><span style="margin-left:5px" >Alone</span><%} else {%><span style="margin-left:5px" >Family</span><%} %></td>
 	</tr>
-	
-	<% if(obj[27].toString().equalsIgnoreCase("WF")) {%>
+	 --%>
+	 
+	<% if(obj[34].toString().equalsIgnoreCase("WF")) {%>
 	<tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-12"><h4>&nbsp; a) Details of family <span style="margin-left:215px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;&nbsp;a) Details of family : <span class="text-blue"><%=obj[35] %></span>
 	   </h4></td>
+    </tr>
       
-      <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px" ><%=obj[28] %></span></td>
-	</tr>
+      <%-- <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px" ><%=obj[35] %></span></td>
+	</tr> --%>
+	
 	<%} %>
 	
 	<tr>
 	
-	<td style="width:400px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;20. Approximate amount expected  to be incurred <br>&nbsp;for the trip including journey and stay abroad <span style="margin-left:30px"> :</span>
+	<td style="width:800px;text-align: left;border: 0;padding:-12"><h4> 20. Approximate amount expected  to be incurred for the trip including journey and stay abroad  : &nbsp; &nbsp; &nbsp; <span class="text-blue">Rs. <%=obj[36]%></span>
 	
 	   </h4></td>
-      
+     </tr>
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:10px" ><%=obj[29]%></span></td>
-	</tr>
+    <%--  <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:10px" ><%=obj[36]%></span></td>
+	</tr> --%>
 	
   <tr>
-	<td style="width:400px;text-align: justify;border: 0;padding:-15"><h4>&nbsp; 21. Trip financed by  <span style="margin-left:205px"> :</span>
+	<td style="width:400px;text-align: left;border: 0;padding:-12"><h4> 21. Trip financed by :  <span class="text-blue"><% if(obj[37].toString().equalsIgnoreCase("S")){ %>Self<%} else{ %>Other People<%} %> </span>
 	
 	   </h4></td>
-      
+   </tr>   
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><% if(obj[30].toString().equalsIgnoreCase("S")){ %><span style="margin-left:5px" >SELF</span><%} else{ %><span style="margin-left:5px" >OTHER PEOPLE</span><%} %></td>
-  </tr>
+    <%--  <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><% if(obj[37].toString().equalsIgnoreCase("S")){ %><span style="margin-left:5px" >SELF</span><%} else{ %><span style="margin-left:5px" >OTHER PEOPLE</span><%} %></td>
+  </tr> --%>
   
-  <% if(obj[30].toString().equalsIgnoreCase("S")) { %>
+  <% if(obj[37].toString().equalsIgnoreCase("S")) { %>
   <tr>
-  <td style="width:400px;text-align:left;border: 0;padding:-15"><h4>&nbsp; a) Amount Spend  <span style="margin-left:225px"> :</span>
+  <td style="width:400px;text-align:left;border: 0;padding:-15"><h4>&nbsp; a) Source of Amount Being Spent : <span  class="text-blue"><%=obj[38]%></span>
 	
 	   </h4></td>
-	   
-      <td class="text-blue" style="border: 0;text-align: justify;padding:-15"><span style="margin-left:5px"><%=obj[31]%></span><%-- <a  href="NocProcAbroadDownload.htm?ProcAbrId=<%=obj[10].toString()%>" 
-     style="margin-left:0px; margin-top:0px;color:red;">Download file</a> --%></td> 
-									  
 	 </tr>
-	
 	<%}
 	
-   else if(obj[30].toString().equalsIgnoreCase("OP")){ %> 
+   else if(obj[37].toString().equalsIgnoreCase("OP")){ %> 
   
   
   <tr>
-  <td style="width:400px;text-align: left;border: 0;padding:-12"><h4> &emsp;&emsp;a)Name&Nationality <span style="margin-left:158px"> :</span>
+  <td style="width:400px;text-align: left;border: 0;padding:-15"><h4>&nbsp;a)Name :  <span class="text-blue"><%=obj[39] %></span>
 	
 	   </h4></td>
-      
+    </tr>  
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px"><%=obj[33] %></span></td>
-  </tr>
+    <%--  <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px"><%=obj[39] %></span></td>
+  </tr> --%>
   
+  <tr>
+  <td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;b)Nationality :  <span class="text-blue"><%=obj[40] %></span>
+	
+	   </h4></td>
+    </tr> 
+   <tr>
+  <td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;c)Relationship : <span class="text-blue"><%=obj[41] %></span>
+	
+	   </h4></td>
+     </tr> 
+    
+     <%-- <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px"><%=obj[41] %></span></td>
+  </tr> --%>
   
    <tr>
-  <td style="width:400px;text-align: left;border: 0;padding:-12"><h4> &emsp;&emsp;b)Relationship <span style="margin-left:200px"> :</span>
+  <td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;d)Address : <span class="text-blue"><%=obj[42] %> </span>
 	
 	   </h4></td>
-      
+      </tr>
     
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-12"><span style="margin-left:5px"><%=obj[34] %></span></td>
-  </tr>
-  
-   <tr>
-  <td style="width:400px;text-align: left;border: 0;padding:-12"><h4> &emsp;&emsp;c)Address <span style="margin-left:232px"> :</span>
-	
-	   </h4></td>
-      
-    
-     <td class="text-blue" style="border: 0;text-align: justify;padding:-10"><span style="margin-left:5px"><%=obj[35] %></span></td>
-  </tr>
+    <%--  <td class="text-blue" style="border: 0;text-align: justify;padding:-10"><span style="margin-left:5px"><%=obj[42] %></span></td>
+  </tr> --%>
   
    <%} %> 
    
    <tr>
-	<td style="width:400px;text-align: left;border: 0;padding:-10"><h4>&nbsp;22. Are you likely to accept any foreign Hospitality<span style="margin-left:1px"> :</span>
-        
-	
-	   </h4></td>
-      
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;22. Are you likely to accept any foreign Hospitality : <span class="text-blue"><% if(obj[43].toString().equalsIgnoreCase("Y")){ %><span style="margin-left:5px">Yes</span><%} else{ %><span style="margin-left:5px">No</span><%} %> </span>
+        </h4></td>
+      </tr>
     
-     <td class="text-blue" style="border: 0;text-align: left;padding:-10"><% if(obj[36].toString().equalsIgnoreCase("Y")){ %><span style="margin-left:5px">YES</span><%} else{ %><span style="margin-left:5px">NO</span><%} %></td>
+     <%-- <td class="text-blue" style="border: 0;text-align: left;padding:-10"><% if(obj[43].toString().equalsIgnoreCase("Y")){ %><span style="margin-left:5px">YES</span><%} else{ %><span style="margin-left:5px">NO</span><%} %></td>
   </tr>
-	
+	 --%>
 	
 	</table>
 	
 	
 	
-	 <div style="margin-left: 10px;margin-top:-10px;text-align: justify; text-justify: inter-word;font-size: 16px;" align="left">
+	 <div style="margin-left: 5px;margin-top:-20px;text-align: justify; text-justify: inter-word;font-size: 16px;" align="left">
 						
 		<h4>23. I certify that:<br>&emsp;
 		 
-          <% if (obj[18].toString().equalsIgnoreCase("N")){%>
-           I am not involved in any court / police / disciplinary / vigilance case and there 
-              is no restriction placed by any authority. <%}  %> 
-             
+          <% if (obj[24].toString().equalsIgnoreCase("N")){%>
+           <span style="color:red; font-size:17px;">I am not involved in any court / police / disciplinary / vigilance case and there 
+              is no restriction placed by any authority.</span> <%}  %> 
+             <br>
               I undertake that I will return my Identity Card before proceeding abroad <br>&emsp; 
               I undertake that I shall not settle permanently abroad and rejoin my duty after expiry of leave
-            
-         </h4>		   			
-				   			
-				   																			
-		</div>
-		
-		
-   <div style="margin-left: 10px;margin-top:-10px;text-align: justify; text-justify: inter-word;font-size: 16px;" align="left">
-						
-		<h4>24. I certify that:<br>&emsp;
-		<% if(obj[39].toString().equalsIgnoreCase("N")) {%>
+            <br>
+              <% if(obj[45].toString().equalsIgnoreCase("N")) {%> 
 		  
-           I am not under contractual obligation to serve STARC for any specific period. <%} 
+           I am not under contractual obligation to serve STARC for any specific period.
 		
-		else if(obj[39].toString().equalsIgnoreCase("Y")){%>
+		<%} else{ %>
 	        
             I am under contractual obligation to serve STARC for a period from 
-              <span class="text-blue" ><%=rdf.format(sdf.parse(obj[40].toString())) %></span>  to   <span class="text-blue" ><%=rdf.format(sdf.parse(obj[41].toString())) %></span>
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[46].toString())) %></span>  to   <span class="text-blue"><%=rdf.format(sdf.parse(obj[47].toString())) %></span>
               
-          <%} %>
-       </h4>		   			
-				   			
-				   																			
-	</div> 
-	
+              <%} %>
+          </h4>		   			
+	</div>
+		
+	<br>
 	<br>
 	<br>
 	 <div  style="margin-left:430px !important;" > Signature of the Applicant</div>	
-	 <% if(obj[44]!=null) {%><div  style="margin-left:450px !important;">Forwarded Date :&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(obj[44].toString())) %></span> </div> <%} %>
-	 <br>
-	 <%-- <div align="left" style="margin-left:10px;" > Dept.Incharge : <span class="text-blue" ><%=obj[42] %></span></div>	 --%>
+	 <% if(obj[50]!=null) {%><div  style="margin-left:450px !important;">Forwarded Date :&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(obj[50].toString())) %></span> </div> <%} %>
 	 
-	 <br>
-	
-	<%-- 
-	<% if(obj[27].toString().equalsIgnoreCase("APR")){%>
-	    <hr>
-		  <div><span style="margin-left: -80px;font-weight: 600;font-size: 18px;text-decoration: underline;">Filled by P&A Department</span></div> 
-		  <table style="margin-left:10px; margin-top:35px;border-collapse: collapse;font-family:FontAwesome; width:650px;">
+	 
+	 
+	  <% if(obj[55]!=null && obj[56]!=null && obj[57]!=null){ %>
+	  
+	  <h1 class="break1"></h1>
+	  
+	    <div><span style="margin-top:0px;font-weight: 600;font-size: 16px;text-decoration: underline;text-align:center;">Filled by Department</span></div> 
+	 <table style="margin-left:20px; margin-top:5px;border-collapse: collapse;font-family:FontAwesome; width:650px;"> 
+	 
+	 <tr>
+		 <td style="width:650px;text-align: left;border: 0;padding: -15px;"><h4> 1. Is the applicant handling any classified work divulgence of which may affect the security of service and the country?
+		 : &nbsp; <span class="text-blue"><% if(obj[55].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
+         </h4></td>
+      </tr>
+	 
+	 <tr>
+		 <td style="width:650px;text-align: left;border: 0;padding: -15px;"><h4> 2. Is the individuals visit recommended even if the answer to Sl.No.1 above is in the affirmative
+		 : &nbsp; <span class="text-blue"><% if(obj[56].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
+         </h4></td>
+      </tr>
+	 
+	 <tr>
+		 <td style="width:650px;text-align: left;border: 0;padding: -15px;"><h4> 3.Whether the leave will be granted for proceeding abroad
+		 : &nbsp; <span class="text-blue"><% if(obj[57].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
+         </h4></td>
+      </tr>
+	 
+	 </table>
+	 <%} %>
+	 
+	 <hr>
+	 
+	<% if(obj[58]!=null  && obj[61]!=null){ %>
+	    
+	    
+		  <div style="margin-top:0px;font-weight: 600;font-size: 16px;text-decoration: underline;text-align:center;">Filled by P&A Department</div> 
+		  <table style="margin-left:10px; margin-top:5px;border-collapse: collapse;font-family:FontAwesome; width:650px;">
+		  
+		  
 		 <tr>
-		 <td style="width:350px;text-align: left;border: 0;"><h4> 1.(a) Are the entries given by the <span style="margin-left:45px"> :</span> <br>&emsp;&emsp;&emsp;applicant in 
-             paras 1 to 6 in <br>&emsp;&emsp;Part - I correct?</h4></td>
+		     <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;1.(a) Are the entries given by the applicant in paras 1 to 6 in Part - I correct? :&nbsp;<span class="text-blue"><% if(obj[58].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %></span></h4></td>
             
-            <td class="text-blue" style="border: 0;text-align: left;"><% if(obj[28].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
+         </tr>
+          
+          <% if(obj[58].toString().equalsIgnoreCase("N")){  %>
+          <tr>
+          
+            <td style="width:750px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;(b) If not, mention variations </h4></td>
+            </tr>
             
+          <tr>
+             <td class="text-blue" style="border: 0;text-align: justify;padding: 0px;"><%=obj[59] %></td>
           </tr>
           
-          <tr>
-          <td style="width:350px;text-align: left;border: 0;"><h4>&emsp;(b) If not, mention variations <span style="margin-left:72px"> :</span> </h4></td>
-          <td class="text-blue" style="border: 0;text-align: left;"><%=obj[29] %></td>
-          </tr>
+          <%} %>
           
           <tr>
-           <td style="width:350px;text-align: left;border: 0;"><h4>2.(a) Whether the employee is <span style="margin-left:72px"> :</span> <br> &emsp; &emsp; &emsp; under suspension?
-           </h4></td>
+          
+            <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;2.(a) Was the individual ever involved in any 	:
+              department enquiry or other cases? :&nbsp;<span class="text-blue">
+            <% if(obj[24].toString().equalsIgnoreCase("Y")){ %> Yes<%} else{ %>No<%} %> </span></h4></td>
+          
+          </tr>
+          
            
-           <td class="text-blue" style="border: 0;text-align: left;"><% if(obj[30].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
-           
-           </tr>
-        </table> --%>
-        
-           
-           
-      <%--  <table style="margin-left:10px; margin-top:35px;border-collapse: collapse;font-family:FontAwesome; width:650px;">
-           <tr>
-           <td style="width:350px;text-align: left;border: 0;"><h4>&emsp;
-               (b) Whether the employee is <span style="margin-left:75px"> :</span><br> &emsp;&emsp;involved in any	
-	           Disciplinary <br>&emsp;&emsp;/Criminal / Corruption /<br>&emsp; &emsp;Court
-	          Case </h4></td> 
-	         
-	          <td class="text-blue" style="border: 0;text-align: left;"><% if(obj[31].toString().equalsIgnoreCase("Y")){ %>YES<%} else{ %>NO<%} %></td>
-	          
-	        </tr>
-	        
+	        <% if(obj[24].toString().equalsIgnoreCase("Y")){ %>
 	        <tr>
-	        <td style="width:350px;text-align: left;border: 0;"><h4>
-                &emsp;(c) If so, details of the case<span style="margin-left:90px"> :</span> </h4></td> 
+	        <td style="width:350px;text-align: justify;border: 0;padding: -12px;"><h4>
+                &nbsp;(b) If so, nature of enquiry and its results? :</h4></td> 
             
-            <td class="text-blue" style="border: 0;text-align: left;"><%=obj[32] %></td>
+            </tr>
+            <tr>
+            <td class="text-blue" style="border: 0;text-align: justify;padding: 0px;"><%=obj[60] %></td>
             
            </tr>
-           
+           <%} %>
+        
+        <tr>
+          
+            <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3.Are any financial dues outstanding against the 	:
+                applicant? :&nbsp;<span class="text-blue">
+            <% if(obj[61].toString().equalsIgnoreCase("Y")){ %> Yes<%} else{ %>No<%} %> </span></h4></td>
+          
+          </tr>
+          
+        
            <tr>
-           <td style="width:350px;text-align: left;border: 0;text-align: left;"><h4> &nbsp;3. Applicant is<span style="margin-left:167px"> :</span></h4></td>
-             
-              
-            <td  style="border: 0;text-align: left;"><% if(obj[20].toString().equalsIgnoreCase("N")) {%>
+           <td style="width:350px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3. Applicant is :<br>&nbsp; <% if(obj[45].toString().equalsIgnoreCase("N")) {%>
 		  
             not under contractual obligation to serve STARC for any specific period. <%} 
 		
-		     else if(obj[20].toString().equalsIgnoreCase("Y")){%>
+		     else if(obj[45].toString().equalsIgnoreCase("Y")){ %>
 	        
-                under contractual obligation to serve STARC for a period from 
-              <span class="text-blue"   ><%=rdf.format(sdf.parse(obj[21].toString())) %></span>  to   <span class="text-blue"  ><%=rdf.format(sdf.parse(obj[22].toString())) %></span>
+               under contractual obligation to serve STARC for a period from 
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[46].toString())) %></span>  to <span class="text-blue" ><%=rdf.format(sdf.parse(obj[47].toString())) %></span>
               
-            <%} %>
+            <%} %> </h4></td>
+             
+              
+           </tr>
           
-          </td>
-          </tr>
-        </table>  --%>
+        </table> 
         
-      
+        <br>
+         <% if (obj[53]!=null){ %><div  style="margin-left:420px !important;" ><span class="text-blue"><%=obj[53]%></span></div><%} %>
+	 <div  style="margin-left:470px !important;">P&A.Incharge </div> 
+      <%} %>
+       <hr> 
+       
         
-	
+        <br>
+        
+	 <% if(obj[49].toString().equalsIgnoreCase("APR")){ %>
+		 <div style="margin-top:0x;text-align:center;"> 
+		                         <span style="font-weight: 600; font-size: 16px;margin-left:0px;">APPROVED</span><br><br>
+						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">CEO:&nbsp;<span class="text-blue" ><% if (Ceoname!=null){%><%=Ceoname[1] %><%} %></span></span><br>
+								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[54].toString().substring(0, 10)) +" "+obj[54].toString().substring(11,19) %></span></span><br>
+		</div>	
+		<%} %>
 	 
-	<%--  <% if (obj[33]!=null){ %><div  style="margin-left:450px !important;" ><span class="text-blue"><%=obj[33]%></span></div><%} %>
-	 <div  style="margin-left:450px !important;">P&A.Incharge </div> 
-	 <br>
-	 <% if(obj[34]!=null){ %><div align="left" style="margin-left:10px;" > Approved Date : <span class="text-blue" ><%=rdf.format(sdf.parse(obj[34].toString())) %></span></div><%} %>	
-		
-	   <%} %>
-	  			 --%>				
+
+	
+	  			 		
 	
 </div>
 		

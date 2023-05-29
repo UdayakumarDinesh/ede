@@ -553,7 +553,8 @@ td{
 		
 		<br>
 		<br>
-		<%if(obj[24].toString().equalsIgnoreCase("APR")){ %>
+		
+		<% if(obj[24].toString().equalsIgnoreCase("APR")){ %>
 		 <div style="margin-top:0x;text-align:center;"> 
 		                         <span style="font-weight: 600; font-size: 16px;margin-left:0px;">APPROVED</span><br><br>
 						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">CEO:&nbsp;<span class="text-blue" ><% if (Ceoname!=null){%><%=Ceoname[1] %><%} %></span></span><br>

@@ -96,5 +96,12 @@ public interface NocDao {
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
 
 	public Object[] getEmpTitleDetails(String passportid) throws Exception;
+
+	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId)throws Exception;
+
+	public long DeptDetailsUpdate(NocProceedingAbroad nocpa)throws Exception;
+
+	public long ProcAbroadPandAFromUpdate(NocProceedingAbroad nocpa)throws Exception;
+
 	
 }

@@ -389,7 +389,7 @@ font-size:18px;
 		else if(obj[20].toString().equalsIgnoreCase("Y")){%>
 	        
            <h4> I am under contractual obligation to serve STARC for a period from 
-              <span class="text-blue"   ><%=rdf.format(sdf.parse(obj[21].toString())) %></span>  to   <span class="text-blue"  ><%=rdf.format(sdf.parse(obj[22].toString())) %></span>
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[21].toString())) %></span>  to   <span class="text-blue"  ><%=rdf.format(sdf.parse(obj[22].toString())) %></span>
               </h4>
           <%} %>
               
@@ -459,10 +459,6 @@ font-size:18px;
            <td style="width:50%;text-align: left;border: 0;"><h4>2.(a) Whether the employee is under suspension? : <span class="text-blue"><% if(obj[30].toString().equalsIgnoreCase("Y")){ %>Yes<%} 
            else{ %>No<%} %></span>
            </h4></td>
-           
-           
-           
-      
            
            </tr>
            

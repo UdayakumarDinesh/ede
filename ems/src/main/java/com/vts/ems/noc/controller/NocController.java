@@ -5,10 +5,10 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -32,7 +32,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.multipart.MultipartFile;
+
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itextpdf.html2pdf.ConverterProperties;
@@ -550,7 +550,7 @@ public class NocController {
 			logger.info(new Date() +"Inside NocApproval.htm"+Username);		
 			try {				
 				
-				System.out.println("LoginType---"+LoginType);
+				
 				String fromdate = req.getParameter("fromdate");
 				String todate = req.getParameter("todate");
 				
@@ -745,7 +745,7 @@ public class NocController {
 				 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 
-				 
+				 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 				 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				 req.setAttribute("NocProcAbraodList",service.getProcAbroadList(EmpNo));
 				
@@ -813,7 +813,7 @@ public class NocController {
 		}
 	 
 	 @RequestMapping(value = "ProcAbroadAddSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
-		public String ProcAbroadAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir,@RequestPart("FormFile") MultipartFile FormFile)  throws Exception 
+		public String ProcAbroadAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			
 		    String UserId=(String)ses.getAttribute("Username");
@@ -822,8 +822,14 @@ public class NocController {
 			logger.info(new Date()+"Inside ProcAbroadAddSubmit.htm "+UserId);
 			try {
 				
+				String Exptamt=req.getParameter("ExpectedAmount");
+				System.out.println("Exptamt----"+req.getParameter("ExpectedAmount"));
+				
 				NocProceedingAbroadDto dto=  NocProceedingAbroadDto.builder()
 						
+						
+						
+						 .PassportExist(req.getParameter("PassportExist"))
 						 .EmpNo(EmpNo)
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
@@ -838,18 +844,18 @@ public class NocController {
 						 .CountriesProposed(req.getParameter("CountriesProposed"))
 						 .DepartureDate(sdf.format(rdf.parse(req.getParameter("DepartureDate"))))
 						 .VisitPurpose(req.getParameter("VisitPurpose"))
-						 .StayDuration(Long.parseLong(req.getParameter("StayDuration")))
+						 .StayDuration(req.getParameter("StayDuration"))
 						 .ReturnDate(sdf.format(rdf.parse(req.getParameter("ReturnDate"))))
 						 .Going(req.getParameter("Going"))
 						 .FamilyDetails(req.getParameter("FamilyDetails"))
-						 .ExpectedAmount(Long.parseLong(req.getParameter("ExpectedAmount")))
+						 .ExpectedAmount(req.getParameter("ExpectedAmount"))
 						 .FinancedBy(req.getParameter("FinancedBy"))
-						 .AmountSpend(Long.parseLong(req.getParameter("AmountSpend")))
-						 .NameNationality(req.getParameter("NameNationality"))
+						 .AmountSource(req.getParameter("AmountSource"))
+						 .Name(req.getParameter("Name1"))
+						 .Nationality(req.getParameter("Nationality"))
 						 .Relationship(req.getParameter("Relationship"))
 						 .RelationshipAddress(req.getParameter("RelationshipAddress"))
-						 .FormFile(FormFile)
-						 .FileName(EmpNo)
+						
 						 .LostPassport(req.getParameter("LostPassport"))
 						 .PassportType(req.getParameter("Passporttype"))
 						 .ContractualObligation(req.getParameter("ContractualObligation"))
@@ -880,7 +886,7 @@ public class NocController {
       }
 		
 	 @RequestMapping(value = "ProcAbroadEditSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
-		public String ProcAbroadEditSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir,@RequestPart("FormFile") MultipartFile FormFile)  throws Exception 
+		public String ProcAbroadEditSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			
 		    String UserId=(String)ses.getAttribute("Username");
@@ -890,12 +896,13 @@ public class NocController {
 			try {
 				
 				 String ProcAbrId=req.getParameter("ProcAbroadId");
-				 System.out.println("ProcAbrId---"+ProcAbrId);
-				 
+				
+				
 				 NocProceedingAbroadDto dto=  NocProceedingAbroadDto.builder()
 						
 						 .NocProcId(Long.parseLong(ProcAbrId))
 						 .EmpNo(EmpNo)
+						 .PassportExist(req.getParameter("PassportExist"))
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
 						 .RelationOccupation(req.getParameter("RelationOccupation"))
@@ -909,18 +916,17 @@ public class NocController {
 						 .CountriesProposed(req.getParameter("CountriesProposed"))
 						 .DepartureDate(sdf.format(rdf.parse(req.getParameter("DepartureDate"))))
 						 .VisitPurpose(req.getParameter("VisitPurpose"))
-						 .StayDuration(Long.parseLong(req.getParameter("StayDuration")))
+						 .StayDuration(req.getParameter("StayDuration"))
 						 .ReturnDate(sdf.format(rdf.parse(req.getParameter("ReturnDate"))))
 						 .Going(req.getParameter("Going"))
 						 .FamilyDetails(req.getParameter("FamilyDetails"))
-						 .ExpectedAmount(Long.parseLong(req.getParameter("ExpectedAmount")))
+						 .ExpectedAmount(req.getParameter("ExpectedAmount"))
 						 .FinancedBy(req.getParameter("FinancedBy"))
-						 .AmountSpend(Long.parseLong(req.getParameter("AmountSpend")))
-						 .NameNationality(req.getParameter("NameNationality"))
+						 .AmountSource(req.getParameter("AmountSource"))
+						 .Name(req.getParameter("Name1"))
+						 .Nationality(req.getParameter("Nationality"))
 						 .Relationship(req.getParameter("Relationship"))
 						 .RelationshipAddress(req.getParameter("RelationshipAddress"))
-						 .FormFile(FormFile)
-						 .FileName(EmpNo)
 						 .LostPassport(req.getParameter("LostPassport"))
 						 .PassportType(req.getParameter("Passporttype"))
 						 .ContractualObligation(req.getParameter("ContractualObligation"))
@@ -952,35 +958,7 @@ public class NocController {
 	 
 	 
 	 
-	  @RequestMapping(value = "NocProcAbroadDownload.htm")
-	    public void TicketFormDownload(HttpServletRequest req, HttpSession ses, HttpServletResponse res) throws Exception 
-		{				
-			String UserId=(String)ses.getAttribute("Username");
-			logger.info(new Date() +"Inside NocProcAbroadDownload.htm "+UserId);
-			try {
-				
-				String ProcAbrId=req.getParameter("ProcAbrId");
-				System.out.println("ProcAbrId---"+ProcAbrId);
-				NocProceedingAbroad form=service.getNocProceedingAbroadById(Long.parseLong(ProcAbrId));
-				res.setContentType("Application/octet-stream");	
-				File my_file=new File(emsfilespath+form.getFilePath());
-				res.setHeader("Content-disposition","attachment;filename="+form.getFileName());
-				OutputStream out=res.getOutputStream();
-				FileInputStream in=new FileInputStream(my_file);
-				byte[] buffer=new byte[4096];
-				int length;
-				while((length=in.read(buffer))>0){
-				out.write(buffer,0,length);
-				}
-				in.close();
-				out.flush();
-				out.close();
-			}catch(Exception e) {
-				logger.error(new Date() +"Inside NocProcAbroadDownload.htm "+UserId,e);
-				e.printStackTrace();
-			}
-			
-		}
+	 
 	 @RequestMapping(value = "NOCProcTransactionStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
 		public String NOCProcTransactionStatus(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{
@@ -1005,24 +983,38 @@ public class NocController {
 	@RequestMapping(value = "ProcAbroadPreview.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String ProcAbroadPreview(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 	{
+			
+		String UserId=(String)ses.getAttribute("Username");
+		String EmpId =  ses.getAttribute("EmpId").toString();
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
+		String LoginType=(String)ses.getAttribute("LoginType").toString();
+	    logger.info(new Date()+"Inside ProcAbroadPreview.htm "+UserId);
+	  try {
 		
-	    String UserId=(String)ses.getAttribute("Username");
-	String EmpId =  ses.getAttribute("EmpId").toString();
-	String EmpNo =  ses.getAttribute("EmpNo").toString();
-	String LoginType=(String)ses.getAttribute("LoginType").toString();
-	logger.info(new Date()+"Inside ProcAbroadPreview.htm "+UserId);
-	try {
 		
-		
-		
+		List<String> GHs = service.GetGHEmpNos();
+		List<String> DGMs = service.GetDGMEmpNos();
+		List<String> DHs = service.GetDHEmpNos();
+		String CEO = service.GetCEOEmpNo();
+		List<String> PandAs = service.GetPandAAdminEmpNos();
 		String ProcAbrId=req.getParameter("ProcAbrId");
 		String isApproval = req.getParameter("isApproval");
+		NocProceedingAbroad ProcAbroad =service.getNocProceedingAbroadById(Long.parseLong(ProcAbrId));
+			
 		req.setAttribute("isApproval", isApproval);
-	//		req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
-	//		req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));	
-		 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+	    req.setAttribute("GroupHeadEmpNos", GHs);
+	    req.setAttribute("PandAsEmpNos", PandAs);
+		req.setAttribute("DGMEmpNos", DGMs);
+		req.setAttribute("DivisionHeadEmpNos", DHs);
+		req.setAttribute("NOCProceedingAbroadRemarkHistory",service.getProceedinAbraodRemarksHistory(ProcAbrId));
+		req.setAttribute("EmpData",service.getEmpNameDesig(EmpNo));
 		req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 		req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId) );
+		req.setAttribute("EmpNo",EmpNo);
+		req.setAttribute("ProcAbroad", ProcAbroad);
+		req.setAttribute("CEOempno", CEO);
+		req.setAttribute("PandAsEmpNos", PandAs);
+		 req.setAttribute("CeoName", service.GetCeoName());
 		
 		 return "noc/ProcAbroadPreview";
 				 
@@ -1035,8 +1027,9 @@ public class NocController {
 	}
 	
 	
+	
 	@RequestMapping(value = "ProcAbroadPrint.htm",method=RequestMethod.GET)
-	public String ProcAbroadPrint(HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	public void ProcAbroadPrint(HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 	{
 		String UserId = (String) ses.getAttribute("Username");
 		String EmpNo =  ses.getAttribute("EmpNo").toString();
@@ -1045,39 +1038,71 @@ public class NocController {
 		
 		try {
 			
-			String ProcAbrId=req.getParameter("ProcAbrId");
-			
-			req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
-			req.setAttribute("lablogo",getLabLogoAsBase64());
-			String filename="ProceedingAbroad-"+ProcAbrId.toString().trim().replace("/", "-");
-			String path=req.getServletContext().getRealPath("/view/temp");
-			req.setAttribute("path",path);
-	        
-	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-			req.getRequestDispatcher("/view/noc/ProcAbroadPrint.jsp").forward(req, customResponse);
-			String html = customResponse.getOutput();        
-	        
-	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
-	         
-	        res.setContentType("application/pdf");
-	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
-	       
-	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
-	        File f=new File(path +File.separator+ filename+".pdf");
-	        FileInputStream fis = new FileInputStream(f);
-	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
-	        res.setHeader("Content-Length",String.valueOf(f.length()));
-	        byte[] buffer = new byte[1024];
-	        int len = 0;
-            while ((len = fis.read(buffer)) >= 0) {
-	            os.write(buffer, 0, len);
-	        } 
-	        os.close();
-	        fis.close();
-	       
-	       
-	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
-	        Files.delete(pathOfFile);	
+			    String ProcAbrId=req.getParameter("ProcAbrId");
+			    req.setAttribute("CeoName", service.GetCeoName());
+			    req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
+			    req.setAttribute("lablogo",getLabLogoAsBase64());
+			    String path = req.getServletContext().getRealPath("/view/temp");
+			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/noc/ProcAbroadPrint.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();
+				byte[] data = html.getBytes();
+				InputStream fis1 = new ByteArrayInputStream(data);
+				PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/NOCProceedingAbroad.pdf"));
+				pdfDoc.setTagged();
+				Document document = new Document(pdfDoc, PageSize.LEGAL);
+				document.setMargins(50, 100, 150, 50);
+				ConverterProperties converterProperties = new ConverterProperties();
+				FontProvider dfp = new DefaultFontProvider(true, true, true);
+				converterProperties.setFontProvider(dfp);
+				HtmlConverter.convertToPdf(fis1, pdfDoc, converterProperties);
+				/*
+				 * document.close(); pdfDoc.close(); fis1.close();
+				 */
+				res.setContentType("application/pdf");
+				res.setHeader("Content-disposition", "inline;filename=NOCProceedingAbroad.pdf");
+				File f = new File(path + "/NOCProceedingAbroad.pdf");
+				FileInputStream fis = new FileInputStream(f);
+				DataOutputStream os = new DataOutputStream(res.getOutputStream());
+				res.setHeader("Content-Length", String.valueOf(f.length()));
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while ((len = fis.read(buffer)) >= 0) {
+					os.write(buffer, 0, len);
+				}
+				os.close();
+				fis.close();
+				Path pathOfFile2 = Paths.get(path + "/NOCProceedingAbroad.pdf");
+				Files.delete(pathOfFile2);
+//			String filename="ProceedingAbroad-"+ProcAbrId.toString().trim().replace("/", "-");
+//			String path=req.getServletContext().getRealPath("/view/temp");
+//			req.setAttribute("path",path);
+//	        
+//	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+//			req.getRequestDispatcher("/view/noc/ProcAbroadPrint.jsp").forward(req, customResponse);
+//			String html = customResponse.getOutput();        
+//	        
+//	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+//	         
+//	        res.setContentType("application/pdf");
+//	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
+//	       
+//	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+//	        File f=new File(path +File.separator+ filename+".pdf");
+//	        FileInputStream fis = new FileInputStream(f);
+//	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+//	        res.setHeader("Content-Length",String.valueOf(f.length()));
+//	        byte[] buffer = new byte[1024];
+//	        int len = 0;
+//            while ((len = fis.read(buffer)) >= 0) {
+//	            os.write(buffer, 0, len);
+//	        } 
+//	        os.close();
+//	        fis.close();
+//	       
+//	       
+//	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+//	        Files.delete(pathOfFile);	
 			
 		}
 			   
@@ -1085,7 +1110,7 @@ public class NocController {
 			e.printStackTrace();  
 			logger.error(new Date() +" Inside ProcAbroadPrint.htm "+UserId, e); 
 		}
-		return "";
+		
 
 	}
 	
@@ -1101,7 +1126,7 @@ public class NocController {
 			
 			
 			String ProcAbroadId=req.getParameter("ProcAbroadId");
-			System.out.println("ProcAbroadId---"+req.getParameter("ProcAbroadId"));
+			
 			String action = req.getParameter("Action");
 			String remarks = req.getParameter("remarks");
 			
@@ -1140,6 +1165,139 @@ public class NocController {
 			return "static/Error";
 		}
 	}
+	 @RequestMapping(value = "NOCProcAbroadDeptDetailsUpdate.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String NOCProcAbroadDeptDetails(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+		    String UserId = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside NOCProcAbroadDeptDetailsUpdate.htm "+UserId);
+			try {
+				
+				String ProcAbrId=req.getParameter("ProcAbrId");
+				NocProceedingAbroadDto dto=  NocProceedingAbroadDto.builder()
+						
+						 .NocProcId(Long.parseLong(ProcAbrId))
+						 .WorkHandled(req.getParameter("WorkHandled"))
+						 .VisitRecommended(req.getParameter("VisitRecommended"))
+						 .LeaveGranted(req.getParameter("LeaveGranted"))
+						 .build();
+				long save=service.DeptDetailsUpdate(dto,UserId);
+				  
+				  if (save > 0) {
+		  				
+	                  redir.addAttribute("result", "Details Updated  Successfully ");
+
+	 			} else {
+	                  redir.addAttribute("resultfail", "Details Update Unsuccessful");
+	 			}
+				  redir.addAttribute("ProcAbrId",ProcAbrId );
+				  redir.addAttribute("isApproval","Y");
+				  
+				return "redirect:/ProcAbroadPreview.htm";
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside NOCProcAbroadDeptDetailsUpdate.htm "+UserId, e);
+				return "static/Error";
+			}
+		}
+	 
+	 
+	 @RequestMapping(value = "NOCProcAbroadPAForm.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String NOCProcAbroadPAForm(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+		    String UserId = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside NOCProcAbroadPAForm.htm "+UserId);
+			try {
+				
+				String ProcAbrId=req.getParameter("ProcAbrId");
+				NocProceedingAbroadDto dto=  NocProceedingAbroadDto.builder()
+						
+						 .NocProcId(Long.parseLong(ProcAbrId))
+						 .ProcAbroadEntries(req.getParameter("PassportEntries"))
+						 .ProcAbroadEntriesDetails(req.getParameter("EntryDetails"))
+						 .EmployeeInvolvement(req.getParameter("EmpInvolvment"))
+						 .EmployeeCaseDetails(req.getParameter("CaseDetails"))
+						 .EmployeeDues(req.getParameter("EmpDues"))
+						 .ContractualObligation(req.getParameter("obligation"))
+						 .FromDate(sdf.format(rdf.parse(req.getParameter("FromDate"))))
+						 .ToDate(sdf.format(rdf.parse(req.getParameter("ToDate"))))
+						 .build();
+				long save=service.ProcAbroadPandAFromUpdate(dto,UserId);
+				  
+				  if (save > 0) {
+		  				
+	                  redir.addAttribute("result", "Details Updated  Successfully ");
+
+	 			} else {
+	                  redir.addAttribute("resultfail", "Details Update Unsuccessful");
+	 			}
+				  
+				  redir.addAttribute("ProcAbrId", ProcAbrId);
+				  redir.addAttribute("isApproval","Y");
+				  
+				return "redirect:/ProcAbroadPreview.htm";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside NOCProcAbroadPAForm.htm "+UserId, e);
+				return "static/Error";
+			}
+		}
+	
+	 
+	 @RequestMapping(value = "NOCProcAbroadCertificate.htm", method=RequestMethod.GET)
+		public void NOCProcAbroadCertificate(HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+		{
+			String UserId = (String) ses.getAttribute("Username");
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date() +"Inside NOCProcAbroadCertificate.htm "+UserId);
+			
+			try {
+				   
+				    String ProcAbrId=req.getParameter("ProcAbrId");
+				    req.setAttribute("Labmaster", service.getLabMasterDetails().get(0));
+				    req.setAttribute("lablogo",getLabLogoAsBase64());
+				    req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
+				    req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
+				    String path = req.getServletContext().getRealPath("/view/temp");
+				    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+					req.getRequestDispatcher("/view/noc/NocProcAbroadCertificate.jsp").forward(req, customResponse);
+					String html = customResponse.getOutput();
+					byte[] data = html.getBytes();
+					InputStream fis1 = new ByteArrayInputStream(data);
+					PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/ProceedingAbroadCertificate.pdf"));
+					pdfDoc.setTagged();
+					Document document = new Document(pdfDoc, PageSize.LEGAL);
+					document.setMargins(50, 100, 150, 50);
+					ConverterProperties converterProperties = new ConverterProperties();
+					FontProvider dfp = new DefaultFontProvider(true, true, true);
+					converterProperties.setFontProvider(dfp);
+					HtmlConverter.convertToPdf(fis1, pdfDoc, converterProperties);
+					/*
+					 * document.close(); pdfDoc.close(); fis1.close();
+					 */
+					res.setContentType("application/pdf");
+					res.setHeader("Content-disposition", "inline;filename=ProceedingAbroadCertificate.pdf");
+					File f = new File(path + "/ProceedingAbroadCertificate.pdf");
+					FileInputStream fis = new FileInputStream(f);
+					DataOutputStream os = new DataOutputStream(res.getOutputStream());
+					res.setHeader("Content-Length", String.valueOf(f.length()));
+					byte[] buffer = new byte[1024];
+					int len = 0;
+					while ((len = fis.read(buffer)) >= 0) {
+						os.write(buffer, 0, len);
+					}
+					os.close();
+					fis.close();
+					Path pathOfFile2 = Paths.get(path + "/ProceedingAbroadCertificate.pdf");
+					Files.delete(pathOfFile2);
+				    
+
+				} catch (Exception e) {
+					logger.error(new Date() + " Getting Error From  NOCProcAbroadCertificate" + UserId, e);
+				}
+			
+		}
+		
 	
 }
 

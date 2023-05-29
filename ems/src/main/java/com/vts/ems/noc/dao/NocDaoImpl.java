@@ -718,6 +718,34 @@ public class NocDaoImpl implements NocDao {
 			return null;
 		}		
 	}
+
+	private static final String NOCPROCEEDINGABROADREMARKHISTORY="SELECT trans.NocProcId,trans.Remarks,e.EmpName FROM noc_proc_abroad_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocProcId=:procAbrId ORDER BY trans.ActionDate ASC";
+	@Override
+	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPROCEEDINGABROADREMARKHISTORY);
+		query.setParameter("procAbrId", procAbrId);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	@Override
+	public long DeptDetailsUpdate(NocProceedingAbroad nocpa) throws Exception {
+		
+		
+		manager.merge(nocpa);
+		manager.flush();
+		return nocpa.getNocProcId();
+		
+	}
+
+	@Override
+	public long ProcAbroadPandAFromUpdate(NocProceedingAbroad nocpa) throws Exception {
+		
+		
+		manager.merge(nocpa);
+		manager.flush();
+		return nocpa.getNocProcId();
+	}
 }
 	
 

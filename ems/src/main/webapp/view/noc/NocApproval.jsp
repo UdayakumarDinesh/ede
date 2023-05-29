@@ -50,7 +50,7 @@ body{
 	for(Object[] obj:PendingList){ 
 	
 	status=obj[5].toString();
-	System.out.println("status--"+status);
+	
 	}
 	 
 	 
@@ -329,42 +329,86 @@ body{
                             <td >
                             
                           
+								  <% if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Passport")){ 
+									  
 								  
-								 	<%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
+								 	if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" formmethod="GET"  name="PassportId" value="<%=obj[4] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
-								    	
-							    	<%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[4] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
-								    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
-								    	</button>
-							    		
-							    		
-							    	<%} 
+							
+							      <%} 
 							    	else{%>
 							    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[4] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;<%=obj[8] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    		
-							    	
-							    	<%} %>  
-                            
+							    	<%}}%>	    	
+								    <%-- 	
+							    	<%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[4] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+								    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button> --%>
+							    		
+							    		
+							    	 <% if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Proceeding Abroad")){ 
+							    		 
+							    		 if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
+								    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" formmethod="GET"  name="ProcAbrId" value="<%=obj[4] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button>
+							
+							
+							            <%} 
+								    	else{%>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" value="<%=obj[4] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;<%=obj[8] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button>
+								    		
+								    	
+								    	<%}}%> 		    	
+								    	<%-- <%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
+								    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" value="<%=obj[4] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button> --%>
+								    		
+							 
                             </td>
                            
                             <td style="text-align:center;">
-                            
+                            <% if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Passport")){ %>
                              <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCPrint.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+								</button> 
+                            <%}
+                            
+                            else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Proceeding Abroad")){%>
+                            
+                             <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4]%>" formaction="ProcAbroadPrint.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
                             
                             
-                            <% if(LoginType.toString().equalsIgnoreCase("P") && obj[5].toString().equalsIgnoreCase("A")){ %>
-						 	     <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Certificate">
+                            <%} %>
+                            
+                            <% if(LoginType.toString().equalsIgnoreCase("P") && obj[5].toString().equalsIgnoreCase("A")){ 
+                            	
+                            	if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Passport")){%>
+                          
+						 	     <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Certificate">
 												<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
 								</button> 
 						 	   
-						 	<%} %>
+						 	<%}
+                            	
+                            else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Proceeding Abroad")){%>
+                            	
+                            	 <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4]%>" formaction="NOCProcAbroadCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Certificate">
+												<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+								</button> 
+                            	
+                            	
+                           <%}} %>
 						 	
 						 	 </td>
                         </tr>

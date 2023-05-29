@@ -3,5 +3,6 @@ encoding//src/main/java=UTF-8
 encoding//src/main/resources=UTF-8
 encoding//src/main/webapp/view/Admin/AttendanceReportInPiechart.jsp=UTF-8
 encoding//src/main/webapp/view/noc/PassportPrint.jsp=UTF-8
+encoding//src/main/webapp/view/noc/ProcAbroadPreview.jsp=UTF-8
 encoding//src/test/java=UTF-8
 encoding/<project>=UTF-8
