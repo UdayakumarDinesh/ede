@@ -66,6 +66,7 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 							<thead>
 								<tr>
 								    <th>SNo</th>
+								    <th>Intimation By</th>								    
 									<th>Company Name</th>
 									<th>Visitor/s</th>
 									<th style="width:20%;" >Dates</th>
@@ -75,24 +76,24 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 								</tr>
 							</thead>
 							<tbody>
-							<%if(pendingList!=null){ int count =1;%>
-							<%for(Object[] intimation :pendingList){ %>
+							<%if(pendingList!=null){ int count =1;
+							for(Object[] intimation :pendingList){ %>
 								<tr>
 								<td><%=count++%></td>
+								<td><%=intimation[16]%> </td>
 								<td><%=intimation[3]%> </td>
 							    <td><%=intimation[10]%> </td>
 							    <td><%=sdf1.format(intimation[5])%>&nbsp; to &nbsp;<%=sdf1.format(intimation[6])%></td>
 				                 <td><%=intimation[9]%></td>
 				                 <td><%=intimation[7]%> </td>
-				                 <td>
-				                 
-				                 <%-- <%if(!sdf1.format(intimation[5].toString()).equalsIgnoreCase(sdf.format(new Date()).toString())) {%> --%>
+				                 <td>				               
+				                 <% long diff = DateTimeFormatUtil.dateDifference(intimation[5].toString()); %>			                
 				                 <form action="intimationDetails.htm" method="post">
 				                 <input type="hidden" name="intimationId" value="<%=intimation[0]%>">
-				                 <button type="submit" class="btn btn-primary btn-sm">Create Pass</button>
+				                 <button type="submit" class="btn btn-primary btn-sm"  <%if(diff>0){%>disabled data-placement="top" title="Pass Cannot be Created" <%} %>>Create Pass</button>
 				                 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 				                 </form>
-				                 <%-- <%} %> --%>
+				               
 				                 </td>
 								</tr>
 							<%}%>

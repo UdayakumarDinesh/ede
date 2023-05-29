@@ -24,12 +24,13 @@
 <div class="card-header page-top ">
 		<div class="row">
 			<div class="col-md-3">
-				<h5></h5>
+				<h5>Create Pass</h5>
 			</div>
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
-						<li class="breadcrumb-item "><a href="LeaveDashBoard.htm">Leave</a></li>
+						<li class="breadcrumb-item "><a href="pendingIntimations.htm">Pending Intimations</a></li>
+						<li class="breadcrumb-item active">Create Pass</li>
 					</ol>
 				</div>
 			</div>
@@ -66,15 +67,15 @@ SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 	
 				<div class="card shadow-nohover">
 					<div class="card-header">
-						<h5>
+						<h6 style="font-size: 92%;">
 							  This gate pass intimation has been sent by&nbsp;<%=intimationDetail.get(0)[8]%>(<%=intimationDetail.get(0)[9]%>)&nbsp; for <%=intimationDetail.get(0)[7]%>&nbsp;
 					<%if(intimationDetail.get(0)[6].toString().length()!=0){ %>with the special permission <%=intimationDetail.get(0)[6]%> <%}%>
 					
-					</h5> 
+					</h6> 
 					
 					</div>
 					<form action="createPassSubmit" id="passForm" method="post" onSubmit="return confirm('Do you want to submit?') ">
-					<div class="card-body" style="height:70vh; overflow-y:auto; ">
+					<div class="card-body">
 	
 						<table class="table table-bordered table-hover table-striped table-condensed">
 							<thead>

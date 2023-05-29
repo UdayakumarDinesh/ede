@@ -192,11 +192,13 @@
               <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable1">
 				<thead>
 					<tr>
-					   <th style="width:5%">SN</th>
+					  <th style="width:5%">SN</th>
 					  <th style="width:40%">Intimation By</th>
 					  <th style="width: ">Visitor</th>					 
 					  <th style="width: ">Company</th>	
-					   <th style="width: ">Special Permission</th>			  
+					  <th style="width: ">Special Permission</th>	
+					  <th>Status</th>	
+					  <th>Action</th> 	  
                   	</tr>
 				</thead>
                  <tbody>
@@ -211,6 +213,20 @@
                              <td ><%=form[8]%></td>                           
                             <td ><%=form[6]%></td>
                             <td ><%=form[5]%></td>
+                            <td>
+                              <button type="submit" class="btn btn-sm btn-link w-100" formaction="VpIntimationTransStatus.htm" value="<%=form[4]%>" name="intimationid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=form[12] %>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=form[11] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    	</button>
+                            </td> 
+                            <td align="center">
+                            <% if(form[14]!=null && "G".equalsIgnoreCase(form[9].toString()) ) {%> 
+								       <button type="submit" class="btn btn-sm" formaction="passPrint" name="passAction" value="<%=form[14]%>#<%=form[4]%>" formtarget="blank" formmethod="GET" data-toggle="tooltip" data-placement="top" title="Download">
+								          <i style="color: #019267" class="fa-solid fa-download"></i>
+								       </button>
+								       <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								       <input type="hidden" value="Y" name="Download">								      
+								       <%}else {%>-<%} %>
+                            </td>
                         </tr>
                        <%}} %>
                           

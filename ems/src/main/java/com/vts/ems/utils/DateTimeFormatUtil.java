@@ -382,6 +382,28 @@ public class DateTimeFormatUtil
 			    return 0l;
 			}
 	}
+
+	
+	public static void main(String args[]) throws Exception {
+		
+		long dateDifference = DateTimeFormatUtil.dateDifference("2023-05-30");
+		System.out.println(dateDifference);
+	}
+	
+	public static long dateDifference(String databaseDate) throws Exception{
+		try {
+			LocalDate currentDate = LocalDate.now();
+	        // Convert the given date string to LocalDate
+	        LocalDate givenDate = LocalDate.parse(databaseDate);
+
+	        // Calculate the number of days between the two dates
+	        return ChronoUnit.DAYS.between(currentDate, givenDate);
+		}catch (Exception e) {
+			 e.printStackTrace();
+			    return 0l;
+		}
+		
+	}
 	public static String SqlDatetimeToRegularDatetime(String sqlDatetime)throws Exception
 	{
 	    // Define the source and target date-time formatters
@@ -395,7 +417,8 @@ public class DateTimeFormatUtil
         String formattedDateTime = dateTime.format(targetFormatter);
 
         // Output the formatted date-time
-	        return formattedDateTime;
+        return formattedDateTime;
+
 	}
 }	
 

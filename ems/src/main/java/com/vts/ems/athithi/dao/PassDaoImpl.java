@@ -112,13 +112,9 @@ public class PassDaoImpl implements PassDao {
 
 
 	@Override
-	public List<Object[]> getCreatedPassList(String LoginType,String EmpNo,String fDate, String tDate) throws Exception {
+	public List<Object[]> getCreatedPassList() throws Exception {
 
-         Query query=entityManager.createNativeQuery("CALL vp_pass_list(:LoginType,:EmpNo,:FROMDATE,:TODATE)");
-         query.setParameter("LoginType", LoginType);
-         query.setParameter("EmpNo", EmpNo);
-         query.setParameter("FROMDATE",fDate);
-         query.setParameter("TODATE",tDate);
+         Query query=entityManager.createNativeQuery("CALL vp_pass_list()");
 		 List<Object[]>detail=(List<Object[]>)query.getResultList();
 		 return detail;
 	}

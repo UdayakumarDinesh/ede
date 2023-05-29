@@ -22,11 +22,10 @@
 <body>
 <%
 List<Object[]> passList=(List<Object[]>)request.getAttribute("createdPassList");
-String fdate=request.getAttribute("fdate").toString();
-String tdate=request.getAttribute("tdate").toString();
 SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 Object[] empData=(Object[])request.getAttribute("EmpData");
 %>
+<div class="page card dashboard-card">
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-sm-12" style="top: 10px;">
@@ -38,7 +37,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 					   			<h5 style="margin-left: -12%;width: 250%;">Pending Pass List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						           </b></small></h5>					   			
 					   			</div>
-								<div class="col-md-4">
+								<%-- <div class="col-md-4">
 								<div class="form-group">
 									<label for="fdate" style="margin-left: 39%;">From Date:</label>
 									 <input class="form-control" data-date-format="dd/mm/yyyy" id="fdate" name="fdate" required="required" value="<%=fdate %>"  style="margin-left: 5px;width: 35%;" readonly>
@@ -52,7 +51,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 								</div>
 								
 								<button type="submit" class="btn btn-sm submit-btn" style="margin-left: -10%;">Submit</button>
-								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+								<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> --%>
 							 
 							</form>
 		   					</div>
@@ -133,6 +132,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 						</div>
 					</div>
 				</div>
+				</div>
 				<script type="text/javascript">
 				function info(passId){
 					var y='';
@@ -196,7 +196,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 
 <script>
 
-$( "#fdate" ).change( function(){
+/* $( "#fdate" ).change( function(){
     
 	$( "#tdate" ).daterangepicker({
 		"singleDatePicker" : true,
@@ -239,7 +239,7 @@ $("#tdate").daterangepicker({
     } 
 });
 
-
+ */
 
 
 </script>

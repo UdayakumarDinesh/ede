@@ -36,7 +36,8 @@
     right: 0;
 }
 </style>
-<%List<Object[]>  data=(List<Object[]>)request.getAttribute("passDetails");
+<%
+List<Object[]>  data=(List<Object[]>)request.getAttribute("passDetails");
 List<Object[]>  visitorList=(List<Object[]>)request.getAttribute("visitorList");
 Object[] lab =(Object[])request.getAttribute("LabDetails");
 SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
@@ -95,7 +96,7 @@ String LabLogo =(String)request.getAttribute("LabLogo");
         <div align="center">
          <table style="border: 1px solid black;">
                 <tr  >
-                  <td style="width:17rem; text-align: left;"> Visitor Receiving Officer : <td>
+                  <td style="width:17rem; text-align: left;"> Receiving Officer : <td>
                      <td style="width:10rem; text-align: left"><b><%=data.get(0)[4]%>&nbsp;(<%=data.get(0)[5]%>)</b> <td>                  
                 <td style="width:5rem;text-align: left">Group : <td>
                      <td style="width:10rem;text-align: left"><b><%=data.get(0)[6]%></b> <td>        
