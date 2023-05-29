@@ -55,7 +55,7 @@
 							<div class="table-responsive">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 65%;">								
 										<tr>
-											<th><label>P And A <span class="mandatory"	style="color: red;">*</span></label></th>
+											<th><label>P & A <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td><select class="form-control select2"  name="panda" id="panda" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option disabled="disabled" selected="selected" hidden="true" value="">--Select--</option>
 												<%if(list!=null&&list.size()>0){for(Object[] O:list){ %>
@@ -64,13 +64,18 @@
 											    </select></td>
 										</tr>	
 									    <tr>
-											<th><label>F And A <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2"  name="fanda" id="fanda" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+											<th><label>F & A <span class="mandatory"	style="color: red;">*</span></label></th>
+											<td ><select class="form-control select2"  name="fanda" id="fanda" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option disabled="disabled" selected="selected" hidden="true" value="">--Select--</option>
 												<%if(list!=null&&list.size()>0){for(Object[] O:list){ %>
 												<option value="<%=O[2]%>" <%if(PandA!=null){if( PandA.getFandAAdmin().equalsIgnoreCase(O[2].toString())  ){%> selected   <%}}%> > <%=O[1]%></option>
 												<%}}%>
 											    </select></td>
+										</tr>
+										<tr>
+										  <th><label>From & To <span class="mandatory"	style="color: red;">*</span></label></th>
+										   <td style="width: 50%;"></td>
+										   <td style="width: 50%;"></td>
 										</tr>
 									
 								</table>

@@ -217,24 +217,25 @@ public class PassController {
 		try {
 			ses.setAttribute("SidebarActive", "createdPass_htm");
 			req.setAttribute("EmpData", piservice.getEmpNameDesig(EmpNo));
-			String fDate=req.getParameter("fdate");
-			String tDate=req.getParameter("tdate");
-			
-			  DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-			  Calendar cal = Calendar.getInstance();
-		 	  String to=dateFormat.format(cal.getTime()).toString();
-				/* cal.add(Calendar.MONTH, -1); */
-		 	  String from =dateFormat.format(cal.getTime()).toString();
-			
-			if(fDate!=null) {
-				req.setAttribute("createdPassList", service.getCreatedPassList(LoginType,EmpNo,new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
-				req.setAttribute("fdate",fDate);
-				req.setAttribute("tdate",tDate);
-			}else{
-			   req.setAttribute("createdPassList", service.getCreatedPassList(LoginType,EmpNo,new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
-			   req.setAttribute("fdate",from);
-			   req.setAttribute("tdate",to);
-			}
+			req.setAttribute("createdPassList", service.getCreatedPassList());
+//			String fDate=req.getParameter("fdate");
+//			String tDate=req.getParameter("tdate");
+//			
+//			  DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+//			  Calendar cal = Calendar.getInstance();
+//		 	  String to=dateFormat.format(cal.getTime()).toString();
+//
+//		 	  String from =dateFormat.format(cal.getTime()).toString();
+//			
+//			if(fDate!=null) {
+//				req.setAttribute("createdPassList", service.getCreatedPassList(LoginType,EmpNo,new java.sql.Date(sdf.parse(fDate).getTime()).toString(), new java.sql.Date(sdf.parse(tDate).getTime()).toString()));
+//				req.setAttribute("fdate",fDate);
+//				req.setAttribute("tdate",tDate);
+//			}else{
+//			   req.setAttribute("createdPassList", service.getCreatedPassList(LoginType,EmpNo,new java.sql.Date(sdf.parse(from).getTime()).toString(), new java.sql.Date(sdf.parse(to).getTime()).toString()));
+//			   req.setAttribute("fdate",from);
+//			   req.setAttribute("tdate",to);
+//			}
 		
 			
 			return "athithi/createdPass";
@@ -303,8 +304,8 @@ public class PassController {
 			
 			if(fromdate==null) 
 			{				
-//				fromdate=today.withDayOfMonth(1).toString();
-				fromdate = today.minusMonths(1).toString();
+				fromdate=today.withDayOfMonth(1).toString();
+//				fromdate = today.minusMonths(1).toString();
 				todate = today.toString();
 				
 			}else

@@ -1068,7 +1068,7 @@ private static final String DEPTCODEEDITCHECK="select count(DivisionCode) from d
 			}
 			
 		}
-		public static final String EMPLOYEELIST = "SELECT EmpId, EmpName,EmpNo FROM employee WHERE IsActive=1";
+		public static final String EMPLOYEELIST = "SELECT EmpId,EmpName,EmpNo FROM employee WHERE IsActive=1 ORDER BY SrNo ASC";
 		@Override
 		public List<Object[]> getEmployeeList() throws Exception {
 			List <Object[]>list=null;

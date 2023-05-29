@@ -334,7 +334,8 @@ int slno=0;
 				             <%			             
 				             long diff = DateTimeFormatUtil.dayDifference(imm.getTransDate().toString());
 				             
-				             if(imm!=null && toUserStatus.contains(imm.getPisStatusCode()) && diff<=30){ %>				           				   		     
+				             if(imm!=null && toUserStatus.contains(imm.getPisStatusCode()) && diff<=30){ %>	
+		           				   		     
 					          <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
@@ -344,7 +345,6 @@ int slno=0;
 							     <i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
 						      </button>
 					        <%} %>
-					
 					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ 
 						     if(imm!=null && ( imm.getPisStatusCode().toString().equalsIgnoreCase("FWD") ||
 						    	imm.getPisStatusCode().toString().equalsIgnoreCase("VDG") )&& !CEO.equalsIgnoreCase(emp[0].toString())  ){ %>

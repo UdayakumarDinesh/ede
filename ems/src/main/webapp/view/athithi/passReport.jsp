@@ -22,10 +22,9 @@ String todate=request.getAttribute("todate").toString();
 SimpleDateFormat sdf1 = new SimpleDateFormat("dd-MM-yyyy");
 Object[] empData=(Object[])request.getAttribute("EmpData");
 %>
+<div class="page card dashboard-card">
 	<div class="container-fluid">
-		<div class="row">
-			<div class="col-sm-12" style="top: 10px;">
-				<div class="card shadow-nohover">
+		<div class="card shadow-nohover">
 					<div class="card-header">
 								
 						<%--  <div class="col-md-12" >
@@ -91,16 +90,18 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 					 	</div>
 					 </div>
 		      </form>
-		         <div align="right" style="margin-top: -4.3%;margin-right: 6%;">
+		      </div>
+		         <div align="right" style="margin-top: -3.3%;margin-right: 6%;">
 		            <button class="btn" onclick="tableToExcel('myTable1', 'passReport.htm')" type="submit" style="">
 					  <i class="fa-regular fa-file-excel" aria-hidden="true" style="font-size: 1.5em; color: green;"></i>
 					</button>
 		           </div> 
+		           <div class="card">					
 					<div class="card-body">
 						<table class="table table-bordered table-hover table-striped table-condensed" id="myTable1">
 							<thead>
 							<tr>
-							<th colspan="8" style="text-align: center;background-color: #E91E63">PASS REPORT: <%=fromdate%>&nbsp;to&nbsp;<%=todate%></th>
+							<th colspan="8" style="text-align: center;background-color: #E91E63">PASS REPORT: <%=DateTimeFormatUtil.SqlToRegularDate(fromdate)%>&nbsp;to&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(todate)%></th>
 							</tr>
 								<tr>
 								    <th style="text-align: center;">SN</th>
@@ -141,12 +142,11 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 							</tbody>
 						</table>
 					</div>
-				</div>
 			</div>
 		</div>
 	</div>
-	</div>	
-			
+</div>	
+</div>			
 <script>
 
 /* $( "#fdate" ).change( function(){

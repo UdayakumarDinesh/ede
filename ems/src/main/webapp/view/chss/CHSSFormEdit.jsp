@@ -1386,13 +1386,13 @@ th,td
 
 
 
-<!-- <script type="text/javascript">
+ <script type="text/javascript">
 	function checkDisputeMsg(textareaid)
 	{
-		var msg = $('#'+textareaid).val();
+		var msg = $('#disputemsg').val();
 		if(msg.trim()==='')
 		{
-			alert('Please Enter the Messege to Submit');
+			alert('Please Enter the Dispute to Submit');
 			return false;
 		}
 		else
@@ -1401,7 +1401,7 @@ th,td
 		}
 	}
 						
-</script> -->
+</script> 
 <script type="text/javascript">
 function DremarkRequired(action)
 {

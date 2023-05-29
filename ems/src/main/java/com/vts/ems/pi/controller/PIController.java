@@ -239,7 +239,7 @@ public class PIController {
 								.build();
                         service.AddressPerTransactionAdd(transaction);
 
-	        	    	 redir.addAttribute("result", "Permanent Address Add Successfull");	
+	        	    	 redir.addAttribute("result", "Permanent Address Added Successfully");	
 	        		} else {
 	        			 redir.addAttribute("resultfail", "Permanent Address Add Unsuccessful");	
 	        	    }
@@ -298,7 +298,7 @@ public class PIController {
 	        	   long result  =  pisservice.EditPerAddress(peraddress); 
 	          	 
 		       	    if(result>0) {
-		       	    	 redir.addAttribute("result", "Permanent Address Edit Successfull");	
+		       	    	 redir.addAttribute("result", "Permanent Address Edited Successfully");	
 		       		} else {
 		       			 redir.addAttribute("resultfail", "Permanent Address Edit Unsuccessful");	
 		       	    }
@@ -341,7 +341,7 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successfull");
+						redir.addAttribute("result", "Address verification Successful");
 					} else {
 						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
 					}	
@@ -503,7 +503,7 @@ public class PIController {
 									.build();
                                   service.AddressResTransactionAdd(transaction);
 
-		        	    	 redir.addAttribute("result", "Residential Address Add Successfull");	
+		        	    	 redir.addAttribute("result", "Residential Address Added Successfully");	
 		        		} else {
 		        			 redir.addAttribute("resultfail", "Residential Address ADD Unsuccessful");	
 		        	    }
@@ -595,7 +595,7 @@ public class PIController {
 	        	 
 	        	    if(result>0) {
 	        	    	
-	        	    	 redir.addAttribute("result", "Residential Address Edit Successfull");	
+	        	    	 redir.addAttribute("result", "Residential Address Edited Successfully");	
 	        		} else {
 	        			 redir.addAttribute("resultfail", "Residential Address Edit Unsuccessful");	
 	        	    }
@@ -638,7 +638,7 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successfull");
+						redir.addAttribute("result", "Address verification Successful");
 					} else {
 						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
 					}	
@@ -1089,7 +1089,7 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successfull");
+						redir.addAttribute("result", "Address verification Successful");
 					} else {
 						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
 					}	
@@ -1389,7 +1389,7 @@ public class PIController {
 				else  
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Hometown verification Successfull");
+						redir.addAttribute("result", "Hometown verification Successful");
 					} else {
 						redir.addAttribute("resultfail", "Hometown verification Unsuccessful");	
 					}	

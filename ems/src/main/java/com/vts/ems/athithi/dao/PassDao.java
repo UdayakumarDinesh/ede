@@ -17,7 +17,7 @@ public interface PassDao {
 	public List<Object[]> getIntimationDetails(String intimationId, String passId)throws Exception;
 	public List<Object[]> getPassVisitorList(String intimationId, String passId)throws Exception;
 	public int updateIntimationStatus(String intimationId)throws Exception;
-	public List<Object[]> getCreatedPassList(String LoginType,String EmpNo,String fDate, String tDate)throws Exception;
+	public List<Object[]> getCreatedPassList()throws Exception;
 	public List<Object[]> getPassVisitorList(String passId)throws Exception;
 	public int passVisitorSubmit(String passId)throws Exception;
 	public List<Object[]> getPassReport(String LoginType,String EmpNo,String fdate, String tdate)throws Exception;

@@ -138,9 +138,9 @@ public class PassServiceImpl implements PassService {
 	}
 
 	@Override
-	public List<Object[]> getCreatedPassList(String LoginType,String EmpNo,String fDate, String tDate) throws Exception {
+	public List<Object[]> getCreatedPassList() throws Exception {
 	
-		return dao.getCreatedPassList(LoginType,EmpNo,fDate,tDate);
+		return dao.getCreatedPassList();
 	}
 
 	@Override

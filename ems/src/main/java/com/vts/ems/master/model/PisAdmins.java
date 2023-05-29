@@ -21,6 +21,8 @@ public class PisAdmins implements Serializable {
 	private long AdminsId;
 	private String PandAAdmin;
 	private String FandAAdmin;
+	private String AdminFrom;
+	private String AdminTo;
 	private String RevisedOn;
 	private int IsActive;
 	private String CreatedBy;
