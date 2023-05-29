@@ -112,12 +112,12 @@ body
 									</thead>
 									<tbody>
 										<tr>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[4]%>(<%=tourdetails[3]%>)</td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[2]%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[5].toString())%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[8]%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[6]%></td>
-											<td style="border: 1px solid black; border-collapse: collapse; text-align: center;"><%=tourdetails[7]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center; color: blue;"><%=tourdetails[4]%>(<%=tourdetails[3]%>)</td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center; color: blue;"><%=tourdetails[2]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center; color: blue;"><%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[5].toString())%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center; color: blue;"><%=tourdetails[8]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center; color: blue;"><%=tourdetails[6]%></td>
+											<td style="border: 1px solid black; border-collapse: collapse; text-align: center; color: blue;"><%=tourdetails[7]%></td>
 										</tr>
 									</tbody>
 								</table>

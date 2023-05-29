@@ -34,7 +34,12 @@
 			font-weight: 600;
 		}
 
+body{
 
+ overflow-x: hidden;
+  overflow-y: hidden;
+
+}
 
 </style>
 </head>
@@ -55,6 +60,7 @@
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
 	
 	Object[] empData=(Object[])request.getAttribute("EmpData");
+	 Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
 	List<Object[]> NocProcAbraodList=(List<Object[]>)request.getAttribute("NocProcAbraodList");
@@ -158,7 +164,7 @@
 								    <i class="fa fa-eye " style="color: black;"></i>
 							    </button> 
 							    
-							    <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[0] %>"  formaction="ProcAbroadPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+							    <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[0] %>"  formaction="ProcAbroadPrint.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 								  <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>  
 								
@@ -178,7 +184,7 @@
 				<div class="row text-center">
 					<div class="col-md-12">
 						
-						<button type="submit" class="btn btn-sm add-btn" formaction="ProcAbroadAdd.htm">ADD</button>
+						<button type="submit" class="btn btn-sm add-btn" formaction="ProcAbroadAdd.htm"  <% if(NocEmpList==null){ %> onclick="message()" <%} %>>ADD</button>
 						<button type="submit" class="btn btn-sm edit-btn" formaction="ProcAbroadEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCProcAbroad)">EDIT</button>
 						<!-- <button type="submit" class="btn btn-sm delete-btn" formaction="" name="action" value="DELETECIR" Onclick="Delete(NOCPassport)">DELETE</button> -->
 						
@@ -331,6 +337,13 @@ function Delete(NOCProcAbroad){
 	} */
 }
 
+function message(){
+	
+	alert("Approval of Permanent and Residential address is mandatory before applying NOC for Proceeding Abroad");
+	event.preventDefault();
+	return false;
+	
+}
 
 </script>
 

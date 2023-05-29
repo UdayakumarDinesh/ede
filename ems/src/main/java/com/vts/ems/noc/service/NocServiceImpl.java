@@ -3,6 +3,7 @@ package com.vts.ems.noc.service;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,7 +19,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
@@ -48,6 +49,20 @@ public class NocServiceImpl implements NocService {
 	
 	@Autowired
 	NocDao dao;
+	
+	public double CropTo2Decimal(String Amount)throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE CropTo2Decimal ");
+		double Invalue = Double.parseDouble(Amount) ;
+		return RoundTo2Decimal(Invalue);
+	}
+	
+	public double RoundTo2Decimal(double Invalue)throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE RoundTo2Decimal ");
+		BigDecimal returnVal= new BigDecimal(Invalue).setScale(2, BigDecimal.ROUND_HALF_UP);
+		return returnVal.doubleValue();
+	}
 	
 	@Override
 	 public Object[] getNocEmpList(String EmpId) throws Exception {
@@ -129,7 +144,14 @@ public class NocServiceImpl implements NocService {
 	}
 
 	@Override
-	public long NOCPassportUpdate(NocPassportDto dto, String userId) throws Exception {
+	public long NOCPassportUpdate(NocPassportDto dto, String userId,Passport pport) throws Exception {
+		
+		long count = dao.GetPassportCount(pport.getEmpId());
+        if(count==0 && !pport.getPassportNo().isEmpty()) {
+      	  
+      	  dao.AddPassport(pport);
+        }
+		
 		
 		
 		NocPassport noc =dao.getNocPassportId(dto.getNocPassportId());
@@ -403,8 +425,8 @@ public class NocServiceImpl implements NocService {
 			if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
 			{
 				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				notification1.setNotificationUrl("Passport.htm");
-				notification1.setNotificationMessage("Noc Passpaort Request Approved");
+				notification1.setNotificationUrl("NocApproval.htm?tab=closed");
+				notification1.setNotificationMessage("NOC Passpaort Request Approved For <br>"+emp.getEmpName());
 				notification1.setNotificationBy(EmpNo);
 				
 				notification1.setNotificationDate(LocalDate.now().toString());
@@ -422,7 +444,7 @@ public class NocServiceImpl implements NocService {
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("Passport.htm");
-			notification.setNotificationMessage("Noc Passpaort Request Approved");
+			notification.setNotificationMessage("NOC Passpaort Request Approved");
 			notification.setNotificationBy(EmpNo);
 		}
 		
@@ -451,14 +473,14 @@ public class NocServiceImpl implements NocService {
 			}
 			
 			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved Noc Passport Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationMessage("Recieved NOC Passport Change Request From <br>"+emp.getEmpName());
 			notification.setNotificationBy(EmpNo);
 		}
 		else if(action.equalsIgnoreCase("R"))
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("Passport.htm");
-			notification.setNotificationMessage("Noc Passport Request Returned");
+			notification.setNotificationMessage("NOC Passport Request Returned");
 			notification.setNotificationBy(EmpNo);
 		}
 		
@@ -511,32 +533,14 @@ public class NocServiceImpl implements NocService {
 	@Override
 	public long NocProcAbroadAdd(NocProceedingAbroadDto dto, String userId) throws Exception {
 		
-		MultipartFile FormFile = dto.getFormFile();
+		
 		LocalDate today= LocalDate.now();
 		String year="";
 		year=String.valueOf(today.getYear()).substring(2, 4);
 		long maxNocProcId = dao.getMaxOfProcAbroadId()+1;
 		
 		String NocProcAbroadNo="";
-		String storagePath="";
-		try {
-			while(new File(FilePath+"//NocAttachments//ProcAbroad-"+maxNocProcId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename())).exists())
-			{
-				maxNocProcId++;
-			}
-			if(!FormFile.getOriginalFilename().toString().equals("")) {
-			saveFile(FilePath+"//NocAttachments//","ProcAbroad-"+maxNocProcId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);}
-			if(!FormFile.getOriginalFilename().toString().equals(""))
-			{	
-				storagePath="//NocAttachments//ProcAbroad-"+maxNocProcId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
-			}
-			NocProcAbroadNo="NOC/PA-"+year+"/"+maxNocProcId;
-			}
-		
-		    catch (Exception e) {
-			e.printStackTrace();
-			return 0;
-		   }
+		NocProcAbroadNo="NOC/PA-"+year+"/"+maxNocProcId;
 		
 		NocProceedingAbroadTrans transaction = NocProceedingAbroadTrans.builder()	
 				.NocProcId(maxNocProcId)
@@ -550,6 +554,7 @@ public class NocServiceImpl implements NocService {
 		NocProceedingAbroad nocpa=NocProceedingAbroad.builder()
 				
 				        .EmpNo(dto.getEmpNo())
+				        .PassportExist(dto.getPassportExist())
 				        .NocProcAbroadNo(NocProcAbroadNo)
 				        .RelationType(dto.getRelationType())
 				        .RelationName(dto.getRelationName())
@@ -568,14 +573,15 @@ public class NocServiceImpl implements NocService {
 				        .ReturnDate(dto.getReturnDate())
 				        .Going(dto.getGoing())
 				        .FamilyDetails(dto.getFamilyDetails())
-				        .ExpectedAmount(dto.getExpectedAmount())
+				        .ExpectedAmount(CropTo2Decimal(dto.getExpectedAmount()))
 				        .FinancedBy(dto.getFinancedBy())
-				        .AmountSpend(dto.getAmountSpend())
-				        .NameNationality(dto.getNameNationality())
+				        .AmountSource(dto.getAmountSource())
+				        .Name(dto.getName())
+				        .Nationality(dto.getNationality())
 				        .Relationship(dto.getRelationship())
 				        .RelationshipAddress(dto.getRelationshipAddress())
-				        .FileName(FormFile.getOriginalFilename())
-				        .FilePath(storagePath)
+				      
+				        
 				        .LostPassport(dto.getLostPassport())
 				        .PassportType(dto.getPassportType())
 				        .ContractualObligation(dto.getContractualObligation())
@@ -585,6 +591,7 @@ public class NocServiceImpl implements NocService {
 				        .ProcAbroadStatus("N")
 				        .NocStatusCode("INI")
 						.NocStatusCodeNext("INI")
+						.InitiatedDate(sdf1.format(new Date()))
 						.isActive(1)
 						.CreatedBy(userId)
 						.CreatedDate(sdf1.format(new Date()))
@@ -594,26 +601,6 @@ public class NocServiceImpl implements NocService {
 		
 	}
 
-
-
-
-  private static void saveFile(String FilePath, String FileName, MultipartFile multiparfile) throws IOException {
-	
-	logger.info(new Date() +"Inside SERVICE saveFile ");
-    Path uploadPath = Paths.get(FilePath);
-    if (!Files.exists(uploadPath)) {
-    	Files.createDirectories(uploadPath);
-    }
-       
-    try (InputStream inputStream = multiparfile.getInputStream()) {
-    	Path filePath = uploadPath.resolve(FileName);
-    	Files.copy(inputStream, filePath, StandardCopyOption.REPLACE_EXISTING);
-    } catch (IOException ioe) {       
-    	throw new IOException("Could not save image file: " + FileName, ioe);
-    }     
-	
-	
-   }
 
 	@Override
 	public List<Object[]> getProcAbroadList(String empNo) throws Exception {
@@ -637,35 +624,14 @@ public class NocServiceImpl implements NocService {
 	@Override
 	public long NocProcAbroadUpdate(NocProceedingAbroadDto dto, String userId) throws Exception {
 		
-		MultipartFile FormFile = dto.getFormFile();
+		
 		
 		NocProceedingAbroad nocpa=dao.getNocProceedingAbroadById(dto.getNocProcId());
 		
 		
-		String storagePath=nocpa.getFilePath();
+	
 		long maxNocProcId = dao.getMaxOfProcAbroadId();
-		if(!FormFile.isEmpty()) {
-			try {
-				String path= FilePath+nocpa.getFilePath();
-				File file = new File(path);
-				if(file.exists()){
-					file.delete();
-				}
-				
-				saveFile(FilePath+"//NocAttachments//","ProcAbroad-"+maxNocProcId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename()),FormFile);
-				storagePath="//NocAttachments//ProcAbroad-"+maxNocProcId+"."+FilenameUtils.getExtension(FormFile.getOriginalFilename());
-//				saveFile(
-//						FilePath+"//Ticketfiles//"+FilenameUtils.getPath(storagePath), 
-//						FilenameUtils.getBaseName(storagePath)+ "." + FilenameUtils.getExtension(FormFile.getOriginalFilename()),
-//						FormFile);
-				nocpa.setFileName(FormFile.getOriginalFilename());
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				return 0;
-			}
-			
-		}
+		
 		
 		    nocpa.setRelationType(dto.getRelationType());
 		    nocpa.setRelationName(dto.getRelationName());
@@ -684,14 +650,14 @@ public class NocServiceImpl implements NocService {
 		    nocpa.setReturnDate(dto.getReturnDate());
 		    nocpa.setGoing(dto.getGoing());
 		    nocpa.setFamilyDetails(dto.getFamilyDetails());
-		    nocpa.setExpectedAmount(dto.getExpectedAmount());
+		    nocpa.setExpectedAmount(CropTo2Decimal(dto.getExpectedAmount()));
 		    nocpa.setFinancedBy(dto.getFinancedBy());
-		    nocpa.setAmountSpend(dto.getAmountSpend());
-		    nocpa.setNameNationality(dto.getNameNationality());
+		    nocpa.setAmountSource(dto.getAmountSource());
+		    nocpa.setName(dto.getName());
+		    nocpa.setNationality(dto.getNationality());
 		    nocpa.setRelationship(dto.getRelationship());
 		    nocpa.setRelationshipAddress(dto.getRelationshipAddress());
 		    
-		    nocpa.setFilePath(storagePath);
 		    nocpa.setLostPassport(dto.getLostPassport());
 		    nocpa.setPassportType(dto.getPassportType());
 		    nocpa.setContractualObligation(dto.getContractualObligation());
@@ -885,12 +851,31 @@ public class NocServiceImpl implements NocService {
 			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
 	
 		//Notification
+			
+			EMSNotification notification1 = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && noc.getProcAbroadStatus().equalsIgnoreCase("A"))
+			{
+				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification1.setNotificationUrl("NocApproval.htm?tab=closed");
+				notification1.setNotificationMessage("NOC Passpaort Request Approved For <br>"+emp.getEmpName());
+				notification1.setNotificationBy(empNo);
+				
+				notification1.setNotificationDate(LocalDate.now().toString());
+				notification1.setIsActive(1);
+				notification1.setCreatedBy(userId);
+				notification1.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification1);		
+				
+			}
+			
+			
 		EMSNotification notification = new EMSNotification();
 		if(action.equalsIgnoreCase("A") && noc.getProcAbroadStatus().equalsIgnoreCase("A"))
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("ProceedingAbroad.htm");
-			notification.setNotificationMessage("Noc Proceeding Abroad Request Approved");
+			notification.setNotificationMessage("NOC Proceeding Abroad Request Approved");
 			notification.setNotificationBy(empNo);
 		}
 		else if(action.equalsIgnoreCase("A") )
@@ -917,14 +902,14 @@ public class NocServiceImpl implements NocService {
 			}
 			
 			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved Noc Proceeding Abroad Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationMessage("Recieved NOC Proceeding Abroad Change Request From <br>"+emp.getEmpName());
 			notification.setNotificationBy(empNo);
 		}
 		else if(action.equalsIgnoreCase("R"))
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("ProceedingAbroad.htm");
-			notification.setNotificationMessage("Noc Proceeding Abroad Request Returned");
+			notification.setNotificationMessage("NOC Proceeding Abroad Request Returned");
 			notification.setNotificationBy(empNo);
 		}
 		
@@ -966,6 +951,50 @@ public class NocServiceImpl implements NocService {
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception {
 		
 		return dao.getEmpNameDesig(EmpNo);
+	}
+
+	@Override
+	public Object[] getEmpTitleDetails(String passportid) throws Exception {
+		
+		return dao.getEmpTitleDetails(passportid) ;
+	}
+
+	@Override
+	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId) throws Exception {
+		
+		return dao.getProceedinAbraodRemarksHistory(procAbrId);
+	}
+
+	@Override
+	public long DeptDetailsUpdate(NocProceedingAbroadDto dto, String userId) throws Exception {
+		
+		NocProceedingAbroad nocpa=dao.getNocProceedingAbroadById(dto.getNocProcId());
+		
+		nocpa.setWorkHandled(dto.getWorkHandled());
+		nocpa.setVisitRecommended(dto.getVisitRecommended());
+		nocpa.setLeaveGranted(dto.getLeaveGranted());
+		
+		return dao.DeptDetailsUpdate(nocpa);
+	}
+
+	@Override
+	public long ProcAbroadPandAFromUpdate(NocProceedingAbroadDto dto, String userId) throws Exception {
+		
+		NocProceedingAbroad nocpa=dao.getNocProceedingAbroadById(dto.getNocProcId());
+		
+		nocpa.setProcAbroadEntries(dto.getProcAbroadEntries());
+		nocpa.setProcAbroadEntriesDetails(dto.getProcAbroadEntriesDetails());
+		nocpa.setEmployeeInvolvement(dto.getEmployeeInvolvement());
+		nocpa.setEmployeeCaseDetails(dto.getEmployeeCaseDetails());
+		nocpa.setEmployeeDues(dto.getEmployeeDues());
+		nocpa.setContractualObligation(dto.getContractualObligation());
+		nocpa.setFromDate(dto.getFromDate());
+		nocpa.setToDate(dto.getToDate());
+		nocpa.setPandAModifiedBy(userId);
+		nocpa.setProcAbroadStatus("N");
+		nocpa.setPandAModifiedDate(sdf1.format(new Date()));
+		return dao.ProcAbroadPandAFromUpdate(nocpa);
+		
 	}
 
 }

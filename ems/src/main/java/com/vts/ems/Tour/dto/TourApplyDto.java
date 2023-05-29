@@ -22,6 +22,8 @@ public class TourApplyDto {
 	private Date StayFrom;
 	private Date StayTo;
 	private String StayPlace;
+	private Date EJPFrom;
+	private Date EJPTo;
 	private String AirTravJust;
 	private String AdvancePropsed;
 	private String AdvanceIssued;
@@ -30,7 +32,6 @@ public class TourApplyDto {
 	private String PandARemarks;
 	private String InitiatedDate;
 	private String ApprovedDate;
-	private String Remarks;
 	private String[] TourDates;
 	private String[] TourTimes;
 	private String[] ModeofTravel;
@@ -48,6 +49,7 @@ public class TourApplyDto {
 	private Date AllowanceToDate;
 	private Date TourfareFrom;
 	private Date TourfareTo;
+	private int TotalProposedAmount;
 	
 	private int IsActive;
 	private String CreatedBy;

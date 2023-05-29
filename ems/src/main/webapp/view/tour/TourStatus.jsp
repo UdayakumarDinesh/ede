@@ -9,7 +9,10 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 
 <style type="text/css">
-
+body{
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 
   html, body {
     margin: 0;

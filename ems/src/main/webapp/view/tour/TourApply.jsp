@@ -9,6 +9,12 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <title>Insert title here</title>
 <style type="text/css">
+body{
+
+ overflow-x: hidden;
+  overflow-y: hidden;
+
+}
 .table thead th {
     color: white;
    
@@ -41,7 +47,7 @@
  Object[] emplist = (Object[])request.getAttribute("ApprovalEmp"); 
 List<Object[]> ModeOfTravelList=(List<Object[]>)request.getAttribute("ModeOfTravelList");
 List<Object[]> CityList=(List<Object[]>)request.getAttribute("CityList");
-Object[] empdata      = (Object[])request.getAttribute("Empdata");
+Object[] empdata  = (Object[])request.getAttribute("Empdata");
 int paylevel = 0;
 if(empdata!=null && empdata[4]!=null){
 	paylevel= Integer.parseInt(empdata[4].toString());
@@ -93,24 +99,62 @@ if(empdata!=null && empdata[4]!=null){
 												    </label>                    
 												</div>
 										     </div>
-										     <div class="col-md-3">					        	
+										     <div class="col-md-4">					        	
 									                <label>Place Of Stay :<span class=" mandatory ">*</span></label>
-									                <input type="text" value="" name="POS" id="pos" class=" form-control input-sm " maxlength="255"   placeholder="Place Of Stay "  required="required">
+									                <input type="text" value="" name="POS" id="pos" class=" form-control input-sm " maxlength="255"   placeholder="Enter the Place Of Stay "  required="required">
 											</div>
-											<div class="col-md-3">					        	
+											<div class="col-md-4">					        	
 									                <label>Purpose :<span class=" mandatory ">*</span></label>
-									                <input type="text" value="" name="Purpose" id="purpose" class=" form-control input-sm " maxlength="255"   placeholder="Enter Purpose "  required="required">
+									                <input type="text" value="" name="Purpose" id="purpose" class=" form-control input-sm " maxlength="255"   placeholder="Enter the Purpose "  required="required">
 											</div>
 									    
-									         <div class="col-md-2">
+										</div>
+									</div>
+									<div class="form-group">
+								        <div class="row">
+								        	<div class="col-md-3">
+										 		<label>EJP From :<span class="mandatory">*</span></label>
+												<div class=" input-group">
+												    <input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="EJPFROM" name="ejpfrom"  required="required"  > 
+												    <label class="input-group-addon btn" for="testdate">						      
+												    </label>                    
+												</div>
+										     </div>
+										     
+										     <div class="col-md-3">
+										 		<label>EJP To :<span class="mandatory">*</span></label>
+												<div class=" input-group">
+												    <input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="EJPTO" name="ejpto"  required="required"  > 
+												    <label class="input-group-addon btn" for="testdate">						      
+												    </label>                    
+												</div>
+										     </div>
+										     
+										<%if(paylevel >= 6){%>
+											 <div class="col-md-3">
+											 	<label>  Justification for Air Travel : </label>
+									    		 <div class=" input-group">
+											         <input type="text" value="" name="airtraveljusti" id="airtraveljusti" class=" form-control input-sm " maxlength="255"   placeholder="Enter Air Travel Justification  "  required="required">
+												</div>
+											</div>
+											<div class="col-md-3">
+												  <label >Advance Required : </label>
+												  <select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" id="isamtreq" name="reqadvamt" onchange="HideTourAdv()" data-live-search="true" data-container="body" >
+													     <option value="N">No</option>
+							                             <option value="Y">Yes</option>
+							                       </select> 
+											 </div>
+										<%}else{%>
+											<div class="col-md-6">
 												 <label >Advance Required : </label>
 												  <select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" id="isamtreq" name="reqadvamt" onchange="HideTourAdv()" data-live-search="true" data-container="body" >
 													     <option value="N">No</option>
 							                             <option value="Y">Yes</option>
 							                       </select> 
 											 </div>
-										</div>
-									</div>
+										<%}%>
+								        </div>
+								    </div>
 									  
 						<div id="advAmountreq" style="display: none;">
 						<hr>
@@ -120,13 +164,13 @@ if(empdata!=null && empdata[4]!=null){
 								    	 <div class="col-md-1">	</div>
 								    	 
 								    	    <div class="col-md-3">
-									    		<label>  Total  : </label>
+									    		<label>  Total fare : </label>
 									    		 <div class=" input-group">
-												    <input  type="text"  name="tourfare"  id="tourfare" class=" form-control input-sm " placeholder="Enter Amount"   value=""  maxlength="12" required="required">                     
+												    <input  type="text"  name="tourfare"  id="tourfare" class=" form-control input-sm " placeholder="Enter Total fare Amount"   value=""  maxlength="12" required="required">                     
 												</div>
 									   		</div>
 								    	 
-								    		 <div class="col-md-3">	
+								    		 <div class="col-md-2">	
 									    		 <label> From Date :</label>
 									    		 <div class=" input-group">
 												    <input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="farefromdate" name="farefromdate"  required="required"  > 
@@ -135,7 +179,7 @@ if(empdata!=null && empdata[4]!=null){
 												</div>
 								    		 </div>
 								    		 
-								    		 <div class="col-md-3">	
+								    		 <div class="col-md-2">	
 									    		 <label> To Date :</label>
 									    		 <div class=" input-group">
 												    <input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="faretodate" name="faretodate"  required="required"  > 
@@ -143,6 +187,14 @@ if(empdata!=null && empdata[4]!=null){
 												    </label>                    
 												</div>
 								    		 </div>	
+								    		 
+								    		  <div class="col-md-3">
+									    		<label> Total Proposed Amt : </label>
+									    		 <div class=" input-group">
+												    <input  type="text"  name="totalproposed"  id="totalproposed" class=" form-control input-sm " placeholder="Enter Total Proposed Amount"   value=""  maxlength="12" required="required">                     
+												</div>
+									   		</div>
+								    		 
 								  </div>
 								</div>    
 								
@@ -164,12 +216,7 @@ if(empdata!=null && empdata[4]!=null){
 											</div>
 										</div>
 									
-										<div class="col-md-2">
-											<label>Allowance Per Days :</label>
-											<div class=" input-group">
-												<input  type="text"  name="allowanceperday"  id="allowanceperday" class=" form-control input-sm " placeholder="Enter Amt Per Days"   value=""  maxlength="12" required="required">                     
-											</div>
-										</div>
+										
 										
 										<div class="col-md-2">
 											<label>Allowance Days :</label>
@@ -177,8 +224,15 @@ if(empdata!=null && empdata[4]!=null){
 												<input  type="text"  name="allowancenoday"  id="allowancenoday" class=" form-control input-sm " placeholder="Enter Allowance Days"   value=""  maxlength="12" required="required">                     
 											</div>
 										</div>
+										
+										<div class="col-md-2">
+											<label>Allowance Per Days :</label>
+											<div class=" input-group">
+												<input  type="text"  name="allowanceperday"  id="allowanceperday" class=" form-control input-sm " placeholder="Enter Amt Per Days"   value=""  maxlength="12" required="required">                     
+											</div>
+										</div>
 										<div class="col-md-2">	
-									    	<label> Allowance From Date :</label>
+									    	<label style="margin-left: -5px;"> Allowance From Date :</label>
 									    		<div class=" input-group">
 												    <input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="allowancefromdate" name="allowancefromdate"  required="required"  > 
 												    <label class="input-group-addon btn" for="testdate">						      
@@ -200,43 +254,30 @@ if(empdata!=null && empdata[4]!=null){
 								<hr>
 								</div>
 								    <div class="form-group">
-								    	 <label> Earliest presence required at destination :</label><%if(paylevel >= 6){%> <label style="    margin-left: 335px;">Air Travel (if applicable) :</label>  <label style="margin-left: 100px;">Remarks :</label> <%}else{%><label style="margin-left: 450px;">Remarks :</label> <%}%>
+								    	 <label> Earliest presence required at destination :</label>
 								        <div class="row">
-								        	<div class="col-md-7">
-									        	<div class="row">
-										       		 <div class="col-md-3">	  	
+									        		  <div class="col-md-2"></div>
+										       		  <div class="col-md-2">	  	
 															<div class=" input-group">
 																<label>Time :<span class=" mandatory ">*</span></label>&nbsp;&nbsp;&nbsp;
 															     <input  class="form-control" id="earliesttime" placeholder="Start Time"   name="EarliestTime" value="<%=LocalTime.now() %>"  maxlength="250" required="required">                     
 															</div>
-													 </div>
-													  <div class="col-md-4">			
+													  </div>
+													 
+													  <div class="col-md-2">			
 															<div class=" input-group" style="width: 184px;">
 															<label>Date :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;        	
 		  													<input type="text" class="form-control input-sm mydate" readonly="readonly"  placeholder=""  id="earliestdate" name="EarliestDate"  required="required"  > 
 														    <label class="input-group-addon btn" for="testdate"></label>      													
 														    </div>
-													 </div>
-													  <div class="col-md-5">			
+													  </div>
+													 
+													   <div class="col-md-3">			
 															<div class=" input-group">
 																<label>Place :<span class=" mandatory ">*</span></label>	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;        	
 															     <input  class=" form-control input-sm " id="earliestplace" placeholder="Place"   name="EarliestPlace" value=""  maxlength="250" required="required">                     
 															</div>
-													 </div>
-												 </div>
-											 </div>
-											 <%if(paylevel >= 6){%>
-											 <div class="col-md-3">
-											         <input type="text" value="" name="airtraveljusti" id="airtraveljusti" class=" form-control input-sm " maxlength="255"   placeholder="Enter Air Travel Justification  "  required="required">
-											</div>
-											<div class="col-md-2">
-													 <input  class=" form-control input-sm " id="Remarks" placeholder="Remarks"   name="Remarks" value=""  maxlength="250" required="required">                     	
-											</div>
-											<%}else{%>
-											<div class="col-md-5">
-												<input  class=" form-control input-sm " id="Remarks" placeholder="Remarks"   name="Remarks" value=""  maxlength="250" required="required">                     	
-											</div>
-											<%}%>
+													   </div>
 								        </div>
 								    </div> 				    
 				 <!-- td Onward --> 
@@ -270,7 +311,7 @@ if(empdata!=null && empdata[4]!=null){
 											</select>
 						         		 </td>
 										<td  width="25%">
-											<select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" name="fromcity"  data-live-search="true" data-container="body" >
+											<select class="form-control test-type fromcity selectpicker "  style="width: 100%" data-size="auto" name="fromcity" id="" data-live-search="true" data-container="body" >
 												<option value="0">Select City</option>
 											    <%for(Object[] ls:CityList){%> 
 					                             <option value="<%=ls[0]%>"><%=ls[1]%></option>
@@ -279,7 +320,7 @@ if(empdata!=null && empdata[4]!=null){
 										</td>						         		                                      
 																	
 										<td width= "25%">
-											<select class="form-control test-type tocity selectpicker "  style="width: 100%" data-size="auto" name="tocity"  data-live-search="true" data-container="body" >	
+											<select class="form-control test-type tocity selectpicker "  style="width: 100%" data-size="auto" name="tocity" id="" data-live-search="true" data-container="body" >	
 												<option value="0">Select City</option>
 											    <%for(Object[] ls:CityList){%> 
 					                             <option value="<%=ls[0]%>"><%=ls[1]%></option>
@@ -578,9 +619,34 @@ $( "#doD" ).change(function() {
 			format : 'DD-MM-YYYY'
 		}
 	});
+ 
+ $('#EJPFROM').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,	
+		"minDate":$("#doD").val(),
+		"maxDate" :$('#doA').val(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
+ $('#EJPTO').daterangepicker({
+		"singleDatePicker" : true,
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,	
+		"minDate":$("#doD").val(),
+		"maxDate" :$('#doA').val(),
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
+	});
  });
  
- $('#farefromdate, #faretodate ,#allowancefromdate , #allowancetodate').daterangepicker({
+ $('#farefromdate, #faretodate ,#allowancefromdate , #allowancetodate , #EJPFROM , #EJPTO').daterangepicker({
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,	
@@ -645,14 +711,12 @@ function TourApply(){
 		var boardingperday = $("#boardingperday").val();
 		var allowancenoday = $("#allowancenoday").val();
 		var allowanceperday = $("#allowanceperday").val();
-		
+		var totalproposedamt = $("#totalproposed").val();
 		var fromdate = $("#doD").val();
 		var todate = $("#doA").val();
 		
 		var dayscount = getNumberOfDays(fromdate ,todate );
-		console.log("dayscount   :"+dayscount);
-		console.log("boardingdays   :"+boardingdays);
-		console.log("allowancenoday   :"+allowancenoday);
+		
 		if(tourfare.trim()=='' || tourfare==null || tourfare =='null' || tourfare == undefined){
 			alert("Enter the Air / Train / Bus Fare Amount!");
 		}else if(boardingdays.trim()=='' || boardingdays==null || boardingdays=='null' || boardingdays==undefined){
@@ -667,6 +731,8 @@ function TourApply(){
 			alert("Boarding Charges days sholud be less than total tour period days!");
 		}else if(allowancenoday > dayscount){
 			alert("Daily Allowance days sholud be less than total tour period days!");
+		}else if(totalproposedamt.trim()=='' || totalproposedamt==null || totalproposedamt =='null' || totalproposedamt == undefined){
+			alert("Enter the Total Proposed Amount!");
 		}else{
 			TourCheck();
 			if(confirm("Are you sure to submit?"))
@@ -723,12 +789,14 @@ function TourCheck()
 		},
 		datatype : 'json',
 		success : function(result) {
-			console.log(result);
 		 var result = JSON.parse(result);
 		 var sp=document.getElementById("sp");
 			if(result[1]=='Fail'){
+				
 		     sp.innerHTML="<b style='color:red; text-align: center; font-size: 17px;'>"+result[0]+"</b>";
+		     
 			}else if(result[1]=='Pass'){
+				
 				 $("#tour").hide();
 				 $("#submitbtn").show();
 				 sp.innerHTML="<b style='color:green; text-align: center; font-size: 17px;'>"+result[0]+"</b>";
@@ -769,7 +837,7 @@ function getNumberOfDays(start, end) {
     // Calculating the no. of days between two dates
     const diffInDays = Math.round(diffInTime / oneDay);
 
-    return diffInDays;
+    return diffInDays+1;
 }
 </script>
 </html>

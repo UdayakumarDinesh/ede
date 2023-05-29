@@ -4,6 +4,7 @@
 <%@page import="java.time.LocalDate"%>
 <%@page import="java.util.List"%>
 <%@page import="com.vts.ems.noc.model.NocProceedingAbroad"%> 
+  <%@page import="com.vts.ems.pis.model.*"%>
 
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -14,6 +15,17 @@
 <meta charset="ISO-8859-1">
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include> 
+
+<style>
+
+body{
+
+ overflow-x: hidden;
+ 
+
+}
+
+</style>
 
 </head>
 <body>
@@ -30,18 +42,19 @@
 	 NocProceedingAbroad ProcAbroad=(NocProceedingAbroad)request.getAttribute("ProcAbroad");
 	 Object[] empData=(Object[])request.getAttribute("EmpData");
 
+	 Passport pispassport=(Passport)request.getAttribute("pispassport");
 	
   %>
 
 <div class="card-header page-top">
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-5">
 			
 			  <h5>Proceeding Abroad <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			 
 			</div>
-			<div class="col-md-8 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="ProceedingAbroad.htm">Proceeding Abroad List</a></li>
@@ -81,18 +94,37 @@
 			
 			<% if(ProcAbroad!=null){ %>
 			
-			<form action="ProcAbroadEditSubmit.htm" method="post" autocomplete="off" enctype="multipart/form-data" >
+			<form action="ProcAbroadEditSubmit.htm" method="post"  >
 			
 			<%} else {%>
 			
-			<form action="ProcAbroadAddSubmit.htm" method="post" autocomplete="off" enctype="multipart/form-data" >
+			<form action="ProcAbroadAddSubmit.htm" method="post"  >
 			
 			<%} %>
 			  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			    <div class="form-group">
 			        <div class="row">
 			         
-			           <div class="col-md-3">
+			         
+			           <div class="col-md-2">
+			                <label> Passport Type:</label>
+			                
+			                 <% if(EmpPassport!=null ) { %>
+			                    <input  class="form-control input-sm " type="text" name="PassportExist" readonly value="Renewal">
+			                    
+			                    <%}
+			                    else{%>
+			                    <select name="PassportExist" class="form-control select2"  id="passporttype" required="required">
+			                        
+			                    	 <option value="New">New</option>
+			                    	   <option value="Renewal">Renewal</option>
+			                    </select>
+			                   <%} %>
+			                
+			             
+			     </div>
+			
+			           <div class="col-md-2">
 			                <label>Name</label> 
 			            	<input type="text" name="Name" value="<%=NocEmpList[0] %>" class="form-control input-sm" readonly >
 			            </div>			
@@ -106,14 +138,14 @@
 			            <div class="col-md-2">
 			                <label> Department</label>
 			                <input type="text" id="" name="Department"    value="<%=NocEmpList[2] %>"
-			                    class=" form-control input-sm " readonly
-			                     >
+			                    class=" form-control input-sm " readonly >
+			                     
 			            </div>
-			             <div class="col-md-3">
+			             <div class="col-md-4">
 			                <label>Present  Address </label>
-			                <input type="text" id="" name="Present"    value="<%=NocEmpList[3] %>"
-			                    class=" form-control input-sm " readonly
-			                    >
+			                <input type="text" id="" name="Present"    value="<%=NocEmpList[3] %>,<%=NocEmpList[6] %>,<%=NocEmpList[7] %> <%=NocEmpList[8] %>"
+			                    class=" form-control input-sm " readonly  >
+			                   
 			            </div>
 				  </div>
 			    </div>
@@ -122,7 +154,7 @@
 			        <div class="row">
 			          <div class="col-md-3">
 			                <label> Permanent Address </label>
-			                <input type="text" id="" name="Permanent"    value="<%=NocEmpList[4] %>"
+			                <input type="text" id="" name="Permanent"    value="<%=NocEmpList[4] %>,<%=NocEmpList[9] %>,<%=NocEmpList[10] %> <%=NocEmpList[11] %> "
 			                    class=" form-control input-sm " readonly
 			                    >
 			            </div>
@@ -138,20 +170,20 @@
 			            </div> 
 			            
 			              <div class="col-md-2">
-			                <label>Relation Name </label>
-			                <input type="text" id="" name="RelationName"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationName() %><%} %>"
+			                <label>Relative Name </label>
+			                <input type="text" id="" name="RelationName"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationName() %><%}  %>"
 			                   class=" form-control input-sm "  required="required" >
 			                    
 			            </div>
 			            <div class="col-md-2">
-			                <label>Relation Occupation </label>
+			                <label>Relative Occupation </label>
 			                <input type="text" id="" name="RelationOccupation"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationOccupation() %><%} %>"
 			                    class="form-control input-sm "  required="required">
 			                   
 			            </div>
 			            
 			             <div class="col-md-3">
-			                <label>Relation Address </label>
+			                <label>Relative Address </label>
 			                <input type="text" id="" name="RelationAddress"  value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationAddress() %><%} %>"  required="required"
 			                    class="form-control input-sm " >
 			             
@@ -169,7 +201,7 @@
 			                <label> Details of blood /close relations working in foreign embassy / firms in India / Abroad 
                               </label>
                              <div class="col-md-13" style="margin-left:1px;">  
-			                <input type="text" name="RelationAbroad"     value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationAbroad() %><%} %>"
+			                <input type="text" name="RelationAbroad"     value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationAbroad() %><%} else{%>NA<%} %>"
 			                    class="form-control input-sm "  required="required"  >
 			                   
 			                    </div>
@@ -179,7 +211,7 @@
 			                <label> Details of employment during last ten years  </label>
                             
                              <div class="col-md-13" style="margin-left:0px;">  
-			                <input type="text" name="EmployementDetails"     value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getEmployementDetails() %><%} %>"
+			                <input type="text" name="EmployementDetails"     value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getEmployementDetails() %><%} else{%>NA<%} %>"
 			                    class="form-control input-sm"  required="required"  >
 			                   
 			                   </div>
@@ -226,6 +258,92 @@
 			           </div>
 			    </div> 
 			    
+			    <div class="form-group" >
+			  
+			        <div class="row">
+			         <% if( EmpPassport!=null) { %>
+			         
+			         <div class="col-md-2">
+			                <label> Passport Type </label>
+			                <input type="text" id="" name="PassportType"  value="<%=EmpPassport[0] %>"
+			                    class=" form-control input-sm " readonly="readonly">
+			                   
+			            </div>
+			            
+			             <div class="col-md-2">
+			                <label> Passport No. </label>
+			                <input type="text" id="" name="PassportNo"    value="<%=EmpPassport[1] %>"
+			                    class=" form-control input-sm "  readonly="readonly">
+			                   
+			            </div> 
+			            
+			              <div class="col-md-2">
+			                <label>Date of Issue  </label>
+			                <input type="text" id="" name="ValidFrom"    value="<%=rdf.format(sdf.parse(EmpPassport[2].toString()))%>"
+			                   class=" form-control input-sm "   readonly="readonly">
+			                    
+			            </div>
+			            
+			            <div class="col-md-2">
+			                <label>Validity </label>
+			                <input type="text" id="" name="ValidTo"   value="<%=rdf.format(sdf.parse(EmpPassport[3].toString()))%>"
+			                    class=" form-control input-sm "  readonly="readonly">
+			                   
+			            </div>
+			            
+			         
+			       <%} %>
+			      
+			        <div class="col-md-2" id="ptype">
+			                <label>Passport Type</label><br>
+                              <select  name="PassportType" class="form-control select2"  data-live-search="true" style="width:200px;">
+                              
+                                     		<option value="Official" >Official</option>
+					                        <option value="Diplomatic" >Diplomatic</option>
+					                        <option value="Ordinary" >Ordinary</option>				                         
+                              </select>
+			                   
+			            </div>
+			            
+			             <div class="col-md-2" id="status">
+                        
+                              <label>Status</label><br>
+                              <select  name="Status" class="form-control select2"  data-live-search="true" style="width:200px;">
+                              
+                                     		<option value="Valid" >Valid</option>
+					                        <option value="Cancelled" >Cancelled</option>
+					                        <option value="Surrendered" >Surrendered</option>
+					                        <option value="Lab Custody" >Lab Custody</option>
+					                        <option value="HQ Custody" >HQ Custody</option>				                         
+                              </select>
+                       
+                       </div>
+			            
+			             <div class="col-md-2" id="pno">
+	                    
+	                            <label>Passport No:</label>
+	                            <input id="passportno" type="text"  class="form-control input-sm "  name="PassportNo"  maxlength="6"   onblur="checknegative(this)">
+	                    
+                    </div>
+                    
+                    <div class="col-md-1" id="validfrom">
+                      
+                             <label> Valid From  </label>
+	                       	  <input type="text" class="form-control input-sm pisfromdate" style="width: 110px;"value="" name="ValidFrom" id="pisfromdate"   /> 
+                      
+                     </div>    
+                     
+                      <div class="col-md-1" style="margin-left:20px;" id="validtill">
+	                       
+	                             <label>Valid To </label>
+	                       	     <input type="text" class="form-control input-sm pistodate"  style="width: 110px;" value="" name="ValidTo" id="pistodate"   />
+	                      
+                       </div>  
+                       
+                       </div>
+                       </div>   
+                       
+                       
 			      <div class="form-group">
 			        <div class="row">
 			            
@@ -246,7 +364,7 @@
 			              </div>
 			              
 			             <div class="col-md-6" style="margin-left:0px;" id="details">
-			                <label> If so, give details of such visits to include countries visited with details of dates</label>
+			                <label> If so, give details of such visits to include countries visited with details of dates<span class="mandatory">*</span></label>
 			                
                             <input class="form-control input-sm"type="text" id="" name="ForeignVisitDetails"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getForeignVisitDetails()%><%}%>" >
 			                     
@@ -287,7 +405,7 @@
 			            
 			                <div class="col-md-3" >
 			                <label> Probable duration of stay at each country	 </label>
-			                <input class="form-control input-sm"  type="number" id="" name="StayDuration"  min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getStayDuration() %><%} %>" >
+			                <input class="form-control input-sm"  type="text" id="" name="StayDuration"  min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getStayDuration() %><%} %>" >
 			                     
 			                   
 			            </div> 
@@ -333,7 +451,7 @@
 			            
 			                <div class="col-md-4" >
 			                <label> Excepted Amount for trip(journey and stay abroad)</label>
-			                <input class="form-control input-sm"  type="number" id="" name="ExpectedAmount"   min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getExpectedAmount() %><%}%>"  >
+			                <input class="form-control input-sm"  type="number" id="" name="ExpectedAmount" step=".01" min="0" max="9999999"  value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getExpectedAmount() %><%} else{%>0.00<%} %>"  >
 			                     
 			                   
 			            </div> 
@@ -362,20 +480,23 @@
                           
 			            
 			             
-			             <div class="col-md-2" id="amt">
-			                <label>If self,amount spend <span class="mandatory"	style="color: red;">*</span></label>
+			             <div class="col-md-3" id="amt">
+			                <label>If so the source of amount being spent<span class="mandatory"	style="color: red;">*</span></label>
 
-			                 <input class="form-control input-sm" type="number" id="" name="AmountSpend"  min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getAmountSpend() %><%} %>"  >
+			                 <input class="form-control input-sm" type="text" id="" name="AmountSource"  min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getAmountSource() %><%} %>"  >
 			                     
 			                   
 			            </div>
 			              
-			               <div class="col-md-3" id="name" >
-			                <label>Name, Nationality of the person <span class="mandatory"	style="color: red;">*</span></label>
-			                <input class="form-control input-sm"  type="text" id="" name="NameNationality"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getNameNationality() %><%}%>"  >
-			                     
-			                   
-			            </div> 
+			              <div class="col-md-3" id="name" >
+			                <label>Name of the person <span class="mandatory"	style="color: red;">*</span></label>
+			                <input class="form-control input-sm"  type="text" id="" name="Name1"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getName() %><%}%>"  >
+			              </div> 
+			              
+			              <div class="col-md-3" id="nationality" >
+			                <label>Nationality of the person <span class="mandatory"	style="color: red;">*</span></label>
+			                <input class="form-control input-sm"  type="text" id="" name="Nationality"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getNationality() %><%}%>"  >
+			              </div>
 			            
 			             <div class="col-md-3" id="rel" >
 			                <label>Relationship  <span class="mandatory"	style="color: red;">*</span></label>
@@ -390,25 +511,7 @@
 			                     
 			            </div> 
 			                  
-			            <div class="col-md-2" id="doc" >
-			                <label> Documentary Proof  <span class="mandatory"	style="color: red;">*</span></label>
-			                
-                           <input type="file"  style="width: 120%;" class="form-control input-sm "  value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getFilePath() %><%} %>" id="formFile" name="FormFile" 
-							accept=".xlsx,.xls,.pdf,.doc,.docx ">
-			                
-			                <div class="col-md-2" >
-			                <% if(ProcAbroad!=null) {
-							if(!ProcAbroad.getFileName().toString().equals("") ){ %>
-							<button type="submit" formnovalidate="formnovalidate" class="btn btn-sm" style="margin-left:204px; margin-top:-65px;" 
-									name="ProcAbrId" value="<%=ProcAbroad.getNocProcId()%>"
-									 formaction="NocProcAbroadDownload.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
-										  <i style="color: #019267" class="fa-solid fa-download fa-1x" ></i>
-									</button>
-									<%}} %> 
-									</div>     
-			                   
-			            </div> 
-			            
+			           
 			         </div>
 			            
 			            
@@ -419,55 +522,17 @@
 			    <div class="form-group">
 			  
 			        <div class="row">
-			         <% if(EmpPassport!=null) { %>
-			         
-			         <div class="col-md-2">
-			                <label> Passport Type </label>
-			                <input type="text" id="" name="Permanent"  value="<%=EmpPassport[0] %>"
-			                    class=" form-control input-sm " readonly="readonly">
-			                   
-			            </div>
-			            
-			             <div class="col-md-2">
-			                <label> Passport No. </label>
-			                <input type="text" id="" name="Permanent"    value="<%=EmpPassport[1] %>"
-			                    class=" form-control input-sm "  readonly="readonly">
-			                   
-			            </div> 
-			            
-			              <div class="col-md-2">
-			                <label>Date of Issue  </label>
-			                <input type="text" id="" name=""    value="<%=rdf.format(sdf.parse(EmpPassport[2].toString()))%>"
-			                   class=" form-control input-sm "   readonly="readonly">
-			                    
-			            </div>
-			            
-			            <div class="col-md-2">
-			                <label>Validity </label>
-			                <input type="text" id="" name="RelationOccupation"   value="<%=rdf.format(sdf.parse(EmpPassport[3].toString()))%>"
-			                    class=" form-control input-sm "  readonly="readonly">
-			                   
-			            </div>
-			       <%} else{ %>
+			        
 			       
-			    	  <a type="button"  class="btn btn-sm add-btn"  style="margin-bottom:28px;margin-top:28px;margin-left:28px" href="AddEditPassport.htm?empid=<%=Empid %>&NOC=noc">Add Passport</a> 
-			    	<%} %> 
 			       
 			        <div class="col-md-4">
 			                <label> Details of passport lost, if any </label>
-			                <input type="text" id="" name="LostPassport"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getLostPassport() %><%}%>"
+			                <input type="text" id="" name="LostPassport"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getLostPassport() %><%} else{%>NA<%} %>"
 			                    class=" form-control input-sm " >
 			             
 			            </div>
-			          
-			         </div>
-			        
-			     </div>
-			     
-			     <div class="form-group">
-			       <div class="row">
-			       
-			        <div class="col-md-2">
+			            
+			             <div class="col-md-2">
 			                <label> Passport Type Required </label>
 			                <select name="Passporttype" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
@@ -478,10 +543,31 @@
 			             
 			            </div>
 			            
+			          
+			         </div>
+			        
+			     </div>
+			     
+			     <div class="form-group">
+			       <div class="row">
+			        <div class="col-md-4" style="width:50px;">
+			                <label > Are you likely to accept any foreign Hospitality </label>
+                            <select name="Hospatility" class="form-control select2"  id=""  required="required" style="width:300px;">
+			                 
+			                    <option value="" selected="selected" disabled="disabled">Select</option>
+			                  
+			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("N")){ %> selected <%}}%> >NO</option>
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("Y")){ %> selected <%}}%> >YES</option>
+			                </select>
+			                   
+			               
+			        </div> 
+			       
+			            
 			            
 			        <div class="col-md-2">
 			                <label>I certify that</label>
-			                <select name="ContractualObligation" class="form-control select2"  style="width:290%;" id="Certify"  required="required">
+			                <select name="ContractualObligation" class="form-control select2"  style="width:310%;" id="Certify"  required="required">
 			                 <!-- <option value="" selected="selected" disabled="disabled">Select</option>  -->
 			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getContractualObligation().toString().equals("N")){ %> selected <%}}%> >I am not under contractual obligation to serve STARC for any specific period </option>
 			                    <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getContractualObligation().toString().equals("Y")){ %> selected <%}}%> > I am under contractual obligation to serve STARC for a specific period</option>
@@ -492,10 +578,10 @@
 			            
 			            
 			            
-			             <div class="col-md-2"  style="margin-left:335px;" id="showfromdate">
-			                <label>From Date  <span class="mandatory"	style="color: red;">*</span></label>
+			             <div class="col-md-1"  style="margin-left:356px;" id="showfromdate">
+			                <label>From Date </label>
 			               <div class=" input-group">
-							    <input type="text" class="form-control input-sm mydate"  value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getFromDate() %><%} %>"   id="fromdate" name="fromdate"  required="required"  > 
+							    <input type="text" class="form-control input-sm mydate"  style="width:105px;" value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getFromDate() %><%} %>"   id="fromdate" name="fromdate"  required="required"  > 
 							     <label class="input-group-addon btn" for="testdate">
 							      
 							    </label>                    
@@ -503,11 +589,11 @@
 			                    
 			            </div>
 			           
-			            <div class="col-md-2" style="margin-left:1px;"  id="showtodate">
-			                <label>To Date <span class="mandatory"	style="color: red;">*</span></label>
+			            <div class="col-md-1" style="margin-left:15px;"  id="showtodate">
+			                <label>To Date </label>
 			               <div class=" input-group">
 			               
-							    <input type="text" class="form-control input-sm mydate"  value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getToDate() %><%} %>"   id="todate" name="todate"  required="required"  > 
+							    <input type="text" class="form-control input-sm mydate"  style="width:105px;" value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getToDate() %><%} %>"   id="todate" name="todate"  required="required"  > 
 							     <label class="input-group-addon btn" for="testdate">
 							      
 							    </label>                    
@@ -517,23 +603,7 @@
 			           </div>
 			     </div>
 			     
-			   <div class="form-group">  
-			     <div class="row">
-			       <div class="col-md-4">
-			                <label > Are you likely to accept any foreign Hospitality </label>
-                            <select name="Hospatility" class="form-control select2"  id=""  required="required">
-			                 
-			                    <option value="" selected="selected" disabled="disabled">Select</option>
-			                  
-			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("N")){ %> selected <%}}%> >NO</option>
-			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("Y")){ %> selected <%}}%> >YES</option>
-			                </select>
-			                   
-			               
-			        </div> 
-			       </div>
-			   </div>
-			     
+			  
 			 <div class="col-12" align="center">
 			       
 			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Submit')">Submit</button>
@@ -616,6 +686,39 @@ $('#departure').daterangepicker({
 	}
 });
 
+
+$('#pisfromdate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	//"minDate" :new Date(), 
+	<% if(pispassport!=null && pispassport.getValidFrom()!=null){ %>
+	"startDate" : new Date("<%=pispassport.getValidFrom()%>"),
+	<% } %>
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});
+
+
+$('#pistodate').daterangepicker({
+	"singleDatePicker" : true,
+	"linkedCalendars" : false,
+	"showCustomRangeLabel" : true,
+	"minDate" :$('#pisfromdate').val(),    
+	<% if(pispassport!=null && pispassport.getValidTo()!=null){ %>
+	"startDate" : new Date("<%=pispassport.getValidTo()%>"),
+	<% } %>
+	"cancelClass" : "btn-default",
+	showDropdowns : true,
+	locale : {
+		format : 'DD-MM-YYYY'
+	}
+});	
+
+
 window.onload = function() {
 	
 	   
@@ -631,6 +734,28 @@ window.onload = function() {
 		  $("#showtodate").hide(); 
 	 }
 	};
+	
+	var select=$('#passporttype').val()
+    
+    if(select=="New" || select==undefined){
+   	 
+   	 $('#ptype').hide();
+   	 $('#status').hide();
+   	 $('#pno').hide();
+   	 $('#validfrom').hide();
+   	 $('#validtill').hide();
+   	 
+   }
+    else{
+   	 
+   	 $('#ptype').show();
+   	 $('#status').show();
+   	 $('#pno').show();
+   	 $('#validfrom').show();
+   	 $('#validtill').show();
+   	 
+    }
+
 	
 	$(document).ready(function() {
 	    $('#Certify').on('change', function() {
@@ -654,26 +779,22 @@ window.onload = function() {
 	$(document).ready(function() {
 		
 		   var trip=$('#trip').val()
-		   
 		   var family=$('#select').val()
+		   var visit= $('#fvisit').val()
 		   
-		  var visit= $('#fvisit').val()
-		   
-		   console.log("trip--"+ trip);
-		  
 		 if(trip=="S"){
 			 
 			    $('#amt').show();
-			    $('#doc').show();
-		    	$('#name').hide();
+			    $('#name').hide();
+		    	$('#nationality').hide();
 		    	$('#rel').hide();
 		    	$('#add').hide();
 		    	
 		}
 		 else{
 			    $('#amt').hide();
-		    	$('#doc').hide();
 		    	$('#name').hide();
+		    	$('#nationality').hide();
 		    	$('#rel').hide();
 		    	$('#add').hide();
 		     }
@@ -681,16 +802,18 @@ window.onload = function() {
 		 if(trip=="OP"){
 			 
 			 $('#name').show();
+			 $('#nationality').show();
 			 $('#rel').show();
 		     $('#add').show();
-		     $('#doc').show();
+		     
 		 }
 		 else{
 			 
 			 $('#name').hide();
+			 $('#nationality').hide();
 			 $('#rel').hide();
 		     $('#add').hide();
-		    /*  $('#doc').hide(); */
+		   
 		 }
 		 
 		 
@@ -723,16 +846,16 @@ window.onload = function() {
 	    if(selectedValue=="S"){
 	    	
 	    	$('#amt').show();
-	    	$('#doc').show();
-	    	$('#name').hide();
+	        $('#name').hide();
+	        $('#nationality').hide();
 	    	$('#rel').hide();
 	    	$('#add').hide();
 	    }
 	    else{
 	    	
-	    	$('#amt').hide();
-	    	$('#doc').show();
+	    	 $('#amt').hide();
 	    	 $('#name').show();
+	    	 $('#nationality').show();
 	    	 $('#rel').show();
 		     $('#add').show();
 	    	 
@@ -775,23 +898,39 @@ window.onload = function() {
 	});
 
 	
-	$(function(){
-	    $("#formFile").on('change', function(event)
-		{
+	$(document).ready(function() {
+	    $('#passporttype').on('change', function() {
+	    var selectedValue = $(this).val();
+	    if(selectedValue=="New"){
 	    	
-	    	var file = $("#formFile").val();
+	    	 $('#ptype').hide();
+	    	 $('#status').hide();
+	    	 $('#pno').hide();
+	    	 $('#validfrom').hide();
+	    	 $('#validtill').hide();
 	    	
-	       	var upld = file.split('.').pop(); 
-	       	if(!(upld.toLowerCase().trim()==='pdf' || upld.toLowerCase().trim()==='xlsx' 
-	       				|| upld.toLowerCase().trim()==='xls' || upld.toLowerCase().trim()==='doc' || upld.toLowerCase().trim()==='docx')  )
-	       	{
-	    	    alert("Only PDF,Word and Excel documents are allowed to Upload")
-	    	    document.getElementById("formFile").value = "";
-	    	    return;
-	    	}
-	        
+	    }
+	    else{
+	    	
+	    	 $('#ptype').show();
+	    	 $('#status').show();
+	    	 $('#pno').show();
+	    	 $('#validfrom').show();
+	    	 $('#validtill').show();
+	    	
+	    }
+	    if(selectedValue=="Renewal"){
+	    	
+	    	
+	    	$('#passportno').attr('required', true);
+	    	
+	    }
+	    
+	    
 	    });
-	});
+	  });
+	
+	
 	
 		    
 </script>

@@ -37,7 +37,7 @@ body {
 	padding: 1px;
 	word-break: break-word;
 	overflow-wrap: anywhere;
-	font-size:18px;
+	font-size:5px;
 } 
 /* th{
 text-align: left;
@@ -46,6 +46,14 @@ width:75%;
 
 .table2 td{
 padding: 1px;
+
+}
+th{
+font-weight:100;
+}
+
+h4{
+font-size:18px;
 
 }
 
@@ -80,6 +88,9 @@ padding: 1px;
      
      Object[] empData=(Object[])request.getAttribute("EmpData");
 	
+     String CEOempno=(String)request.getAttribute("CEOempno");
+     
+     List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
 	%>
 
 
@@ -87,11 +98,11 @@ padding: 1px;
 
  <div class="card-header page-top "> 
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-md-5">
 				<h5>Passport Preview <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			</div>
-			<div class="col-md-8 ">
+			<div class="col-md-7 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
@@ -143,7 +154,7 @@ padding: 1px;
 								<div align="center">
 								<div style="width: 100%;">
 									<div style="width: 100%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
-									 <div ><span style="margin-left: -80px;font-weight: 600;font-size: 18px;">APPLICATION FOR OBTAINING NO OBJECTION CERTIFICATE FOR PASSPORT</span></div> 
+									 <div ><span style="margin-left: -5px;font-weight: 600;font-size: 18px;">APPLICATION FOR OBTAINING NO OBJECTION CERTIFICATE FOR PASSPORT</span></div> 
 									<!-- <div ><span style="margin-left: -90px;font-weight: 600">APPLICATION FOR OBTAINING NO OBJECTION <br>CERTIFICATE FOR PASSPORT</span></div> -->
 				
 								</div>
@@ -205,13 +216,13 @@ padding: 1px;
 	</tr>
 	
 	<tr>
-	<td style="width:400px;border: 0;"><h4> (a) Present  <span style="margin-left:233px"> :</span> </h4></td>
-	<td class="text-blue" style="border: 0;"><%=obj[4] %></td>
+	<td style="width:100px;border: 0;"><h4> (a) Present  <span style="margin-left:50px"> :</span> </h4></td>
+	<td class="text-blue" style="border: 0;text-align:justify;"><span class="text-blue" style="margin-left:-223px"><%=obj[4] %> , <%=obj[40] %> , <%=obj[41] %> <%=obj[42] %></span></td>
 	</tr>
 	
 	<tr>
-	<td style="width:400px;border: 0;"><h4> (b) Permanent  <span style="margin-left:199px"> :</span></h4></td>
-	<td class="text-blue" style="border: 0;"><%=obj[5] %></td>
+	<td style="width:350px;border: 0;"><h4> (b) Permanent  <span style="margin-left:23px"> :</span></h4></td>
+	<td class="text-blue" style="border: 0;text-align:justify;"><span class="text-blue" style="margin-left:-226px"> <%=obj[5] %> , <%=obj[43] %> , <%=obj[44] %> <%=obj[45] %></span></td>
 	</tr>
 	<!-- </table> -->
 	
@@ -227,21 +238,21 @@ padding: 1px;
 	</tr>
 	
 	<tr>
-	<td style="width:400px;border: 0;"><h4>  (a) Name <span style="margin-left:253px"> :</span></h4></td>
+	<td style="width:400px;border: 0;"><h4>  (a) Name <span style="margin-left:79px"> :</span></h4></td>
       
-    <td class="text-blue" style="border: 0;"><%=obj[13] %></td>
+    <td class="text-blue" style="border: 0;text-align:justify;"><span class="text-blue" style="margin-left:-225px"><%=obj[13] %></span></td>
 	</tr>
 	
 	<tr>
-	<td style="width:400px;border: 0;"><h4>  (b) Occupation <span style="margin-left:196px"> :</span></h4></td>
+	<td style="width:400px;border: 0;"><h4>  (b) Occupation <span style="margin-left:32px"> :</span></h4></td>
       
-    <td class="text-blue" style="border: 0;"><%=obj[14] %></td>
+    <td class="text-blue" style="border: 0;text-align:justify;"><span class="text-blue" style="margin-left:-226px"><%=obj[14] %></span></td>
 	</tr>
 	
 	<tr>
-	<td style="width:400px;border: 0;"><h4>  (c) Address   <span style="margin-left:232px"> :</span></h4></td>
+	<td style="width:400px;border: 0;"><h4>  (c) Address   <span style="margin-left:60px"> :</span></h4></td>
       
-    <td class="text-blue" style="border: 0;"><%=obj[15] %></td>
+    <td class="text-blue" style="border: 0;text-align:justify;"><span class="text-blue" style="margin-left:-225px"><%=obj[15] %></span></td>
 	</tr>
 	
 	</table>
@@ -254,7 +265,7 @@ padding: 1px;
     </tr>
       
      <tr>
-     <td class="text-blue" style="border: 0;"><% if (obj[16].toString().trim().length()>0){%><%=obj[16] %><%} else{ %>N/A<%} %></td>
+     <td class="text-blue" style="border: 0;text-align:justify;"><% if (obj[16].toString().trim().length()>0){%><%=obj[16] %><%} else{ %>N/A<%} %></td>
 	</tr> 
 	
 	<tr>
@@ -263,11 +274,11 @@ padding: 1px;
     </tr>
     
      <tr> 
-    <td class="text-blue" style="border: 0;"><% if (obj[17].toString().trim().length()>0){%><%=obj[17] %><%}  else{ %>N/A<%} %></td>
+    <td class="text-blue" style="border: 0;text-align:justify;"><% if (obj[17].toString().trim().length()>0){%><%=obj[17] %><%}  else{ %>N/A<%} %></td>
 	</tr>
 	
 	<tr>
-	<td style="width:20%;text-align: left;border: 0;"><h4>9. Details of passport held previously, if any : &nbsp;<% if(obj[6].toString().equalsIgnoreCase("NA") && obj[7].toString().equalsIgnoreCase("NA") && obj[8].toString().equalsIgnoreCase("NA") &&  obj[9].toString().equalsIgnoreCase("NA")){ %><span class="text-blue">NA</span><%} %></h4></td>
+	<td style="width:20%;text-align:justify;border: 0;"><h4>9. Details of passport held previously, if any : &nbsp;<% if(obj[6].toString().equalsIgnoreCase("NA") && obj[7].toString().equalsIgnoreCase("NA") && obj[8].toString().equalsIgnoreCase("NA") &&  obj[9].toString().equalsIgnoreCase("NA")){ %><span class="text-blue">NA</span><%} %></h4></td>
      
     </tr>
 	
@@ -337,16 +348,22 @@ padding: 1px;
 	
 	<tr>
 	<td style="width:350px;text-align: left;border: 0;"><h4> 10. Details of passport lost, if any <span style="margin-left:15px"> :</span>
-       </h4> </td>
-    
-    <td class="text-blue" style="border: 0;"><% if(!obj[18].toString().equals("")){%><%=obj[18] %><%} else{ %>N/A<%} %></td>
+        <%if(obj[18].toString().equals("NA")){ %><span class="text-blue">NA</span><%} %></h4> </td>
+       
+     </tr>  
+    <% if(!obj[18].toString().equals("NA")){%>
+    <tr>
+    <td class="text-blue" style="border: 0;text-align:justify;"><%=obj[18] %></td>
 	</tr>
+	<%} %>
+	</table>
 	
+	<table  style="margin-left:10px; margin-top:5px;border-collapse: collapse; width:100%;" >
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;"><h4> 11. Type of passport required  <span style="margin-left:50px"> :</span>
+	<td style="width:350px;text-align: left;border: 0;"><h4> 11. Type of passport required  <span style="margin-left:10px"> :</span>
        </h4> </td>
     
-    <td class="text-blue" style="border: 0;"><%=obj[19] %></td>
+    <td class="text-blue" style="border: 0;"><span class="text-blue" style="margin-left:-93px;" > <%=obj[19] %></span></td>
 	</tr>
 	</table>
 	
@@ -358,8 +375,8 @@ padding: 1px;
     </tr>
     
     <tr>
-    <td style="border: 0;width:900px;">(a) My application for the above passport is not for proceeding to a foreign 
-           country. <span style="color:red;font-size:17px;">I shall  separately seek the NO OBJECTION CERTIFICATE  
+    <td style="border: 0;width:900px;"><h4>(a) My application for the above passport is not for proceeding to a foreign 
+           country.</h4> <span style="color:red;font-size:17px;">I shall  separately seek the NO OBJECTION CERTIFICATE  
            before proceeding to a foreign country.</span>
            
            <span style="color:red;font-size:17px;">(b) I am not involved in any court / police / disciplinary / vigilance case and there 
@@ -367,13 +384,13 @@ padding: 1px;
               
               <% if(obj[20].toString().equalsIgnoreCase("N")) {%>
 		  
-           I am not under contractual obligation to serve STARC for any specific period. <%} 
+           <h4>I am not under contractual obligation to serve STARC for any specific period.</h4> <%} 
 		
 		else if(obj[20].toString().equalsIgnoreCase("Y")){%>
 	        
-            I am under contractual obligation to serve STARC for a period from 
-              <span class="text-blue"   ><%=rdf.format(sdf.parse(obj[21].toString())) %></span>  to   <span class="text-blue"  ><%=rdf.format(sdf.parse(obj[22].toString())) %></span>
-              
+           <h4> I am under contractual obligation to serve STARC for a period from 
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[21].toString())) %></span>  to   <span class="text-blue"  ><%=rdf.format(sdf.parse(obj[22].toString())) %></span>
+              </h4>
           <%} %>
               
        </td>
@@ -407,16 +424,7 @@ padding: 1px;
 	 <% if(obj[25]!=null) {%><div   style="margin-left:500px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(obj[25].toString().substring(0, 10)) +" "+obj[25].toString().substring(11,19) %></span> </div> <%} %>
 	 <br>
 	<%--  <div align="left" style="margin-left:10px;font-weight:400;" > Dept.Incharge : <span class="text-blue"  ><%=obj[23] %></span></div>	 --%>
-	  	<% if(obj[24]!=null && toUserStatus.contains(obj[24].toString())) { %>
-	  	<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
-				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
-					 <textarea class="w-100 form-control" rows="3" cols="100"   name="remarks"  maxlength="500"></textarea>
-				  </div>
-                <button type="submit" class="btn btn-sm submit-btn"  name="Action" value="A"  formaction="NOCPassportForward.htm"  onclick="return confirm('Are You Sure To Submit?');" >Forward</button>
-                
-				</div>
-		<%} %>
-		<br>
+	  	
 		
 		
 		<!-- ----------------------------------------  P&A Department-------------------------------------------------------------------------------------------- -->
@@ -452,15 +460,11 @@ padding: 1px;
            else{ %>No<%} %></span>
            </h4></td>
            
-           
-           
-      
-           
            </tr>
            
            <tr>
            <td style="width:50%;text-align: left;border: 0;"><h4>
-               (b) Whether the employee is involved in any	
+              (b) Whether the employee is involved in any	
 	           Disciplinary / Criminal / Corruption / Court
 	          Case :&nbsp;<span class="text-blue"><% if(obj[31].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %></span></h4></td> 
 	         
@@ -486,15 +490,15 @@ padding: 1px;
            <td style="width:20%;text-align: left;border: 0;"><h4>3. Applicant is :
              </h4></td>
            
-            <td style="border: 0;text-align:justify"><% if(obj[20].toString().equalsIgnoreCase("N")) {%>
+            <td style="border: 0; text-align:justify" ><% if(obj[20].toString().equalsIgnoreCase("N")) {%>
 		  
-            not under contractual obligation to serve STARC for any specific period. <%} 
+            <h4 >not under contractual obligation to serve STARC for any specific period.</h4> <%} 
 		
 		     else if(obj[20].toString().equalsIgnoreCase("Y")){%>
 	        
-                under contractual obligation to serve STARC for a period from 
+               <h4 style="margin-left:-43px;"> under contractual obligation to serve STARC for a period from 
               <span class="text-blue"   ><%=rdf.format(sdf.parse(obj[21].toString())) %></span> to <span class="text-blue"  ><%=rdf.format(sdf.parse(obj[22].toString())) %></span>
-              
+              </h4>
             <%} %>
           
           </td>
@@ -534,7 +538,7 @@ padding: 1px;
 										<tr>
 											<th  style="text-align:left;"><label> Whether the employee is under suspension?	 <span class="mandatory"	style="color: red;">*</span></label></th>
 											<td>
-											  <select class="form-control select2"  name="EmpSuspension" id="" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
+											  <select class="form-control select2"  name="EmpSuspension" id="suspended" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width:100%;">
 												<option value="" disabled="disabled" selected="selected" hidden="true">--Select--</option>
 												<option value="N" <%if(passport!=null && passport.getEmployeeSuspensed()!=null){ if(passport.getEmployeeSuspensed().toString().equalsIgnoreCase("N")){%> selected  <% }}%>>NO</option>
 												<option value="Y" <%if(passport!=null && passport.getEmployeeSuspensed()!=null){ if(passport.getEmployeeSuspensed().toString().equalsIgnoreCase("Y")){%> selected  <% }}%>>YES</option>
@@ -627,7 +631,7 @@ padding: 1px;
 					<tr>
 					    <% if(rh[1]!=null){ %>
 						<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-						    	<%=rh[2] %>&nbsp; :
+						    	<span style="font-size:16px;"><%=rh[2] %> :-</span>&nbsp;&nbsp;  
 						    	<span style="border:none;" class="text-blue" >	<% if (!rh[1].toString().equals("")){%><%=rh[1] %><%} else{ %>--<%} %></span>
 						  </td>
 						 <%}%>
@@ -637,6 +641,19 @@ padding: 1px;
 					
 			</div>
 			<%} %>
+			
+			<br>
+			
+			<% if(obj[24]!=null && toUserStatus.contains(obj[24].toString())) { %>
+	  	<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
+				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
+					 <textarea class="w-100 form-control" rows="3" cols="100"   name="remarks"  maxlength="500"></textarea>
+				  </div>
+                <button type="submit" class="btn btn-sm submit-btn"  name="Action" value="A"  formaction="NOCPassportForward.htm"  onclick="return confirm('Are You Sure To Forward?');" >Forward</button>
+                
+				</div>
+		<%} %>
+		<br>
 		
 		<% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
 		<%-- <div align="left">
@@ -651,14 +668,32 @@ padding: 1px;
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100" id="remarksarea" name="remarks" maxlength="500"></textarea>
 				  </div>
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Verify	
+				  
+				  <% if(CEOempno.toString().equals(empData[0].toString())){ %>
+				  
+				  
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Approve?');" >
+							Approve
 						</button>
+					<% } else if (PandAs.contains(empData[0].toString())){ %>
 					
-				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="R" onclick="return validateTextBox();">
+				     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="A"  onclick=" return message()"  >
+							Verify
+						</button>
+						
+					<%}else{%>
+						
+                           <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Recommend?');" >
+								Recommend
+							</button>
+						
+					<%} %>
+				  
+				  <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="NOCPassportForward.htm" name="Action" value="R" onclick="return validateTextBox();">
 							 Return
 						</button>
 					 </div>
+					 
 					 <%} %>
 					 
 				<%} %>
@@ -695,7 +730,22 @@ function validateTextBox() {
 }
 
 
-
+function message(){
+	
+	var entries=$('#Entries').val()
+	var involve=$('#Involved').val()
+	 var suspended=$('#suspended').val()
+	 
+	  
+	 
+	if(entries!=null &&   involve!=null && suspended!=null ){
+		return confirm('Are You Sure To Verify?');
+	}
+	else{
+		alert("Please Fill The Details");
+		 return false;
+	}
+}
 
 </script>
 
@@ -705,19 +755,19 @@ $(document).ready(function() {
 	
 	   var entries=$('#Entries').val()
 	   var involve=$('#Involved').val()
-	   console.log("involve--"+ involve);
+	   
 	   var id=$('#oblig').val()
-	   //console.log("id--"+typeof id);
+	  
 	  
 	 if(id=="Y"){
-		 console.log(id=="Y");
+		
 		 $('.trow').hide();
 		 $('.trow1').hide();
 		 $('.trow3').show();
 		 $('.trow4').show(); 
 	}
 	 else{
-		 console.log(id=="Y"); console.log(id);
+		 
          $('.trow').hide();
          $('.trow1').hide();
          $('.trow3').hide();
@@ -725,24 +775,24 @@ $(document).ready(function() {
 	 }
 	 
 	  if(entries=="N"){
-		 console.log(entries=="N");
+		 
 		   $('.trow').show(); 
 	}
 	 
 	 else{
 		 
-		 console.log(entries=="N"); console.log(entries);
+		
           $('.trow').hide();
           
 	 }
 	  
 	 if(involve=="Y")
 	{  
-		   console.log(involve=="Y");
+		   
 		   $('.trow1').show();
     }
 	 else{
-		 console.log(involve=="Y"); console.log(involve);
+		
         
          $('.trow1').hide();
          

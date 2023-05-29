@@ -30,38 +30,19 @@
     <div class="row">
         <div class="col-md-12"  style="margin-top: 50px; margin-left: 30px">
           <div class="row" style="margin-right: 48px">
-            <div class="col-6" style="font-size: 20px">Our Ref. No. STARC/P & A/1601 </div>
-            <div class="col-6" style="text-align: right; font-weight: bold">Date : <%=DateTimeFormatUtil .fromDatabaseToActual( LocalDate.now().toString())%> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+            <div class="col-6" style="font-size: 20px">Our Ref. No. <span style="color: blue; font-size: 20px;">STARC/P & A/1601 </span></div>
+            <div class="col-6" style="text-align: right; font-weight: bold">Date :<span style="color: blue; "> <%=DateTimeFormatUtil .fromDatabaseToActual( LocalDate.now().toString())%></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
   		  </div>
           &nbsp;
           <div class="row">
              <div class="col">
-             <div style="font-weight: bold;">Mr. / Ms. : <%=details[4]%>(<%=details[3]%>)</div>
-             <div style="font-weight: bold;">Emp. No. <%=details[2] %></div>
+             <div style="font-weight: bold;">Mr. / Ms. : <span style="color: blue;"><%=details[4]%>(<%=details[3]%>) </span> </div>
+             <div style="font-weight: bold;">Emp. No.  <span style="color: blue;"> <%=details[2]%> </span></div>
           </div>
         </div>
              <h3 style="text-align: center;text-decoration: underline; margin-top: 70px">SUB : MOVEMENT ORDER</h3>
-          <P class="para" style="margin-top: 25px ; font-size: 18px">You are directed to proceed to <%=details[12]%> for <%=details[9]%> from <%= DateTimeFormatUtil .fromDatabaseToActual(details[13].toString())%> to <%= DateTimeFormatUtil .fromDatabaseToActual(details[14].toString())%></P>
+          <P class="para" style="margin-top: 25px ; font-size: 18px">You are directed to proceed to  <span style="color: blue;"><%=details[12]%> </span> for <span style="color: blue;"><%=details[9]%> </span> from  <span style="color: blue;"><%= DateTimeFormatUtil .fromDatabaseToActual(details[13].toString())%> </span> to  <span style="color: blue;"><%= DateTimeFormatUtil .fromDatabaseToActual(details[14].toString())%> </span></P>
           
-          <!-- <table class="table1">
-            
-                <tr>
-                  <th style="width: 63%">Particulars</th>
-                  <th style="width: 30%">Date of Journey</th>
-                  <th style="width: 20%">Mode</th>
-                </tr>
-                <tr>
-                  <td>Depature from --------------- to -------------</td>
-                  <td>------------- forenoon/afternoon</td>
-                  <td>Air</td>
-                </tr>
-                 <tr>
-                  <td>Depature from --------------- to -------------</td>
-                  <td>------------- forenoon/afternoon</td>
-                  <td>Air</td>
-                </tr>
-             
-          </table> -->
           <table style="width: 90%; margin-top: 10px;">
 									
 									<thead>
@@ -89,12 +70,10 @@
 										<%}}%>
 									</tbody>
 								</table>
-          
     </div>
     </div>
-    
   <p style="margin-top: 73px ; font-size: 18px; margin-left: 31px">You may draw TA / DA as per the Society rules.</p>
-  <b style="margin-left: 75px;"> (<%=approvalemp[3]%>) </b><br>
+  <b style="margin-left: 75px;"> <span style="color: blue;"> (<%=approvalemp[3]%>)  </span> </b><br>
   <b style="margin-left: 75px;"> Manager - P & A</b>
 </div> 
 </body>

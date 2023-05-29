@@ -1,5 +1,6 @@
 package com.vts.ems.utils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -375,12 +376,13 @@ public class DateTimeFormatUtil
 			    LocalDate dateAfter = LocalDate.parse(todate);
 	
 			    long daysDiff = ChronoUnit.DAYS.between(dateBefore, dateAfter);
-			    return daysDiff;
+			    return daysDiff+1;
 			}catch(Exception e){
 			    e.printStackTrace();
 			    return 0l;
 			}
 	}
+
 	
 	public static void main(String args[]) throws Exception {
 		
@@ -401,6 +403,21 @@ public class DateTimeFormatUtil
 			    return 0l;
 		}
 		
+	}
+	public static String SqlDatetimeToRegularDatetime(String sqlDatetime)throws Exception
+	{
+	    // Define the source and target date-time formatters
+        DateTimeFormatter sourceFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.S");
+        DateTimeFormatter targetFormatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss.S");
+
+        // Parse the SQL datetime string using the source formatter
+        LocalDateTime dateTime = LocalDateTime.parse(sqlDatetime, sourceFormatter);
+
+        // Format the LocalDateTime using the target formatter
+        String formattedDateTime = dateTime.format(targetFormatter);
+
+        // Output the formatted date-time
+        return formattedDateTime;
 
 	}
 }	

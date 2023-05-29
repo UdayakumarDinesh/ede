@@ -33,7 +33,7 @@ public class NocDaoImpl implements NocDao {
 	@PersistenceContext
 	EntityManager manager;
 
-	private static final String EMPDATA="SELECT e.EmpName,ed.Designation ,dm.DivisionName ,res.res_addr,per.per_addr,e.EmpNo FROM employee e, employee_desig ed,division_master dm,pis_address_res res,pis_address_per per WHERE ed.DesigId=e.DesigId  AND e.divisionid=dm.divisionid AND res.Empid=e.Empid AND per.Empid=e.Empid AND res.ResAdStatus='A' AND per.PerAdStatus='A' AND  e.EmpId=:EmpId";
+	private static final String EMPDATA="SELECT e.EmpName,ed.Designation ,dm.DivisionName ,res.res_addr,per.per_addr,e.EmpNo,res.city AS res_city,res.state AS res_state,res.pin AS res_pin,per.city AS per_city,per.state AS per_state,per.pin AS per_pin FROM employee e, employee_desig ed,division_master dm,pis_address_res res,pis_address_per per WHERE ed.DesigId=e.DesigId  AND e.divisionid=dm.divisionid AND res.Empid=e.Empid AND per.Empid=e.Empid AND res.ResAdStatus='A' AND per.PerAdStatus='A' AND  e.EmpId=:EmpId";
 	@Override
 	public Object[] getNocEmpList(String EmpId) throws Exception {
 		
@@ -695,6 +695,56 @@ public class NocDaoImpl implements NocDao {
 			e.printStackTrace();
 			return null;
 		}		
+	}
+
+	private static final String EMPTITLE="SELECT empd.title FROM employee_details empd,noc_passport n WHERE n.EmpNo = empd.EmpNo AND n.isActive='1' AND  n.NocPassportId=:passportid";
+	@Override
+	public Object[] getEmpTitleDetails(String passportid) throws Exception {
+		
+    try {
+			
+			Query query= manager.createNativeQuery(EMPTITLE);
+			query.setParameter("passportid", passportid);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getEmpTitleDetails " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+
+	private static final String NOCPROCEEDINGABROADREMARKHISTORY="SELECT trans.NocProcId,trans.Remarks,e.EmpName FROM noc_proc_abroad_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocProcId=:procAbrId ORDER BY trans.ActionDate ASC";
+	@Override
+	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPROCEEDINGABROADREMARKHISTORY);
+		query.setParameter("procAbrId", procAbrId);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	@Override
+	public long DeptDetailsUpdate(NocProceedingAbroad nocpa) throws Exception {
+		
+		
+		manager.merge(nocpa);
+		manager.flush();
+		return nocpa.getNocProcId();
+		
+	}
+
+	@Override
+	public long ProcAbroadPandAFromUpdate(NocProceedingAbroad nocpa) throws Exception {
+		
+		
+		manager.merge(nocpa);
+		manager.flush();
+		return nocpa.getNocProcId();
 	}
 }
 	
