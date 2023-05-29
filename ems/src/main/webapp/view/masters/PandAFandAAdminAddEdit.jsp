@@ -75,7 +75,7 @@
 										<tr>
 										  <th><label>From & To <span class="mandatory"	style="color: red;">*</span></label></th>
 										   <td style="width: 50%;"></td>
-										   <td style="width: 50%;"    ></td>
+										   <td style="width: 50%;"></td>
 										</tr>
 									
 								</table>
