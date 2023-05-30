@@ -56,7 +56,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				   </div>
 				    <div class="col-md-2">
 				       <label>Transaction Date:<span class="mandatory">*</span></label>
-				       <input class="form-control input-sm " type="text" name="transDate"  id="transDate" value="<%if(imm!=null && imm.getTransDate()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(imm.getTransDate().toString()) %> <%} %> " placeholder="Enter Discipline" required="required" readonly>
+				       <input class="form-control input-sm " type="text" name="transDate"  id="transDate" value="<%if(imm!=null && imm.getTransDate()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(imm.getTransDate().toString()) %> <%} %>" placeholder="Enter Discipline" required="required" readonly>
 				   </div> 
 				   <div class="col-md-2">
 				       <label>Mode:<span class="mandatory">*</span></label>

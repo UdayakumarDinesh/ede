@@ -37,6 +37,7 @@ import com.vts.ems.master.model.MasterEdit;
 import com.vts.ems.master.model.PisAdmins;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.EmployeeDesig;
+import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
 public class MasterServiceImpl implements MasterService {
@@ -631,7 +632,7 @@ public class MasterServiceImpl implements MasterService {
 		}
 
 		@Override
-		public Object[] PandAFandAAdminData() throws Exception {
+		public List<Object[]> PandAFandAAdminData() throws Exception {
 			
 			return dao.PandAFandAAdminData();
 		}
@@ -652,6 +653,8 @@ public class MasterServiceImpl implements MasterService {
 		public long PandAFandAEdit(PisAdmins admins) throws Exception {
 			PisAdmins pisadmins = dao.getPandAFandAById(admins.getAdminsId());
 			
+			String adminFrom = DateTimeFormatUtil.SqlToRegularDate(pisadmins.getAdminFrom().toString());
+			pisadmins.setAdminTo(DateTimeFormatUtil.getMinusOneDay(adminFrom));
 			pisadmins.setIsActive(admins.getIsActive());
 			pisadmins.setRevisedOn(admins.getRevisedOn());
 			pisadmins.setModifiedBy(admins.getModifiedBy());

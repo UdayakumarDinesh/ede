@@ -99,7 +99,7 @@ public interface MasterDao {
 	public long dgmEdit(DgmMaster dgmMaster) throws Exception;
 	public BigInteger duplicateDgmCodeCountAdd(String dgmCode) throws Exception;
 	public BigInteger duplicateDgmCodeCountEdit(String dgmId, String dgmCode) throws Exception;
-	public Object[] PandAFandAAdminData() throws Exception;
+	public List<Object[]> PandAFandAAdminData() throws Exception;
 	public PisAdmins getPandAFandAById(long adminsId) throws Exception;
 	public long PandAFandAAdd(PisAdmins admins) throws Exception;
 	public long PandAFandAEdit(PisAdmins admins) throws Exception;

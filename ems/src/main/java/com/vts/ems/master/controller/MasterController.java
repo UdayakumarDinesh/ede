@@ -1968,9 +1968,10 @@ public class MasterController {
 		try {
 		
 			PisAdmins pisAdmins = new PisAdmins();
-			
-			pisAdmins.setPandAAdmin(req.getParameter("panda"));
-			pisAdmins.setFandAAdmin(req.getParameter("fanda"));
+			pisAdmins.setAdmin(req.getParameter("panda"));
+			pisAdmins.setAdminType(req.getParameter("adminType"));
+			pisAdmins.setAdminFrom(DateTimeFormatUtil.dateConversionSql(req.getParameter("fdate")));
+//			pisAdmins.setAdminTo(DateTimeFormatUtil.dateConversionSql(req.getParameter("tdate")));
 			pisAdmins.setIsActive(1);
 			pisAdmins.setCreatedBy(UserId);
 			pisAdmins.setCreatedDate(sdtf.format(new Date()));
@@ -1978,9 +1979,9 @@ public class MasterController {
 			long result = service.PandAFandAAdd(pisAdmins);
      			
 			if (result != 0) {
-				 redir.addAttribute("result", "P&A And F&A Added Successfully");
+				 redir.addAttribute("result", "Admin Added Successfully");
 			} else {
-				 redir.addAttribute("resultfail", "P&A And F&A Add Unsuccessfull");
+				 redir.addAttribute("resultfail", "Admin Add Unsuccessfull");
 			}
 			
 			return "redirect:/PandAFandAAdmin.htm";
@@ -2012,9 +2013,10 @@ public class MasterController {
 			 long result =0L;
 			 if(EditCount>0) {
              PisAdmins pisAdmins = new PisAdmins();
-			            
-			 pisAdmins.setPandAAdmin(req.getParameter("panda"));
-			 pisAdmins.setFandAAdmin(req.getParameter("fanda"));
+          
+			 pisAdmins.setAdmin(req.getParameter("panda"));
+			 pisAdmins.setAdminType(req.getParameter("adminType"));
+			 pisAdmins.setAdminFrom(DateTimeFormatUtil.dateConversionSql(req.getParameter("fdate")));
 			 pisAdmins.setIsActive(1);
 			 pisAdmins.setCreatedBy(UserId);
 			 pisAdmins.setCreatedDate(sdtf.format(new Date()));

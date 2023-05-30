@@ -1,6 +1,7 @@
 package com.vts.ems.master.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,10 +20,10 @@ public class PisAdmins implements Serializable {
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private long AdminsId;
-	private String PandAAdmin;
-	private String FandAAdmin;
-	private String AdminFrom;
-	private String AdminTo;
+	private String Admin;
+	private String AdminType;
+	private Date AdminFrom;
+	private Date AdminTo;
 	private String RevisedOn;
 	private int IsActive;
 	private String CreatedBy;

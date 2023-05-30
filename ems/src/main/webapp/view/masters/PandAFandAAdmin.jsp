@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>   
-<%@page import="com.vts.ems.utils.DateTimeFormatUtil" %>
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil,java.util.List" %>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<title>P&A And F&A</title>
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
@@ -42,7 +41,7 @@
 </head>
 <body>
 <%
-Object[] PandAFandAData   = (Object[])request.getAttribute("PandAFandAData");
+List<Object[]> PandAFandAData   = (List<Object[]>)request.getAttribute("PandAFandAData");
 
 %>
 
@@ -95,12 +94,12 @@ Object[] PandAFandAData   = (Object[])request.getAttribute("PandAFandAData");
 							<th>Edit</th>
 					   </tr>
 					    <tr align="center">
-							<td><%=PandAFandAData[1]+", "+PandAFandAData[2]%></td>
-							<td><%=PandAFandAData[3]+", "+PandAFandAData[4]%></td>
+							<%-- <td><%=PandAFandAData[1]+", "+PandAFandAData[2]%></td>
+							<td><%=PandAFandAData[3]+", "+PandAFandAData[4]%></td> --%>
 							<%-- <td><%if(PandAFandAData[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(PandAFandAData[5].toString())%><%}else{%>--<%}%></td> --%>
 							<td style="padding-top:5px; padding-bottom: 5px;">
 							<form action="PandAFandAAdmin.htm" method="GET">
-							 <input type="hidden" name="adminsId" value="<%if(PandAFandAData!=null){%><%=PandAFandAData[0]%><%}%>">
+							 <%-- <input type="hidden" name="adminsId" value="<%if(PandAFandAData!=null){%><%=PandAFandAData[0]%><%}%>"> --%>
 						     <button type="submit" class="btn btn-sm" name="Action" value="EDIT" data-toggle="tooltip" data-placement="top" title="Edit">
 							<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>	</form></td>
 					   </tr>
