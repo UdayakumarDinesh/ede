@@ -312,7 +312,7 @@ public class TourServiceImpl implements TourService {
 	{
 		logger.info(new Date() +"Inside SERVICE GetDeptInchApproved ");
 		int count=0;
-		Object[]  fapa = dao.GetPAFADetails();
+		
 		Object[] divisiondgmpafa = dao.GetDivisionHeadandDGMPAFA(dto.getValue());
 		if(dto.getApprove()!=null) {
 			for(int i=0;i<dto.getApprove().length;i++) {
@@ -414,17 +414,17 @@ public class TourServiceImpl implements TourService {
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 						dao.TourUpdateFromCEO(dto, TDMoNo);
 						
-						if(fapa!=null && fapa.length>0) {
+						if(divisiondgmpafa!=null && divisiondgmpafa[3]!=null) {
 							EMSNotification notification1 = new EMSNotification(); 
-							notification1.setEmpNo(fapa[1].toString());
+							notification1.setEmpNo(divisiondgmpafa[3].toString());
 							notification1.setCreatedBy(dto.getUserName());
 							notification1.setCreatedDate(sdtf.format(new Date()));
 							notification1.setNotificationBy(dto.getEmpNo());
 							notification1.setNotificationMessage("Tour Sanctioned by "+dto.getUserName());
 							notification1.setNotificationDate(sdtf.format(new Date()));
-							notification1.setNotificationUrl("TourSanctionedlist.htm");
+							notification1.setNotificationUrl("TourApprovallist.htm");
 							notification1.setIsActive(1);
-							long value= dao.EmpNotificationForTour(notification1);
+							 dao.EmpNotificationForTour(notification1);
 						}
 						EMSNotification notification2 = new EMSNotification(); 
 						notification2.setEmpNo(req.getParameter("EmpNo"+dto.getApplId()));
@@ -435,7 +435,7 @@ public class TourServiceImpl implements TourService {
 						notification2.setNotificationDate(sdtf.format(new Date()));
 						notification2.setNotificationUrl("TourSanctionedlist.htm");
 						notification2.setIsActive(1);
-						long value1= dao.EmpNotificationForTour(notification2);
+						 dao.EmpNotificationForTour(notification2);
 					}
 					
 				   	    TourTransaction transaction=new TourTransaction();
@@ -815,13 +815,7 @@ public class TourServiceImpl implements TourService {
 	{
 		return dao.GetTourAdvanceData(tourid);
 	}
-	
-	@Override
-	public Object[] GetPAAndFA()throws Exception
-	{
-		return dao.GetPAAndFA();
-	}
-	
+
 	@Override
 	public List<Object[]> GetPAndAList()throws Exception
 	{
@@ -901,4 +895,5 @@ public class TourServiceImpl implements TourService {
 	{
 		return dao.EmpNotificationForTour(notification);
 	}
+
 }

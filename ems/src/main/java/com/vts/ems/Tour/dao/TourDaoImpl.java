@@ -480,23 +480,6 @@ public class TourDaoImpl implements TourDao {
 		}
 	}
 
-	private static final String GETFAPA="SELECT a.AdminsId, a.pandaadmin , fandaadmin , a.RevisedOn FROM pis_admins a WHERE a.IsActive=1 ";
-	@Override
-	public Object[] GetPAFADetails()throws Exception
-	{
-		try {
-			 Query query = manager.createNativeQuery(GETFAPA);
-			 List<Object[]> list = (List<Object[]>)query.getResultList();
-			 if(list.size()>0) {
-				 return list.get(0);
-			 }
-				return null;
-		}catch (Exception e){
-				logger.error(new Date() +"Inside DAO GetPAFADetails "+ e);
-				e.printStackTrace();
-				return null;
-		}	
-   }
 	private static final String CANCELTOUR="UPDATE tour_apply SET CancelReason=:reason  , tourstatuscode=:statuscode , modifiedby=:modifiedby , modifieddate=:modifieddate WHERE tourapplyid=:applid ";
    @Override
    public int CancelTour(ApprovalDto dto)throws Exception
@@ -632,24 +615,7 @@ public class TourDaoImpl implements TourDao {
 			return advance.getTourApplyId();
 		}
 		
-		private static final String PAFADETAILS="SELECT pandaadmin , fandaadmin  FROM pis_admins WHERE isactive =1  ORDER BY adminsid DESC";
-		@Override
-		public Object[] GetPAAndFA()throws Exception
-		{
-	    	try {
-				 Query query = manager.createNativeQuery(PAFADETAILS);
-				 List<Object[]> list = (List<Object[]>)query.getResultList();
-				 if(list.size()>0) {
-					 return list.get(0);
-				 }
-					return null;
-			} catch (Exception e) {
-				logger.error(new Date() +"Inside DAO GetPAAndFA "+ e);
-				e.printStackTrace();
-				return null;
-			}
-		}
-		private static final String GETPANDALIST="SELECT a.empid, a.empno, a.empname , c.designation FROM employee a , pis_admins b , employee_desig c WHERE c.desigid=a.desigid AND a.empno = b.pandaadmin AND b.isactive='1' ";
+		private static final String GETPANDALIST="SELECT a.empid, a.empno, a.empname , c.designation FROM employee a , pis_admins b , employee_desig c WHERE c.desigid=a.desigid AND a.empno = b.admin AND b.isactive='1' AND b.admintype='P' ";
 		@Override
 		public List<Object[]> GetPAndAList()throws Exception
 		{
@@ -750,7 +716,7 @@ public class TourDaoImpl implements TourDao {
 			}
 		}
 		
-		private static final String GETAPPROVALDATA=" SELECT (SELECT divisionheadid FROM employee e , division_master dm WHERE e.divisionid =dm.divisionid AND e.empno=:EmpNo) AS 'Divisionid',(SELECT dgmempno FROM employee e , dgm_master d, division_master dm WHERE d.dgmid=dm.dgmid AND  e.divisionid = dm.divisionid AND e.empno=:EmpNo) AS 'DGM' ,(SELECT FandAAdmin FROM pis_admins a WHERE  a.IsActive=1 LIMIT 1) AS 'F&A' ,(SELECT PandAAdmin FROM pis_admins a WHERE  a.IsActive=1 LIMIT 1) AS 'P&A' , (SELECT b.empno FROM lab_master a , employee b WHERE a.labauthorityid=b.empid LIMIT 1)AS 'CEO'  FROM DUAL ";
+		private static final String GETAPPROVALDATA="SELECT (SELECT divisionheadid FROM employee e , division_master dm WHERE e.divisionid =dm.divisionid AND e.empno=:EmpNo) AS 'Divisionid',(SELECT dgmempno FROM employee e , dgm_master d, division_master dm WHERE d.dgmid=dm.dgmid AND  e.divisionid = dm.divisionid AND e.empno=:EmpNo) AS 'DGM' ,(SELECT a.Admin FROM pis_admins a WHERE  a.IsActive=1 AND a.admintype='F' LIMIT 1) AS 'F&A' ,(SELECT a.Admin FROM pis_admins a WHERE  a.IsActive=1 AND a.admintype='P' LIMIT 1) AS 'P&A' , (SELECT b.empno FROM lab_master a , employee b WHERE a.labauthorityid=b.empid LIMIT 1)AS 'CEO'  FROM DUAL ";
 		@Override
 		public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception
 		{

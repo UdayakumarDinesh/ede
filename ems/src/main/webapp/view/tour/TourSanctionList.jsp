@@ -161,9 +161,9 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 									   		<%if(hlo[11].toString().equalsIgnoreCase(Loginempno)){%>
 									  			<button type="button" class="btn btn-sm edit-btn"  onclick="CancelTour('<%=hlo[7]%>')"  data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
 									  		<%}%>
-									  		<%if(logintype.equalsIgnoreCase("P")){%>
+									  		<%-- <%if(logintype.equalsIgnoreCase("P")){%>
 									  			<button type="button" class="btn btn-sm" style="background-color: #0ae3d9;" onclick="IssueMO('<%=hlo[7]%>')" data-toggle="tooltip" data-placement="top" title="Issue MO"> Issue MO </button>
-									  		<%}%>
+									  		<%}%> --%>
 									  	<%}%>	
 									   <%-- <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
 									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
@@ -201,7 +201,7 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 	</div>
 <!---------------------- Model Close --------------------------------->
 
-<!---------------------- Model Open --------------------------------->
+<%-- <!---------------------- Model Open --------------------------------->
 	<div class="modal fade" id="IssueMOOrder" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 	  <div class="modal-dialog">
 	    <div class="modal-content">
@@ -251,7 +251,7 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 	    </div>
 	  </div>
 	</div>
-<!---------------------- Model Close --------------------------------->
+<!---------------------- Model Close ---------------------------------> --%>
 </div>	
 </div>
 <script type="text/javascript">
@@ -262,11 +262,11 @@ function CancelTour(myfrm) {
 	 $('#staticBackdrop').modal('toggle');
 }
 
-function IssueMO(myfrm)
+/* function IssueMO(myfrm)
 {
 	 $("#TOURAPPLY").val(myfrm);
 	 $('#IssueMOOrder').modal('toggle');
-}
+} */
 
 </script>
 <script type="text/javascript">

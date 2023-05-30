@@ -44,7 +44,6 @@ public interface TourService {
 	public Long ModifyTourApply(TourApplyDto dto)throws Exception;
 	public List<Object[]> GetTourApprovedList(String empno , String fromdate , String todate )throws Exception;
 	public TourAdvance  GetTourAdvanceData(Long tourid) throws Exception;
-	public Object[] GetPAAndFA()throws Exception;
 	public List<Object[]> GetPAndAList()throws Exception;
 	public long UpdateIssueOrder(String tourapplyid , String  issueddate ,String  issueby ,String Username , String remraks)throws Exception;
 	public long UpdateTourAdvanceRelesed(String tourapplyid ,String empno, String tourAdvance ,String Username ,String remarks)throws Exception;

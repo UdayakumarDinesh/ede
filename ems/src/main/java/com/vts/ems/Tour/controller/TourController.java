@@ -60,6 +60,9 @@ public class TourController {
 	@Autowired
 	NocService nocservice;
 	
+	private final String formmoduleid="14";
+	
+	
 	@Autowired
 	EmsFileUtils emsfileutils ;
 	
@@ -108,7 +111,8 @@ public class TourController {
 			req.setAttribute("CityList", citylist);
 			req.setAttribute("emplist", emplist);
 		    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
-			ses.setAttribute("SidebarActive","TourApply_htm");
+			ses.setAttribute("formmoduleid", formmoduleid);		
+		    ses.setAttribute("SidebarActive","TourApply_htm");
 			return "tour/TourApply";
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TourApply.htm "+Username, e);
@@ -366,16 +370,16 @@ public class TourController {
 					
 					return "redirect:/TourApplyList.htm";
 			}else if(action!=null && action.equalsIgnoreCase("Preview")) {
-				String tourapplyid = actval.split("/")[1];
-				Object[] details = service.GetTourDetails(tourapplyid);
-				Object[] touradvancedetails = service.GetTourAdvanceDetails(tourapplyid);
-				req.setAttribute("tourdetails", details);
-				req.setAttribute("touradvancedetails", touradvancedetails);
-				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
-				req.setAttribute("tourstatisdetails", service.TourStatusDetails(tourapplyid));
-				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-				req.setAttribute("pandalist", service.GetPAndAList());
-				req.setAttribute("DivisiondgmpafaDetails", service.GetDivisionHeadandDGMPAFA(details[2].toString()));
+					String tourapplyid = actval.split("/")[1];
+					Object[] details = service.GetTourDetails(tourapplyid);
+					Object[] touradvancedetails = service.GetTourAdvanceDetails(tourapplyid);
+					req.setAttribute("tourdetails", details);
+					req.setAttribute("touradvancedetails", touradvancedetails);
+					req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
+					req.setAttribute("tourstatisdetails", service.TourStatusDetails(tourapplyid));
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					req.setAttribute("pandalist", service.GetPAndAList());
+					req.setAttribute("DivisiondgmpafaDetails", service.GetDivisionHeadandDGMPAFA(details[2].toString()));
 				return "tour/TourDetailsPreview";
 			}else{
 				String Empno = (String) ses.getAttribute("EmpNo");
@@ -384,7 +388,8 @@ public class TourController {
 				req.setAttribute("emplist", emplist);
 				req.setAttribute("applylist", applylist);
 			    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
-			    
+				ses.setAttribute("formmoduleid", formmoduleid);		
+
 				ses.setAttribute("SidebarActive","TourApplyList_htm");
 				return "tour/TourApplyList";
 			}
@@ -424,6 +429,7 @@ public class TourController {
 			req.setAttribute("applyStatuslist", applystatuslist);
 		    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			ses.setAttribute("SidebarActive","TourApplyStatus_htm");
+			ses.setAttribute("formmoduleid", formmoduleid);		
 
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TourApplyStatus.htm "+Username, e);
@@ -486,11 +492,12 @@ public class TourController {
 
 			List<Object[]> approvallist = service.GetTourApprovalList(empno);
 			List<Object[]> Canceledlist = service.GetTourCancelList(empno);
-			req.setAttribute("FAPAdetails", service.GetPAAndFA());
 			req.setAttribute("approvallist", approvallist);
 			req.setAttribute("canceledlist", Canceledlist);
 			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			ses.setAttribute("SidebarActive","TourApprovallist_htm");
+			ses.setAttribute("formmoduleid", formmoduleid);		
+
 			return "tour/TourApprovalList";
 		}catch (Exception e){
 			logger.error(new Date() +" Inside TourApprovallist.htm "+Username, e);
@@ -569,8 +576,8 @@ public class TourController {
 				sanclist = service.GetSanctionList(empno,fromdate,todate);
 			}
 			List<Object[]> emplist = service.GetEmployeeList();
-			List<Object[]> pandalist = service.GetPAndAList();
-			req.setAttribute("pandalist", pandalist);
+//			List<Object[]> pandalist = service.GetPAndAList();
+//			req.setAttribute("pandalist", pandalist);
 			req.setAttribute("fromdate", fromdate);
 			req.setAttribute("todate", todate);
 			req.setAttribute("empno", empno);		
@@ -579,6 +586,7 @@ public class TourController {
 		    
 			req.setAttribute("SanctionList", sanclist);
 			ses.setAttribute("SidebarActive","TourSanctionedlist_htm");
+			ses.setAttribute("formmoduleid", formmoduleid);		
 
 			
 		} catch (Exception e) {
@@ -598,6 +606,7 @@ public class TourController {
 			
 			List<Object[]> cancellist = service.GetCancelList((String)ses.getAttribute("EmpNo"));
 			ses.setAttribute("SidebarActive","TourCancelledlist_htm");
+			ses.setAttribute("formmoduleid", formmoduleid);
 			req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 			req.setAttribute("CacncelList", cancellist);
 		} catch (Exception e) {
@@ -672,7 +681,7 @@ public class TourController {
 					req.setAttribute("cancelStatuslist", applystatuslist);
 					req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
 					ses.setAttribute("SidebarActive","TourCancel_htm");
-
+					ses.setAttribute("formmoduleid", formmoduleid);		
 				return "tour/TourCancelStatus";
 			}
 			
@@ -1120,6 +1129,9 @@ public class TourController {
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String UserId =req.getUserPrincipal().getName();
+		String empname =(String)ses.getAttribute("EmpName"); 
+		String empno = (String) ses.getAttribute("EmpNo");
+
 		logger.info(new Date() +"Inside IssueMOFromPA.htm "+UserId);
 		try {
 			
@@ -1131,6 +1143,17 @@ public class TourController {
 	   	   long count  = service.UpdateIssueOrder(tourapplyid , issueddate , issueby , Username , remarks);
 		
 			if (count != 0) {
+				Object[] divisiondgmpafa = service.GetDivisionHeadandDGMPAFA(req.getParameter("empno"));
+					EMSNotification notification = new EMSNotification();   
+						notification.setEmpNo(divisiondgmpafa[2].toString());
+						notification.setCreatedBy(empname);
+						notification.setCreatedDate(sdtf.format(new Date()));
+						notification.setNotificationBy(empno);
+						notification.setNotificationMessage("Tour Advance Movement Order Issued by "+empname);
+						notification.setNotificationDate(sdtf.format(new Date()));
+						notification.setNotificationUrl("TourApprovallist.htm");
+						notification.setIsActive(1);
+				 service.EmpNotificationForTour(notification);
 				redir.addAttribute("result", "Tour program Movement Order Issued successfully");
 			} else {
 				redir.addAttribute("resultfail", "Tour program Movement Order Issued Unsuccessfull");

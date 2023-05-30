@@ -510,7 +510,7 @@
 											<div class="col-md-5">  <input type="hidden" name="empno"  value="<%=tourdetails[2]%>"></div>
 												<%if(tourdetails[19].toString().equalsIgnoreCase("ABP")){%>
 												<div class="col-md-2">
-													<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>" onclick="return confirm('Are you sure to Submit?')" data-toggle="tooltip" data-placement="top" title="Forward"> Verify</button>
+													<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>" onclick="return confirm('Are you sure to Submit?')" data-toggle="tooltip" data-placement="top" title="Forward"> Approve</button>
 												</div>
 												<div class="col-md-2">
 													<button style="margin-bottom: -10px; background-color: maroon;" type="submit" class="btn btn-sm submit-btn"  name="reject" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>" onclick="return confirm('Are you sure to Return?')" data-toggle="tooltip" data-placement="top" title="Return"> DisApprove </button>																								
