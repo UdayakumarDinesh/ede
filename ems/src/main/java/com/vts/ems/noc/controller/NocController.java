@@ -999,6 +999,7 @@ public class NocController {
 		List<String> PandAs = service.GetPandAAdminEmpNos();
 		String ProcAbrId=req.getParameter("ProcAbrId");
 		String isApproval = req.getParameter("isApproval");
+		System.out.println("isApproval----"+isApproval);
 		NocProceedingAbroad ProcAbroad =service.getNocProceedingAbroadById(Long.parseLong(ProcAbrId));
 			
 		req.setAttribute("isApproval", isApproval);

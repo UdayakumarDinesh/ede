@@ -451,7 +451,7 @@ body{
 			            
 			                <div class="col-md-4" >
 			                <label> Excepted Amount for trip(journey and stay abroad)</label>
-			                <input class="form-control input-sm"  type="number" id="" name="ExpectedAmount" step=".01" min="0" max="9999999"  value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getExpectedAmount() %><%} else{%>0.00<%} %>"  >
+			                <input class="form-control input-sm"  type="number" id="" name="ExpectedAmount" step=".01" min="0" max="9999999"  value="<% if(ProcAbroad!=null){%><%=Double.parseDouble(ProcAbroad.getExpectedAmount().toString()) %><%} else{%>0.00<%} %>"  >
 			                     
 			                   
 			            </div> 

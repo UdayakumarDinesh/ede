@@ -286,7 +286,7 @@ td{
 	
 	<table style="margin-left:15px; margin-top:5px;border-collapse: collapse; width:650px;">
 	<tr>
-	<td style="width:750px;text-align: justify;border: 0;padding:-12"><h4>&nbsp;7. Details of blood / close relations working in  foreign embassy / firms in India / Abroad 
+	<td style="width:750px;text-align: justify;border: 0;padding:-12"><h4>7. Details of blood / close relations working in  foreign embassy / firms in India / Abroad 
          : <span class="text-blue"><% if(obj[22].toString().equalsIgnoreCase("NA")){%><%=obj[22] %><%} %></span></h4> </td>
     </tr>
     
@@ -298,7 +298,7 @@ td{
 	
 	<%} %>
 	<tr>
-	<td style="width:350px;text-align: left;border: 0;text-align: justify;padding:-12"><h4>&nbsp;8. Details of employment during  last ten years : <span class="text-blue"><% if(obj[23].toString().equalsIgnoreCase("NA")){%><%=obj[23] %><%} %></span>
+	<td style="width:350px;text-align: left;border: 0;text-align: justify;padding:-12"><h4>8. Details of employment during  last ten years : <span class="text-blue"><% if(obj[23].toString().equalsIgnoreCase("NA")){%><%=obj[23] %><%} %></span>
        </h4> </td>
     </tr>
     
@@ -595,8 +595,10 @@ td{
 	<br>
 	<br>
 	<br>
+	
+	
 	 <div  style="margin-left:430px !important;" > Signature of the Applicant</div>	
-	 <% if(obj[50]!=null) {%><div  style="margin-left:450px !important;">Forwarded Date :&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(obj[50].toString())) %></span> </div> <%} %>
+	 <% if(obj[50]!=null) {%><div  style="margin-left:440px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(obj[50].toString())) %></span> </div> <%} %>
 	 
 	 
 	 
@@ -628,11 +630,11 @@ td{
 	 </table>
 	 <%} %>
 	 
-	 <hr>
+	
 	 
 	<% if(obj[58]!=null  && obj[61]!=null){ %>
 	    
-	    
+	     <hr>
 		  <div style="margin-top:0px;font-weight: 600;font-size: 16px;text-decoration: underline;text-align:center;">Filled by P&A Department</div> 
 		  <table style="margin-left:10px; margin-top:5px;border-collapse: collapse;font-family:FontAwesome; width:650px;">
 		  
@@ -685,7 +687,7 @@ td{
           
         
            <tr>
-           <td style="width:350px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3. Applicant is :<br>&nbsp; <% if(obj[45].toString().equalsIgnoreCase("N")) {%>
+           <td style="width:350px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3. Applicant is :&nbsp; <% if(obj[45].toString().equalsIgnoreCase("N")) {%>
 		  
             not under contractual obligation to serve STARC for any specific period. <%} 
 		
@@ -705,7 +707,7 @@ td{
          <% if (obj[53]!=null){ %><div  style="margin-left:420px !important;" ><span class="text-blue"><%=obj[53]%></span></div><%} %>
 	 <div  style="margin-left:470px !important;">P&A.Incharge </div> 
       <%} %>
-       <hr> 
+       
        
         
         <br>

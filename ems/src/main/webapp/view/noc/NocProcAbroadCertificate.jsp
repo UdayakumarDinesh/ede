@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
-<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+<%-- <jsp:include page="../static/LetterHead.jsp"></jsp:include> --%>
 
 
 <style type="text/css">
@@ -110,32 +110,37 @@
 
     %>
 
-     <div style="text-align:center;margin-top:60px;">
-         <div align="left" style="margin-left:10px !important;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[17] %></div>
-            <div class="square" style="text-align:center">Applicant photo</div>
+     <div style="text-align:center;margin-top:0px;">
+         <div align="left" style="margin-left:10px !important;width:45%;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[17] %></div>
+             <div align="right" style="margin-top:-15px;margin-right:10px;" >Date:&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(date.toString())) %></span></div>
             <br>
             
-		      <h3 style="text-align: center;text-decoration: underline;">NO OBJECTION CERTIFICATE  </h3>
+		      <h3 style="text-align: center;text-decoration: underline;margin-top:-10px;">NO OBJECTION CERTIFICATE  </h3>
 	
 	
-	      <div style="margin-left: 10px;text-align: justify;width:650px; text-justify: inter-word;font-size: 18px;" align="left">
+	      <div style="margin-left: 10px;text-align: justify;width:650px; text-justify: inter-word;font-size: 17px;" align="left">
 				
-		Mr.&nbsp;<span class="text-blue" style="text-decoration: underline;"><%=obj[1] %></span>,&nbsp;EmpNo.<span class="text-blue" style="text-decoration: underline;"><%=obj[0] %></span>
-		working as <span class="text-blue" style="text-decoration: underline;"><%=obj[2] %></span> in STARC is permitted to visit from <span class="text-blue" style="text-decoration: underline;"><%=rdf.format(sdf.parse(obj[30].toString())) %></span> to  <span class="text-blue" style="text-decoration: underline;"><%=rdf.format(sdf.parse(obj[33].toString())) %></span>
-		as a Student for <span class="text-blue" style="text-decoration: underline;"><%=obj[31] %></span> subject to the following conditions:<br>
+		Mr.&nbsp;<span class="text-blue" style="text-decoration: underline;"><%=obj[1] %></span> ,&nbsp;EmpNo. <span class="text-blue" style="text-decoration: underline;"><%=obj[0] %></span>
+		 working as <span class="text-blue" style="text-decoration: underline;"><%=obj[2] %></span> in STARC is permitted to visit from <br><span class="text-blue" style="text-decoration: underline;"><%=rdf.format(sdf.parse(obj[30].toString())) %></span> to  <span class="text-blue" style="text-decoration: underline;"><%=rdf.format(sdf.parse(obj[33].toString())) %></span>
+	     for <span class="text-blue" style="text-decoration: underline;"><%=obj[31] %></span> subject to the following conditions:<br>
          
          <br>
-		a) He should not take up any appointment or undergo any training/seminar/workshop/conference other than the one specified ,during his stay abroad without prior permission.
+		a)&nbsp;He&nbsp;should&nbsp;not&nbsp;take&nbsp;up&nbsp;any&nbsp;appointment&nbsp;or&nbsp;undergo&nbsp;any&nbsp;training/seminar/workshop/<br>conference other than the one specified ,during his stay abroad without prior permission.
+		<br>
 		<br>
 		b) That STARC will not be made liable for any expenditure including travel expenditure etc. in connection with his trip abroad. 			
 		<br>
+		<br>
 		c) He should not tender resignation of the post held by him in STARC while abroad and his resignation for the appointment if tendered while abroad will not be accepted on any account.
+		<br>
 		<br>
 		d) He should not canvas or seek any business while abroad
 		<br>
+		<br>
 		e) He should surrender his STARC Identity Card before proceeding abroad
 		<br>
-		This No Objection Certificate is valid for a period of six months from the date of issue .It is issued in connection with the purpose indicated above and should not be used for any other purpose.
+		<br>
+		This No Objection Certificate is valid for a period of six months from the date of issue.It is issued in connection with the purpose indicated above and should not be used for any other purpose.
 		
 		
 				   																			
@@ -143,7 +148,7 @@
 		
 		<br>
 		 
-		 <div align="left" style="margin-left:10px !important;" >Date:&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(date.toString())) %></span></div>
+		
 		 	
 		<br>
 		<br>

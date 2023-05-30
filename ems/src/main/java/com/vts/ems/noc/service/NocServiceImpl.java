@@ -902,7 +902,7 @@ public class NocServiceImpl implements NocService {
 			}
 			
 			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved NOC Proceeding Abroad Change Request From <br>"+emp.getEmpName());
+			notification.setNotificationMessage("Recieved NOC Proceeding Abroad Change Request <br> From "+emp.getEmpName());
 			notification.setNotificationBy(empNo);
 		}
 		else if(action.equalsIgnoreCase("R"))
