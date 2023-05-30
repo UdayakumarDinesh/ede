@@ -109,10 +109,9 @@ body
 								
 								<table style="border: 0px; width: 100%;margin-top: 5px; ">
 									<tr>
-										<td> <b>Department : </b>&nbsp; <span style="color: blue;"> <%=tourdetails[3]%> </span> </td>
-										<td><b> Phone No : </b> &nbsp;  <span style="color: blue;"> <%=tourdetails[6]%> </span> </td>
-										<td><b> Date : </b></td>
-										
+										<td><b>Department : </b> &nbsp;  <span style="color: blue;"> <%=tourdetails[3]%> </span> </td>
+										<td><b> Phone No :  </b> &nbsp;  <span style="color: blue;"> <%=tourdetails[6]%> </span> </td>
+										<td><b> Date :      </b> &nbsp;  <span style="color: blue;"> <%=DateTimeFormatUtil.fromDatabaseToActual( LocalDate.now().toString())%> </span> </td>								
 									</tr>
 								</table>
 								

@@ -9,6 +9,7 @@ import com.vts.ems.Tour.model.TourAdvance;
 import com.vts.ems.Tour.model.TourApply;
 import com.vts.ems.Tour.model.TourOnwardReturn;
 import com.vts.ems.leave.dto.ApprovalDto;
+import com.vts.ems.model.EMSNotification;
 
 public interface TourService {
 
@@ -50,6 +51,8 @@ public interface TourService {
 	public int CancelForwardTour(String tourapplyid , String empno , String remarks)throws Exception;
 	public int ForwardTour(String tourapplyid , String empno , String remarks)throws Exception;
 	public List<Object[]> TourCancelStatusDetailsTrack(String tourapplyid)throws Exception;
+	public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception;
+	public Long EmpNotificationForTour(EMSNotification notification)throws Exception;
 
 	
 	

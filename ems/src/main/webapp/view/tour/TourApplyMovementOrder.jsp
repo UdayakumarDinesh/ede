@@ -11,24 +11,67 @@
 <jsp:include page="../../view/static/dependancy.jsp"></jsp:include>
         
 <spring:url value="/webresources/css/Header.css" var="Header" />
-<title>Tour Report</title>
-<%-- 	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
- --%>
-<style type="text/css">
-
-
-</style>
-<body>
-<%
+<title>Tour Approval Movement Order</title>
+	<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+ 
+ <%
 	SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 
 	Object[] details = (Object[])request.getAttribute("tourdetails");
 	List<Object[]> touronwarddetails = (List<Object[]>)request.getAttribute("Touronwarddetails");
 	Object[] approvalemp = (Object[]) request.getAttribute("ApprovalEmp");
 %>
+<style type="text/css">
+
+			.break {
+				page-break-after: always;
+			}
+
+			#pageborder {
+				position: fixed;
+				left: 0;
+				right: 0;
+				top: 0;
+				bottom: 0;
+				border: 2px solid black;
+			}
+
+			@page {
+				size: 790px 950px;
+				margin-top: 49px;
+				margin-left: 72px;
+				margin-right: 39px;
+				margin-buttom: 49px;
+				border: 2px solid black;
+
+				@bottom-right {
+					counter-increment: page;
+  					counter-reset: page 2;
+					content: "Page "counter(page) " of "counter(pages);
+					margin-bottom: 30px;
+					margin-right: 10px;
+				}
+
+				@top-left {
+					margin-top: 30px;
+					margin-left: 10px;
+					content: "Emp No: <%=details[2]%>";
+					
+				}
+
+			}
+body
+{
+	font-size:14px !important;
+}
+
+
+</style>
+<body>
+
   <div class="center"> 
     <div class="row">
-        <div class="col-md-12"  style="margin-top: 50px; margin-left: 30px">
+        <div class="col-md-12"  style="margin-top: 20px; margin-left: 30px">
           <div class="row" style="margin-right: 48px">
             <div class="col-6" style="font-size: 20px">Our Ref. No. <span style="color: blue; font-size: 20px;">STARC/P & A/1601 </span></div>
             <div class="col-6" style="text-align: right; font-weight: bold">Date :<span style="color: blue; "> <%=DateTimeFormatUtil .fromDatabaseToActual( LocalDate.now().toString())%></span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
@@ -43,13 +86,13 @@
              <h3 style="text-align: center;text-decoration: underline; margin-top: 70px">SUB : MOVEMENT ORDER</h3>
           <P class="para" style="margin-top: 25px ; font-size: 18px">You are directed to proceed to  <span style="color: blue;"><%=details[12]%> </span> for <span style="color: blue;"><%=details[9]%> </span> from  <span style="color: blue;"><%= DateTimeFormatUtil .fromDatabaseToActual(details[13].toString())%> </span> to  <span style="color: blue;"><%= DateTimeFormatUtil .fromDatabaseToActual(details[14].toString())%> </span></P>
           
-          <table style="width: 90%; margin-top: 10px;">
+          <table style="width: 90%; margin-top: 10px; border: 1px solid black; border-collapse: collapse;">
 									
 									<thead>
 										<tr >
 											<th style="text-align: left;">Proposed journey details :</th>
 										</tr>
-										<tr>
+										<tr >
 											<th style="border: 1px solid black; border-collapse: collapse;">Departure Place</th>
 											<th style="border: 1px solid black; border-collapse: collapse;">Date</th>
 											<th style="border: 1px solid black; border-collapse: collapse;">Time</th>

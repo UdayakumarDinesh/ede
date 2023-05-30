@@ -235,4 +235,6 @@ public interface PisService {
 	public Object[] HometownDetails(String empNo);
 	public long EmployeeHometownWithStatusUpdate(String Hometown, String HomeAllowed, String EmpNo) throws Exception;
 	public long EmployeeHometownUpdate(String Hometown, String EmpNo) throws Exception;
+	
+	
 }

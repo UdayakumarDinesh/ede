@@ -135,13 +135,15 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 	                             <tr>
 	                             	  <td align="center"> <%=++sn %></td>
 	                             	   <td>
-	                             	   <%if(hlo[10]!=null){%>
-	                             	  <button type="submit" class="btn btn-sm btn-link w-100 " formaction="TourApplyReport.htm" formmethod="get" name="tourapplyid" value="Apply/<%=hlo[7]%>" formtarget="_blank" 
-													  style=" color:<%=hlo[10]%>; font-weight: 600;" ><%=hlo[10]%></button>
-									  
-	                             	  <%}else{ %>
-	                             	    <button class="btn btn-sm btn-link w-100 ">--</button>
-	                             	  <%}%>
+	                             	   <%if(hlo[10]!=null){
+	                             	   	if(empno.equalsIgnoreCase(session.getAttribute("EmpNo").toString())){
+	                             	   %>
+		                             	  <button type="submit" class="btn btn-sm btn-link w-100 " formaction="TourApplyReport.htm" formmethod="get" name="tourapplyid" value="Apply/<%=hlo[7]%>" formtarget="_blank" 
+														  style=" color:<%=hlo[10]%>; font-weight: 600;" ><%=hlo[10]%></button>
+										  <%}else{%> <span style="color: blue;"><%=hlo[10]%></span> <%}%>
+		                             	  <%}else{%>
+		                             	    <button class="btn btn-sm btn-link w-100 ">--</button>
+		                             	  <%}%>
 	                             	   </td>
 									  <td align="center"><%=stayfromdate%> To <%=staytodate%></td>
                                		  <td align="center"><%=applydate %><br/> for <%=noofdays%> Day(s)</td>
@@ -191,7 +193,7 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 		      </div>
 		      <div class="modal-footer">
 		      	<input type="hidden" name="Action" id="action">
-		        <button type="submit" class="btn btn-sm submit-btn" >Submit</button>
+		        <button type="submit" class="btn btn-sm submit-btn" onclick="return confirm('Are you sure to Submit?')">Submit</button>
 		      </div>
 	      </form>
 	    </div>
@@ -241,7 +243,7 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 						    	<div class="col-md-5"></div>
 						    	<div class="col-md-3">
 						    		<input type="hidden" name="tourapply" id="TOURAPPLY">
-		      						  <button type="submit" class="btn btn-sm submit-btn" onclick="confirm('Are you sure to Submit?')">Submit</button>
+		      						  <button type="submit" class="btn btn-sm submit-btn" onclick="return confirm('Are you sure to Submit?')">Submit</button>
 						    	</div>
 						    </div>
 						</div>

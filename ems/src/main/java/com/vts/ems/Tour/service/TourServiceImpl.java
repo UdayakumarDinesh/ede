@@ -164,11 +164,11 @@ public class TourServiceImpl implements TourService {
 						if(action!=null && action.equalsIgnoreCase("Edit")) {
 							/* Tour Edit */
 							Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTourAlreadyPresentForSameEmpidAndSameDates(tourid, empno,fromdate,todate);
-							System.out.println("Count 2 : "+checkTDAlreadyPresentForSameEmpidAndSameDate);
+							
 							if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
-								Result[0]="You Can Apply";
-								Result[1]="Pass";
-								return Result;
+										Result[0]="You Can Apply";
+										Result[1]="Pass";
+										return Result;
 								} else {
 										Result[0]="Tour Already Present For Same Period";
 										Result[1]="Fail";
@@ -178,12 +178,12 @@ public class TourServiceImpl implements TourService {
 						}else {
 							/* First Tour Apply */
 							Long checkTDAlreadyPresentForSameEmpidAndSameDate = dao.checkTDAlreadyPresentForSameEmpidAndSameDates(empno,fromdate,todate);
-							System.out.println("Count 1 : "+checkTDAlreadyPresentForSameEmpidAndSameDate);
+							
 							
 							if (checkTDAlreadyPresentForSameEmpidAndSameDate ==0) {
-								Result[0]="You Can Apply";
-								Result[1]="Pass";
-								return Result;
+										Result[0]="You Can Apply";
+										Result[1]="Pass";
+										return Result;
 								} else {
 										Result[0]="Tour Already Present For Same Period";
 										Result[1]="Fail";
@@ -252,10 +252,10 @@ public class TourServiceImpl implements TourService {
 			advance.setAllowanceFromDate(dto.getAllowanceFromDate());
 			advance.setAllowanceToDate(dto.getAllowanceToDate());
 			advance.setTourApplyId(dto.getTourApplyId());
-			System.out.println("Hiiiii     :"+advance.getTourApplyId());
+			
 			TourAdvance touradvdata = dao.GetTourAdvanceData(advance.getTourApplyId());
 			if(touradvdata!=null ){
-				System.out.println("Hiiiii   2222  :"+advance.getTourApplyId());
+				
 				touradvdata.setTourFare(dto.getTourFare());
 				touradvdata.setTourfareFrom(dto.getTourfareFrom());
 				touradvdata.setTourfareTo(dto.getTourfareFrom());
@@ -271,7 +271,7 @@ public class TourServiceImpl implements TourService {
 				touradvdata.setModifiedDate(dto.getModifiedDate());
 				dao.UpdateTourAdvance(touradvdata);
 			}else {
-				System.out.println("Hiiiii  123   :"+advance.getTourApplyId());
+				
 				advance.setCreatedBy(dto.getModifiedBy());
 				advance.setCreatedDate(dto.getModifiedDate());
 				dao.AddTouradvance(advance);
@@ -313,31 +313,56 @@ public class TourServiceImpl implements TourService {
 		logger.info(new Date() +"Inside SERVICE GetDeptInchApproved ");
 		int count=0;
 		Object[]  fapa = dao.GetPAFADetails();
+		Object[] divisiondgmpafa = dao.GetDivisionHeadandDGMPAFA(dto.getValue());
 		if(dto.getApprove()!=null) {
 			for(int i=0;i<dto.getApprove().length;i++) {
 				try {
-					   
+					EMSNotification notification = new EMSNotification();
+					notification.setCreatedBy(dto.getUserName());
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setNotificationBy(dto.getEmpNo());
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setNotificationUrl("TourApprovallist.htm");
+					notification.setIsActive(1);
+					 
 					String status = dto.getApprove()[i].split("_")[1];
 					if(status.equalsIgnoreCase("FWD")) {
-						//notification.setEmpNo("");
-						dto.setStatus("VDH");
-						dto.setApplId(dto.getApprove()[i].split("_")[0]);
-						dao.getTourUpdate(dto);
+
+						notification.setEmpNo(divisiondgmpafa[1].toString());
+						notification.setNotificationMessage("Tour Forwarded by "+dto.getUserName());
+						dao.EmpNotificationForTour(notification);
+
+							dto.setStatus("VDH");
+							dto.setApplId(dto.getApprove()[i].split("_")[0]);
+						
+							dao.getTourUpdate(dto);
 					}else if(status.equalsIgnoreCase("VDH")) {
-						//notification.setEmpNo("");
+						
+						notification.setEmpNo(divisiondgmpafa[2].toString());
+						notification.setNotificationMessage("Tour Forwarded by "+dto.getUserName());
+						dao.EmpNotificationForTour(notification);
+							
 						dto.setStatus("ABD");
-						dto.setApplId(dto.getApprove()[i].split("_")[0]);
-						dao.getTourUpdate(dto);
+							dto.setApplId(dto.getApprove()[i].split("_")[0]);
+							dao.getTourUpdate(dto);
 					}else if(status.equalsIgnoreCase("ABD")) {
-						//notification.setEmpNo("");
+						
+						notification.setEmpNo(divisiondgmpafa[3].toString());
+						notification.setNotificationMessage("Tour Verifed by "+dto.getUserName());
+						dao.EmpNotificationForTour(notification);
+						
 						String funds=req.getParameter("Funds"+dto.getApprove()[i].split("_")[0]);
-						System.out.println("funds   : "+funds);
+
 						dto.setFunds(funds!=null && funds.equalsIgnoreCase("true")? "Y" : "N");
 						dto.setStatus("ABF");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 						dao.getTourUpdate(dto);
 					}else if(status.equalsIgnoreCase("ABF")) {
-						//notification.setEmpNo("");
+						
+						notification.setEmpNo(divisiondgmpafa[4].toString());
+						notification.setNotificationMessage("Tour Verifed by "+dto.getUserName());
+						dao.EmpNotificationForTour(notification);
+						
 						dto.setStatus("ABP");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 						dao.TourUpdateFromPandA(dto , req.getParameter(dto.getApplId()));
@@ -390,23 +415,23 @@ public class TourServiceImpl implements TourService {
 						dao.TourUpdateFromCEO(dto, TDMoNo);
 						
 						if(fapa!=null && fapa.length>0) {
-							EMSNotification notification = new EMSNotification(); 
-							notification.setEmpNo(fapa[1].toString());
-							notification.setCreatedBy(dto.getUserName());
-							notification.setCreatedDate(sdtf.format(new Date()));
-							notification.setNotificationBy(dto.getEmpNo());
-							notification.setNotificationMessage("Tour Sanctioned by "+dto.getUserName());
-							notification.setNotificationDate(sdtf.format(new Date()));
-							notification.setNotificationUrl("TourSanctionedlist.htm");
-							notification.setIsActive(1);
-							long value= dao.EmpNotificationForTour(notification);
+							EMSNotification notification1 = new EMSNotification(); 
+							notification1.setEmpNo(fapa[1].toString());
+							notification1.setCreatedBy(dto.getUserName());
+							notification1.setCreatedDate(sdtf.format(new Date()));
+							notification1.setNotificationBy(dto.getEmpNo());
+							notification1.setNotificationMessage("Tour Sanctioned by "+dto.getUserName());
+							notification1.setNotificationDate(sdtf.format(new Date()));
+							notification1.setNotificationUrl("TourSanctionedlist.htm");
+							notification1.setIsActive(1);
+							long value= dao.EmpNotificationForTour(notification1);
 						}
 						EMSNotification notification2 = new EMSNotification(); 
 						notification2.setEmpNo(req.getParameter("EmpNo"+dto.getApplId()));
 						notification2.setCreatedBy(dto.getUserName());
 						notification2.setCreatedDate(sdtf.format(new Date()));
 						notification2.setNotificationBy(dto.getEmpNo());
-						notification2.setNotificationMessage("Tour Sanctioned by "+dto.getUserName());
+						notification2.setNotificationMessage("Tour Approved by "+dto.getUserName());
 						notification2.setNotificationDate(sdtf.format(new Date()));
 						notification2.setNotificationUrl("TourSanctionedlist.htm");
 						notification2.setIsActive(1);
@@ -432,21 +457,37 @@ public class TourServiceImpl implements TourService {
 		if(dto.getReject()!=null) {
 			for(int i=0;i<dto.getReject().length;i++) {
 				try {
+					EMSNotification notification = new EMSNotification();
 					String status = dto.getReject()[i].split("_")[1];
 					if(status.equalsIgnoreCase("FWD")) {
+						notification.setNotificationMessage("Tour Returned by "+dto.getUserName());
 						dto.setStatus("RDH");
 					}else if(status.equalsIgnoreCase("VDH")) {
+						notification.setNotificationMessage("Tour Returned by "+dto.getUserName());
 						dto.setStatus("RDG");
 					}else if(status.equalsIgnoreCase("ABD")) {
+						notification.setNotificationMessage("Tour Returned by "+dto.getUserName());
 						dto.setStatus("RBF");
 					}else if(status.equalsIgnoreCase("ABF")) {
+						notification.setNotificationMessage("Tour Returned by "+dto.getUserName());
 						dto.setStatus("RBP");
 					}else if(status.equalsIgnoreCase("ABP")) {
+						notification.setNotificationMessage("Tour Disapproved by "+dto.getUserName());
 						dto.setStatus("RBC");
 					}
 					dto.setApplId(dto.getReject()[i].split("_")[0]);
 
 					dao.getTourUpdate(dto);
+					
+					notification.setEmpNo(dto.getValue());
+					notification.setCreatedBy(dto.getUserName());
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setNotificationBy(dto.getEmpNo());
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setNotificationUrl("TourApplyList.htm");
+					notification.setIsActive(1);
+					 dao.EmpNotificationForTour(notification);
+
 					    TourTransaction transaction=new TourTransaction();
 				        transaction.setActionBy(dto.getEmpNo());
 				        transaction.setActionDate(sdtf.format(new Date()));
@@ -468,37 +509,69 @@ public class TourServiceImpl implements TourService {
 	{
 		logger.info(new Date() +"Inside SERVICE GetDeptInchApproved ");
 		int count=0;
+		Object[] divisiondgmpafa = dao.GetDivisionHeadandDGMPAFA(dto.getValue());
 		if(dto.getApprove()!=null) {
 			for(int i=0;i<dto.getApprove().length;i++) {
 				try {
-					   
+					
+					EMSNotification notification = new EMSNotification();
 					String status = dto.getApprove()[i].split("_")[1];
+					
 					if(status.equalsIgnoreCase("CBU")) {
+						notification.setEmpNo(divisiondgmpafa[1].toString());
+						notification.setNotificationMessage("Tour cancellation Forwarded by "+dto.getUserName());
+						notification.setNotificationUrl("TourApprovallist.htm");
+
+						
 						dto.setStatus("CAA");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}else if(status.equalsIgnoreCase("CAA")) {
+						notification.setEmpNo(divisiondgmpafa[2].toString());
+						notification.setNotificationMessage("Tour cancellation Forwarded by "+dto.getUserName());
+						notification.setNotificationUrl("TourApprovallist.htm");
+
 						dto.setStatus("CAG");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}else if(status.equalsIgnoreCase("CAG")) {
+						notification.setEmpNo(divisiondgmpafa[4].toString());
+						notification.setNotificationMessage("Tour cancellation forwarded by "+dto.getUserName());
+						notification.setNotificationUrl("TourApprovallist.htm");
+
 						dto.setStatus("CAF");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}else if(status.equalsIgnoreCase("CAF")) {
+						notification.setEmpNo(divisiondgmpafa[3].toString());
+						notification.setNotificationMessage("Tour cancellation approved by "+dto.getUserName());
+						notification.setNotificationUrl("TourApprovallist.htm");
+
 						dto.setStatus("CAC");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}else if(status.equalsIgnoreCase("CAC")) {
+						notification.setEmpNo(dto.getValue());
+						notification.setNotificationMessage("Tour cancellation approved by "+dto.getUserName());
+						notification.setNotificationUrl("TourCancelledlist.htm");
+
 						dto.setStatus("CAP");
 						dto.setApplId(dto.getApprove()[i].split("_")[0]);
 					}
+					
 					dao.getTourUpdate(dto);
+					
+					notification.setCreatedBy(dto.getUserName());
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setNotificationBy(dto.getEmpNo());
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setIsActive(1);
+					   dao.EmpNotificationForTour(notification);
+
 				   	    TourTransaction transaction=new TourTransaction();
 				        transaction.setActionBy(dto.getEmpNo());
 				        transaction.setActionDate(sdtf.format(new Date()));
 				        transaction.setTourApplyId(Long.parseLong(dto.getApplId()));
 				        transaction.setTourStatusCode(dto.getStatus());
 				        transaction.setTourRemarks(req.getParameter(dto.getApplId()));
-				        long trns=dao.AddTourTransaction(transaction);
-					
-				        
+				           dao.AddTourTransaction(transaction);
+			        
 				        count=1;
 				}catch (Exception e) {
 					e.printStackTrace();
@@ -509,7 +582,10 @@ public class TourServiceImpl implements TourService {
 		if(dto.getReject()!=null) {
 			for(int i=0;i<dto.getReject().length;i++) {
 				try {
+					
+					EMSNotification notification = new EMSNotification();
 					String status = dto.getReject()[i].split("_")[1];
+					
 					if(status.equalsIgnoreCase("CBU")) {
 						dto.setStatus("CAD");
 					}else if(status.equalsIgnoreCase("CAA")) {
@@ -521,16 +597,26 @@ public class TourServiceImpl implements TourService {
 					}else if(status.equalsIgnoreCase("CAC")) {
 						dto.setStatus("CDP");
 					}
+					
 					dto.setApplId(dto.getReject()[i].split("_")[0]);
-
-					dao.getTourUpdate(dto);
+						
+					notification.setNotificationMessage("Tour cancellation Returned by "+dto.getUserName());
+					notification.setEmpNo(dto.getValue());
+					notification.setCreatedBy(dto.getUserName());
+					notification.setCreatedDate(sdtf.format(new Date()));
+					notification.setNotificationBy(dto.getEmpNo());
+					notification.setNotificationDate(sdtf.format(new Date()));
+					notification.setNotificationUrl("TourCancelledlist.htm");
+					notification.setIsActive(1);
+					 dao.EmpNotificationForTour(notification);
+					 dao.getTourUpdate(dto);
 					    TourTransaction transaction=new TourTransaction();
 				        transaction.setActionBy(dto.getEmpNo());
 				        transaction.setActionDate(sdtf.format(new Date()));
 				        transaction.setTourApplyId(Long.parseLong(dto.getApplId()));
 				        transaction.setTourStatusCode(dto.getStatus());
 				        transaction.setTourRemarks(req.getParameter(dto.getApplId()));
-				        long trns=dao.AddTourTransaction(transaction);
+				          dao.AddTourTransaction(transaction);
 				        count=1;
 				}catch (Exception e) {
 					e.printStackTrace();
@@ -600,6 +686,17 @@ public class TourServiceImpl implements TourService {
 	{
 		int result =  dao.CancelTour(dto);
 		if(result>0) {
+			Object[] divisiondgmpafa = dao.GetDivisionHeadandDGMPAFA(dto.getEmpNo());
+			EMSNotification notification = new EMSNotification();
+				notification.setEmpNo(divisiondgmpafa[0].toString());
+				notification.setCreatedBy(dto.getUserName());
+				notification.setCreatedDate(sdtf.format(new Date()));
+				notification.setNotificationBy(dto.getEmpNo());
+				notification.setNotificationDate(sdtf.format(new Date()));
+				notification.setNotificationUrl("TourApprovallist.htm");
+				notification.setIsActive(1);
+			 dao.EmpNotificationForTour(notification);
+			
 			TourTransaction transaction=new TourTransaction();
 			transaction.setTourRemarks(dto.getValue());
 	        transaction.setActionBy(dto.getEmpNo());
@@ -794,6 +891,14 @@ public class TourServiceImpl implements TourService {
 		return result;
 	}
 	
-
-
+	@Override
+	public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception
+	{
+		return dao.GetDivisionHeadandDGMPAFA(empno);
+	}
+	@Override
+	public Long EmpNotificationForTour(EMSNotification notification)throws Exception
+	{
+		return dao.EmpNotificationForTour(notification);
+	}
 }

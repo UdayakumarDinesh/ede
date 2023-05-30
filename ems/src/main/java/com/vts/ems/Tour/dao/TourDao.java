@@ -57,6 +57,7 @@ public interface TourDao {
 	public List<Object[]> TourCancelStatusDetailsTrack(String tourapplyid)throws Exception;
 	public int CancelForwardTour(String tourapplyid , String empno)throws Exception;
 	public int ForwardTour(String tourapplyid , String empno)throws Exception;
+	public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception;
 
 	
 

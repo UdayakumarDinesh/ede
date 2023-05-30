@@ -1,3 +1,4 @@
+<%@page import="java.time.LocalDate"%>
 <%@page import="java.util.stream.Collectors"%>
 <%@page import="com.vts.ems.utils.AmountWordConveration"%>
 <%@page import="java.util.List"%>
@@ -31,7 +32,7 @@
 	List<Object[]> list = (List<Object[]>)request.getAttribute("Touronwarddetails");
 	List<Object[]> TourStatisDetails = (List<Object[]>)request.getAttribute("tourstatisdetails");
 	List<Object[]> pandalist = (List<Object[]>)request.getAttribute("pandalist");
-
+	Object[] divisiondgmpafadetails = (Object[]) request.getAttribute("DivisiondgmpafaDetails");
 	
 	SimpleDateFormat time = new SimpleDateFormat("HH:mm");
 	long totaladvance=0l;
@@ -109,8 +110,7 @@
 									<tr>
 										<td> <b>Department : </b>&nbsp; <span style="color: blue;"><%=tourdetails[3]%></span></td>
 										<td><b> Phone No : </b> &nbsp;  <span style="color: blue;"> <%=tourdetails[6]%></span> </td>
-										<td><b> Date : </b></td>
-										
+										<td><b> Date : </b> &nbsp;  <span style="color: blue;"><%=DateTimeFormatUtil.fromDatabaseToActual( LocalDate.now().toString())%></span></td>								
 									</tr>
 								</table>
 								<br>
@@ -213,7 +213,7 @@
 									<tr>
 										<td colspan="2"> 
 											Signature of the employee <br>
-											Name : &nbsp;&nbsp; <span style="color: blue;"> <%=tourdetails[4]%>(<%=tourdetails[3]%>) </span>
+											&nbsp; <span style="color: blue;"> <%=tourdetails[4]%>(<%=tourdetails[3]%>) </span>
 										 </td>
 										
 										<td style="text-align: right;">  
@@ -221,7 +221,7 @@
 											Signature of Dept. Incharge <br>
 											 &nbsp;&nbsp;
 											
-												<span style="color: blue;"><%=Deptapprove.get(0)[2]%>(<%=Deptapprove.get(0)[3]%>) <br><%=Deptapprove.get(0)[5]%></span>
+												<span style="color: blue;"><%=Deptapprove.get(0)[2]%>(<%=Deptapprove.get(0)[3]%>) <br><%= DateTimeFormatUtil.SqlDatetimeToRegularDatetime(Deptapprove.get(0)[5].toString())%></span>
 											 <%}%>
 										</td>
 									</tr>
@@ -472,24 +472,32 @@
 						   <div class="card-body">  
 							<div align="center" style="margin: 10px;">
 								<div class="row">
-									<div class="col-md-6">
-										<table >
-										<tr> <th>Name </th><th> Remarks</th></tr>
-										<%if(TourStatisDetails!=null && TourStatisDetails.size()>0){
+									<div class="col-md-6" align="left" style="margin-top:1rem; padding:0px;border: 1px solid #992929;border-radius: 5px;">			
+											
+										<table style="margin: 3px;padding: 0px;">
+										    <tr>
+												<td style="border:none;padding: 0px">
+													<h6 class="text-blue"style="text-decoration: underline; color: red;">Remarks :</h6> 
+												</td>											
+											</tr>
+										   <%if(TourStatisDetails!=null && TourStatisDetails.size()>0){
 											for(Object[] obj : TourStatisDetails){if(obj[9]!=null && !obj[9].toString().equalsIgnoreCase("INI")){ %>
-										
-											<tr> 
-												<td style="text-align: left; color: blue;"> <%=obj[2]%>(<%=obj[3]%>):</td> 
-												<td style="text-align: left;"><%if(obj[6]!=null){%> <%=obj[6]%> <%}else{%> -- <%}%></td>
-											</tr>											
-										
-										<% }}}%>
+											<tr>
+												<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+													<%=obj[2]%><%-- (<%=obj[3]%>) --%>&nbsp;  : &nbsp; <span style="color: blue;"> <%if(obj[6]!=null){%> <%=obj[6]%> <%}else{%> -- <%}%> </span>
+												</td>
+											</tr>
+										  <% }}}%>
 										</table>
 									</div>
 									<div class="col-md-6" style="margin-top: -10px;">
 									
-						<%if( !tourdetails[2].toString().equalsIgnoreCase(empno) && tourdetails[19]!=null && (tourdetails[19].toString().equalsIgnoreCase("FWD") || tourdetails[19].toString().equalsIgnoreCase("VDH") || tourdetails[19].toString().equalsIgnoreCase("ABF") || tourdetails[19].toString().equalsIgnoreCase("ABP"))){%>			
-						  <form action="DeptInchApproval.htm" method="post">
+						<%if(tourdetails[19]!=null &&
+						(divisiondgmpafadetails[0].toString().equalsIgnoreCase(empno) && tourdetails[19].toString().equalsIgnoreCase("FWD")) ||							
+						(divisiondgmpafadetails[1].toString().equalsIgnoreCase(empno) && tourdetails[19].toString().equalsIgnoreCase("VDH"))  ||				
+						(divisiondgmpafadetails[3].toString().equalsIgnoreCase(empno) && tourdetails[19].toString().equalsIgnoreCase("ABF")) ||
+						(!tourdetails[2].toString().equalsIgnoreCase(empno) && tourdetails[19].toString().equalsIgnoreCase("ABP"))){%>			
+						 	 <form action="DeptInchApproval.htm" method="post">
 						  			 <div class="row" style="margin-top: 10px;">
 										<div class="col-md-4">
 											    <label style="font-weight: 600;"> Remarks  :</label>
@@ -499,7 +507,7 @@
 										</div>
 									  </div>
 						  			 <div class="row" style="margin-top: 10px;">
-											<div class="col-md-5"></div>
+											<div class="col-md-5">  <input type="hidden" name="empno"  value="<%=tourdetails[2]%>"></div>
 												<%if(tourdetails[19].toString().equalsIgnoreCase("ABP")){%>
 												<div class="col-md-2">
 													<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>" onclick="return confirm('Are you sure to Submit?')" data-toggle="tooltip" data-placement="top" title="Forward"> Verify</button>
@@ -518,11 +526,17 @@
 											
 									   </div>
 									<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>										
-									</form>			
-								<%}%>	
+									</form>	
+						 	
+						 		
+						<%}%>	
+							
+							
+							
 							
 						
 						<%if(tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("INI") || tourdetails[19].toString().equalsIgnoreCase("RDH") || tourdetails[19].toString().equalsIgnoreCase("RDG") || tourdetails[19].toString().equalsIgnoreCase("RBF") || tourdetails[19].toString().equalsIgnoreCase("RBP")){%>
+							<!-- initialy forward and returned Forward -->
 							<form action="TourApplyList.htm" method="post">
 								    <div class="row" style="margin-top: 10px;">
 										<div class="col-md-4">
@@ -533,7 +547,7 @@
 										</div>
 									  </div>
 									  <div class="row" style="margin-top: 10px;">
-											<div class="col-md-5"></div>
+											<div class="col-md-5"> <input type="hidden" name="empno"  value="<%=tourdetails[2]%>"></div>
 											 <div class="col-md-3">
 												<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="Action" value="ForwardTour/<%=tourdetails[0]%>" onclick="return confirm('Are you sure to Forward?')" data-toggle="tooltip" data-placement="top" title="Forward"> Forward</button>										
 											 </div>
@@ -544,7 +558,7 @@
 
 						
 						
-						<%if(!tourdetails[2].toString().equalsIgnoreCase(empno) && tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("ABD")){%>
+						<%if(divisiondgmpafadetails[2].toString().equalsIgnoreCase(empno) && tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("ABD")){%>
 									
 						 <form action="DeptInchApproval.htm" method="post">
 							<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>							   
@@ -567,7 +581,7 @@
 									  </div>
 									  
 									  <div class="row" style="margin-top: 10px;">
-											  <div class="col-md-5"></div>
+											  <div class="col-md-5"><input type="hidden" name="empno"  value="<%=tourdetails[2]%>"></div>
 											  <div class="col-md-2">
 											    <button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>"  onclick="return confirm('Are you sure to Forward?')" data-toggle="tooltip" data-placement="top" title="Forward"> Forward</button>										
 											  </div>
@@ -579,7 +593,7 @@
 						</form>
 						<%}%>	
 									
-							<%if(!tourdetails[2].toString().equalsIgnoreCase(empno) && tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("ABC")){%>								
+							<%if(divisiondgmpafadetails[3].toString().equalsIgnoreCase(empno) && tourdetails[19]!=null && tourdetails[19].toString().equalsIgnoreCase("ABC")){%>								
 									 <form action="IssueMOFromPA.htm" method="post">
 							   			<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>							   
 								
@@ -622,6 +636,7 @@
 											    <div class="row" style="margin-top: 10px;">
 											    	<div class="col-md-5"></div>
 											    	<div class="col-md-3">
+											    		  <input type="hidden" name="empno"  value="<%=tourdetails[2]%>">		    	
 											    		  <input type="hidden" name="tourapply" id="TOURAPPLY" value="<%=tourdetails[0]%>">
 							      						  <button type="submit" class="btn btn-sm submit-btn" onclick="return confirm('Are you sure to Submit?')">Submit</button>
 											    	</div>
@@ -658,6 +673,7 @@
 											    	<div class="col-md-5"></div>
 											    	<div class="col-md-3">
 											    		<input type="hidden" name="tourapply" id="TOURAPPLY" value="<%=tourdetails[0]%>">
+											    		<input type="hidden" name="empno"  value="<%=tourdetails[2]%>">
 														<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are you sure to Submit?')" name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>"  data-toggle="tooltip" data-placement="top" title="Approve"> Approve</button>											    	</div>
 											    </div>
 										</div>

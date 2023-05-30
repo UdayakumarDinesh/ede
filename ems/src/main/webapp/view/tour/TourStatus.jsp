@@ -40,7 +40,7 @@ body{
   }
   section#timeline article {
     width: 100%;
-    margin: 0 0 20px 0;
+    margin: -5px 0 0px 0;
     position: relative;
   }
   section#timeline article:after {

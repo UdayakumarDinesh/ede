@@ -219,7 +219,7 @@ if(empdata!=null && empdata[4]!=null){
 											</div>
 										</div>
 										<div class="col-md-2">	
-									    	<label> Allowance From Date :</label>
+									    	<label style="margin-left: -5px;"> Allowance From Date :</label>
 									    		<div class=" input-group">
 												    <input <%if(touradvance!=null && touradvance.getAllowanceFromDate()!=null){%> value="<%=DateTimeFormatUtil.SqlToRegularDate( touradvance.getAllowanceFromDate().toString())%>" <%}%> type="text" class="form-control input-sm mydate" readonly="readonly"   id="allowancefromdate" name="allowancefromdate"  required="required"  > 
 												    <label class="input-group-addon btn" for="testdate">						      

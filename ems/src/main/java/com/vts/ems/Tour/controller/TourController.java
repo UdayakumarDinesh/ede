@@ -249,15 +249,17 @@ public class TourController {
 				String empno = (String) ses.getAttribute("EmpNo");
 				int result  = service.ForwardTour(tourapplyid,empno , remarks);
 				if (result != 0) {
-					EMSNotification notification = new EMSNotification();                
+					Object[] divisiondgmpafa = service.GetDivisionHeadandDGMPAFA(empno);
+ 					EMSNotification notification = new EMSNotification();   
+ 					notification.setEmpNo(divisiondgmpafa[0].toString());
 					notification.setCreatedBy(empno);
 					notification.setCreatedDate(sdtf.format(new Date()));
 					notification.setNotificationBy(empno);
 					notification.setNotificationMessage("Tour Program Forwarded  from "+empname);
 					notification.setNotificationDate(sdtf.format(new Date()));
-					notification.setNotificationUrl("AdminReplyToReqMsg.htm");
+					notification.setNotificationUrl("TourApprovallist.htm");
 					notification.setIsActive(1);
-					//long value= service.EmpRequestNotification(notification);
+					long value= service.EmpNotificationForTour(notification);
 					redir.addAttribute("result", "Tour program Forward successfully");
 					} else {
 						redir.addAttribute("resultfail", "Tour program Forward Unsuccessfull");
@@ -373,6 +375,7 @@ public class TourController {
 				req.setAttribute("tourstatisdetails", service.TourStatusDetails(tourapplyid));
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				req.setAttribute("pandalist", service.GetPAndAList());
+				req.setAttribute("DivisiondgmpafaDetails", service.GetDivisionHeadandDGMPAFA(details[2].toString()));
 				return "tour/TourDetailsPreview";
 			}else{
 				String Empno = (String) ses.getAttribute("EmpNo");
@@ -381,6 +384,7 @@ public class TourController {
 				req.setAttribute("emplist", emplist);
 				req.setAttribute("applylist", applylist);
 			    req.setAttribute("Empdata", pisserv.GetEmpData(ses.getAttribute("EmpId").toString()));
+			    
 				ses.setAttribute("SidebarActive","TourApplyList_htm");
 				return "tour/TourApplyList";
 			}
@@ -506,8 +510,8 @@ public class TourController {
 	        dto.setReject( req.getParameterValues("reject"));
 	        dto.setEmpNo((String)ses.getAttribute("EmpNo"));
 			dto.setUserName(UserId);
-			
-			int result=service.GetDeptInchApproved(dto,req);
+			dto.setValue(req.getParameter("empno"));			
+			int result = service.GetDeptInchApproved(dto,req);
 			if(result>0) {
 				redir.addAttribute("result","Tour Transaction Successfull");
 			}else{
@@ -633,13 +637,13 @@ public class TourController {
 					return "redirect:/TourSanctionedlist.htm";
 			}else if(action!=null && "Preview".equalsIgnoreCase(act)) {
 				String tourapplyid = action.split("/")[1];
-				System.out.println("tourapplyid  :"+tourapplyid);
 				Object[] details = service.GetTourDetails(tourapplyid);
 				Object[] touradvancedetails = service.GetTourAdvanceDetails(tourapplyid);
 				req.setAttribute("tourdetails", details);
 				req.setAttribute("touradvancedetails", touradvancedetails);
 				req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
 				req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
+				req.setAttribute("DivisiondgmpafaDetails", service.GetDivisionHeadandDGMPAFA(details[2].toString()));
 				req.setAttribute("cancelstatustrack", service.TourCancelStatusDetailsTrack(tourapplyid));
 				req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 				return "tour/TourCancelPreview";
@@ -686,7 +690,7 @@ public class TourController {
 		logger.info(new Date() +"Inside Tour-CancelStatus-details.htm "+Username);
 		try {
 			String chssapplyid = req.getParameter("tourapplyid");
-			req.setAttribute("TourStatisDetails", service.TourCancelStatusDetails(chssapplyid));
+			req.setAttribute("TourStatisDetails", service.TourCancelStatusDetailsTrack(chssapplyid));
 			
 			return "tour/TourStatus";
 		}catch (Exception e) {
@@ -706,13 +710,13 @@ public class TourController {
 	        dto.setApprove( req.getParameterValues("approve"));
 	        dto.setReject( req.getParameterValues("reject"));
 	        dto.setEmpNo((String)ses.getAttribute("EmpNo"));
+	        dto.setValue(req.getParameter("empno"));
 			dto.setUserName(UserId);
-			
 			
 			int result = service.GetCancelApproved(dto,req);
 			if(result>0) {
 				redir.addAttribute("result","Tour Transaction Successfull");
-			}else{
+			} else {
 				redir.addAttribute("resultfail","Tour Transaction Unsuccessful");
 			}
 			
@@ -794,7 +798,7 @@ public class TourController {
 	}
 	
 	@RequestMapping(value = "TourApplyReport.htm" ,method = {RequestMethod.POST , RequestMethod.GET})
-	public String TourApplyReport(HttpServletRequest req, HttpServletResponse res ,HttpSession ses, RedirectAttributes redir)throws Exception
+	public void TourApplyReport(HttpServletRequest req, HttpServletResponse res ,HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 			String UserId =req.getUserPrincipal().getName();
 		logger.info(new Date() +"Inside TourApplyReport.htm "+UserId);
@@ -806,26 +810,118 @@ public class TourController {
 				req.setAttribute("lablogo",getLabLogoAsBase64());
 				if (action!=null &&  actval.equalsIgnoreCase("Cancel"))
 				{
-					System.out.println(tourapplyid);
+					
 					Object[] details=service.GetTourDetails(tourapplyid);
 					req.setAttribute("tourdetails",details );
 					req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
 					req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
 					
-					return "tour/TourCancelMovementOrder";
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					req.setAttribute("Labmaster", nocservice.getLabMasterDetails().get(0));
+					req.setAttribute("lablogo",getLabLogoAsBase64());
+					String filename="Tour Cancel Movement Order";
+				
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					req.setAttribute("pagePart","3" );
+					
+					req.setAttribute("view_mode", req.getParameter("view_mode"));
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					
+					String path=req.getServletContext().getRealPath("/view/temp");
+					req.setAttribute("path",path);
+			        
+			        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			        req.getRequestDispatcher("/view/tour/TourCancelMovementOrder.jsp").forward(req, customResponse);
+
+					
+					String html = customResponse.getOutput();        
+			        
+			        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+			         
+			        res.setContentType("application/pdf");
+			        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+			       
+			       
+			        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+			        
+			        
+			        File f=new File(path +File.separator+ filename+".pdf");
+			        FileInputStream fis = new FileInputStream(f);
+			        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			        res.setHeader("Content-Length",String.valueOf(f.length()));
+			        byte[] buffer = new byte[1024];
+			        int len = 0;
+			        while ((len = fis.read(buffer)) >= 0) {
+			            os.write(buffer, 0, len);
+			        } 
+			        os.close();
+			        fis.close();
+			       
+			       
+			        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			        Files.delete(pathOfFile);
+					
+					//return "tour/TourCancelMovementOrder";
 				}else {
 					Object[] details = service.GetTourDetails(tourapplyid);
 					req.setAttribute("tourdetails", details);
 					req.setAttribute("Touronwarddetails", service.getTourOnwardReturnDetails(tourapplyid));
 					req.setAttribute("ApprovalEmp", service.GetApprovalEmp(details[2].toString()));
-					return "tour/TourApplyMovementOrder";
+
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					req.setAttribute("Labmaster", nocservice.getLabMasterDetails().get(0));
+					req.setAttribute("lablogo",getLabLogoAsBase64());
+					String filename="Tour Movement Order";
+				
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					req.setAttribute("pagePart","3" );
+					
+					req.setAttribute("view_mode", req.getParameter("view_mode"));
+					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+					
+					String path=req.getServletContext().getRealPath("/view/temp");
+					req.setAttribute("path",path);
+			        
+			        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			        req.getRequestDispatcher("/view/tour/TourApplyMovementOrder.jsp").forward(req, customResponse);
+
+					
+					String html = customResponse.getOutput();        
+			        
+			        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+			         
+			        res.setContentType("application/pdf");
+			        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+			       
+			       
+			        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+			        
+			        
+			        File f=new File(path +File.separator+ filename+".pdf");
+			        FileInputStream fis = new FileInputStream(f);
+			        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			        res.setHeader("Content-Length",String.valueOf(f.length()));
+			        byte[] buffer = new byte[1024];
+			        int len = 0;
+			        while ((len = fis.read(buffer)) >= 0) {
+			            os.write(buffer, 0, len);
+			        } 
+			        os.close();
+			        fis.close();
+			       
+			       
+			        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			        Files.delete(pathOfFile);		
+			       	
+				
+					//return "tour/TourApplyMovementOrder";
 				}
 			    
 
 		} catch (Exception e) {
 			logger.error(new Date() +" Inside TourApplyReport.htm "+UserId, e);
 			e.printStackTrace();	
-			return "static/Error";
+			//return "static/Error";
 		}
 	}
 	
@@ -839,7 +935,7 @@ public class TourController {
 			String action = req.getParameter("tourapplyid");
 			String actval = action.split("/")[0];
 			String tourapplyid =  action.split("/")[1];
-			System.out.println("tourapplyid     :"+tourapplyid);
+			
 			if(action!=null && actval!=null && actval.equalsIgnoreCase("Modify")) {
 				
 				req.setAttribute("ApprovalEmp", service.GetApprovalEmp(ses.getAttribute("EmpNo").toString()));
@@ -969,7 +1065,8 @@ public class TourController {
 			req.setAttribute("Labmaster", nocservice.getLabMasterDetails().get(0));
 			req.setAttribute("lablogo",getLabLogoAsBase64());
 			String filename="Tour Cancel";
-		
+			req.setAttribute("cancelstatustrack", service.TourCancelStatusDetailsTrack(tourapplyid));
+
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
 			req.setAttribute("pagePart","3" );
 			
@@ -1059,10 +1156,7 @@ public class TourController {
 			String tourAdvance = req.getParameter("tourAdvance");
 			String remarks = req.getParameter("remarks");
 			
-			System.out.println("empno"+empno);
-			System.out.println("tourapplyid"+tourapplyid);
-			System.out.println(tourAdvance);
-			System.out.println(remarks);
+			
 	   	   long count = service.UpdateTourAdvanceRelesed(tourapplyid , empno , tourAdvance , Username ,remarks);
 			if (count != 0) {
 				redir.addAttribute("result", "Tour program Advance Relesed successfully");

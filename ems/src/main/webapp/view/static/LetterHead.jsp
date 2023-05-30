@@ -36,8 +36,8 @@
 			
 				<div align="left" style=""> 
 				
-						        <span style="font-weight:bold;" >&nbsp;(A Government of India Society)</span><br>
-								<div style="margin-top: 20px;">
+						        <span style="font-weight:bold;" >&nbsp;(A Government of India Society)</span>
+								<div style="margin-top: 10px;">
 								<span style="font-weight: 400;">&nbsp;Vijinapura Road,</span><br>
 								<span style="font-weight: 400;">&nbsp;Dooravani Nagar P.O.,</span><br>
 								<span style="font-weight: 400;">&nbsp;Bangalore-560016</span><br>

@@ -120,7 +120,7 @@ public class TourDaoImpl implements TourDao {
 			return (List<Object[]>) query.getResultList();
 		
 		}
-		private static final String GETAPPLYSTATUSLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC' ,'MOI') AND a.empno=:empno  AND CAST(a.initiateddate AS DATE) BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
+		private static final String GETAPPLYSTATUSLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC' ,'MOI' , 'TAR' , 'REV') AND a.empno=:empno  AND CAST(a.initiateddate AS DATE) BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC";
 		@Override
 		public List<Object[]> GetApplyStatusList(String empno ,  String fromdate , String todate)throws Exception
 		{
@@ -131,7 +131,7 @@ public class TourDaoImpl implements TourDao {
 			return (List<Object[]>) query.getResultList();
 		}
 	
-		private static final String CHECKDATE="SELECT a.Empno,a.divisionId FROM tour_apply a WHERE Empno=:empno AND a.tourstatuscode IN ('INI','FWD','VDH','ABD','ABF','ABP','ABC') AND (:fromdate BETWEEN a.stayfrom  AND a.stayto OR  :todate BETWEEN a.stayfrom  AND a.stayto  OR a.stayfrom BETWEEN :fromdate AND :todate) AND a.IsActive='1'";
+		private static final String CHECKDATE="SELECT a.Empno,a.divisionId FROM tour_apply a WHERE Empno=:empno AND CASE WHEN a.AdvancePropsed IN ('Y') THEN a.tourstatuscode NOT IN ('TAR', 'CAP') WHEN a.AdvancePropsed IN ('N') THEN  a.tourstatuscode NOT IN ('ABC' ,'CAP') END AND (:fromdate BETWEEN a.stayfrom  AND a.stayto OR  :todate BETWEEN a.stayfrom  AND a.stayto  OR a.stayfrom BETWEEN :fromdate AND :todate) AND a.IsActive='1'";
 		@Override
 		public Long  checkTDAlreadyPresentForSameEmpidAndSameDates(String empno,String DepartureDate,String ArrivalDate)
 	   	{
@@ -149,7 +149,7 @@ public class TourDaoImpl implements TourDao {
 					}
 					return result;
 				} catch (Exception e) {
-					logger.error(new Date() + "Inside DAO EmployeeDetails "+e);
+					logger.error(new Date() + "Inside DAO checkTDAlreadyPresentForSameEmpidAndSameDates "+e);
 					e.printStackTrace();
 					return 0l;
 				}  
@@ -349,7 +349,7 @@ public class TourDaoImpl implements TourDao {
 			return 0;
 		}	
 	}
-	private static final String TOURSTATUSDETAILS="SELECT a.tourtransactionid,f.empno,c.empname,d.designation,e.divisionname,a.actiondate,a.tourremarks,b.statusdesc,b.statuscolor  , b.tourstatuscode  FROM tour_transaction a, tour_status b,employee c,employee_desig d,division_master e ,tour_apply f WHERE a.tourstatuscode=b.tourstatuscode AND f.tourapplyid=a.tourapplyid AND a.actionby=c.empno  AND c.desigid=d.desigid AND c.divisionid=e.divisionid AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC','MOI','TAR') AND a.tourapplyid=:tourapplyid ORDER BY a.tourtransactionid";
+	private static final String TOURSTATUSDETAILS="SELECT a.tourtransactionid,f.empno,c.empname,d.designation,e.divisionname,a.actiondate,a.tourremarks,b.statusdesc,b.statuscolor  , b.tourstatuscode  FROM tour_transaction a, tour_status b,employee c,employee_desig d,division_master e ,tour_apply f WHERE a.tourstatuscode=b.tourstatuscode AND f.tourapplyid=a.tourapplyid AND a.actionby=c.empno  AND c.desigid=d.desigid AND c.divisionid=e.divisionid AND a.tourstatuscode IN ('INI','FWD','RDH','VDH','RDG','ABD','RBF','ABF','RBP','ABP','RBC','ABC','MOI','TAR' ,'REV') AND a.tourapplyid=:tourapplyid ORDER BY a.tourtransactionid";
 	@Override
 	public List<Object[]> TourStatusDetails(String tourapplyid)throws Exception
 	{
@@ -364,7 +364,7 @@ public class TourDaoImpl implements TourDao {
 			return new ArrayList<Object[]>();
 		}
 	}
-	private static final String TOURCANCELSTATUSDETAILS="SELECT a.tourtransactionid,f.empno,c.empname,d.designation,e.divisionname,a.actiondate,a.tourremarks,b.statusdesc,b.statuscolor  FROM tour_transaction a, tour_status b,employee c,employee_desig d,division_master e ,tour_apply f WHERE a.tourstatuscode=b.tourstatuscode AND f.tourapplyid=a.tourapplyid AND a.actionby=c.empno  AND c.desigid=d.desigid AND c.divisionid=e.divisionid and a.tourstatuscode IN ('CBU','CAD','CAA','CDG','CAG','CAF','CDF','CAP','CDP','CAC','CDC')  AND a.tourapplyid=:tourapplyid ORDER BY a.tourtransactionid";
+	private static final String TOURCANCELSTATUSDETAILS="SELECT a.tourtransactionid,f.empno,c.empname,d.designation,e.divisionname,a.actiondate,a.tourremarks,b.statusdesc,b.statuscolor , a.tourstatuscode FROM tour_transaction a, tour_status b,employee c,employee_desig d,division_master e ,tour_apply f WHERE a.tourstatuscode=b.tourstatuscode AND f.tourapplyid=a.tourapplyid AND a.actionby=c.empno  AND c.desigid=d.desigid AND c.divisionid=e.divisionid and a.tourstatuscode IN ('CBU','CAD','CAA','CDG','CAG','CAF','CDF','CAP','CDP','CAC','CDC')  AND a.tourapplyid=:tourapplyid ORDER BY a.tourtransactionid";
 	@Override
 	public List<Object[]> TourCancelStatusDetailsTrack(String tourapplyid)throws Exception
 	{
@@ -747,6 +747,27 @@ public class TourDaoImpl implements TourDao {
 				logger.error(new Date() + "Inside DAO CancelForwardTour "+e);
 				e.printStackTrace();
 				return 0;
+			}
+		}
+		
+		private static final String GETAPPROVALDATA=" SELECT (SELECT divisionheadid FROM employee e , division_master dm WHERE e.divisionid =dm.divisionid AND e.empno=:EmpNo) AS 'Divisionid',(SELECT dgmempno FROM employee e , dgm_master d, division_master dm WHERE d.dgmid=dm.dgmid AND  e.divisionid = dm.divisionid AND e.empno=:EmpNo) AS 'DGM' ,(SELECT FandAAdmin FROM pis_admins a WHERE  a.IsActive=1 LIMIT 1) AS 'F&A' ,(SELECT PandAAdmin FROM pis_admins a WHERE  a.IsActive=1 LIMIT 1) AS 'P&A' , (SELECT b.empno FROM lab_master a , employee b WHERE a.labauthorityid=b.empid LIMIT 1)AS 'CEO'  FROM DUAL ";
+		@Override
+		public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception
+		{
+			try {
+				Query query = manager.createNativeQuery(GETAPPROVALDATA);
+				query.setParameter("EmpNo", empno);
+				List<Object[]> list =  (List<Object[]>)query.getResultList();
+				if(list.size()>0) {
+					return list.get(0);
+				}else {
+					return null;
+				}	
+				
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside DAO GetDivisionHeadandDGMPAFA "+e);
+				e.printStackTrace();
+				return null;
 			}
 		}
 }
