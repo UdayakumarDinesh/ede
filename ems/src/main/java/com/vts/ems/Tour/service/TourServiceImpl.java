@@ -426,7 +426,7 @@ public class TourServiceImpl implements TourService {
 						notification2.setEmpNo(req.getParameter("EmpNo"+dto.getApplId()));
 						notification2.setCreatedBy(dto.getUserName());
 						notification2.setCreatedDate(sdtf.format(new Date()));
-						notification2.setNotificationBy(dto.getEmpNo());
+						notification2.setNotificationBy(dto.getValue());
 						notification2.setNotificationMessage("Tour Approved by "+dto.getUserName());
 						notification2.setNotificationDate(sdtf.format(new Date()));
 						notification2.setNotificationUrl("TourSanctionedlist.htm");
@@ -682,16 +682,6 @@ public class TourServiceImpl implements TourService {
 	{
 		int result =  dao.CancelTour(dto);
 		if(result>0) {
-			Object[] divisiondgmpafa = dao.GetDivisionHeadandDGMPAFA(dto.getEmpNo());
-			EMSNotification notification = new EMSNotification();
-				notification.setEmpNo(divisiondgmpafa[0].toString());
-				notification.setCreatedBy(dto.getUserName());
-				notification.setCreatedDate(sdtf.format(new Date()));
-				notification.setNotificationBy(dto.getEmpNo());
-				notification.setNotificationDate(sdtf.format(new Date()));
-				notification.setNotificationUrl("TourApprovallist.htm");
-				notification.setIsActive(1);
-			 dao.EmpNotificationForTour(notification);
 			
 			TourTransaction transaction=new TourTransaction();
 			transaction.setTourRemarks(dto.getValue());

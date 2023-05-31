@@ -621,6 +621,7 @@ public class TourController {
 	public String TourCancel(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String UserId =req.getUserPrincipal().getName();
+		String EmpName = ses.getAttribute("EmpName").toString();
 		logger.info(new Date() +"Inside TourCancel.htm "+UserId);
 		try {
 			String action= req.getParameter("Action");
@@ -639,6 +640,18 @@ public class TourController {
 					dto.setUserName(UserId);
 					int result=service.CancelTour(dto);
 					if(result>0) {
+						Object[] divisiondgmpafa = service.GetDivisionHeadandDGMPAFA(dto.getEmpNo());
+						EMSNotification notification = new EMSNotification();
+							notification.setEmpNo(divisiondgmpafa[0].toString());
+							notification.setCreatedBy(dto.getUserName());
+							notification.setCreatedDate(sdtf.format(new Date()));
+							notification.setNotificationMessage("Tour Programme cancelled by "+EmpName);
+							notification.setNotificationBy(dto.getEmpNo());
+							notification.setNotificationDate(sdtf.format(new Date()));
+							notification.setNotificationUrl("TourApprovallist.htm");
+							notification.setIsActive(1);
+						 service.EmpNotificationForTour(notification);
+						
 						redir.addAttribute("result","Tour Cancel Successfull");
 					}else{
 						redir.addAttribute("resultfail","Tour Cancel Unsuccessful");

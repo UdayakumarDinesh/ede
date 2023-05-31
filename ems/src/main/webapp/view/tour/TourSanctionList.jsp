@@ -157,8 +157,7 @@ String Loginempno = session.getAttribute("EmpNo").toString();
                                 			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 		</button>
                                 		<%}}%> 
-									   <%if(hlo[6].toString().equalsIgnoreCase("ABC")){%>
-									   		<%if(hlo[11].toString().equalsIgnoreCase(Loginempno)){%>
+ 										<%if(( hlo[6].toString().equalsIgnoreCase("ABC") && hlo[12].toString().equalsIgnoreCase("N")) ||( hlo[6].toString().equalsIgnoreCase("TAR") && hlo[12].toString().equalsIgnoreCase("Y"))){%>									   		<%if(hlo[11].toString().equalsIgnoreCase(Loginempno)){%>
 									  			<button type="button" class="btn btn-sm edit-btn"  onclick="CancelTour('<%=hlo[7]%>')"  data-toggle="tooltip" data-placement="top" title="Cancel"><i class="fa fa-times" aria-hidden="true"></i> </button>
 									  		<%}%>
 									  		<%-- <%if(logintype.equalsIgnoreCase("P")){%>

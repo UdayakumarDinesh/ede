@@ -615,7 +615,7 @@ public class TourDaoImpl implements TourDao {
 			return advance.getTourApplyId();
 		}
 		
-		private static final String GETPANDALIST="SELECT a.empid, a.empno, a.empname , c.designation FROM employee a , pis_admins b , employee_desig c WHERE c.desigid=a.desigid AND a.empno = b.admin AND b.isactive='1' AND b.admintype='P' ";
+		private static final String GETPANDALIST="SELECT a.empid, a.empno, a.empname , c.designation FROM employee a , pis_admins b , employee_desig c WHERE c.desigid=a.desigid AND a.empno = b.empadmin AND b.isactive='1' AND b.admintype='P' ";
 		@Override
 		public List<Object[]> GetPAndAList()throws Exception
 		{
