@@ -249,12 +249,12 @@ public class PropertyController {
 			 if(result>0) { 
 				 
 				 PisImmovablePropertyTrans transaction = PisImmovablePropertyTrans.builder()	
-							.ImmPropertyId(result)
-							.PisStatusCode("INI")
-							.ActionBy(EmpNo)
-							.Remarks("")
-							.ActionDate(sdtf.format(new Date()))
-							.build();
+							                             .ImmPropertyId(result)
+							                             .PisStatusCode("INI")
+							                             .ActionBy(EmpNo)
+							                             .Remarks("")
+							                             .ActionDate(sdtf.format(new Date()))
+							                             .build();
                        service.addImmovablePropertyTransaction(transaction);
                        
      	    	 redir.addAttribute("result", "Immovable Property Added Successfully");	
@@ -522,6 +522,7 @@ public class PropertyController {
 			if(immPropertyId!=null) {
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));	
 				filename="Immovable_Property";
@@ -677,17 +678,17 @@ public class PropertyController {
 			 if(result>0) { 
 				 
 				 PisMovablePropertyTrans transaction = PisMovablePropertyTrans.builder()	
-							.MovPropertyId(result)
-							.PisStatusCode("INI")
-							.ActionBy(EmpNo)
-							.Remarks("")
-							.ActionDate(sdtf.format(new Date()))
-							.build();
+							                           .MovPropertyId(result)
+							                           .PisStatusCode("INI")
+							                           .ActionBy(EmpNo)
+							                           .Remarks("")
+							                           .ActionDate(sdtf.format(new Date()))
+							                           .build();
                       service.addMovablePropertyTransaction(transaction);
                       
-    	    	 redir.addAttribute("result", "Immovable Property Added Successfully");	
+    	    	 redir.addAttribute("result", "Movable Property Added Successfully");	
     		} else {
-    			 redir.addAttribute("resultfail", "Immovable Property Add Unsuccessful");	    			
+    			 redir.addAttribute("resultfail", "Movable Property Add Unsuccessful");	    			
     	    }	
 			redir.addAttribute("movPropertyId", result);
 			
@@ -765,9 +766,9 @@ public class PropertyController {
 			Long result = service.editMovableProperty(movable);
 			
 			 if(result>0) {                      
-    	    	 redir.addAttribute("result", "Immovable Property Edited Successfully");	
+    	    	 redir.addAttribute("result", "Movable Property Edited Successfully");	
     		} else {
-    			 redir.addAttribute("resultfail", "Immovable Property Edit Unsuccessful");	    			
+    			 redir.addAttribute("resultfail", "Movable Property Edit Unsuccessful");	    			
     	    }	
 			redir.addAttribute("movPropertyId", result);
 			
@@ -856,9 +857,9 @@ public class PropertyController {
 			}
 			else {
 				if(count>0) {
-					redir.addAttribute("result", "Immovable Property verification Successful");
+					redir.addAttribute("result", "Movable Property verification Successful");
 				}else {
-					redir.addAttribute("resultfail", "Immovable Property verification Unsuccessful");
+					redir.addAttribute("resultfail", "Movable Property verification Unsuccessful");
 				}
 				return "redirect:/PropertyApprovals.htm";
 			}
@@ -884,6 +885,7 @@ public class PropertyController {
 			if(movPropertyId!=null) {
 				PisMovableProperty movableProperty = service.getMovablePropertyById(Long.parseLong(movPropertyId.trim()));
 			    req.setAttribute("movPropFormData",movableProperty );	
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("ApprovalEmpData", service.movPropTransactionApprovalData(movPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(movableProperty.getEmpNo().trim()));
 				filename="Movovable_Property";

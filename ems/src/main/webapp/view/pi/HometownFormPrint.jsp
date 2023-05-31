@@ -8,6 +8,7 @@
 <%
 Object[] HomFormData = (Object[])request.getAttribute("HomFormData");
 %>
+<title>Hometown Form</title>
 <head>
 <style type="text/css">
 

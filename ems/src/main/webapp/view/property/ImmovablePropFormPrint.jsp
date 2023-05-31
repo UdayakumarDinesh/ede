@@ -7,6 +7,7 @@
 <%
 Object[] emp = (Object[])request.getAttribute("EmpData");
 %>
+<title>Immovable Property Form</title>
 <head>
 <style type="text/css">
 

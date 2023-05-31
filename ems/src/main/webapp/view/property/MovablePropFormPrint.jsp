@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List,java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%> 
-<%@ page import="com.vts.ems.property.model.PisMovableProperty" %>    
+<%@ page import="com.vts.ems.property.model.PisMovableProperty" %>
+<%@page import="java.util.List,java.util.ArrayList,java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>       
 <!DOCTYPE html>
 <html>
 <%
 Object[] emp = (Object[])request.getAttribute("EmpData");
 %>
+<title>Movable Property Form</title>
 <head>
 <style type="text/css">
 
@@ -133,17 +136,22 @@ input:focus {
 <%
 PisMovableProperty mov =(PisMovableProperty)request.getAttribute("movPropFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+String CEO = (String)request.getAttribute("CEOEmpNo");
+String empNo = (String)session.getAttribute("EmpNo");
+
 String LabLogo = (String)request.getAttribute("LabLogo");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+
+List<String> adminRemarks  = Arrays.asList("VDG","VPA","APR");
 int slno=0;
 %>
     
       <div class="center">
          <div style="width: 100%;float:left;">
               <div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
-              <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h4 style="text-decoration: underline">Form for giving <%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Movable Property</h4></div>
+              <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h3 style="text-decoration: underline">Form for giving <%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Movable Property</h3></div>
          </div>
           <br><br>
           <table style="border: 0px; width: 100%;">
@@ -305,7 +313,11 @@ int slno=0;
 							</table>
 							
 							<!--DECLARATION  -->
-							<div style="width: 100%;border: 0;text-align: center;margin-top:70px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+							<%if(slno<=13) {%>
+							<div style="width: 100%;border: 0;text-align: center;margin-top: 90px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+							<%}else{ %>
+							<div style="width: 100%;border: 0;text-align: center;margin-top: 70px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+							<%} %>
 							<br>
 							<%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> 
 						    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
@@ -331,7 +343,7 @@ int slno=0;
 						     <div style="" align="right">Signature of the employee</div>
 						     
 						     <!--Remarks of Administration  -->
-						     <% if( mov!=null && "APR".equalsIgnoreCase(mov.getPisStatusCode()) ){ %>	
+						     <% if( CEO.equalsIgnoreCase(empNo) || mov!=null && adminRemarks.contains(mov.getPisStatusCode()) ){ %>	
 						     <hr style="border: solid 1px;margin-left:20px;">				     
 						     <div style="width: 100%;border: 0;text-align: center;margin-top: 20px;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
@@ -357,7 +369,7 @@ int slno=0;
 				   		      </label>
 				             </div>				            
 				             <%} %>
-				              <%if( mov!=null && mov.getPisStatusCode().toString().equalsIgnoreCase("APR") ) {%>
+				              <%if( ( CEO.equalsIgnoreCase(empNo) || ( mov!=null && mov.getPisStatusCode().toString().equalsIgnoreCase("APR") )) ) {%>
                       <div class="row" style="margin-top: 40px;">
                          <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
                       </div>
