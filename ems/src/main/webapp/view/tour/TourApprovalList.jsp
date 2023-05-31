@@ -18,32 +18,14 @@ body{
 
 }
 
-  .toggle.ios, .toggle-on.ios, .toggle-off.ios { border-radius: 20rem; }
-  .toggle.ios .toggle-handle { border-radius: 20rem; }
-
-.app:hover{background-color:#008000; color:white;}
-.app{ border: 1px solid #2E8B57 ; padding: 2px 2px 2px 2px; width:50%;  border-radius: 5px;}
-
-.disapp:hover{background-color:#B22222; color:white;}
-.disapp{ border: 1px solid 	#FF0000 ; padding: 2px 2px 2px 2px; width:50%;  border-radius: 5px;}
-
-
-.sendBack:hover{background-color:#FFA500 ; color:white;}
-.sendBack{ border: 1px solid 	#DAA520 ; padding: 2px 2px 2px 2px; width:60%;  border-radius: 10px;}
-
-
-.table thead tr{
-	background-color: white;
-	color: black;
-}
 .card-header {
     padding: 0.25rem 1.25rem 0.25rem 1.25rem;
     }
-  #blink ,#blink2,#blink3 {
+  #blink {
 	  animation: blinker 2s linear infinite;
 	  background-color:red !important;
 	  width: 16px;
-	  top: 3.2px;
+	  top: 7.2px;
   } 
   @keyframes blinker {
   50% {
@@ -80,6 +62,7 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 
 List<Object[]> approvallist = (List<Object[]>)request.getAttribute("approvallist");
 List<Object[]> canceledlist = (List<Object[]>)request.getAttribute("canceledlist");
+List<Object[]> amendapprovallist = (List<Object[]>)request.getAttribute("amendapprovallist");
 /* List<Object[]> approval = approvallist.stream().filter(e->!e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
 List<Object[]> fAndAdeptlist = approvallist.stream().filter(e->e[7].toString().equalsIgnoreCase("ABD")).collect(Collectors.toList());
  */
@@ -88,7 +71,7 @@ List<Object[]> approvedlist = (List<Object[]>)request.getAttribute("approvedlist
 String fromdate = (String)request.getAttribute("fromdate");
 String todate = (String)request.getAttribute("todate");
 SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
-int totalcount = approvallist.size() + canceledlist.size();
+int totalcount = approvallist.size() + canceledlist.size() + amendapprovallist.size();
 String tab   = (String)request.getAttribute("tab");
 
 %>
@@ -128,7 +111,7 @@ String tab   = (String)request.getAttribute("tab");
 		  <li class="nav-item" style="width: 50%;"  >
 		    <div class="nav-link active" style="text-align: center; cursor: pointer;" id="pills-mov-property-tab" data-toggle="pill" data-target="#pills-mov-property" role="tab" aria-controls="pills-mov-property" aria-selected="true">
 			   <span>Pending</span> 
-				<span class="badge badge-danger badge-counter count-badge" style="margin-left: 0px;">
+				<span class="badge badge-danger badge-counter count-badge" id="blink" style="margin-left: 0px;">
 				   	    <%if(totalcount>99){ %>
 				   			99+
 				   		<%}else{ %>
@@ -169,8 +152,13 @@ String tab   = (String)request.getAttribute("tab");
 		            </thead>
 		            <tbody>
 		            <%int count=0; 
-		            if(approvallist!=null){
-		            for(Object[] ls:approvallist){
+		            if(approvallist!=null && approvallist.size()>0){%>
+		             <tr>
+		               <td colspan="6" style="text-align: center;"> 
+		                    <h5>Applied Approval List</h5>
+		               </td>
+		            </tr>
+		           <% for(Object[] ls:approvallist){
 		            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
 		                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
 		                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
@@ -189,19 +177,24 @@ String tab   = (String)request.getAttribute("tab");
 		           </tr>
 		           <%  }}%> <!-- if closed -->
 		           
-		             <%
-		            if(canceledlist!=null){
-		            for(Object[] ls:canceledlist){
+		             <%if(canceledlist!=null && canceledlist.size()>0){%>
+		            
+		            <tr>
+		               <td colspan="6" style="text-align: center;"> 
+		                    <h5>Cancel Approval List</h5>
+		               </td>
+		            </tr>
+		             <%for(Object[] ls:canceledlist){
 		            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
 		                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
 		                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
-		            %>
+		              %>
 		             <tr>
-		             		<td style="text-align:center;"> <%=++count%></td>
-		                    <td style="text-align:center;"><%= ls[1]%><br> <%=ls[2]%></td>
-		                    <td style="text-align:center;"><%=stayfromdate%><br><%=staytodate%></td>
-		                    <td style="text-align:center;"><%=ls[5]%><br>for <%=noofdays%> Day(s)</td> 
-		                    <td style="text-align:left;"> <%=ls[8] %></td>
+		             		<td style="text-align:center;"> <%=++count%> </td>
+		                    <td style="text-align:center;"> <%= ls[1]%> <br> <%=ls[2]%> </td>
+		                    <td style="text-align:center;"> <%=stayfromdate%> <br> <%=staytodate%> </td>
+		                    <td style="text-align:center;"> <%=ls[5]%> <br> for <%=noofdays%> Day(s) </td> 
+		                    <td style="text-align:left;">   <%=ls[8] %> </td>
 		                    <td style="text-align:center;">
 		                     <button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=ls[0]%>"  formaction="TourCancel.htm"  formmethod="POST"  data-toggle="tooltip" data-placement="top" title="View Form" >
 									 <i class="fa-solid fa-eye"></i>
@@ -210,6 +203,32 @@ String tab   = (String)request.getAttribute("tab");
 		           		   </td>
 		           </tr>
 		           <% }}%> <!-- if closed -->
+		           
+		           <%
+		            if(amendapprovallist!=null && amendapprovallist.size()>0){%>
+		             <!--  <tr>
+		               <td colspan="6" style="text-align: center;"> 
+		                    <h5>Amended Approval List</h5>
+		               </td>
+		            </tr>  -->
+		           <% for(Object[] ls:amendapprovallist){
+		            		String  stayfromdate=DateTimeFormatUtil.fromDatabaseToActual(ls[3].toString());
+		                    String  staytodate= DateTimeFormatUtil.fromDatabaseToActual(ls[4].toString());
+		                    long noofdays = DateTimeFormatUtil.CountNoOfDaysBwdates(ls[3].toString(), ls[4].toString());   
+		            %>
+		             <tr>	
+		             		<td style="text-align:center;"> <%=++count%></td>
+		                    <td style="text-align:center;"> <%=ls[1]%>  <%=ls[2]%></td>
+		                    <td style="text-align:center;"> <%=stayfromdate%> <br> <%=staytodate%></td>
+		                    <td style="text-align:center;"> <%=ls[5]%> <br> for <%=noofdays%> Day(s)</td> 
+		                    <td style="text-align:left;">   <%=ls[8] %> </td>
+		                    <td style="text-align:center;"> 
+		                    <button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=ls[0]%>"  formaction="TourApplyList.htm" formmethod="POST"  data-toggle="tooltip" data-placement="top" title="View Form" >
+									 <i class="fa-solid fa-eye"></i>
+							</button>
+		           		   </td>
+		           </tr>
+		           <%  }}%> <!-- if closed -->
 		           </tbody>
 		     </table>
 		      <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
@@ -256,12 +275,12 @@ String tab   = (String)request.getAttribute("tab");
               <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable1">
 				<thead>
 					<tr style="background-color: #0e6fb6; color: white;">
-					   <th style="width:5%">   SN</th>
-					   <th style="width:15%">  TourNo</th>
-					   <th style="width:20%">  Date </th>
-					   <th style="width:20%;"> Applied On</th>
-					   <th style="width:20%">  Employee Name</th>
-                       <th style="width:20%">  Approved Date</th>
+					   <th >   SN</th>
+					   <th >  TourNo</th>
+					   <th >  Date </th>
+					   <th > Applied On</th>
+					  <!--  <th >  Employee Name</th> -->
+                       <th >  Approved Date</th>
                   	</tr>
 				</thead>
                  <tbody>
@@ -277,7 +296,7 @@ String tab   = (String)request.getAttribute("tab");
                             <td style="text-align: center;"> <%if(form[1]!=null){%> <%=form[1]%> <%}else{%> -- <%}%> </td>
                             <td style="text-align: center;"> <%=stayfromdate%> To <%=staytodate%></td>
                             <td style="text-align: center;"> <%=applydate %><br/> for <%=noofdays%> Day(s)</td> 
-                            <td style="text-align: center;"> <%=form[2]%> </td>
+                    <%--    <td style="text-align: center;"> <%=form[2]%> </td>--%>
                             <td style="text-align: center;"> <%= DateTimeFormatUtil.fromDatabaseToActual(form[8].toString())%></td> 
                         </tr>
                        <%} %> 
@@ -296,9 +315,11 @@ String tab   = (String)request.getAttribute("tab");
 <script type="text/javascript">
 	
 	$("#myTable1").DataTable({
-	    "lengthMenu": [ 50, 75, 100],
-	    "pagingType": "simple"
-
+		 "lengthMenu": [10,20, 50, 75, 100],
+		    "pagingType": "simple",
+		    "language": {
+			      "emptyTable": "No Record Found"
+			    }
 	});
 	$("#myTable2").DataTable({
 	    "lengthMenu": [ 50, 75, 100],

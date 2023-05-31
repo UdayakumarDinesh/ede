@@ -99,22 +99,13 @@ Object[] empdata = (Object[])request.getAttribute("Empdata");
 									  <td><%=hlo[4]+"" %></td>
 									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
 									  <td> 
-									   
 									   		<button type="submit" class="btn btn-sm" name="Action" value="Preview/<%=hlo[7]%>"     data-toggle="tooltip" data-placement="top" title="View Form" >
 									 			<i class="fa-solid fa-eye"></i>
 									 		</button>
 									 		<button type="submit" class="btn btn-sm" name="Action" value="Download/<%=hlo[7]%>" formaction="DownloadTourProposal.htm" formmethod="get" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 															<i style="color: #019267" class="fa-solid fa-download"></i>
 											</button> 
-									   	
-									   <%if(hlo[6].toString().equalsIgnoreCase("INI")){%>
-									  		<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Edit"><i class="fas fa-edit"></i> </button>
-									  		<button type="submit" class="btn btn-sm submit-btn" name="Action" value="ForwardTour/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Forward"><i class="fa fa-forward" aria-hidden="true"></i> </button>
-									  	<%}%>	
-									   <%if(!hlo[6].toString().equalsIgnoreCase("INI") && !hlo[6].toString().equalsIgnoreCase("REV") && !hlo[6].toString().equalsIgnoreCase("ABC")){%>
-									  		<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke/<%=hlo[7]%>"   data-toggle="tooltip" data-placement="top" title="Revoke"><i class="fa fa-undo" aria-hidden="true" ></i> </button>								  	
-									  	<%}%>
-									  	
+
 									  </td>
 								</tr> 
                   <%}}%>

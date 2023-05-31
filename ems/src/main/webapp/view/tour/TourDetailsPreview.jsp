@@ -117,8 +117,14 @@
 								<div align="left">
 								<table>
 									<tr>
-										<td style="text-align: left;">
-										 The Following tour Program is proposed for the purpose of   <%=tourdetails[9]%>
+									<td style="text-align: left;">
+									<%if(tourdetails[26]!=null && Integer.parseInt(tourdetails[26].toString())>0 ){ %>
+										
+										The revised tour programme is proposed due to <%=tourdetails[9]%>
+										<%}else{%>
+										 The Following tour programme is proposed for the purpose of   <%=tourdetails[9]%>
+										
+										<%}%>
 										</td>
 									</tr>
 									<tr>	
@@ -344,7 +350,7 @@
 									<br>2. I have to refund to the STARCany excess of TA advance amount immediately on completion of the tour.<br>
 									    3. I have read / have been explained the TA rules applicable to me.</p><br><br>
 									    
-									<b style="float: left; margin-left: 10px;">Date: <span style="color: blue;"> <%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[22].toString())%> </span> </b><b style="float: right; margin-right: 10px;">Signature of the employee <br>Name : &nbsp;&nbsp; <span style="color: blue;"> <%=tourdetails[4]%>(<%=tourdetails[3]%>) </span></b>	    
+									<b style="float: left; margin-left: 10px;">Date: <span style="color: blue;"> <%=DateTimeFormatUtil.fromDatabaseToActual( tourdetails[22].toString())%> </span> </b><b style="float: right; margin-right: 10px;">Signature of the employee <br> &nbsp;&nbsp; <span style="color: blue;"> <%=tourdetails[4]%>(<%=tourdetails[3]%>) </span></b>	    
 								
 									
 										
@@ -636,6 +642,9 @@
 											    <div class="row" style="margin-top: 10px;">
 											    	<div class="col-md-5"></div>
 											    	<div class="col-md-3">
+											    		  <%if(tourdetails[26]!=null && Integer.parseInt(tourdetails[26].toString())>0 ){ %>
+												    	  <input type="text" name="tourpreviousid" value="tourdetails[26]">
+												    	  <%}%>
 											    		  <input type="hidden" name="empno"  value="<%=tourdetails[2]%>">		    	
 											    		  <input type="hidden" name="tourapply" id="TOURAPPLY" value="<%=tourdetails[0]%>">
 							      						  <button type="submit" class="btn btn-sm submit-btn" onclick="return confirm('Are you sure to Submit?')">Submit</button>
@@ -672,6 +681,9 @@
 											    <div class="row" style="margin-top: 10px;">
 											    	<div class="col-md-5"></div>
 											    	<div class="col-md-3">
+											    		<%if(tourdetails[26]!=null && Integer.parseInt(tourdetails[26].toString())>0 ){ %>
+											    		<input type="text" name="tourpreviousid" value="tourdetails[26]">
+											    		<%}%>
 											    		<input type="hidden" name="tourapply" id="TOURAPPLY" value="<%=tourdetails[0]%>">
 											    		<input type="hidden" name="empno"  value="<%=tourdetails[2]%>">
 														<button style="margin-bottom: -10px; " type="submit" class="btn btn-sm submit-btn"  onclick="return confirm('Are you sure to Submit?')" name="approve" value="<%=tourdetails[0]%>_<%=tourdetails[19]%>"  data-toggle="tooltip" data-placement="top" title="Approve"> Approve</button>											    	</div>
