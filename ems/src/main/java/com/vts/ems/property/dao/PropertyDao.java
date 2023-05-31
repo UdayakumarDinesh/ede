@@ -27,5 +27,5 @@ public interface PropertyDao {
     public List<Object[]> movPropTransactionApprovalData(String movPropertyId);
     public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception;
     public List<Object[]> propertyApprovedList(String EmpNo,String FromDate,String ToDate) throws Exception;
-    
+    public List<Object[]> movPropertyRemarksHistory(String movPropertyId) throws Exception;
 }

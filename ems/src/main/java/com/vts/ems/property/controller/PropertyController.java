@@ -34,6 +34,7 @@ import com.vts.ems.pis.service.PisService;
 import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
+import com.vts.ems.property.model.PisMovablePropertyTrans;
 import com.vts.ems.property.service.PropertyService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -248,15 +249,15 @@ public class PropertyController {
 			 if(result>0) { 
 				 
 				 PisImmovablePropertyTrans transaction = PisImmovablePropertyTrans.builder()	
-							.ImmPropertyId(result)
-							.PisStatusCode("INI")
-							.ActionBy(EmpNo)
-							.Remarks("")
-							.ActionDate(sdtf.format(new Date()))
-							.build();
+							                             .ImmPropertyId(result)
+							                             .PisStatusCode("INI")
+							                             .ActionBy(EmpNo)
+							                             .Remarks("")
+							                             .ActionDate(sdtf.format(new Date()))
+							                             .build();
                        service.addImmovablePropertyTransaction(transaction);
                        
-     	    	 redir.addAttribute("result", "Immovable Property Add Successfull");	
+     	    	 redir.addAttribute("result", "Immovable Property Added Successfully");	
      		} else {
      			 redir.addAttribute("resultfail", "Immovable Property Add Unsuccessful");	    			
      	    }	
@@ -269,6 +270,7 @@ public class PropertyController {
 		}
 		return "redirect:/ImmovablePropPreview.htm";
 	}
+	
 	@RequestMapping(value="ImmovablePropEdit.htm")
 	public String ImmovablePropEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception{
 		
@@ -360,7 +362,7 @@ public class PropertyController {
 			Long result = service.editImmovableProperty(immovable);
 			
 			if(result>0) {   	    
-				redir.addAttribute("result", "Immovable Property Edit Successfull");	
+				redir.addAttribute("result", "Immovable Property Edited Successfully");	
 			} else {
 				redir.addAttribute("resultfail", "Immovable Property Edit Unsuccessful");	
 			}		
@@ -449,7 +451,7 @@ public class PropertyController {
 			}
 			else {
 				if(count>0) {
-					redir.addAttribute("result", "Immovable Property verification Successfull");
+					redir.addAttribute("result", "Immovable Property verification Successful");
 				}else {
 					redir.addAttribute("resultfail", "Immovable Property verification Unsuccessful");
 				}
@@ -520,6 +522,7 @@ public class PropertyController {
 			if(immPropertyId!=null) {
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));	
 				filename="Immovable_Property";
@@ -602,15 +605,191 @@ public class PropertyController {
 		
 	}
 	
+	@RequestMapping(value="MovablePropAdd.htm")
+	public String movablePropAdd(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside MovablePropAdd.htm"+Username);
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		try {
+			String transState = req.getParameter("transState");
+			String transDate = req.getParameter("transDate");
+			String description = req.getParameter("description");
+			String mode = req.getParameter("mode");
+			String financeSource = "";
+			String partyRealted = req.getParameter("partyRealted");
+			String relavantFacts = req.getParameter("relavantFacts");
+			
+			PisMovableProperty movable = new PisMovableProperty();
+			
+			movable.setEmpNo(EmpNo);
+			movable.setMovIntimationDate(sdf.format(new Date()));
+			movable.setPurpose(req.getParameter("purpose"));
+			movable.setTransState(transState);
+			movable.setTransDate(DateTimeFormatUtil.dateConversionSql(transDate));
+			movable.setDescription(description);
+			if(("Four Wheeler").equalsIgnoreCase(description) || ("Two Wheeler").equalsIgnoreCase(description)) {
+				movable.setMakeAndModel(req.getParameter("makeAndModel").trim());
+			}
+			
+			movable.setMode(mode);
+			movable.setPrice(Double.parseDouble(req.getParameter("price").trim()) );
+			if("A".equalsIgnoreCase(transState)) {
+				financeSource = req.getParameter("financeSource");
+
+			if("Other sources".equalsIgnoreCase(financeSource)) {
+				financeSource = req.getParameter("otherSource");
+			}			
+			if("Gift".equalsIgnoreCase(mode)) {
+				movable.setSanctionRequired(req.getParameter("sanctionRequired")); ;
+			}
+			
+			    movable.setFinanceSource(financeSource.trim());
+			}
+			else {
+				movable.setRequisiteSanction(req.getParameter("requisite")); 
+			}
+			
+			movable.setPartyName(req.getParameter("partyName").trim());
+			movable.setPartyAddress(req.getParameter("partyAddress").trim());
+			movable.setTransArrangement(req.getParameter("transArrangement").trim());
+			movable.setPartyRelated(partyRealted);
+			
+			if("Y".equalsIgnoreCase(partyRealted)) {
+				movable.setRelationship(req.getParameter("relationship").trim());
+			}
+			
+			movable.setFutureDealings(req.getParameter("futureDealings"));
+			movable.setDealingNature(req.getParameter("dealingNature").trim());
+			
+			if(relavantFacts!=null) {
+			movable.setRelavantFacts(relavantFacts.trim());
+			}
+			
+			movable.setMovStatus("N");
+			movable.setPisStatusCode("INI");
+			movable.setPisStatusCodeNext("INI");
+			movable.setIsActive(1);
+			movable.setCreatedBy(Username);
+			movable.setCreatedDate(sdtf.format(new Date()));
+			
+			Long result = service.addMovableProperty(movable);
+			
+			 if(result>0) { 
+				 
+				 PisMovablePropertyTrans transaction = PisMovablePropertyTrans.builder()	
+							                           .MovPropertyId(result)
+							                           .PisStatusCode("INI")
+							                           .ActionBy(EmpNo)
+							                           .Remarks("")
+							                           .ActionDate(sdtf.format(new Date()))
+							                           .build();
+                      service.addMovablePropertyTransaction(transaction);
+                      
+    	    	 redir.addAttribute("result", "Movable Property Added Successfully");	
+    		} else {
+    			 redir.addAttribute("resultfail", "Movable Property Add Unsuccessful");	    			
+    	    }	
+			redir.addAttribute("movPropertyId", result);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.info(new Date()+"Inside MovablePropAdd.htm"+Username,e);
+			return "static/Error";
+		}
+		
+		return "redirect:/MovablePropPreview.htm";
+	}
+	
+	@RequestMapping(value="MovablePropEdit.htm")
+	public String movablePropEdit(HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside MovablePropEdit.htm"+Username);
+		try {
+			String transState = req.getParameter("transState");
+			String transDate = req.getParameter("transDate");
+			String description = req.getParameter("description");
+			String mode = req.getParameter("mode");
+			String financeSource = "";
+			String partyRealted = req.getParameter("partyRealted");
+			String relavantFacts = req.getParameter("relavantFacts");
+			
+			PisMovableProperty movable = new PisMovableProperty();
+			
+            movable.setMovPropertyId(Long.parseLong(req.getParameter("movpropertyId")));
+			movable.setPurpose(req.getParameter("purpose"));
+			movable.setTransState(transState);
+			movable.setTransDate(DateTimeFormatUtil.dateConversionSql(transDate));
+			movable.setDescription(description);
+			if(("Four Wheeler").equalsIgnoreCase(description) || ("Two Wheeler").equalsIgnoreCase(description)) {
+				movable.setMakeAndModel(req.getParameter("makeAndModel").trim());
+			}
+			
+			movable.setMode(mode);
+			movable.setPrice(Double.parseDouble(req.getParameter("price").trim()) );
+			if("A".equalsIgnoreCase(transState)) {
+				financeSource = req.getParameter("financeSource");
+
+			if("Other sources".equalsIgnoreCase(financeSource)) {
+				financeSource = req.getParameter("otherSource");
+			}			
+			if("Gift".equalsIgnoreCase(mode)) {
+				movable.setSanctionRequired(req.getParameter("sanctionRequired")); ;
+			}
+			
+			    movable.setFinanceSource(financeSource.trim());
+			}
+			else {
+				movable.setRequisiteSanction(req.getParameter("requisite")); 
+			}
+			
+			movable.setPartyName(req.getParameter("partyName").trim());
+			movable.setPartyAddress(req.getParameter("partyAddress").trim());
+			movable.setTransArrangement(req.getParameter("transArrangement").trim());
+			movable.setPartyRelated(partyRealted);
+			
+			if("Y".equalsIgnoreCase(partyRealted)) {
+				movable.setRelationship(req.getParameter("relationship").trim());
+			}
+			
+			movable.setFutureDealings(req.getParameter("futureDealings"));
+			movable.setDealingNature(req.getParameter("dealingNature").trim());
+			
+			if(relavantFacts!=null) {
+			movable.setRelavantFacts(relavantFacts.trim());
+			}
+			
+			movable.setModifiedBy(Username);
+			movable.setModifiedDate(sdtf.format(new Date()));
+			
+			Long result = service.editMovableProperty(movable);
+			
+			 if(result>0) {                      
+    	    	 redir.addAttribute("result", "Movable Property Edited Successfully");	
+    		} else {
+    			 redir.addAttribute("resultfail", "Movable Property Edit Unsuccessful");	    			
+    	    }	
+			redir.addAttribute("movPropertyId", result);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.info(new Date()+"Inside MovablePropEdit.htm"+Username,e);
+			return "static/Error";
+		}
+		
+		return "redirect:/MovablePropPreview.htm";
+	}
+	
 	@RequestMapping(value="MovablePropTransStatus.htm")
 	public String movablePropTransStatus(HttpServletRequest req, HttpSession ses) throws Exception
 	{
 		String Username = (String)ses.getAttribute("Username");
 		logger.info(new Date()+"Inside MovablePropTransStatus.htm"+Username);
 		try {
-			String movPropertyId = req.getParameter("movPropertyId");
-			if(movPropertyId!=null) {
-				req.setAttribute("TransactionList", service.movablePropertyTransList(movPropertyId.trim()));
+			String movpropertyId = req.getParameter("movpropertyId");
+			if(movpropertyId!=null) {
+				req.setAttribute("TransactionList", service.movablePropertyTransList(movpropertyId));
 			}
 			return "property/PropertyTransStatus";
 		}catch (Exception e) {
@@ -638,8 +817,10 @@ public class PropertyController {
 			    req.setAttribute("movPropFormData",movableProperty );	
 			    req.setAttribute("ApprovalEmpData", service.movPropTransactionApprovalData(movPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(movableProperty.getEmpNo().trim()));
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
+			    req.setAttribute("MovIntimationRemarks", service.movPropertyRemarksHistory(movPropertyId));
 			}
-			return "property/ImmovablePropForm";
+			return "property/MovablePropForm";
 		}catch(Exception e) {
 			logger.info(new Date()+"Inside MovablePropPreview.htm"+Username,e);
 			e.printStackTrace();
@@ -676,9 +857,9 @@ public class PropertyController {
 			}
 			else {
 				if(count>0) {
-					redir.addAttribute("result", "Immovable Property verification Successfull");
+					redir.addAttribute("result", "Movable Property verification Successful");
 				}else {
-					redir.addAttribute("resultfail", "Immovable Property verification Unsuccessful");
+					redir.addAttribute("resultfail", "Movable Property verification Unsuccessful");
 				}
 				return "redirect:/PropertyApprovals.htm";
 			}
@@ -704,9 +885,10 @@ public class PropertyController {
 			if(movPropertyId!=null) {
 				PisMovableProperty movableProperty = service.getMovablePropertyById(Long.parseLong(movPropertyId.trim()));
 			    req.setAttribute("movPropFormData",movableProperty );	
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("ApprovalEmpData", service.movPropTransactionApprovalData(movPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(movableProperty.getEmpNo().trim()));
-				filename="Immovable_Property";
+				filename="Movovable_Property";
 			}
 			
 			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));

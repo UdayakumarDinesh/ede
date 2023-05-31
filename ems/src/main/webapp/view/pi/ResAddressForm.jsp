@@ -109,44 +109,47 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 					<table style="margin-top: 5%;border-collapse: collapse;width:100%;">	
 					  <tbody>
 						<tr>
-						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%} %> </td>
+						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<label style="color: blue;"><%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%} %></label> </td>
 						  <td style="border: 0;width:17%;">To: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp.No.&emsp;&nbsp;&nbsp;:&emsp; <%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp.No.&emsp;&nbsp;&nbsp;:&emsp; <label style="color: blue;"><%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%} %></label></td> </tr>
 						 <tr> 
 						  	<td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; 
+						  	<label style="color: blue;">
 							  <%for(Object[] apprInfo : ApprovalEmpData){ %>
 							  <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
 					   				<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
 					   			<%break;
 					   			} %>
 						   		<%} %>
+						   		</label>
 					   		</td>	 
 					   	</tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
-						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:12%;text-align:center;">&nbsp; and the present address and the telephone number is as under:
+						     This is to inform you that I have changed my residence w.e.f.&nbsp;<input type="text" value=" <%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%>  <%} %>" readonly style="width:12%;text-align:center;color: blue;">&nbsp; and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						 
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[2]!=null){ %> <%=ResFormData[2]%> <%} %>	" readonly></td> </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="<% if(ResFormData!=null){ %> <%=ResFormData[9]  +", "+ResFormData[8]+" - "+ResFormData[10] %> <%} %> " readonly></td> </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[4]!=null){ %> <%=ResFormData[4]%> <%} %>" readonly></td> </tr>	
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[2]!=null){ %> <%=ResFormData[2]%> <%} %>	" readonly style="color: blue;"></td> </tr>			
+						 	<tr> <td style="border: 0;"> <input type="text" value="<% if(ResFormData!=null){ %> <%=ResFormData[9]  +", "+ResFormData[8]+" - "+ResFormData[10] %> <%} %> " readonly style="color: blue;"></td> </tr>			
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[4]!=null){ %> <%=ResFormData[4]%> <%} %>" readonly style="color: blue;"></td> </tr>	
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;">The same may be recorded in the office records.</td> </tr>	
 						 						       
 					    </tbody>
-					</table>	
+					</table>
+					<div style="width:100%;text-align: right;margin-left:-5%;color: blue;">	<%if(ResFormData!=null && ResFormData[11]!=null){ %><%=ResFormData[11] %> <%} %>	</div>	
 					<div style="width:100%;text-align: right;margin-left:-5%;">	
 						Signature of Employee<br>
-						<%for(Object[] apprInfo : ApprovalEmpData){ %>
+						<%-- <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
 				   				<%=apprInfo[2] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<% break;} %>
-				   		<%} %> 
+				   		<%} %>  --%>
 				   		
 				   		
 					</div>				
@@ -161,7 +164,7 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
 						Intimation of change of address received on  &nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
-				   				<span style="text-decoration: underline;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
+				   				<span style="text-decoration: underline;color: blue;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
 				   				
 				   			<%
 				   				break;
@@ -173,13 +176,14 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 				   <div style="border:0px;width: 100%; text-align: right;"> 
 				   		Incharge - P&A
 				   		<br>
+				   		<label style="color: blue;">
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
 				   				<%=apprInfo[2] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<% break;} %>
 				   		<%} %> 
-				   
+				      </label>
 				   </div>
 				   <br>
 				   <div class="row">

@@ -309,13 +309,36 @@ public class PropertyServiceImp implements PropertyService{
 	@Override
 	public Long editMovableProperty(PisMovableProperty movable) throws Exception {
 		
-		return dao.editMovableProperty(movable);
+       PisMovableProperty mov = dao.getMovablePropertyById(movable.getMovPropertyId());
+		
+		mov.setPurpose(movable.getPurpose());
+		mov.setTransState(movable.getTransState());
+		mov.setTransDate(movable.getTransDate());		
+		mov.setDescription(movable.getDescription());
+		mov.setMakeAndModel(movable.getMakeAndModel());
+		mov.setMode(movable.getMode());	
+		mov.setPrice(movable.getPrice());
+		mov.setFinanceSource(movable.getFinanceSource());
+		mov.setRequisiteSanction(movable.getRequisiteSanction());
+		mov.setPartyName(movable.getPartyName());
+		mov.setPartyAddress(movable.getPartyAddress());
+		mov.setTransArrangement(movable.getTransArrangement());
+		mov.setPartyRelated(movable.getPartyRelated());
+		mov.setRelationship(movable.getRelationship());
+		mov.setFutureDealings(movable.getFutureDealings());
+		mov.setDealingNature(movable.getDealingNature());
+		mov.setSanctionRequired(movable.getSanctionRequired());
+		mov.setRelavantFacts(movable.getRelavantFacts());
+		mov.setModifiedBy(movable.getModifiedBy());
+		mov.setModifiedDate(movable.getModifiedDate());
+		
+		return dao.editMovableProperty(mov);
 	}
 
 	@Override
 	public List<Object[]> movablePropertyTransList(String movPropertyId) throws Exception {
 		
-		return dao.immmovablePropertyTransList(movPropertyId);
+		return dao.movablePropertyTransList(movPropertyId);
 	}
 
 	@Override
@@ -498,5 +521,17 @@ public class PropertyServiceImp implements PropertyService{
 	public List<Object[]> propertyApprovedList(String EmpNo, String FromDate, String ToDate) throws Exception {
 		
 		return dao.propertyApprovedList(EmpNo, FromDate, ToDate);
+	}
+
+	@Override
+	public Long addMovablePropertyTransaction(PisMovablePropertyTrans transaction) throws Exception {
+		
+		return dao.addMovablePropertyTransaction(transaction);
+	}
+
+	@Override
+	public List<Object[]> movPropertyRemarksHistory(String movPropertyId) throws Exception {
+		
+		return dao.movPropertyRemarksHistory(movPropertyId);
 	}
 }

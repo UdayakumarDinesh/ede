@@ -20,11 +20,10 @@ public class PisAdmins implements Serializable {
 	@Id
 	@GeneratedValue(strategy =  GenerationType.IDENTITY)
 	private long AdminsId;
-	private String Admin;
+	private String EmpAdmin;
 	private String AdminType;
 	private Date AdminFrom;
 	private Date AdminTo;
-	private String RevisedOn;
 	private int IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

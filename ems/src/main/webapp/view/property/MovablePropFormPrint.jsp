@@ -1,12 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@ page import="java.util.List,java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%> 
-<%@ page import="com.vts.ems.property.model.PisMovableProperty" %>    
+<%@ page import="com.vts.ems.property.model.PisMovableProperty" %>
+<%@page import="java.util.List,java.util.ArrayList,java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>       
 <!DOCTYPE html>
 <html>
 <%
 Object[] emp = (Object[])request.getAttribute("EmpData");
 %>
+<title>Movable Property Form</title>
 <head>
 <style type="text/css">
 
@@ -131,19 +134,24 @@ input:focus {
 </head>
 <body>
 <%
-PisMovableProperty mov =(PisMovableProperty)request.getAttribute("MovPropFormData");
+PisMovableProperty mov =(PisMovableProperty)request.getAttribute("movPropFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+String CEO = (String)request.getAttribute("CEOEmpNo");
+String empNo = (String)session.getAttribute("EmpNo");
+
 String LabLogo = (String)request.getAttribute("LabLogo");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+
+List<String> adminRemarks  = Arrays.asList("VDG","VPA","APR");
 int slno=0;
 %>
     
       <div class="center">
          <div style="width: 100%;float:left;">
               <div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
-              <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h4 style="text-decoration: underline">Form for giving <%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Movable Property</h4></div>
+              <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h3 style="text-decoration: underline">Form for giving <%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Movable Property</h3></div>
          </div>
           <br><br>
           <table style="border: 0px; width: 100%;">
@@ -177,15 +185,12 @@ int slno=0;
 								   <td style="width:20%;text-align: center;color: blue;"><%if(emp!=null && emp[3]!=null){ %> <%=emp[4] %> <%}else{ %>-<%} %></td>
 								</tr>
 								
-							    <tr>
+							     <tr>
 								   <td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
-								   <td colspan="4">Purpose of application </td>
-								</tr>
-								<tr>
-								   <td style="border-bottom: 1;border-top: 0"></td>
-								  <%if(mov!=null && mov.getPurpose()!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> <td colspan="4" style="color: blue;">(a) Intimation of transaction (To be submitted within 30 days of transaction along with supporting documents)</td>
+								   <td>Purpose of application </td>
+								    <%if(mov!=null && mov.getPurpose()!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> <td colspan="2" style="color: blue;">(a) Prior Intimation of transaction</td>
 								  <%}else{%> 
-								  <td colspan="4" style="color: blue;">(b) Prior permission of  transaction (if such transaction is with a person having official dealing w.r.t Sl. No. 13 below and / or if property is situated outside India / transaction is with foreigner.</td> 
+								  <td colspan="2" style="color: blue;">(b) Prior permission of  transaction </td> 
 								  <%}%>
 								</tr>
 								
@@ -205,13 +210,13 @@ int slno=0;
 								
 								<tr>
 								    <td style="width: 5%;border-bottom: 0"><%=++slno%>.</td>
-								    <td>(a) Description of the property (e.g., Four wheeler/ Two wheeler / Refrigerator/TV/PC/ Jewellery /Loans/Insurance Policies premium/ shares/Securities/ debentures /any other items etc).</td>
+								    <td>(a) Description of the property</td>
 								    <td colspan="2" style="color: blue;"><%if(mov!=null && mov.getDescription()!=null){ %><%=mov.getDescription()%> <%}else{ %>-<%} %></td>
 								</tr>
 								
 								<tr>
 								    <td style="border-top: 0"></td>
-								    <td>(b) Make & Model (Registration No.  in case of vehicle) where necessary</td>
+								    <td>(b) Make & Model (Registration No.)</td>
 								    <td colspan="2" style="color: blue;"><%if(mov!=null && mov.getMakeAndModel()!=null) {%><%=mov.getMakeAndModel() %><%}else{ %>-<%} %></td>
 								</tr>
 								
@@ -231,9 +236,15 @@ int slno=0;
 								<tr>
 								    <td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
-								    <td colspan="2"></td>
+								    <td colspan="2" style="color: blue;">
+								    <%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource())) {%>
+								      Personal savings
+								     <%} else if(mov!=null && mov.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(mov.getFinanceSource()) ) {%>
+								     <%=mov.getFinanceSource()%>
+								     <%} %>
+								    </td>
 								</tr>
-								<%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource())) {%>
+								<%-- <%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource())) {%>
 								<tr>
 								    <td style="border-bottom: 1;border-top: 0;"></td>
 								    <td>(a) Personal savings</td>
@@ -244,12 +255,12 @@ int slno=0;
 								    <td style="border-bottom: 1;border-top: 0;"></td>
 								    <td>(b) Other sources give details	</td>
 								    <td colspan="2" style="color: blue;"><%=mov.getFinanceSource()%></td>
-								 </tr> 
-								 <%} }else if(mov!=null&& mov.getTransState()!=null && "D".equalsIgnoreCase(mov.getTransState())) {%>
+								 </tr>  --%>
+								 <%} else if(mov!=null&& mov.getTransState()!=null && "D".equalsIgnoreCase(mov.getTransState())) {%>
 								 <tr>
 								    <td style="width: 5%;"><%=++slno%>.</td>
-								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition (A copy of the sanction/acknowledgement should be attached)</td>
-								    <td colspan="2" style="color: blue"><%if(mov!=null && mov.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(mov.getRequisiteSanction())){ %>YES<%} else{%>NO<%} %></td>
+								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition </td>
+								    <td colspan="2" style="color: blue"><%if(mov!=null && mov.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(mov.getRequisiteSanction())){ %>Yes<%} else{%>No<%} %></td>
 								 </tr>  
 								 <%} %>	
 								 
@@ -260,14 +271,14 @@ int slno=0;
 								</tr>
 								<tr>
 									<td style="width: 5%;border-top:0"></td>
-									<td>(b) How the transaction was arranged / to be arranged (whether through any statutory body or a private agency through advertisement or through friends and relatives, full particulars to be given).</td>
+									<td>(b) How the transaction was arranged / to be arranged </td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getTransArrangement()!=null) {%> <%=mov.getTransArrangement() %> <%} %></td>
 								</tr>
 								
 								<tr>
 									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
 									<td>(a) Is the party related to the applicant</td>
-									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getPartyRelated()!=null && "Y".equalsIgnoreCase(mov.getPartyRelated())){ %>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getPartyRelated()!=null && "Y".equalsIgnoreCase(mov.getPartyRelated())){ %>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%if(mov!=null && mov.getPartyRelated()!=null && "Y".equalsIgnoreCase(mov.getPartyRelated())){ %>
 								<tr>
@@ -279,7 +290,7 @@ int slno=0;
 								<tr>
 									<td style="border-bottom: 0;border-top: 0;"></td>
 									<td>(c) Did the applicant have any dealings with the party in his/her official capacity at any time, or is the applicant likely to have any dealing with the party in the near future?</td>
-									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getFutureDealings()!=null && "Y".equalsIgnoreCase(mov.getFutureDealings())) {%>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getFutureDealings()!=null && "Y".equalsIgnoreCase(mov.getFutureDealings())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<tr>
 									<td style="border-top: 0;"></td>
@@ -291,7 +302,7 @@ int slno=0;
 								<tr>
 									<td style="width: 5%;"><%=++slno%>.</td>
 									<td>In case of acquisition by gift, whether sanction is also required under SITAR Conduct, Discipline & Appeal Rules.</td>
-									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getSanctionRequired()!=null && "Y".equalsIgnoreCase(mov.getSanctionRequired())) {%>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getSanctionRequired()!=null && "Y".equalsIgnoreCase(mov.getSanctionRequired())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%} %>
 								<tr>
@@ -302,7 +313,11 @@ int slno=0;
 							</table>
 							
 							<!--DECLARATION  -->
-							<div style="width: 100%;border: 0;text-align: center;margin-top:70px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+							<%if(slno<=13) {%>
+							<div style="width: 100%;border: 0;text-align: center;margin-top: 90px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+							<%}else{ %>
+							<div style="width: 100%;border: 0;text-align: center;margin-top: 70px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+							<%} %>
 							<br>
 							<%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> 
 						    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
@@ -315,19 +330,21 @@ int slno=0;
 						     <%} %>
 						     <br>
 						     <div style="margin-left: 10px;font-size: 14px;" align="left">Date&emsp;:&emsp;
+						      <label style="color: blue;">
 						      <%for(Object[] apprInfo : ApprovalEmpData){ %>
 							  <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
 					   				<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
 					   			<%break;
 					   			} %>
 						   		<%} %>
+						   		</label>
 						     </div>
-						     <div style="" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
+						     <div style="color: blue;" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
 						     <div style="" align="right">Signature of the employee</div>
 						     
 						     <!--Remarks of Administration  -->
-						     <% if( mov!=null && "APR".equalsIgnoreCase(mov.getPisStatusCode()) ){ %>	
-						     <hr style="border: solid 1px;">				     
+						     <% if( CEO.equalsIgnoreCase(empNo) || mov!=null && adminRemarks.contains(mov.getPisStatusCode()) ){ %>	
+						     <hr style="border: solid 1px;margin-left:20px;">				     
 						     <div style="width: 100%;border: 0;text-align: center;margin-top: 20px;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
 						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
@@ -342,14 +359,29 @@ int slno=0;
 						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
 				              <br>	
 				              <br>
+				              <label style="color: blue;">
 				   		     <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
 				   				<%=apprInfo[2] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			 <% break;} %>
 				   		     <%} %> 
-				             </div>
+				   		      </label>
+				             </div>				            
 				             <%} %>
+				              <%if( ( CEO.equalsIgnoreCase(empNo) || ( mov!=null && mov.getPisStatusCode().toString().equalsIgnoreCase("APR") )) ) {%>
+                      <div class="row" style="margin-top: 40px;">
+                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
+                      </div>
+                      <div class="row">
+                         <div class="col-md-12" style="color: blue;"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> </div>
+                      </div>
+                       <%} %>
       </div>
 
 </body>

@@ -1944,8 +1944,7 @@ public class MasterController {
 				 req.setAttribute("PandA", service.getPandAFandAById(Long.parseLong(adminsId)));
 				return "masters/PandAFandAAdminAddEdit";
 			}
-			else {
-				;
+			else {				
 				req.setAttribute("PandAFandAData", service.PandAFandAAdminData());
 				
 				return "masters/PandAFandAAdmin";
@@ -1968,10 +1967,10 @@ public class MasterController {
 		try {
 		
 			PisAdmins pisAdmins = new PisAdmins();
-			pisAdmins.setAdmin(req.getParameter("panda"));
+			pisAdmins.setEmpAdmin(req.getParameter("employee"));
 			pisAdmins.setAdminType(req.getParameter("adminType"));
 			pisAdmins.setAdminFrom(DateTimeFormatUtil.dateConversionSql(req.getParameter("fdate")));
-//			pisAdmins.setAdminTo(DateTimeFormatUtil.dateConversionSql(req.getParameter("tdate")));
+			pisAdmins.setAdminTo(DateTimeFormatUtil.dateConversionSql(req.getParameter("tdate")));
 			pisAdmins.setIsActive(1);
 			pisAdmins.setCreatedBy(UserId);
 			pisAdmins.setCreatedDate(sdtf.format(new Date()));
@@ -1981,7 +1980,7 @@ public class MasterController {
 			if (result != 0) {
 				 redir.addAttribute("result", "Admin Added Successfully");
 			} else {
-				 redir.addAttribute("resultfail", "Admin Add Unsuccessfull");
+				 redir.addAttribute("resultfail", "Admin Add Unsuccessful");
 			}
 			
 			return "redirect:/PandAFandAAdmin.htm";
@@ -2001,29 +2000,17 @@ public class MasterController {
 		try {
 			long adminsId = Long.parseLong(req.getParameter("adminsId")) ;
 			
-			 PisAdmins editpisAdmins = new PisAdmins();
+			 PisAdmins pisAdmins = new PisAdmins();
 			 			
-			 editpisAdmins.setAdminsId(adminsId);
-			 editpisAdmins.setRevisedOn(sdtf.format(new Date()));
-			 editpisAdmins.setIsActive(0);
-			 editpisAdmins.setModifiedBy(UserId);
-			 editpisAdmins.setModifiedDate(sdtf.format(new Date()));
-			 
-			 long EditCount = service.PandAFandAEdit(editpisAdmins);
-			 long result =0L;
-			 if(EditCount>0) {
-             PisAdmins pisAdmins = new PisAdmins();
-          
-			 pisAdmins.setAdmin(req.getParameter("panda"));
+			 pisAdmins.setAdminsId(adminsId);
+			 pisAdmins.setEmpAdmin(req.getParameter("employee"));
 			 pisAdmins.setAdminType(req.getParameter("adminType"));
 			 pisAdmins.setAdminFrom(DateTimeFormatUtil.dateConversionSql(req.getParameter("fdate")));
-			 pisAdmins.setIsActive(1);
-			 pisAdmins.setCreatedBy(UserId);
-			 pisAdmins.setCreatedDate(sdtf.format(new Date()));
+			 pisAdmins.setAdminTo(DateTimeFormatUtil.dateConversionSql(req.getParameter("tdate")));
+			 pisAdmins.setModifiedBy(UserId);
+			 pisAdmins.setModifiedDate(sdtf.format(new Date()));
 			 
-			 result = service.PandAFandAAdd(pisAdmins);
-			
-			 }
+			 long result = service.PandAFandAEdit(pisAdmins);        
                     
                String comments = (String)req.getParameter("comments");
 	    	   MasterEdit masteredit  = new MasterEdit();
@@ -2039,9 +2026,9 @@ public class MasterController {
 	    	 
 	    	   
 			if (result != 0) {
-				 redir.addAttribute("result", "P&A And F&A Updated Successfully");
+				 redir.addAttribute("result", "Admin Updated Successfully");
 			} else {
-				 redir.addAttribute("resultfail", "P&A And F&A Update Unsuccessfull");
+				 redir.addAttribute("resultfail", "Admin Update Unsuccessful");
 			}
 			
 			 return "redirect:/PandAFandAAdmin.htm";

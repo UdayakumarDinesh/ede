@@ -7,6 +7,7 @@
 <%
 Object[] emp = (Object[])request.getAttribute("EmpData");
 %>
+<title>Immovable Property Form</title>
 <head>
 <style type="text/css">
 
@@ -24,7 +25,7 @@ Object[] emp = (Object[])request.getAttribute("EmpData");
 			}
 
 			@page {
-				size: 790px 1140px;
+				size: 790px 1050px;
 				margin-top: 49px;
 				margin-left: 72px;
 				margin-right: 39px;
@@ -226,7 +227,7 @@ int slno=0;
 								</tr>
 								 <tr>
 								    <td style="border-bottom: 0;border-top: 0;"></td>
-								    <td>(d) Whether the applicant&apos;s interest in the property is in full or part (in case of partial interest, the extent of such interest must be indicated)</td>
+								    <td>(d) Whether the applicant&apos;s interest in the property is in full or part</td>
 								    <%if(imm!=null && imm.getApplicantInterest()!=null && "F".equalsIgnoreCase(imm.getApplicantInterest())) {%><td colspan="2" style="color: blue;">Full</td>
 								    <%}else if(imm!=null && imm.getApplicantInterest()!=null && "P".equalsIgnoreCase(imm.getApplicantInterest()) ){%><td colspan="2" style="color: blue;"> <%="Part -"+imm.getPartialInterest() %></td> <%} %>
 								</tr>
@@ -247,9 +248,15 @@ int slno=0;
 								<tr>
 								    <td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
-								    <td colspan="2"></td>
+								    <td colspan="2" style="color: blue;">
+								     <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource())) {%>
+								      Personal savings
+								      <%}else if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>
+								      <%=imm.getFinanceSource()%>
+								      <%} %>
+								    </td>
 								</tr>
-								<%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource())) {%>
+								<%-- <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource())) {%>
 								<tr>
 								    <td style="border-bottom: 1;border-top: 0;"></td>
 								    <td>(a) Personal savings</td>
@@ -260,12 +267,12 @@ int slno=0;
 								    <td style="border-bottom: 1;border-top: 0;"></td>
 								    <td>(b) Other sources give details	</td>
 								    <td colspan="2" style="color: blue;"><%=imm.getFinanceSource()%></td>
-								 </tr> 
-								 <%} }else if(imm!=null&& imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())) {%>
+								 </tr>  --%>
+								 <%} else if(imm!=null&& imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())) {%>
 								 <tr>
 								    <td style="width: 5%;"><%=++slno%>.</td>
-								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition (A copy of the sanction/acknowledgement should be attached)</td>
-								    <td colspan="2" style="color: blue"><%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){ %>YES<%} else{%>NO<%} %></td>
+								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition</td>
+								    <td colspan="2" style="color: blue"><%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){ %>Yes<%} else{%>No<%} %></td>
 								 </tr>  
 								 <%} %>	
 								 
@@ -276,14 +283,14 @@ int slno=0;
 								</tr>
 								<tr>
 									<td style="width: 5%;border-top:0"></td>
-									<td>(b) How the transaction was arranged / to be arranged (whether through any statutory body or a private agency through advertisement or through friends and relatives, full particulars to be given).</td>
+									<td>(b) How the transaction was arranged / to be arranged</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getTransArrangement()!=null) {%> <%=imm.getTransArrangement() %> <%} %></td>
 								</tr>
 								
 								<tr>
 									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
 									<td>(a) Is the party related to the applicant</td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>
 								<tr>
@@ -295,7 +302,7 @@ int slno=0;
 								<tr>
 									<td style="border-bottom: 0;border-top: 0;"></td>
 									<td>(c) Did the applicant have any dealings with the party in his/her official capacity at any time, or is the applicant likely to have any dealing with the party in the near future?</td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getFutureDealings()!=null && "Y".equalsIgnoreCase(imm.getFutureDealings())) {%>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getFutureDealings()!=null && "Y".equalsIgnoreCase(imm.getFutureDealings())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<tr>
 									<td style="border-top: 0;"></td>
@@ -307,7 +314,7 @@ int slno=0;
 								<tr>
 									<td style="width: 5%;"><%=++slno%>.</td>
 									<td>In case of acquisition by gift, whether sanction is also required under SITAR Conduct, Discipline & Appeal Rules.</td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>YES<%} else{%>NO<%} %></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%} %>
 								<tr>
@@ -317,7 +324,11 @@ int slno=0;
 								</tr>
 						 </table>
 						 
+						 <%if(slno<=13) {%>
 						 <div style="width: 100%;border: 0;text-align: center;margin-top:100px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+						 <%}else{ %>
+						 <div style="width: 100%;border: 0;text-align: center;margin-top:40px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
+						 <%} %>
 							<br>
 							<%if(imm!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> 
 						    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
@@ -330,14 +341,16 @@ int slno=0;
 						     <%} %>
 						     <br>
 						     <div style="margin-left: 10px;font-size: 14px;" align="left">Date&emsp;:&emsp;
+						     <label style="color: blue;">
 						      <%for(Object[] apprInfo : ApprovalEmpData){ %>
 							  <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
 					   				<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
 					   			<%break;
 					   			} %>
 						   		<%} %>
+						   	</label>
 						     </div>
-						     <div style="" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
+						     <div style="color: blue;" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
 						     <div style="" align="right">Signature of the employee</div>
 						     
 						     <% if( imm!=null && "APR".equalsIgnoreCase(imm.getPisStatusCode()) ){ %>	
@@ -356,14 +369,29 @@ int slno=0;
 						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
 				              <br>	
 				              <br>
+				              <label style="color: blue;">
 				   		     <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
 				   				<%=apprInfo[2] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			 <% break;} %>
-				   		     <%} %> 
+				   		     <%} %>
+				   		     </label> 
 				             </div>
 				             <%} %>
+				             <%if( imm!=null && imm.getPisStatusCode().toString().equalsIgnoreCase("APR") ) {%>
+                      <div class="row" style="margin-top: 40px;">
+                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
+                      </div>
+                      <div class="row">
+                         <div class="col-md-12" style="color: blue;"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> </div>
+                      </div>
+                       <%} %>
        </div>
 </body>
 </html>

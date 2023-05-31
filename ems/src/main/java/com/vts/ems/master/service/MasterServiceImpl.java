@@ -651,12 +651,13 @@ public class MasterServiceImpl implements MasterService {
 
 		@Override
 		public long PandAFandAEdit(PisAdmins admins) throws Exception {
+			
 			PisAdmins pisadmins = dao.getPandAFandAById(admins.getAdminsId());
 			
-			String adminFrom = DateTimeFormatUtil.SqlToRegularDate(pisadmins.getAdminFrom().toString());
-			pisadmins.setAdminTo(DateTimeFormatUtil.getMinusOneDay(adminFrom));
-			pisadmins.setIsActive(admins.getIsActive());
-			pisadmins.setRevisedOn(admins.getRevisedOn());
+			pisadmins.setEmpAdmin(admins.getEmpAdmin());
+			pisadmins.setAdminType(admins.getAdminType());
+			pisadmins.setAdminFrom(admins.getAdminFrom());
+			pisadmins.setAdminTo(admins.getAdminTo());
 			pisadmins.setModifiedBy(admins.getModifiedBy());
 			pisadmins.setModifiedDate(admins.getModifiedDate());
 			

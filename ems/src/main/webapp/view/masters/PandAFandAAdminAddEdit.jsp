@@ -56,11 +56,11 @@
 							<div class="table-responsive" align="center" style="margin-left: 10%;">
 								<table	class="table table-bordered table-hover table-striped table-condensed " style="width: 75%;" >								
 										<tr>
-											<th style="width: 20%;"><label>Admin : <span class="mandatory"	style="color: red;">*</span></label></th>
-											<td><select class="form-control select2"   id="panda" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width: 80%;">
+											<th style="width: 20%;"><label>Employee : <span class="mandatory"	style="color: red;">*</span></label></th>
+											<td><select class="form-control select2" name="employee"  id="employee" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width: 80%;">
 												<option disabled="disabled" selected="selected" hidden="true" value="">--Select--</option>
 												<%if(list!=null&&list.size()>0){for(Object[] O:list){ %>
-												<option value="<%=O[2]%>" <%if(PandA!=null){if( PandA.getAdmin().equalsIgnoreCase(O[2].toString())  ){%> selected   <%}}%> > <%=O[1]%></option>
+												<option value="<%=O[2]%>" <%if(PandA!=null){if( PandA.getEmpAdmin().equalsIgnoreCase(O[2].toString())  ){%> selected   <%}}%> > <%=O[1]%></option>
 												<%}}%>
 											    </select></td>
 										</tr>	
@@ -68,8 +68,8 @@
 											<th style="width: 20%;"><label>Admin Type : <span class="mandatory"	style="color: red;">*</span></label></th>
 											  <td>
 											    <select class="form-control select2"  name="adminType" id="adminType" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width: 80%;">
-	                                               <option value="P" <%if(PandA!=null && PandA.getAdminType()!=null && "P".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>P&A</option>
-	                                               <option value="F" <%if(PandA!=null && PandA.getAdminType()!=null && "P".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>F&A</option>
+	                                               <option value="P" <%if(PandA!=null && PandA.getAdminType()!=null && "P".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>P&A Admin</option>
+	                                               <option value="F" <%if(PandA!=null && PandA.getAdminType()!=null && "F".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>F&A Admin</option>
 											    </select>
 											  </td>
 											<%-- <td ><select class="form-control select2"  name="" id="fanda" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width: 80%;">
@@ -80,11 +80,11 @@
 											    </select></td> --%>
 										</tr>
 										<tr>
-										  <th style="width: 20%;"><label> Admin From : <span class="mandatory"	style="color: red;">*</span></label></th>
+										  <th style="width: 20%;"><label> Duration : <span class="mandatory"	style="color: red;">*</span></label></th>
 										   <td >
                                               <input class="form-control" type="text" id="fdate" name="fdate" value="<%if(PandA!=null && PandA.getAdminFrom()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(PandA.getAdminFrom().toString())%><%}%>" required="required" readonly="readonly" style="width: 35%;display: inline;">
-                                             <!--  &emsp;-&emsp;					 
-								              <input class="form-control" type="text" id="tdate" name="tdate" required="required"  readonly="readonly" style="width: 35%;display: inherit;"> -->
+                                               &emsp;-&emsp;					 
+								              <input class="form-control" type="text" id="tdate" name="tdate" value="<%if(PandA!=null && PandA.getAdminTo()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(PandA.getAdminTo().toString())%><%}%>" required="required"  readonly="readonly" style="width: 35%;display: inherit;">
 	                                      </td>
 	                                      <td style="border: 0;width: 30%;"></td>
 									    </tr>									
@@ -108,7 +108,7 @@
 									
 									<%} %>
 							</div>
-							<div id="reset" class="btn btn-sm btn-info" style="margin-left: 2%;">RESET</div>
+							<!-- <div id="reset" class="btn btn-sm btn-info" style="margin-left: 2%;">RESET</div> -->
 
 						</div>
 						<input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
@@ -191,12 +191,57 @@ $( "#fdate" ).daterangepicker({
     }
 });
 
+
+$( "#fdate" ).change( function(){
+    
+	$( "#tdate" ).daterangepicker({
+		"singleDatePicker" : true,
+	    "linkedCalendars" : false,
+	    "showCustomRangeLabel" : true,
+	    "minDate" :$("#fdate").val(),  
+	    "cancelClass" : "btn-default",
+	    showDropdowns : true,
+	    	locale : {
+	    	format : 'DD-MM-YYYY'
+	    } 
+	});
+
+	
+});
+
+$( "#fdate" ).daterangepicker({
+    "singleDatePicker" : true,
+    "linkedCalendars" : false,
+    "showCustomRangeLabel" : true,
+    "minDate" :new Date(),  
+    "cancelClass" : "btn-default",
+    showDropdowns : true,
+    locale : {
+    	format : 'DD-MM-YYYY'
+    }
+});
+
+        
+$( "#tdate" ).daterangepicker({
+	"singleDatePicker" : true,
+    "linkedCalendars" : false,
+    "showCustomRangeLabel" : true,
+    "minDate" :$("#fdate").val(),  
+    "startDate" : $("#fdate").val(),
+    "cancelClass" : "btn-default",
+    showDropdowns : true,
+    	locale : {
+    	format : 'DD-MM-YYYY'
+    } 
+});
+
+
+</script>
+
+<!-- <script type="text/javascript">
 $('#reset').click(function() {
     location.reload();
 });
-</script>
-
-<script type="text/javascript">
 $( document ).ready(function() {
 	$("#fanda").change(function(){
 		var panda=$('#panda').val();
@@ -213,6 +258,6 @@ $( document ).ready(function() {
 	      $("#fanda").prop("disabled", true);
 	});
 });
-</script>
+</script> -->
 </body>
 </html>
