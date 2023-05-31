@@ -5,6 +5,7 @@ import java.util.List;
 import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
+import com.vts.ems.property.model.PisMovablePropertyTrans;
 
 public interface PropertyService {
 
@@ -27,5 +28,7 @@ public interface PropertyService {
     public Long movablePropForward(String movPropertyId,String username, String action, String remarks, String apprEmpNo,String loginType ) throws Exception;
     public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception;
     public List<Object[]> propertyApprovedList(String EmpNo,String FromDate,String ToDate) throws Exception;
+    public Long addMovablePropertyTransaction(PisMovablePropertyTrans transaction) throws Exception;
+	public List<Object[]> movPropertyRemarksHistory(String movPropertyId) throws Exception;
     
 }

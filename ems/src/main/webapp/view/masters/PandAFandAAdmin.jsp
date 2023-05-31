@@ -41,7 +41,7 @@
 </head>
 <body>
 <%
-List<Object[]> PandAFandAData   = (List<Object[]>)request.getAttribute("PandAFandAData");
+List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
 
 %>
 
@@ -79,40 +79,46 @@ List<Object[]> PandAFandAData   = (List<Object[]>)request.getAttribute("PandAFan
 			</div>
 		<%} %>
 	</div>
-		
-			<div class="card" >		
-				<div class="card-body " >
-				 <h5>Add / Edit Admin</h5>	
-					<hr>
-					<%if(PandAFandAData!=null){ %>
-					<table class="table table-hover table-striped  table-condensed  table-bordered"  id="">
-					<tbody>
-					    <tr align="center">
-							<th>P & A</th>
-							<th>F & A</th>
-							<!-- <th>Revised On</th> -->
-							<th>Edit</th>
-					   </tr>
-					    <tr align="center">
-							<%-- <td><%=PandAFandAData[1]+", "+PandAFandAData[2]%></td>
-							<td><%=PandAFandAData[3]+", "+PandAFandAData[4]%></td> --%>
-							<%-- <td><%if(PandAFandAData[5]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(PandAFandAData[5].toString())%><%}else{%>--<%}%></td> --%>
-							<td style="padding-top:5px; padding-bottom: 5px;">
-							<form action="PandAFandAAdmin.htm" method="GET">
-							 <%-- <input type="hidden" name="adminsId" value="<%if(PandAFandAData!=null){%><%=PandAFandAData[0]%><%}%>"> --%>
-						     <button type="submit" class="btn btn-sm" name="Action" value="EDIT" data-toggle="tooltip" data-placement="top" title="Edit">
-							<i class="fa-solid fa-pen-to-square" style="color: #E45826"></i></button>	</form></td>
-					   </tr>
-					</tbody>
-					</table>
-						<%}else{%>
-				          <form action="PandAFandAAdmin.htm" method="GET">
-                             <button  type="submit" name="Action" value="ADD"  class="btn btn-sm add-btn" style="margin-bottom:12px;"> Add P&A And F&A Admin</button>
-                          </form>
-					    <%}%>
+	    <div class="card" >
+				<div class="card-body ">			
+					<form action="PandAFandAAdmin.htm" method="POST" id="empForm">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
+						<div class="table-responsive">					
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
+								<thead>
+									<tr>
+										<th> Select   </th>
+										<th> Admin </th>
+										<th> Admin Role </th>
+										<th> Admin From </th>
+										<th> Admin To </th>
+									</tr>
+								</thead>
+								<tbody>
+									<% if(list!=null){ for(Object[] obj:list){ %>
+										<tr>										   
+											<td style="text-align: center;width: 5%;">
+							                  <input type="radio" name="adminsId" value="<%=obj[0] %>"> 
+											</td>
+											<td style="text-align: left;width: 40%%;"><%=obj[5]+", "+obj[6]%></td>
+											<td style="text-align: center;width: 15%;"><%if("P".equalsIgnoreCase(obj[2].toString())){%>P&A Admin<%} else{%>F&A Admin<%} %></td>
+											<td style="text-align: center;width: 15%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
+							                <td style="text-align: center;width: 15%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>
+										</tr>
+									 <%} }%>
+								</tbody>
+							</table>
+						</div>			
+						<div class="row text-center">
+						<div class="col-md-12">
 						
-		  </div>
-		</div>					
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADD"   >ADD </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDIT"  Onclick="Edit(empForm)" >EDIT </button>
+						</div>
+						</div>
+			   </form>		
+			  </div>
+			  </div>				
 	</div>
 </div>
 </body>

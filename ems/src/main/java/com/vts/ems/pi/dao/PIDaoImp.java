@@ -453,7 +453,7 @@ public class PIDaoImp implements PIDao{
 		return notification.getNotificationId();
 	}
 	
-	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.Admin FROM pis_admins a WHERE a.AdminType IN ('P') AND a.IsActive=1 LIMIT 1";
+	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpAdmin FROM pis_admins a WHERE a.AdminType IN ('P') AND a.IsActive=1 LIMIT 1";
 	@Override
 	public List<String> GetPandAAdminEmpNos()throws Exception
 	{
@@ -490,7 +490,7 @@ public class PIDaoImp implements PIDao{
 		}		
 	}
 	
-	private static final String GETPANDAEMPNAME  ="SELECT DISTINCT a.EmpNo,a.EmpName FROM employee a, pis_admins b WHERE a.EmpNo=b.Admin AND b.AdminType IN ('P') AND b.IsActive=1  LIMIT 1";
+	private static final String GETPANDAEMPNAME  ="SELECT DISTINCT a.EmpNo,a.EmpName FROM employee a, pis_admins b WHERE a.EmpNo=b.EmpAdmin AND b.AdminType IN ('P') AND b.IsActive=1  LIMIT 1";
 	@Override
 	public Object[] GetPandAEmpName() throws Exception
 	{

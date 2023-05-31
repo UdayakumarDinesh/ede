@@ -44,7 +44,7 @@
 <div class="card-header page-top ">
 	<div class="row">
 		<div class="col-md-7">
-				<h5>Intimation Approvals<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+				<h5>Property Approvals<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			</div>
 			<div class="col-md-5">
@@ -109,7 +109,7 @@
 				<thead>
 					<tr>
 					   <th style="width:5%">SN</th>
-					  <th style="width:15%">EmpNo</th>
+					 <!--  <th style="width:15%">EmpNo</th> -->
 					  <th style="width:40%">Employee Name</th>
                        <th style="width:15%">Type</th>
                        <th style="width:25%">Action</th>
@@ -122,7 +122,7 @@
                         <tr>
                              
                             <td style="text-align: center;"><%=++SN%></td>
-                            <td style="text-align: center;"><%=form[1]%></td>
+                            <%-- <td style="text-align: center;"><%=form[1]%></td> --%>
                             <td ><%=form[2] %></td>
                             <td ><%=form[3]%></td>
                             <td style="text-align: center;">
@@ -130,7 +130,11 @@
                             	<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=form[4] %>" formaction="ImmovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
-						 	<%} %>                           
+						 	<%}else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Movable Property") ){ %>  
+						 	<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4] %>" formaction="MovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 			<i class="fa-solid fa-eye"></i>
+						 		</button>
+						 	<%} %>                         
 						 	</td>
                             
                         </tr>
@@ -185,9 +189,10 @@
 				<thead>
 					<tr>
 					   <th style="width:5%">SN</th>
-					  <th style="width:15%">EmpNo</th>
 					  <th style="width:40%">Employee Name</th>
                        <th style="width:15%">Type</th>
+                       <th style="width: ">Status</th>
+                       <th style="width: ">Action</th>
                   	</tr>
 				</thead>
                  <tbody>
@@ -197,9 +202,31 @@
                         <tr>
                              
                             <td style="text-align: center;"><%=++SNA%></td>
-                            <td style="text-align: center;"><%=form[1]%></td>
                             <td ><%=form[2] %></td>
                             <td ><%=form[3]%></td>
+                            <td>
+                            <%if(form[3]!=null && form[3].toString().equalsIgnoreCase("Immovable Property") ){%>
+                            	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=form[4]%>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=form[8]%>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=form[7] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								</button>
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Movable Property")){ %>
+						 		<button type="submit" class="btn btn-sm btn-link w-100" formaction="MovablePropTransStatus.htm" value="<%=form[4]%>" name="movpropertyId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=form[8]%>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=form[7] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								</button>						 	
+						 	<%} %>
+						 	</td>
+						 	<td align="center">
+                            <%
+                            if(form[3]!=null && form[3].toString().equalsIgnoreCase("Immovable Property") ){%>
+                            	<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=form[4]%>" formaction="ImmovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Movable Property")){ %>
+						 		<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4]%>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+									<i style="color: #019267" class="fa-solid fa-download"></i>
+							    </button>						 	
+						 	<%} %>
+						 	</td>
                         </tr>
                        <%} %>
                           

@@ -146,7 +146,7 @@
 						    <td style="text-align: left;width:10%;"><%if(obj[7]!=null){ %> <%=obj[7] %> <%} %> </td>
 						    <td style="text-align: left;">
 						    <%if(obj[5]!=null){ %> <%=obj[5] %> <%} %>
-						    <%if(obj[6]!=null || !obj[6].toString().isEmpty()){ %>	<%="("+obj[6]+")" %> <%} %>					 
+						    <%if(obj[6]!=null){ %>	<%="("+obj[6]+")" %> <%} %>					 
 						     </td>
 						    <td style="text-align: right;width:10%;"><%if(obj[8]!=null){ %> <%=obj[8] %> <%} %> </td>
 					   		<td style="width:17%;">
@@ -154,11 +154,11 @@
 								<%if(obj[12]!=null){%>
 								  
 								 	<%if(obj[9]!=null && obj[9].toString().equalsIgnoreCase("A") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="movpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="MovablePropTransStatus.htm" value="<%=obj[0] %>" name="movpropertyId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%}else{ %>
-								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="" value="<%=obj[0] %>" name="movpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[13] %>; font-weight: 600;" formtarget="_blank">
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="MovablePropTransStatus.htm" value="<%=obj[0] %>" name="movpropertyId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[13] %>; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; <%=obj[12] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%} %>  
@@ -167,10 +167,10 @@
 							</td>
 					   		
 					   		<td style="text-align: left;width:10%;">
-								<button type="submit" class="btn btn-sm view-icon" formaction="" name="movPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Movable Property" style="font-weight: 600;" >
+								<button type="submit" class="btn btn-sm view-icon" formaction="MovablePropPreview.htm" name="movPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Movable Property" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
-								<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=obj[0] %>" formaction="" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=obj[0] %>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 								   <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>
                             </td>	
@@ -357,7 +357,7 @@
 			   </div>
        </div>
 </div>	
-				
+</div>				
 </div>	
 <script type="text/javascript">
 $("#myTable2").DataTable({

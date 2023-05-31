@@ -1237,13 +1237,13 @@ private static final String QUALIFICATIONLIST="SELECT quali_id,quali_title FROM 
 			
 			
 	}
-		private static final String PANDAFANDAADMINDATA="SELECT a.AdminsId,a.Admin,a.AdminType,a.AdminFrom,a.AdminTo,a.RevisedOn,b.EmpName,c.Designation FROM pis_admins a,employee b,employee_desig c WHERE a.Admin=b.EmpNo AND a.IsActive=1 AND b.DesigId=c.DesigId";
+		private static final String PANDAFANDAADMINDATA="SELECT a.AdminsId,a.EmpAdmin,a.AdminType,a.AdminFrom,a.AdminTo,b.EmpName,c.Designation FROM pis_admins a,employee b,employee_desig c WHERE a.EmpAdmin=b.EmpNo AND b.DesigId=c.DesigId AND a.IsActive=1 ORDER BY a.AdminsId DESC";
 
 		@Override
 		public List<Object[]> PandAFandAAdminData() throws Exception {			
 			try {
 				Query query = manager.createNativeQuery(PANDAFANDAADMINDATA);
-				return (List<Object[]>) query.getSingleResult();
+				return (List<Object[]>) query.getResultList();
 			} catch (Exception e) {
 				 logger.error(new Date()+" Inside DAO PandAFandAAdminData "+ e);
 					return null;
