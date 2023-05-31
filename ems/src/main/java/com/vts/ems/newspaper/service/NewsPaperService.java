@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.newspaper.model.Newspaper;
+import com.vts.ems.newspaper.model.NewspaperContingent;
 import com.vts.ems.pis.model.Employee;
 
 public interface NewsPaperService {
@@ -28,8 +29,9 @@ public interface NewsPaperService {
 	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
 	public List<String> GetEmpDGMEmpNo() throws Exception;
 	public long editNewspaper(Newspaper newspaper) throws Exception;
+	public List<Object[]> newspapersByContingentBill(Long ContingentId)throws Exception;
 	public long forwardNewspaper(long newspaperApplyId, String empNo, String remarks, String userName, String Action) throws Exception;
-	public List<Object[]> findDGMNewspaperList(String empNo) throws Exception;
+	public List<Object[]> findDGMNewspaperList(String empNo, String LoginType) throws Exception;
 	public Object[] empOnLogintype(String Logintype) throws Exception;
 	public List<Object[]> findPONewspaperList() throws Exception;
 	public List<Object[]> findAONewspaperList() throws Exception;
@@ -38,6 +40,14 @@ public interface NewsPaperService {
 	public List<Object[]> findApprovedNewspaperList(String toDate) throws Exception;
 	public long ContingentGenerate(String[] CHSSApplyId, String Username, String logintype,String EmpId,String genTilldate ) throws Exception;
 	public List<Object[]> getNewspaperContingentList(String logintype,String fromdate,String todate) throws Exception;
+	public List<Object[]> NewspaperContingentClaimList(String contingentid) throws Exception;
+	public List<Object[]> newspaperTransaById(long NewspaperId) throws Exception;
+	public Object[] newspaperContingentData(String contingentid) throws Exception;
+	public long ContingentClaimDrop(String[] newspaperids,String Username) throws Exception ;
+	public long NewspaperContingentDelete(String contingentid,String Username) throws Exception;
+	public NewspaperContingent findNewspaperContingent(String ContingentId) throws Exception ;
+	public long newspaperClaimsApprove(String contingentid,String Username, String action, String remarks,String LoginType,String EmpNo, Long EmpId ) throws Exception;
+	public List<Object[]> newspaperContningentApprTransById(Long ContingentId)throws Exception;
 	
 	
 	

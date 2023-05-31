@@ -32,24 +32,31 @@ public interface NewsPaperDao {
 	public List<Object[]> getNewspaperClaimList(String empid) throws Exception;
 	public LabMaster getLabDetails() throws Exception;
 	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception;
+	public List<Object[]> newspapersByContingentBill(Long ContingentId)throws Exception;
+	public List<Object[]> newspaperContningentApprTransById(Long ContingentId)throws Exception;
 	public List<Object[]> TelePhoneAllApprovedOrNot(String claimMonth, String claimYear)throws Exception;
 	public long addNewspaper(Newspaper newspaper) throws Exception;
 	public long addNewspaperTrans(NewspaperApplyTransaction newspaperTrans) throws Exception;
 	public List<String> GetEmpDGMEmpNo() throws Exception;
 	public long editNewspaper(Newspaper newspaper) throws Exception;
+	public long editNewspaperContingent(NewspaperContingent newspaperContingent) throws Exception;
 	public Object[] empOnLogintype(String Logintype) throws Exception;
 	public String GetDGMEmpNo(String empno) throws Exception;
 	public Newspaper findNewspaperApply(long newspaperApplyId) throws Exception;
 	public Employee findEmpByEmpNo(String empNo) throws Exception ;
+	public NewspaperContingent findNewspaperContingent(String ContingentId) throws Exception ;
 	public long addNotification(EMSNotification notification) throws Exception;
 	public long addNewspaperContingent(NewspaperContingent newspaperContingent) throws Exception;
 	public long addNewspaperContingentTrans(NewspaperContingentTrans newspaperContingentTrans) throws Exception;
-	public List<Object[]> findDGMNewspaperList(String empNo) throws Exception;
+	public List<Object[]> findDGMNewspaperList(String empNo, String LoginType) throws Exception;
 	public List<Object[]> findPONewspaperList() throws Exception;
 	public List<Object[]> findAONewspaperList() throws Exception;
 	public List<Object[]> findApprovedNewspaperList(String todate) throws Exception;
 	public List<Object[]> getNewspaperContingentList(String logintype,String fromdate,String todate) throws Exception;
 	public List<Object[]> NewspaperContingentClaimList(String contingentid) throws Exception;
+	public List<Object[]> newspaperTransaById(long NewspaperId) throws Exception;
+	public Object[] newspaperContingentData(String contingentid) throws Exception;
+	
 	
 	
 	

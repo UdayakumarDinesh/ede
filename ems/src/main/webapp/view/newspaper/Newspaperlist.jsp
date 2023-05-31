@@ -111,8 +111,8 @@ String AO=(String) request.getAttribute("AO");
 								<%-- <td><%if(0!=(Integer.parseInt(ls[6].toString()))&&ls[7]!=null){%><span class="label label-success">Approved</span><%}else{%><span class="label label-primary">User Applied</span><%}%></td> --%>
 								<td>
 									<button type="submit" class="btn btn-sm btn-link w-100"
-										formaction="BankDetTransacStatus.htm" value="<%=ls[0]%>"
-										name="bankId" data-toggle="tooltip" data-placement="top"
+										formaction="NewspaperApplyTransacStatus.htm" value="<%=ls[0]%>"
+										name="NewspaperId" data-toggle="tooltip" data-placement="top"
 										title="Transaction History" formnovalidate="formnovalidate"
 										style="color: <%=ls[11]%>; font-weight: 600;"
 										formtarget="_blank">

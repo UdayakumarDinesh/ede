@@ -34,6 +34,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.chss.dto.CHSSContingentDto;
+import com.vts.ems.chss.model.CHSSContingent;
+import com.vts.ems.newspaper.model.NewspaperContingent;
 import com.vts.ems.newspaper.service.NewPaperServiceImpl;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -720,6 +723,8 @@ public class NewspaperController {
 		HttpSession ses= req.getSession(false);
 		String Username = (String) ses.getAttribute("Username");
 		String EmpNo = (String) ses.getAttribute("EmpNo");
+		String LoginType = (String) ses.getAttribute("LoginType");
+
 		logger.info(new Date() + "Inside NewspaperApproval.htm " + Username);
 
 
@@ -728,16 +733,14 @@ public class NewspaperController {
 			List<String> DGMs = service.GetEmpDGMEmpNo();
 			String poEmpno=(String) service.empOnLogintype("K")[0];
 			String aoEmpno=(String) service.empOnLogintype("W")[0];
+			
 			if(aoEmpno.equalsIgnoreCase(EmpNo)) {
 				req.setAttribute("NewspapepApproList", service.findAONewspaperList());
 				return "newspaper/NewspaperApprovalList";
-			} else if(poEmpno.equalsIgnoreCase(EmpNo)) {
-				req.setAttribute("NewspapepApproList", service.findPONewspaperList());
+			} else if( DGMs.contains(EmpNo) || poEmpno.equalsIgnoreCase(EmpNo)) {
+				req.setAttribute("NewspapepApproList", service.findDGMNewspaperList(EmpNo, LoginType));
 				return "newspaper/NewspaperApprovalList";
-			} else if( DGMs.contains(EmpNo) ) {
-				req.setAttribute("NewspapepApproList", service.findDGMNewspaperList(EmpNo));
-				return "newspaper/NewspaperApprovalList";
-			} else {
+			}  else {
 				return "newspaper/NewspaperApprovalList";
 			}
 		} 
@@ -791,11 +794,11 @@ public class NewspaperController {
 	}
 	
 	@RequestMapping(value = "NewspaperContingentGenerate.htm", method = RequestMethod.POST)
-	public String CHSSContingentGenerate(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	public String NewspaperContingentGenerate(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
 	{
 		String Username = (String) ses.getAttribute("Username");
 		String LoginType = (String) ses.getAttribute("LoginType");
-		String EmpNO = (String) ses.getAttribute("EmpNO");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 		logger.info(new Date() +"Inside NewspaperContingentGenerate.htm "+Username);
 		try {
 
@@ -803,8 +806,8 @@ public class NewspaperController {
 
 			String genTilldate = req.getParameter("genTilldate");		
 			
-			long count= service.ContingentGenerate(NewspaperId, Username, LoginType, EmpNO, genTilldate);
-//			CHSSContingent contingent = service.getCHSSContingent(String.valueOf(count));
+			long count= service.ContingentGenerate(NewspaperId, Username, LoginType, EmpNo, genTilldate);
+
 			
 				if (count > 0) {
 					redir.addAttribute("result", "Contingent Bill Generated Successfully");
@@ -879,7 +882,7 @@ public class NewspaperController {
 
 	
 	@RequestMapping(value = "NewspaperContingetBill.htm", method = {RequestMethod.POST,RequestMethod.GET})
-	public String ContingetBill(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	public String NewspaperContingetBill(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 	{
 		String LoginType = (String) ses.getAttribute("LoginType");
 		String Username = (String) ses.getAttribute("Username");
@@ -897,19 +900,18 @@ public class NewspaperController {
 				claim_view_mode="A";
 			}
 			
-			req.setAttribute("ContingentList", "");
-			req.setAttribute("contingentdata", "");
+			req.setAttribute("ContingentList", service.NewspaperContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.newspaperContingentData(contingentid));
 			req.setAttribute("ApprovalAuth", "");
-			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("LabLogo", getLabLogoAsBase64());
 			req.setAttribute("labdata", "");
 			req.setAttribute("contingentremarks", "");
 			req.setAttribute("onlyview","Y");
 			req.setAttribute("logintype",LoginType);
 			req.setAttribute("view_mode",claim_view_mode);
 
-			return "chss/ContingentBillView";
+			return "newspaper/NewspaperContingentBillView";
 			
-//			return "chss/ContingentBill";
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside NewspaperContingetBill.htm "+Username, e);
@@ -917,7 +919,151 @@ public class NewspaperController {
 		}
 	}
 
+	@RequestMapping(value = "NewspaperApplyTransacStatus.htm" )
+	public String newspaperTransactionStatus(Model model,HttpServletRequest req, HttpSession ses)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewspaperApplyTransacStatus.htm "+ Username);
+		try {
+			String NewspaperId = req.getParameter("NewspaperId");
+			req.setAttribute("TransactionList", service.newspaperTransaById(Long.parseLong(NewspaperId)));
+			return "newspaper/NewspaperTransactionStatus";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperApplyTransacStatus.htm "+ Username, e);
+			return "static/Error";
+		}
+	}
 
+	@RequestMapping(value = "NewspaperContingentClaimDrop.htm", method = RequestMethod.POST)
+	public String ContingentFormDrop(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewspaperContingetBill.htm "+Username);
+		try {
+			String[] NewspaperIds = req.getParameterValues("NewspaperId");
+			String contingentid = req.getParameter("contingentid");
+			
+			long count = service.ContingentClaimDrop(NewspaperIds, Username);
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Contingent Bill Updated Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Contingent Bill Update Unsuccessful");	
+			}	
+			
+			redir.addFlashAttribute("contingentid", String.valueOf(contingentid));
+			return "redirect:/NewspaperContingetBill.htm";		
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingetBill.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+
+	
+	@RequestMapping(value = "NewspaperContingentDelete.htm", method = RequestMethod.POST)
+	public String newspaperContingentDelete(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewspaperContingentDelete.htm "+Username);
+		long count=0;
+		try {
+			String contingentid = req.getParameter("contingentid");
+			count = service.NewspaperContingentDelete(contingentid, Username);
+			
+			
+			if (count > 0) {
+				redir.addAttribute("result", "Bill Deleted Successfully");
+			} else {
+				redir.addAttribute("resultfail", "Bill Delete Unsuccessful");	
+			}	
+			
+			
+			return "redirect:/NewspaperContingentAppro.htm";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingentDelete.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
+	@RequestMapping(value = "NewspaperContingentApprove.htm", method = RequestMethod.POST)
+	public String newspaperClaimsApprove(HttpServletRequest req, HttpServletResponse response, HttpSession ses, RedirectAttributes redir) throws Exception 
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		Long EmpId = ((Long) ses.getAttribute("EmpId"));
+		String EmpNo =  ses.getAttribute("EmpNo").toString();
+		logger.info(new Date() +"Inside NewspaperContingentApprove.htm "+Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			String action = req.getParameter("action");
+			String remarks = req.getParameter("remarks");
+			
+						
+			long count= service.newspaperClaimsApprove(contingentid, Username, action,remarks,LoginType, EmpNo, EmpId);
+			
+			if(action.equalsIgnoreCase("F") || action.equalsIgnoreCase("VF") || action.equalsIgnoreCase("AF") || action.equalsIgnoreCase("CF")) 
+			{
+				NewspaperContingent contingent = service.findNewspaperContingent(contingentid);
+				if(contingent.getContingentStatusCode().equalsIgnoreCase("CSD"))
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Contingent Bill Status Updated Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Status Update Unsuccessful");	
+					}
+					
+					return "redirect:/ApprovedBills.htm";
+					
+				}
+				else if(LoginType.equalsIgnoreCase("Z")) 
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Contingent Bill Approved Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Approved Unsuccessful");	
+					}
+					
+				}else if(LoginType.equalsIgnoreCase("W"))
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Contingent Bill Recommended Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Recommend Unsuccessful");	
+					}
+				}
+				else
+				{
+					if (count > 0)
+					{
+						redir.addAttribute("result", "Contingent Bill Forwarded Successfully");
+					} else {
+						redir.addAttribute("resultfail", "Contingent Bill Forward Unsuccessful");	
+					}
+				}
+				
+			}
+			if(action.equalsIgnoreCase("R")) {
+				if (count > 0) {
+					redir.addAttribute("result", "Claim application(s) Returned Successfully");
+				} else {
+					redir.addAttribute("resultfail", "Claim application(s) Return Unsuccessful");	
+				}	
+			}
+			
+			return "redirect:/NewspaperContingentAppro.htm";
+		} catch (Exception e) {
+			
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingentApprove.htm "+Username, e);
+			return "static/Error";
+		}
+	}
 
 
 	////////////////////////////////////////////////////////////////////// Telephone code ///////////////////////////////////////////////////////////////////
@@ -1797,14 +1943,21 @@ public class NewspaperController {
 		try {
 			String ClaimMonth = req.getParameter("ClaimMonth");
 			String ClaimYear = req.getParameter("ClaimYear");
+			String contingentid = req.getParameter("contingentid");
 
 
 			String filename="";
 			if( ClaimMonth != null && ClaimYear!= null ) {
 				req.setAttribute("newsPaperFinalAppro", service.NewspaperAllApprovedOrNot(ClaimMonth, ClaimYear));
 				filename="NewsPaper_Final_Approval";
+			} else {
+				req.setAttribute("newsPaperFinalAppro", service.newspapersByContingentBill(Long.parseLong(contingentid)));
+				req.setAttribute("ContingentBillTrans", service.newspaperContningentApprTransById(Long.parseLong(contingentid)));
+				req.setAttribute("Bill", "YES");
+				filename="NewsPaper_Contingent_Bill";
 			}
 
+			
 			req.setAttribute("pagePart","3" );
 
 			req.setAttribute("view_mode", req.getParameter("view_mode"));

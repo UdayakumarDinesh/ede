@@ -177,6 +177,21 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			return 0;
 		}
 	}
+	
+	@Override
+	public long editNewspaperContingent(NewspaperContingent newspaperContingent) throws Exception{
+		long l=0;
+		try {
+			manager.merge(newspaperContingent);
+			manager.flush();	
+			return newspaperContingent.getContingentId();
+		} catch (Exception e) {
+
+			logger.error(new Date() +"Inside DAO editNewspaperContingent "+e);
+			e.printStackTrace();
+			return 0;
+		}
+	}
   
 	
 	private static final String GETCHECKPERIODOFNEWSALREADYPRESENTORNOT = "SELECT  NewspaperId,NewspaperBillId from pis_newspaper   WHERE IsActive='1' and ClaimMonth=:ClaimMonth   and ClaimYear=:ClaimYear and empno=:empno";
@@ -657,6 +672,66 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 	}
 	
+	private static final String NEWSPAPERSBYCONTINGENTBILL="SELECT a.ClaimMonth,a.ClaimYear,a.ClaimAmount,a.RestrictedAmount,a.PayableAmount,b.PayLevel,b.PayGrade, em.EmpName, a.EmpNo \r\n"
+			+ "FROM pis_newspaper a, pis_pay_level b, employee em  \r\n"
+			+ "WHERE  a.PayLevelId=b.PayLevelId AND a.EmpNo=em.EmpNo AND a.ContingentId=:ContingentId";
+	
+	@Override
+	public List<Object[]> newspapersByContingentBill(Long ContingentId)throws Exception
+	{
+		List<Object[]> NewspaperPrintData = null;
+
+		try {
+
+			Query q = manager.createNativeQuery( NEWSPAPERSBYCONTINGENTBILL);
+			q.setParameter("ContingentId", ContingentId);
+			NewspaperPrintData =  q.getResultList();
+
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
+
+			 logger.error(new Date() +"Inside DAO newspapersByContingentBill "+e);
+			e.printStackTrace();
+		}
+
+		return (NewspaperPrintData);
+
+	}
+	
+	private static final String NEWSPAPERCONTNINGENTAPPRTRANSBYID="SELECT tr.StatusCode, tr.ActionBy,em.empName, des.Designation, tr.ActionDate FROM  pis_newspaper_contingent_trans tr, employee em,employee_desig des WHERE  tr.ActionBy=em.empno AND em.DesigId=des.DesigId \r\n"
+			+ "AND tr.ContinTransactionId IN ((SELECT MAX(ContinTransactionId) FROM pis_newspaper_contingent_trans WHERE StatusCode='CGT' AND ContingentId=:ContingentId), (SELECT MAX(ContinTransactionId) FROM pis_newspaper_contingent_trans WHERE StatusCode='ABP' AND ContingentId=:ContingentId),\r\n"
+			+ "(SELECT MAX(ContinTransactionId) FROM pis_newspaper_contingent_trans WHERE StatusCode='ABV' AND ContingentId=:ContingentId), (SELECT MAX(ContinTransactionId) FROM pis_newspaper_contingent_trans WHERE StatusCode='ABA' AND ContingentId=:ContingentId), (SELECT MAX(ContinTransactionId) FROM pis_newspaper_contingent_trans WHERE StatusCode='ABD' AND ContingentId=:ContingentId))";
+	
+	@Override
+	public List<Object[]> newspaperContningentApprTransById(Long ContingentId)throws Exception
+	{
+		List<Object[]> ContingentTransData = null;
+
+		try {
+
+			Query q = manager.createNativeQuery( NEWSPAPERCONTNINGENTAPPRTRANSBYID);
+			q.setParameter("ContingentId", ContingentId);
+			ContingentTransData =  q.getResultList();
+
+		}
+		catch (NoResultException e)
+		{
+			System.err.println("No Result found Exception");
+		}	
+		 catch (Exception e) {
+
+			 logger.error(new Date() +"Inside DAO newspaperContningentApprTransById "+e);
+			e.printStackTrace();
+		}
+
+		return (ContingentTransData);
+
+	}
+	
 	private static final String TELEPHONEALLAPPROVEDORNOT="SELECT a.ClaimMonth,a.ClaimYear,a.GrossTotal,a.RestrictedAmt,a.PayableAmount,b.PayLevel,b.PayGrade, em.EmpName, a.Empid\r\n"
 			+ "FROM pis_tele a, pis_pay_level b, employee em  WHERE  a.PayLevelId=b.PayLevelId AND a.EmpId=em.EmpNo AND a.ClaimMonth=:claimMonth AND a.Claimyear=:claimYear ";
 	
@@ -779,6 +854,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 	}
 	
 	private static final String FINDEMPBYEMPNO  ="FROM Employee WHERE EmpNo=:EmpNo";
+	
 	@Override
 	public Employee findEmpByEmpNo(String empNo) throws Exception{
 		Employee employee=null;
@@ -793,6 +869,20 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 
 		}		
 		return employee;
+	}
+	
+	@Override
+	public NewspaperContingent findNewspaperContingent(String ContingentId) throws Exception{
+		NewspaperContingent Contingent=null;
+		try {			
+			Contingent= manager.find(NewspaperContingent.class,Long.parseLong(ContingentId));
+
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO findNewspaperContingent " + e);
+			e.printStackTrace();
+
+		}		
+		return Contingent;
 	}
 	
 	@Override
@@ -840,13 +930,14 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		return 0;
 	}
 	
-	private static final String DGMALLBANK="SELECT a.NewspaperId, a.EmpNo, em.EmpName, des.Designation, a.ClaimMonth, a.ClaimYear, a.NewspaperStatusCode, c.NewsPaperStatus, c.StatusColor FROM pis_newspaper a, employee em, employee_desig des, division_master b, pis_newspaper_status c ,dgm_master d WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND em.DesigId=des.DesigId AND a.NewspaperStatusCode='FWD' AND em.DivisionId=b.DivisionId AND b.DGMId=d.DGMId AND d.DGMEmpNo=:empNo AND a.NewspaperStatusCode=c.NewsPaperStatusCode";
+	private static final String DGMALLBANK="SELECT a.NewspaperId, a.EmpNo, em.EmpName, des.Designation, a.ClaimMonth, a.ClaimYear, a.NewspaperStatusCode, c.NewsPaperStatus, c.StatusColor FROM pis_newspaper a, employee em, employee_desig des, division_master b, pis_newspaper_status c ,dgm_master d WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND em.DesigId=des.DesigId AND a.NewspaperStatusCode='FWD' AND em.DivisionId=b.DivisionId AND b.DGMId=d.DGMId AND d.DGMEmpNo=:empNo AND a.NewspaperStatusCode=c.NewsPaperStatusCode UNION SELECT a.NewspaperId, a.EmpNo, em.EmpName, des.Designation, a.ClaimMonth, a.ClaimYear, a.NewspaperStatusCode, b.NewsPaperStatus, b.StatusColor FROM pis_newspaper a, employee em, employee_desig des,  pis_newspaper_status b WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND em.DesigId=des.DesigId AND a.NewspaperStatusCode='VDG' AND a.NewspaperStatusCode=b.NewsPaperStatusCode AND :LoginType='K'";
 
-	public List<Object[]> findDGMNewspaperList(String empNo) throws Exception{
+	public List<Object[]> findDGMNewspaperList(String empNo, String LoginType) throws Exception{
 		List<Object[]> newspaperList=new ArrayList<Object[]>();
 		try {
 			Query q = manager.createNativeQuery(DGMALLBANK);
 			q.setParameter("empNo", empNo);
+			q.setParameter("LoginType", LoginType);
 			newspaperList=(List<Object[]>) q.getResultList();
 		}
 		catch(Exception e) {
@@ -905,7 +996,9 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		return newspaperList;
 	}
 	
-	private static final String NEWSPAPERCLAIMLIST="SELECT a.NewspaperId, a.EmpNo, em.EmpName, des.Designation, a.ClaimMonth,  a.ClaimYear, a.ClaimAmount, a.RestrictedAmount, a.PayableAmount, a.NewspaperStatusCode, b.NewsPaperStatus, b.StatusColor, a.NewsAppliedDate FROM pis_newspaper a, employee em, employee_desig des,  pis_newspaper_status b WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND em.DesigId=des.DesigId AND a.NewspaperStatusCode='VBA' AND a.NewspaperStatusCode=b.NewsPaperStatusCode AND a.NewsAppliedDate <=:todate AND a.ContingentId=0";
+	private static final String NEWSPAPERCLAIMLIST="SELECT a.NewspaperId, a.ClaimAmount,a.RestrictedAmount, a.NewspaperStatusCode,  a.isactive, a.NewsAppliedDate, a.ContingentId, a.empno, em.empname, b.ClaimsCount, b.ContingentBillNo, b.ContingentStatusCode \r\n"
+			+ "FROM pis_newspaper a, pis_newspaper_contingent b, employee em\r\n"
+			+ "WHERE a.ContingentId=b.ContingentId AND b.ContingentId=:contingentid AND a.empno=em.empNo";
 
 	@Override
 	public List<Object[]> NewspaperContingentClaimList(String contingentid) throws Exception {
@@ -920,6 +1013,43 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			e.printStackTrace();
 		}
 		return newspaperList;
+	}
+	
+	private static final String NEWSPAPERTRANSABYID="SELECT tra.NewspaperTransactionId,emp.empno,emp.empname,des.designation,tra.ActionDate,tra.Remark,sta.NewsPaperStatus,sta.StatusColor  \r\n"
+			+ "FROM pis_newspaperapply_trans tra, pis_newspaper_status sta,employee emp,employee_desig des,pis_newspaper n WHERE n.NewspaperId = tra.NewspaperApplyId AND tra.NewspapertatusCode = sta.NewsPaperStatusCode AND tra.ActionBy=emp.empno AND emp.desigid=des.desigid AND n.NewspaperId =:NewspaperId ORDER BY actiondate";
+	
+	@Override
+	public List<Object[]> newspaperTransaById(long NewspaperId) throws Exception
+	{
+		List<Object[]> bankDetailList=new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(NEWSPAPERTRANSABYID);
+			query.setParameter("NewspaperId", NewspaperId);
+			bankDetailList= query.getResultList();
+		}catch(Exception e) {
+			logger.error(new Date() +"Inside DAO newspaperTransaById "+e);
+			e.printStackTrace();
+		}
+		return bankDetailList;
+	}
+	
+	private static final String NEWSPAPERCONTINGENTDATA  ="SELECT cc.contingentid, cc.ContingentBillNo,cc.ContingentDate,ClaimsCount,cc.ContingentStatusCode ,cc.Remarks ,cs.chssstatus, cc.ApprovalDate,cc.gentilldate \r\n"
+			+ "FROM pis_newspaper_contingent cc , chss_contingent_status cs \r\n"
+			+ "WHERE  cc.ContingentStatusCode = cs.CHSSStatusCode AND cc.ContingentId=:contingentid";
+	@Override
+	public Object[] newspaperContingentData(String contingentid) throws Exception
+	
+	{
+		
+		try {
+			Query query= manager.createNativeQuery(NEWSPAPERCONTINGENTDATA);
+			query.setParameter("contingentid", contingentid);
+			return (Object[])query.getResultList().get(0);
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO newspaperContingentData " + e);
+			return null;
+		}
 	}
 	
 ///////////////////////////////////////// Telephone code ///////////////////////////////////////////////

@@ -7,7 +7,14 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<%
+	String Bill=(String) request.getAttribute("Bill");
+	%>
+<% if(!Bill.equalsIgnoreCase("YES")) {%>	
 <title>Newspaper Final Approval</title>
+<%} else { %>
+<title>Newspaper Contingent Bill</title>
+<%}%>
 <style type="text/css">
 .break {
 	page-break-after: always;
@@ -58,6 +65,7 @@ tr, th, td {
 <body>
 	<%
 	List<Object[]> newsPaperFinalAppro=(List<Object[]>) request.getAttribute("newsPaperFinalAppro");
+	List<Object[]> ContingentBillTrans=(List<Object[]>) request.getAttribute("ContingentBillTrans");
 	String LabLogo = (String) request.getAttribute("LabLogo");
 	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yyyy");
 	Date date = new Date();
@@ -136,13 +144,14 @@ tr, th, td {
 			<p>The claims are accordingly admitted for the above employees and it is requested to condone for those employees who had submitted beyond due date and approve 
 			the reimbursement of residential Newspaper claims.</p>
 			<p style="margin-top: 25px;">Put up for approval please</p>
-			<p style="margin: 0; display: inline; float: left; margin-top: 40px;">Srikanth KR <br>	
-               Executive Officer-Fin</p>
-			<p style="display: inline; float: right; margin-top: 40px; margin-right: 25px;">Kavya Jayaraman <br>
-			Senior Finance Officer</p>
-			<p style="margin-top: 130px;">Dobbidi Ashok Kumar <br>
-			Head-Budget, Finance & Project Accounting</p>
+			<p style="margin: 0; display: inline; float: left; margin-top: 40px;"> <% if(ContingentBillTrans !=null && ContingentBillTrans.size()>1 ) {%><%=ContingentBillTrans.get(1)[2]%>,<br><%=ContingentBillTrans.get(1)[3]%>,<br>  <%}%><br>	
+               Processed On :</p>
+			<p style="display: inline; float: right; margin-top: 40px; margin-right: 25px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>2 ) {%><%=ContingentBillTrans.get(2)[2]%> <%} %><br>
+			Verified On :</p>
+			<p style="margin-top: 130px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>3 ) {%><%=ContingentBillTrans.get(3)[2]%> <%} %><br>
+			[Authorized On :</p>
 			<p style="text-align:center; margin-top: 30px;"><b>Sanctioned / Not sanctioned	 </b></p>
+			<p style="text-align:center; margin-top: 60px;"><b><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>3 ) {%><%=ContingentBillTrans.get(3)[2]%> <%} %></b></p>
 			<p style="text-align:center; margin-top: 60px;"><b>CEO</b></p>
 		</div>
 		<%} else { %> <h1 style="color: red; margin-top: 100px; text-align: center">No Data</h1> <%} %>

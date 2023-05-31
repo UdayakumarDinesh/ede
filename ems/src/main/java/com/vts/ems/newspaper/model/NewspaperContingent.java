@@ -11,7 +11,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@Table(name = "pis_news_contingent")
+@Table(name = "pis_newspaper_contingent")
 public class NewspaperContingent {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -12,7 +12,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
+import com.vts.ems.chss.model.CHSSApply;
+import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.newspaper.dao.NewsPaperDao;
@@ -114,7 +115,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 				newspaper.setNewspaperStatusCode("FWD");
 
 				tr.setNewspapertatusCode("FWD");
-				
+
 				notification.setEmpNo(DGM);
 				notification.setNotificationUrl("NewspaperApproval.htm");
 				notification.setNotificationMessage("Received Newspaper Claim Application From <br>"+emp.getEmpName());
@@ -122,7 +123,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 				newspaper.setNewspaperStatusCode("VDG");
 
 				tr.setNewspapertatusCode("VDG");
-				
+
 				notification.setEmpNo(poEmpno);
 				notification.setNotificationUrl("NewspaperApproval.htm");
 				notification.setNotificationMessage("Received Newspaper Claim Application From <br>"+dao.findEmpByEmpNo(newspaper.getEmpNo()).getEmpName());
@@ -130,43 +131,45 @@ public class NewPaperServiceImpl implements NewsPaperService {
 				newspaper.setNewspaperStatusCode("SDG");
 
 				tr.setNewspapertatusCode("SDG");
-				
+
 				notification.setEmpNo(newspaper.getEmpNo());
 				notification.setNotificationUrl("NewspaperList.htm");
 				notification.setNotificationMessage("Newspaper Claim Application Returned");
-				
+
 			} else if(Action.equalsIgnoreCase("PO-A")) {
 				newspaper.setNewspaperStatusCode("VBP");
 
 				tr.setNewspapertatusCode("VBP");
-				
+
 				notification.setEmpNo(aoEmpno);
 				notification.setNotificationUrl("NewspaperApproval.htm");
 				notification.setNotificationMessage("Received Newspaper Claim Application From <br>"+dao.findEmpByEmpNo(newspaper.getEmpNo()).getEmpName());
-				
+
 			}else if(Action.equalsIgnoreCase("PO-R")) {
 				newspaper.setNewspaperStatusCode("SBP");
 
 				tr.setNewspapertatusCode("SBP");
-				
+
 				notification.setEmpNo(newspaper.getEmpNo());
 				notification.setNotificationUrl("NewspaperList.htm");
 				notification.setNotificationMessage("Newspaper Claim Application Returned");
-				
+
 			} else if(Action.equalsIgnoreCase("AO-A")) {
 				newspaper.setNewspaperStatusCode("VBA");
 
 				tr.setNewspapertatusCode("VBA");
-				
-				
+
+
 			}else if(Action.equalsIgnoreCase("AO-R")) {
 				newspaper.setNewspaperStatusCode("SBA");
 
 				tr.setNewspapertatusCode("SBA");
-				
+
 				notification.setEmpNo(newspaper.getEmpNo());
-			
+
 			}
+			
+			newspaper.setRemark(remarks);
 			dao.editNewspaper(newspaper);
 
 			tr.setNewspaperApplyId(newspaper.getNewspaperId());
@@ -181,9 +184,9 @@ public class NewPaperServiceImpl implements NewsPaperService {
 			notification.setIsActive(1);
 			notification.setCreatedBy(userName);
 			if(!Action.equalsIgnoreCase("AO-A") || !Action.equalsIgnoreCase("AO-R")) {
-			dao.addNotification(notification);
+				dao.addNotification(notification);
 			}
-			
+
 			l=newspaper.getNewspaperId();
 
 		} catch (Exception e) {
@@ -198,40 +201,47 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	public long editNewspaper(Newspaper newspaper) throws Exception{
 		return dao.editNewspaper(newspaper);
 	}
-	
+
 	@Override
 	public Object[] empOnLogintype(String Logintype) throws Exception{
 		return dao.empOnLogintype(Logintype);
 	}
-	
+
 	@Override
 	public List<Object[]> findPONewspaperList() throws Exception{
 		return dao.findPONewspaperList();
 	}
-	
+
 	@Override
 	public List<Object[]> findAONewspaperList() throws Exception{
 		return dao.findAONewspaperList();
 	}
-	
+
 	@Override
 	public String GetDGMEmpNo(String empno) throws Exception{
 		return dao.GetDGMEmpNo(empno);
 	}
-	
+
+	@Override
 	public Employee findEmpByEmpNo(String empNo) throws Exception {
 		return dao.findEmpByEmpNo(empNo);
 	}
-	
+
 	@Override
 	public List<Object[]> findApprovedNewspaperList(String todate) throws Exception{
 		return dao.findApprovedNewspaperList(todate);
 	}
-	
+
+	@Override
 	public List<Object[]> getNewspaperContingentList(String logintype,String fromdate,String todate) throws Exception{
 		return dao.getNewspaperContingentList(logintype, fromdate, todate);
 	}
 	
+	@Override
+	public List<Object[]> newspaperContningentApprTransById(Long ContingentId)throws Exception{
+		return dao.newspaperContningentApprTransById(ContingentId);
+	}
+
 	@Override
 	public long ContingentGenerate(String NewspaperId[],String Username, String logintype,String EmpNo,String genTilldate) throws Exception 
 	{	
@@ -239,12 +249,12 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		NewspaperContingent continnew =new NewspaperContingent();
 		long contingentid=0;
 
-//		continnew.setContingentBillNo();			
+		//		continnew.setContingentBillNo();			
 
-//		continnew.setContingentDate(LocalDate.now().toString()); 
+		//		continnew.setContingentDate(LocalDate.now().toString()); 
 		continnew.setClaimsCount(NewspaperId.length);
 		continnew.setContingentStatusCode("CGT");
-//		continnew.setRemarks(billcontent);
+		//		continnew.setRemarks(billcontent);
 		continnew.setIsActive(1);
 		continnew.setCreatedBy(Username);
 		continnew.setCreatedDate(sdf.format(new Date()));
@@ -254,21 +264,21 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		continnew.setCEO(0L);
 		continnew.setGenTillDate(genTilldate);
 		contingentid=dao.addNewspaperContingent(continnew);
-		
+
 		long count=0;
 		for(String claimid  : NewspaperId)
 		{
 			Newspaper claim = dao.findNewspaperApply(Long.parseLong(claimid));
-			
-//			claim.setCHSSStatusId(8);
+
+			//			claim.setCHSSStatusId(8);
 			claim.setContingentId(contingentid);
 			claim.setModifiedBy(Username);
 			claim.setModifiedDate(sdtf.format(new Date()));
 			count=dao.editNewspaper(claim);
-			
+
 
 		}
-			
+
 		NewspaperContingentTrans transac =new NewspaperContingentTrans();
 		transac.setContingentId(contingentid);
 		transac.setStatusCode("CGT");
@@ -277,8 +287,13 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		transac.setActionDate(sdtf.format(new Date()));
 		dao.addNewspaperContingentTrans(transac);
 
-		
+
 		return contingentid;
+	}
+
+	@Override
+	public List<Object[]> NewspaperContingentClaimList(String contingentid) throws Exception{
+		return dao.NewspaperContingentClaimList(contingentid);
 	}
 
 	@Override
@@ -418,6 +433,11 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	public List<Object[]> NewspaperAllApprovedOrNot(String claimMonth, String claimYear) throws Exception{
 		return dao.NewspaperAllApprovedOrNot(claimMonth, claimYear);
 	}
+	
+	@Override
+	public List<Object[]> newspapersByContingentBill(Long ContingentId)throws Exception{
+		return dao.newspapersByContingentBill(ContingentId);
+	}
 
 	@Override
 	public List<String> GetEmpDGMEmpNo() throws Exception{
@@ -425,8 +445,100 @@ public class NewPaperServiceImpl implements NewsPaperService {
 	}
 
 	@Override
-	public List<Object[]> findDGMNewspaperList(String empNo) throws Exception{
-		return dao.findDGMNewspaperList(empNo);
+	public List<Object[]> findDGMNewspaperList(String empNo, String LoginType) throws Exception{
+		return dao.findDGMNewspaperList(empNo, LoginType);
+	}
+
+	@Override
+	public List<Object[]> newspaperTransaById(long NewspaperId) throws Exception{
+		return dao.newspaperTransaById(NewspaperId);
+	}
+
+	@Override
+	public Object[] newspaperContingentData(String contingentid) throws Exception{
+		return dao.newspaperContingentData(contingentid);
+	}
+
+	@Override
+	public NewspaperContingent findNewspaperContingent(String ContingentId) throws Exception {
+		return dao.findNewspaperContingent(ContingentId);
+	}
+
+	public long ContingentClaimDrop(String[] newspaperids,String Username) throws Exception 
+	{
+		long count=0;
+		for(String applyid :  newspaperids)
+		{
+			Newspaper apply=dao.findNewspaperApply(Long.parseLong(applyid));
+			apply.setContingentId(0L);
+			/* apply.setNewspaperStatusCode(""); */
+			apply.setModifiedBy(Username);
+			apply.setModifiedDate(sdtf.format(new Date()));
+
+			count +=dao.editNewspaper(apply);
+		}
+		return count;
+	}
+
+	public long NewspaperContingentDelete(String contingentid,String Username) throws Exception
+	{
+		logger.info(new Date() +"Inside SERVICE NewspaperContingentDelete ");
+		NewspaperContingent contingent = dao.findNewspaperContingent(contingentid);
+		contingent.setIsActive(0);
+		contingent.setModifiedBy(Username);
+		contingent.setModifiedDate(sdtf.format(new Date()));
+		return dao.editNewspaperContingent(contingent);
+	}
+
+	public long newspaperClaimsApprove(String contingentid,String Username, String action, String remarks,String LoginType,String EmpNo, Long EmpId ) throws Exception{
+		Long l=0L;
+		try {
+			NewspaperContingent contingent = dao.findNewspaperContingent(contingentid);
+			NewspaperContingentTrans trans=new NewspaperContingentTrans();
+			EMSNotification notify = new EMSNotification();
+			
+			String voEmpno= (String) dao.empOnLogintype("V")[0];
+			String aoEmpno= (String) dao.empOnLogintype("W")[0];
+			String ceoEmpno= (String) dao.empOnLogintype("Z")[0];
+
+			if(action.equalsIgnoreCase("F")) {
+				contingent.setContingentStatusCode("ABP");
+				contingent.setPO(EmpId);
+				contingent.setContingentDate(LocalDate.now().toString());
+				
+				trans.setStatusCode("ABP");
+				
+				notify.setNotificationMessage("Newspaper Claim Contingent Bill Received");
+				notify.setEmpNo(voEmpno);
+				
+			}
+
+			contingent.setModifiedBy(Username);
+			contingent.setModifiedDate(sdtf.format(new Date()));
+
+
+			l=dao.editNewspaperContingent(contingent);
+
+			trans.setContingentId(Long.parseLong(contingentid));
+			trans.setRemarks(remarks);
+			trans.setActionBy(EmpNo);
+			trans.setActionDate(sdtf.format(new Date()));
+			dao.addNewspaperContingentTrans(trans);
+			
+			notify.setNotificationUrl("NewspaperContingentAppro.htm");
+			notify.setNotificationDate(LocalDate.now().toString());
+			notify.setNotificationBy(EmpNo);
+			notify.setIsActive(1);
+			notify.setCreatedBy(Username);
+			notify.setCreatedDate(sdtf.format(new Date()));
+			dao.addNotification(notify);
+
+		} catch (Exception e) {
+			logger.error(new Date() +" Inside SERVICE newspaperClaimsApprove "+ e);
+			e.printStackTrace();
+			return 0;
+		}
+		return l;
 	}
 
 	/////////////////////////////////////////////////Telephone///////////////////////////////////////////////

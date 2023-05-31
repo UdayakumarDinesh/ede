@@ -83,8 +83,8 @@
 			                    <td><%=ls[5] %></td>
 			                    <td>
 					                    	<button type="submit" class="btn btn-sm btn-link w-100"
-											formaction="BankDetTransacStatus.htm" value="<%=ls[0]%>"
-											name="bankId" data-toggle="tooltip" data-placement="top"
+											formaction="NewspaperApplyTransacStatus.htm" value="<%=ls[0]%>"
+											name="NewspaperId" data-toggle="tooltip" data-placement="top"
 											title="Transaction History" formnovalidate="formnovalidate"
 											style="color: <%=ls[8]%>; font-weight: 600;"
 											formtarget="_blank">

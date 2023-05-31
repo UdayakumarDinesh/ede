@@ -65,6 +65,7 @@ tr, th, td {
 
 	SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	SimpleDateFormat rdtf = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+	
 	%>
 	<div class="center"">
 		<div style="width: 100%; float: left;">

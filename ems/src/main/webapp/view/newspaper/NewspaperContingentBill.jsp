@@ -71,7 +71,7 @@
 			<div class="card" >
 				<div class="card-body main-card " >
 				
-					<form action="ContingentApprovals.htm" method="POST" style="float: right;">
+					<form action="NewspaperContingentAppro.htm" method="POST" style="float: right;">
 						<div class="row" style="margin-bottom: 10px;">
 							<div class="col-12">
 								<table style="width: 100%;">
@@ -121,10 +121,10 @@
 														
 											</td>
 											<td style="padding-top:5px; padding-bottom: 5px;">
-												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="ContingetBill.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
+												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="NewspaperContingetBill.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="ContingentBillDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="NewsPaperFinalAppPrint.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												<input type="hidden" name="claim_view_mode" value="E">

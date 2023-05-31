@@ -142,7 +142,8 @@ public class BankDetailDaoImp implements BankDetailDao{
 
 
 
-	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpNo FROM employee a, pis_admins b WHERE a.EmpNo=b.PandAAdmin AND b.IsActive=1 LIMIT 1";
+	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpAdmin FROM pis_admins a WHERE a.AdminType IN ('P') AND a.IsActive=1 LIMIT 1";
+	
 	@Override
 	public List<String> GetPandAAdminEmpNos()throws Exception
 	{
@@ -160,6 +161,7 @@ public class BankDetailDaoImp implements BankDetailDao{
 	}
 
 	private static final String GETEMPDGMEMPNO  ="SELECT dgmempno FROM dgm_master";
+	
 	@Override
 	public List<String> GetEmpDGMEmpNo() throws Exception
 	{

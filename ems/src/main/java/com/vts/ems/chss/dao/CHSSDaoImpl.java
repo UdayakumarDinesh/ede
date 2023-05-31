@@ -1881,6 +1881,7 @@ public class CHSSDaoImpl implements CHSSDao {
 	}
 	
 	private static final String GETLABCODE  ="SELECT labcode,LabName FROM lab_master";
+	
 	@Override
 	public Object[] getLabCode() throws Exception
 	{
