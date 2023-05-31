@@ -40,12 +40,13 @@ margin-left: 42%;
      <div class="card-header page-top">
 		<div class="row">
 		<div class="col-md-7">
-				<h5>Property Details List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[0]%> (<%=empData[1]%>)<%}%>
+				<h5>Annual Property Return List<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[0]%> (<%=empData[1]%>)<%}%>
 						</b></small></h5>
 			</div>
 			   <div class="col-md-5">
 					<ol class="breadcrumb">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
+						<li class="breadcrumb-item"><a href="PropertyDashBoard.htm">Property</a></li>
 						<li class="breadcrumb-item active " aria-current="page">  Property Details List </li>
 					</ol>
 				</div>

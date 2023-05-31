@@ -40,6 +40,10 @@ input:focus {
   outline: none;
 }
 
+#dashboardcard{
+min-height: 100% !important;
+max-height: 489px !important;
+}
 </style>
 </head>
 <body>
@@ -62,7 +66,7 @@ List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
 int slno=0;
 %>
 
-<div class="page card dashboard-card">
+<div class="page card dashboard-card" id="dashboardcard">
   <div class="card-body" align="center">
 		<div align="center">
 		   <% String ses=(String)request.getParameter("result"); 
@@ -85,13 +89,13 @@ int slno=0;
 						<div class="card-body main-card" style="padding-top: 0px; margin-top: -15px;" align="center">
 						
                           <div style="width: 10%; height: 75px; border: 0; display: inline-block;margin:2% 0 10px -90%;"><img style="width: 80px; height: 90px; margin: 5px;" align="left" src="data:image/png;base64,<%=LabLogo%>"></div>									
-                          <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-8%;margin-left:5%;"><h4 style="text-decoration: underline">Form for giving <%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Movable Property</h4></div>
+                          <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-5%;margin-left:5%;"><h4 style="text-decoration: underline">Form for giving <%if(mov!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> intimation <%}else{ %> permission<%} %> for transaction of <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %> Acquiring <%}else {%> Disposing <%} %> of Movable Property</h4></div>
 						  <!-- <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-4%;"><h4>(Eg. Land / Plot / Flat / House / Building / Shop etc.)</h4></div>	
 						  <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-4%;margin-left:5%;"><h4>To be submitted at least 30 days before the proposed date of the transaction</h4></div> -->	
 							<br>
 							<table style="border: 0px; width: 100%;">
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Name and Designation</td>
 									<td colspan="2" style="color: blue;">
 									<%if(emp!=null){ %>
@@ -102,13 +106,13 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Emp.No.</td>
 									<td colspan="2" style="color: blue;"> <%if(emp!=null){ %> <%=emp[0] %> <%}else{ %>-<%} %></td>
 								</tr>
 								
 								<tr>
-									<td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
+									<td style="border-bottom: 0;width: 5%;text-align: center"><%=++slno%>.</td>
 									<td style="border-bottom: 0">Level in the Pay Matrix & Pay</td>
 									<td style="width:20%;text-align: center">Level in the Pay Matrix</td>
 									<td style="width:20%;text-align: center">Pay</td>
@@ -121,7 +125,7 @@ int slno=0;
 								</tr>
 								
 							    <tr>
-								   <td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
+								   <td style="border-bottom: 0;width: 5%;text-align: center"><%=++slno%>.</td>
 								   <td >Purpose of application </td>
 								    <%if(mov!=null && mov.getPurpose()!=null && "I".equalsIgnoreCase(mov.getPurpose())) {%> <td colspan="2" style="color: blue;">(a) Prior Intimation of transaction</td>
 								  <%}else{%> 
@@ -130,21 +134,21 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Whether property is being Acquired or Disposed off ?</td>
 									<%if(mov!=null&& mov.getTransState()!=null && "A".equalsIgnoreCase(mov.getTransState())) {%><td colspan="2" style="color: blue;">Acquired</td>
 									<%} else{%><td colspan="2" style="color: blue;">Disposed off</td><%} %>
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Date of <%if(mov!=null&& mov.getTransState()!=null && "A".equalsIgnoreCase(mov.getTransState())) {%> Acquisition <%}else{ %> Disposal <%} %> of property</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getTransDate()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(mov.getTransDate().toString())%><%}else{ %>-<%} %></td>
 									
 								</tr>
 								
 								<tr>
-								    <td style="width: 5%;border-bottom: 0"><%=++slno%>.</td>
+								    <td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 								    <td>(a) Description of the property</td>
 								    <td colspan="2" style="color: blue;"><%if(mov!=null && mov.getDescription()!=null){ %><%=mov.getDescription()%> <%}else{ %>-<%} %></td>
 								</tr>
@@ -156,20 +160,20 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Mode of <%if(mov!=null&& mov.getTransState()!=null && "A".equalsIgnoreCase(mov.getTransState())) {%> Acquisition <%}else{ %> Disposal <%} %></td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getMode()!=null) {%> <%=mov.getMode()%><%}else{ %>-<%} %></td>							
 								</tr>	
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Sale/Purchase price of the property (Market value in the case of gifts)</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getPrice()!=null) {%> <%=mov.getPrice()%><%} else{%>-<%} %></td>
 								</tr>
 								
 								<%if(mov!=null&& mov.getTransState()!=null && "A".equalsIgnoreCase(mov.getTransState())) {%>
 								<tr>
-								    <td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+								    <td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
 								    <td colspan="2" style="color: blue">
 								     <%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource())) {%>
@@ -193,14 +197,14 @@ int slno=0;
 								 </tr>  --%>
 								 <% }else if(mov!=null&& mov.getTransState()!=null && "D".equalsIgnoreCase(mov.getTransState())) {%>
 								 <tr>
-								    <td style="width: 5%;"><%=++slno%>.</td>
+								    <td style="width: 5%;text-align: center"><%=++slno%>.</td>
 								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition (A copy of the sanction/acknowledgement should be attached)</td>
 								    <td colspan="2" style="color: blue"><%if(mov!=null && mov.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(mov.getRequisiteSanction())){ %>Yes<%} else{%>No<%} %></td>
 								 </tr>  
 								 <%} %>	 
 								 
 								 <tr>
-									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+									<td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 									<td>(a) Name & Address of the party with whom transaction is made / proposed to be made</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getPartyName()!=null) %><%=mov.getPartyName()+"<br>"+mov.getPartyAddress() %></td>
 								</tr>
@@ -211,7 +215,7 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+									<td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 									<td>(a) Is the party related to the applicant</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getPartyRelated()!=null && "Y".equalsIgnoreCase(mov.getPartyRelated())){ %>Yes<%} else{%>No<%} %></td>
 								</tr>
@@ -235,13 +239,13 @@ int slno=0;
 								
 								<%if(mov!=null&& mov.getTransState()!=null && "A".equalsIgnoreCase(mov.getTransState()) && mov.getMode()!=null && "Gift".equalsIgnoreCase(mov.getMode())) {%>
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>In case of acquisition by gift, whether sanction is also required under SITAR Conduct, Discipline & Appeal Rules.</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getSanctionRequired()!=null && "Y".equalsIgnoreCase(mov.getSanctionRequired())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%} %>
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Any other relevant fact which the applicant may like to mention.</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && !mov.getRelavantFacts().isEmpty()) {%> <%=mov.getRelavantFacts() %> <%} else{%>-<%} %></td>
 								</tr>
@@ -283,7 +287,7 @@ int slno=0;
 						     </div>
 						     <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %>
 						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">
-						       2. As per Sl. No. 13 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
+						       2. As per Sl. No. 12 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
 						     </div>	
 						     <%} %>	
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">Submitted for kind information.</div>	

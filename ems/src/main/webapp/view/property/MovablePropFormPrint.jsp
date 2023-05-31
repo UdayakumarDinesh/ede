@@ -352,7 +352,7 @@ int slno=0;
 						     </div>
 						     <%if(mov!=null && "A".equalsIgnoreCase(mov.getTransState())){ %>
 						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">
-						       2. As per Sl. No. 13 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
+						       2. As per Sl. No. 12 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
 						     </div>	
 						     <%} %>	
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">Submitted for kind information.</div>	

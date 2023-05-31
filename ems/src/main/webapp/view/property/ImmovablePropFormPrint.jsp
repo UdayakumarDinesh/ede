@@ -151,7 +151,7 @@ int slno=0;
 	                <br><br>
 	                       <table style="border: 0px;margin-top: 20px; width: 100%;">
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Name and Designation</td>
 									<td colspan="2" style="color: blue;">
 									<%if(emp!=null){ %>
@@ -162,13 +162,13 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Emp.No.</td>
 									<td colspan="2" style="color: blue;"> <%if(emp!=null){ %> <%=emp[0] %> <%}else{ %>-<%} %></td>
 								</tr>
 								
 								<tr>
-									<td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
+									<td style="border-bottom: 0;width: 5%;text-align: center"><%=++slno%>.</td>
 									<td style="border-bottom: 0">Level in the Pay Matrix & Pay</td>
 									<td style="width:20%;text-align: center">Level in the Pay Matrix</td>
 									<td style="width:20%;text-align: center">Pay</td>
@@ -181,7 +181,7 @@ int slno=0;
 								</tr>
 								
 							    <tr>
-								   <td style="border-bottom: 0;width: 5%;"><%=++slno%>.</td>
+								   <td style="border-bottom: 0;width: 5%;text-align: center"><%=++slno%>.</td>
 								   <td>Purpose of application </td>
 								    <%if(imm!=null && imm.getPurpose()!=null && "I".equalsIgnoreCase(imm.getPurpose())) {%> <td colspan="2" style="color: blue;">(a) Prior Intimation of transaction</td>
 								  <%}else{%> 
@@ -190,27 +190,27 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Whether property is being Acquired or Disposed off ?</td>
 									<%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState())) {%><td colspan="2" style="color: blue;">Acquired</td>
 									<%} else{%><td colspan="2" style="color: blue;">Disposed off</td><%} %>
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Date of <%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState())) {%> Acquisition <%}else{ %> Disposal <%} %> of property</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getTransDate()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(imm.getTransDate().toString())%><%}else{ %>-<%} %></td>
 									
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Mode of <%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState())) {%> Acquisition <%}else{ %> Disposal <%} %></td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getMode()!=null) {%> <%=imm.getMode()%><%}else{ %>-<%} %></td>							
 								</tr>	
 								
 								<tr>
-									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+									<td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 									<td>(a) Full details about location viz. Municipal No. Street/Village, Taluk, District and State in which situated</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null) {%> <%=imm.getLocation()+", "+imm.getDistrict()+", "+imm.getState()+" - "+imm.getPincode()%><%} %></td>
 								</tr>
@@ -239,14 +239,14 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Sale/Purchase price of the property (Market value in the case of gifts)</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPrice()!=null) {%> <%=imm.getPrice()%><%} else{%>-<%} %></td>
 								</tr>
 								
 								<%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState())) {%>
 								<tr>
-								    <td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+								    <td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
 								    <td colspan="2" style="color: blue;">
 								     <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource())) {%>
@@ -270,14 +270,14 @@ int slno=0;
 								 </tr>  --%>
 								 <%} else if(imm!=null&& imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())) {%>
 								 <tr>
-								    <td style="width: 5%;"><%=++slno%>.</td>
+								    <td style="width: 5%;text-align: center"><%=++slno%>.</td>
 								    <td>In case of disposal of the property, was requisite sanction/intimation obtained/given for its acquisition</td>
 								    <td colspan="2" style="color: blue"><%if(imm!=null && imm.getRequisiteSanction()!=null && "Y".equalsIgnoreCase(imm.getRequisiteSanction())){ %>Yes<%} else{%>No<%} %></td>
 								 </tr>  
 								 <%} %>	
 								 
 								 <tr>
-									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+									<td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 									<td>(a) Name & Address of the party with whom transaction is made / proposed to be made</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPartyName()!=null) %><%=imm.getPartyName()+"<br>"+imm.getPartyAddress() %></td>
 								</tr>
@@ -288,7 +288,7 @@ int slno=0;
 								</tr>
 								
 								<tr>
-									<td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
+									<td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 									<td>(a) Is the party related to the applicant</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getPartyRelated()!=null && "Y".equalsIgnoreCase(imm.getPartyRelated())){ %>Yes<%} else{%>No<%} %></td>
 								</tr>
@@ -312,13 +312,13 @@ int slno=0;
 								
 								<%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState()) && imm.getMode()!=null && "Gift".equalsIgnoreCase(imm.getMode())) {%>
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>In case of acquisition by gift, whether sanction is also required under SITAR Conduct, Discipline & Appeal Rules.</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getSanctionRequired()!=null && "Y".equalsIgnoreCase(imm.getSanctionRequired())) {%>Yes<%} else{%>No<%} %></td>
 								</tr>
 								<%} %>
 								<tr>
-									<td style="width: 5%;"><%=++slno%>.</td>
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Any other relevant fact which the applicant may like to mention.</td>
 									<td colspan="2" style="color: blue;"><%if(imm!=null && !imm.getRelavantFact().isEmpty()) {%> <%=imm.getRelavantFact() %> <%} else{%>-<%} %></td>
 								</tr>
@@ -362,7 +362,7 @@ int slno=0;
 						     </div>
 						     <%if(imm!=null && "A".equalsIgnoreCase(imm.getTransState())){ %>
 						     <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">
-						       2. As per Sl. No. 13 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
+						       2. As per Sl. No. 12 above, the applicant is proposing acquisition of the property with a person having official dealing with the employee / with a foreigner which may be permitted. 
 						     </div>	
 						     <%} %>	
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">Submitted for kind information.</div>	

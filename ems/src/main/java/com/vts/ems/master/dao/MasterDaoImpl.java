@@ -57,7 +57,7 @@ public class MasterDaoImpl implements MasterDao{
 		return FormModuleList;
 	}
 	
-	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname ,a.testcode FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid ORDER BY a.testsubid DESC";
+	private static final String TESTMAIN = "SELECT a.testsubid ,a.testname , a.testrate ,b.testmainname ,a.testcode FROM chss_test_sub a , chss_test_main b WHERE isactive='1' AND a.testmainid=b.testmainid AND a.TestSubId>='3001' ORDER BY a.testsubid DESC";
 	@Override
 	public List<Object[]> ChssTestSub() throws Exception
 	{
