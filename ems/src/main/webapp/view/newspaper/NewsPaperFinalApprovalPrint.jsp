@@ -155,6 +155,7 @@ tr, th, td {
 			<p style="text-align:center; margin-top: 60px;"><b>CEO</b></p>
 		</div>
 		<%} else { %> <h1 style="color: red; margin-top: 100px; text-align: center">No Data</h1> <%} %>
+		
 	</div>
 
 </body>
