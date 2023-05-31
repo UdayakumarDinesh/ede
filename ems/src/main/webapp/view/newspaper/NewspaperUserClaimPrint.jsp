@@ -170,6 +170,8 @@ tr, th, td {
 	String PayableRupee = "Not Available";
 	String RistrictedAmt = "Not Available";
 	String ClaimRupee = "Not Available";
+	
+	SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 
 	/* String NewsClaimHeader =(String)request.getAttribute("NewsClaimHeader"); */
 
@@ -365,7 +367,7 @@ tr, th, td {
 				<% if(NewspaperUserPrintData[17] != null) { %>
 				<%=NewspaperUserPrintData[17] %> <%} %> <br>
 				<% if(NewspaperUserPrintData[15] != null) { %>
-				[Processed On : <%=NewspaperUserPrintData[15] %>] <%} %>
+				[Processed On : <%=rdtf.format(NewspaperUserPrintData[15]) %>] <%} %>
 
 			</main >
 			<main style=" display: inline; float: right; text-align: right;">
@@ -374,7 +376,7 @@ tr, th, td {
 				<% if(NewspaperUserPrintData[20] != null) { %>
 				<%=NewspaperUserPrintData[20] %> <%} %> <br>
 				<% if(NewspaperUserPrintData[18] != null) { %>
-				[Authorized On : <%=NewspaperUserPrintData[18] %>] <%} %>
+				[Authorized On :<%=rdtf.format(NewspaperUserPrintData[18]) %>] <%} %>
 			</main >
 		</div>
 

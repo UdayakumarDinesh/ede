@@ -144,12 +144,12 @@ tr, th, td {
 			<p>The claims are accordingly admitted for the above employees and it is requested to condone for those employees who had submitted beyond due date and approve 
 			the reimbursement of residential Newspaper claims.</p>
 			<p style="margin-top: 25px;">Put up for approval please</p>
-			<p style="margin: 0; display: inline; float: left; margin-top: 40px;"> <% if(ContingentBillTrans !=null && ContingentBillTrans.size()>1 ) {%><%=ContingentBillTrans.get(1)[2]%>,<br><%=ContingentBillTrans.get(1)[3]%>,<br>  <%}%><br>	
-               Processed On :</p>
-			<p style="display: inline; float: right; margin-top: 40px; margin-right: 25px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>2 ) {%><%=ContingentBillTrans.get(2)[2]%> <%} %><br>
-			Verified On :</p>
-			<p style="margin-top: 130px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>3 ) {%><%=ContingentBillTrans.get(3)[2]%> <%} %><br>
-			[Authorized On :</p>
+			<p style="margin: 0; display: inline; float: left; margin-top: 40px;"> <% if(ContingentBillTrans !=null && ContingentBillTrans.size()>1 ) {%><%=ContingentBillTrans.get(1)[2]%>,<br><%=ContingentBillTrans.get(1)[3]%>,<br>	
+              <%=rdtf.format(ContingentBillTrans.get(1)[4])%> <%} %></p>
+			<p style="display: inline; float: right; margin-top: 40px; margin-right: 25px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>2 ) {%><%=ContingentBillTrans.get(2)[2]%> ,<br><%=ContingentBillTrans.get(2)[3]%>,<br>
+			<%=rdtf.format(ContingentBillTrans.get(2)[4].toString()) %> <%} %></p>
+			<p style="margin-top: 130px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>3 ) {%><%=ContingentBillTrans.get(3)[2]%>, <br><%=ContingentBillTrans.get(3)[3]%>,<br>
+			<%=rdtf.format(ContingentBillTrans.get(3)[4].toString()) %> <%} %></p>
 			<p style="text-align:center; margin-top: 30px;"><b>Sanctioned / Not sanctioned	 </b></p>
 			<p style="text-align:center; margin-top: 60px;"><b><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>3 ) {%><%=ContingentBillTrans.get(3)[2]%> <%} %></b></p>
 			<p style="text-align:center; margin-top: 60px;"><b>CEO</b></p>
