@@ -14,8 +14,6 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.vts.ems.Admin.Service.AdminService;
-import com.vts.ems.Admin.dao.AdminDao;
 import com.vts.ems.Tour.dao.TourDao;
 import com.vts.ems.Tour.dto.TourApplyDto;
 import com.vts.ems.Tour.model.TourAdvance;
@@ -23,9 +21,7 @@ import com.vts.ems.Tour.model.TourApply;
 import com.vts.ems.Tour.model.TourOnwardReturn;
 import com.vts.ems.Tour.model.TourTransaction;
 import com.vts.ems.leave.dto.ApprovalDto;
-import com.vts.ems.leave.model.LeaveTransaction;
 import com.vts.ems.master.dao.MasterDao;
-import com.vts.ems.master.service.MasterService;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
@@ -753,10 +749,14 @@ public class TourServiceImpl implements TourService {
 		
 		if(result>0) {
 			TourApply apply = new TourApply();
+			apply.setEmpNo(dto.getEmpNo());
+			apply.setTourApplPreviousId(dto.getTourApplyId());
 			apply.setTourNo(dto.getTourNo().replace("/", "_"));
 			apply.setStayFrom(dto.getStayFrom());
 			apply.setStayTo(dto.getStayTo());
 			apply.setStayPlace(dto.getStayPlace());
+			apply.setEJPFrom(dto.getEJPFrom());
+			apply.setEJPTo(dto.getEJPTo());
 			apply.setPurpose(dto.getPurpose());
 			apply.setAirTravJust(dto.getAirTravJust());
 			apply.setAdvancePropsed(dto.getAdvancePropsed());
@@ -769,13 +769,32 @@ public class TourServiceImpl implements TourService {
 			apply.setCreatedDate(dto.getCreatedDate());
 			apply.setIsActive(dto.getIsActive());
 			apply.setInitiatedDate(dto.getInitiatedDate());
-			
 			apply.setTourStatusCode(dto.getTourStatusCode());
-			
-			
+			apply.setIsActive(dto.getIsActive());
 		Long TourApplyId = dao.AddTourapply(apply);
-		
-		
+			
+		if(TourApplyId>0) {
+			
+			if(dto.getAdvancePropsed().equalsIgnoreCase("Y") && TourApplyId >0 ) {
+				TourAdvance touradvance = new TourAdvance();
+					touradvance.setTotalProposedAmt(dto.getTotalProposedAmount());
+					touradvance.setTourFare(dto.getTourFare());
+					touradvance.setTourfareFrom(dto.getTourfareFrom());
+					touradvance.setTourfareTo(dto.getTourfareTo());
+					touradvance.setBoardingDays(dto.getBoardingDays());
+					touradvance.setBoardingPerDay(dto.getBoardingPerDay());
+					touradvance.setPerDayAllowance(dto.getPerDayAllowance());
+					touradvance.setAllowanceDays(dto.getAllowanceDays());
+					touradvance.setAllowanceFromDate(dto.getAllowanceFromDate());
+					touradvance.setAllowanceToDate(dto.getAllowanceToDate());
+					touradvance.setStatus(dto.getTourStatusCode());
+					touradvance.setIsActive(dto.getIsActive());
+					touradvance.setCreatedBy(dto.getCreatedBy());
+					touradvance.setCreatedDate(dto.getCreatedDate());
+					touradvance.setTourApplyId(TourApplyId);
+				dao.AddTouradvance(touradvance);
+			}
+			
 			for(int i=0;i<dto.getTourDates().length;i++) {
 				TourOnwardReturn tourdetails = new TourOnwardReturn(); 
 					tourdetails.setTourApplyId(TourApplyId);
@@ -792,11 +811,10 @@ public class TourServiceImpl implements TourService {
 				transaction.setActionBy(dto.getEmpNo());
 				transaction.setActionDate(dto.getInitiatedDate());
 				transaction.setTourApplyId(TourApplyId);
-				transaction.setTourStatusCode("INI");
-				
+				transaction.setTourStatusCode("INI");				
 			
-			dao.AddTourTransaction(transaction);
-		
+			 dao.AddTourTransaction(transaction);
+		}
 		  return TourApplyId;
 		  
 		}else {
@@ -895,5 +913,14 @@ public class TourServiceImpl implements TourService {
 	{
 		return dao.EmpNotificationForTour(notification);
 	}
-
+	@Override
+	public List<Object[]> GetTourAmendList(String empno)throws Exception
+	{
+		return dao.GetTourAmendList(empno);
+	}
+	@Override
+	public List<Object[]> GetTourAmendedList(String empno)throws Exception
+	{
+		return dao.GetTourAmendedList(empno);
+	}
 }

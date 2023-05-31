@@ -52,6 +52,8 @@ public interface TourService {
 	public List<Object[]> TourCancelStatusDetailsTrack(String tourapplyid)throws Exception;
 	public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception;
 	public Long EmpNotificationForTour(EMSNotification notification)throws Exception;
+	public List<Object[]> GetTourAmendList(String empno)throws Exception;
+	public List<Object[]> GetTourAmendedList(String empno)throws Exception;
 
 	
 	

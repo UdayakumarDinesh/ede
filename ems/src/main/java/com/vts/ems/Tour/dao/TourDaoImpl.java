@@ -449,7 +449,7 @@ public class TourDaoImpl implements TourDao {
 		}	
 	}
 	
-	private  static final String GETSANCLIST=" SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor , a.tourno , a.empno FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.empno=:empno AND a.tourstatuscode IN ('ABC','MOI','TAR') AND CAST(a.approveddate AS DATE) BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC"; 
+	private  static final String GETSANCLIST=" SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor , a.tourno , a.empno , a.advancepropsed FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.empno=:empno AND a.tourstatuscode IN ('ABC','MOI','TAR') AND CAST(a.approveddate AS DATE) BETWEEN :fromdate AND :todate ORDER BY a.tourapplyid DESC"; 
 	@Override
 	public List<Object[]> GetSanctionList(String empno , String fromdate , String todate)throws Exception
 	{
@@ -509,7 +509,7 @@ public class TourDaoImpl implements TourDao {
 		query.setParameter("todate", todate);
 		return (List<Object[]>) query.getResultList();
 	}
-   private static final String TOURDETAILS="SELECT a.tourapplyid , a.tourno , a.empno , e.divisionname , b.empname , c.dob , c.phoneno ,b.email, d.paylevel  , a.purpose , a.earliestdate , a.earliesttime , a.earliestplace , stayfrom , a.stayto , a.stayplace , a.airtravjust , a.advancepropsed ,a.advanceissued , a.tourstatuscode , a.fundsavailable , a.pandaremarks , a.initiateddate , a.remarks , d.paygrade , a.cancelreason FROM tour_apply a , employee b ,employee_details c , pis_pay_level d , division_master e WHERE a.empno = b.empno AND b.empno =c.empno AND d.paylevelid = c.paylevelid AND e.divisionid = a.divisionid AND a.tourapplyid=:tourapplyid";
+   private static final String TOURDETAILS="SELECT a.tourapplyid , a.tourno , a.empno , e.divisionname , b.empname , c.dob , c.phoneno ,b.email, d.paylevel  , a.purpose , a.earliestdate , a.earliesttime , a.earliestplace , stayfrom , a.stayto , a.stayplace , a.airtravjust , a.advancepropsed ,a.advanceissued , a.tourstatuscode , a.fundsavailable , a.pandaremarks , a.initiateddate , a.remarks , d.paygrade , a.cancelreason , a.tourapplpreviousid FROM tour_apply a , employee b ,employee_details c , pis_pay_level d , division_master e WHERE a.empno = b.empno AND b.empno =c.empno AND d.paylevelid = c.paylevelid AND e.divisionid = a.divisionid AND a.tourapplyid=:tourapplyid";
    
     @Override
 	public Object[] GetTourDetails(String tourapplyid) throws Exception
@@ -716,7 +716,7 @@ public class TourDaoImpl implements TourDao {
 			}
 		}
 		
-		private static final String GETAPPROVALDATA="SELECT (SELECT divisionheadid FROM employee e , division_master dm WHERE e.divisionid =dm.divisionid AND e.empno=:EmpNo) AS 'Divisionid',(SELECT dgmempno FROM employee e , dgm_master d, division_master dm WHERE d.dgmid=dm.dgmid AND  e.divisionid = dm.divisionid AND e.empno=:EmpNo) AS 'DGM' ,(SELECT a.Admin FROM pis_admins a WHERE  a.IsActive=1 AND a.admintype='F' LIMIT 1) AS 'F&A' ,(SELECT a.Admin FROM pis_admins a WHERE  a.IsActive=1 AND a.admintype='P' LIMIT 1) AS 'P&A' , (SELECT b.empno FROM lab_master a , employee b WHERE a.labauthorityid=b.empid LIMIT 1)AS 'CEO'  FROM DUAL ";
+		private static final String GETAPPROVALDATA="SELECT (SELECT divisionheadid FROM employee e , division_master dm WHERE e.divisionid =dm.divisionid AND e.empno=:EmpNo) AS 'Divisionid',(SELECT dgmempno FROM employee e , dgm_master d, division_master dm WHERE d.dgmid=dm.dgmid AND  e.divisionid = dm.divisionid AND e.empno=:EmpNo) AS 'DGM' ,(SELECT a.empAdmin FROM pis_admins a WHERE  a.IsActive=1 AND a.admintype='F' LIMIT 1) AS 'F&A' ,(SELECT a.empAdmin FROM pis_admins a WHERE  a.IsActive=1 AND a.admintype='P' LIMIT 1) AS 'P&A' , (SELECT b.empno FROM lab_master a , employee b WHERE a.labauthorityid=b.empid LIMIT 1)AS 'CEO'  FROM DUAL ";
 		@Override
 		public Object[] GetDivisionHeadandDGMPAFA(String empno)throws Exception
 		{
@@ -735,5 +735,24 @@ public class TourDaoImpl implements TourDao {
 				e.printStackTrace();
 				return null;
 			}
+		}
+		
+		private static final String GETAMENDLIST="SELECT b.empname ,a.stayfrom , a.stayto ,CAST(a.initiateddate AS DATE) AS 'initiateddate' , a.purpose  , a.stayplace  , a.tourstatuscode , a.tourapplyid , c.statusdesc ,c.statuscolor, a.tourno FROM tour_apply a , employee b , tour_status c WHERE a.empno=b.empno AND a.tourstatuscode=c.tourstatuscode  AND a.tourapplpreviousid<>0 AND c.tourstatusid > 0 AND c.tourstatusid < 28 AND a.empno=:empno  ORDER BY a.tourapplyid DESC";
+		@Override
+		public List<Object[]> GetTourAmendList(String empno)throws Exception
+		{
+			Query query = manager.createNativeQuery(GETAMENDLIST);
+			query.setParameter("empno", empno);
+			return (List<Object[]>) query.getResultList();
+		
+		}
+		private static final String GETAMENDAPPROVALLIST="call tour_amendapprovallist(:empno)";
+		@Override
+		public List<Object[]> GetTourAmendedList(String empno)throws Exception
+		{
+			Query query = manager.createNativeQuery(GETAMENDAPPROVALLIST);
+			query.setParameter("empno", empno);
+			return (List<Object[]>) query.getResultList();
+		
 		}
 }

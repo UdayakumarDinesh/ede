@@ -204,6 +204,12 @@ if(empdata!=null && empdata[4]!=null){
 												<input  type="text"  name="boardingperday"  id="boardingperday" class=" form-control input-sm " placeholder="Enter  Amount"   <%if(touradvance!=null && touradvance.getBoardingPerDay()>0){%> value="<%=touradvance.getBoardingPerDay()%>" <%}%>  maxlength="12" required="required">                     
 											</div>
 										</div>
+										<div class="col-md-2">
+											<label>Allowance Days :</label>
+											<div class=" input-group">
+												<input  type="text"  name="allowancenoday"  id="allowancenoday" class=" form-control input-sm " placeholder="Enter Allowance Days"   <%if(touradvance!=null && touradvance.getAllowanceDays()>0){%> value="<%=touradvance.getAllowanceDays()%>" <%}%>  maxlength="12" required="required">                     
+											</div>
+										</div>
 									
 										<div class="col-md-2">
 											<label>Allowance Per Days :</label>
@@ -212,12 +218,7 @@ if(empdata!=null && empdata[4]!=null){
 											</div>
 										</div>
 										
-										<div class="col-md-2">
-											<label>Allowance Days :</label>
-											<div class=" input-group">
-												<input  type="text"  name="allowancenoday"  id="allowancenoday" class=" form-control input-sm " placeholder="Enter Allowance Days"   <%if(touradvance!=null && touradvance.getAllowanceDays()>0){%> value="<%=touradvance.getAllowanceDays()%>" <%}%>  maxlength="12" required="required">                     
-											</div>
-										</div>
+										
 										<div class="col-md-2">	
 									    	<label style="margin-left: -5px;"> Allowance From Date :</label>
 									    		<div class=" input-group">
@@ -565,6 +566,31 @@ $( "#doA" ).change(function() {
 			format : 'DD-MM-YYYY'
 		}
 	});
+	
+	 $('#EJPFROM').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,	
+			"minDate":$("#doD").val(),
+			"maxDate" :$('#doA').val(),
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
+	 $('#EJPTO').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,	
+			"minDate":$("#doD").val(),
+			"maxDate" :$('#doA').val(),
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
 });
 
 $('#farefromdate, #faretodate ,#allowancefromdate , #allowancetodate ,#EJPFROM , #EJPTO').daterangepicker({

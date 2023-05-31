@@ -151,9 +151,9 @@ String Loginempno = session.getAttribute("EmpNo").toString();
 									  <td><%=hlo[4]+"" %></td>
 									  <td align="center" style=" color:<%=hlo[9]%>; font-weight: 600;">&nbsp;<%=hlo[8]%> </td>
 									  <td> 
-									  <%if(new Date().before(new SimpleDateFormat("dd-MM-yyyy").parse(parsedate))){%>
-									  <%if(hlo[11].toString().equalsIgnoreCase(Loginempno)){%>
-									  	<button class="btn btn-sm" type="submit" formaction="TourModify.htm" formmethod="GET" name="tourapplyid"  value="Modify/<%=hlo[7]%>"  data-toggle="tooltip" data-placement="top" title="Modify">
+									  <%if(new Date().before(new SimpleDateFormat("dd-MM-yyyy").parse(parsedate)) && hlo[11].toString().equalsIgnoreCase(Loginempno) ){%>
+									 <%if(( hlo[6].toString().equalsIgnoreCase("ABC") && hlo[12].toString().equalsIgnoreCase("N")) ||( hlo[6].toString().equalsIgnoreCase("TAR") && hlo[12].toString().equalsIgnoreCase("Y"))){%>									 
+									  	<button class="btn btn-sm" type="submit" formaction="TourModify.htm" formmethod="GET" name="Action"  value="Modify/<%=hlo[7]%>"  data-toggle="tooltip" data-placement="top" title="Modify">
                                 			<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
                                 		</button>
                                 		<%}}%> 
