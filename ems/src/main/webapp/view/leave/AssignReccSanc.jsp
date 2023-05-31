@@ -29,24 +29,24 @@
 <%
 List<Object[]> AllRaSaAssignEmployee=(List<Object[]>)request.getAttribute("AllRaSaAssignEmployee");
 %> 
-<%
-String ses=(String)request.getParameter("result"); 
- String ses1=(String)request.getParameter("resultfail");
-	if(ses1!=null){
-	%><center>
-	<div class="alert alert-danger" role="alert">
-                     <%=ses1 %>
-                    </div></center>
-	<%}if(ses!=null){ %>
-	<center>
-	<div class="alert alert-success" role="alert" >
-                     <%=ses %>
-                   </div></center>
-                    <%} %>
-
 <div class="page card dashboard-card">
-
-			 
+<div class="card-body" >		
+		<div align="center">
+		<%String ses=(String)request.getParameter("result"); 
+		String ses1=(String)request.getParameter("resultfail");
+		if(ses1!=null){ %>
+			<div class="alert alert-danger" role="alert">
+				<%=ses1 %>
+			</div>
+			
+		<%}if(ses!=null){ %>
+			
+			<div class="alert alert-success" role="alert">
+				<%=ses %>
+			</div>
+		<%} %>
+	</div>
+<div class="card" >			 
    <div class="card-body" >
      	    <div class="row" style="margin-top:7px;"> 
 	    <div class="col-md-12">
@@ -68,7 +68,7 @@ String ses=(String)request.getParameter("result");
                                <tbody>
                               <%for(Object[] ls:AllRaSaAssignEmployee){%>
 	                            <tr> 
-	                             <td><input type="radio" name="selecRadioForEmpid" required value="<%=ls[0]%>"> </td>
+	                             <td align="center"><input type="radio" name="selecRadioForEmpid" required value="<%=ls[0]%>"> </td>
                                <%--  <td ><%if(ls[12]!=null){out.println(ls[12]);}else{out.println("Not Assign");}%></td>--%>
                                   <td style='text-align:left;'><%=ls[1]%></td>
                                  <td style='text-align:left;'><%=ls[2] %></td>
@@ -101,8 +101,8 @@ String ses=(String)request.getParameter("result");
 	   </div>
 	   </div>
 	   </div>
-	   
-
+	</div>   
+</div>
 
 
 				

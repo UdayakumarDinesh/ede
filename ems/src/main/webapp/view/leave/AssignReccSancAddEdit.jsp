@@ -40,11 +40,10 @@ List<Object[]> ReccSanc=(List<Object[]>)request.getAttribute("ReccSanc");
 String empNo=(String)request.getAttribute("empNo");
 %> 
 
-<div class="page card dashboard-card">		 
+<div class="page card dashboard-card">		
+<div class="card" > 
    <div class="card-body" >          
-    <div class="row">
-   		
-   		<div class="col-md-12">
+ 
    			<form action="assign-recc-sanc.htm" method="POST" >
 			    <div class="row" style="margin-top: -4px;">
 				    
@@ -52,7 +51,7 @@ String empNo=(String)request.getAttribute("empNo");
 				            Employee :
 				    </div>
 				    <div class="col-md-4">
-					    <select class="form-control  selectpicker" required="required" name="selecRadioForEmpid" title="Select Employee" data-live-search="ture" id="empNo">
+					    <select class="form-control  selectpicker" required="required" name="selecRadioForEmpid" title="Select Employee" onchange="this.form.submit()" data-live-search="ture" id="empNo">
 					    <%for(Object[] emp:AllEmployee){ %>
 					    <option value="<%=emp[0] %>" <%if(empNo.equals(emp[0])){ %>selected="selected" <%}%>><%=emp[1] %></option>
 					    <%} %>
@@ -60,7 +59,7 @@ String empNo=(String)request.getAttribute("empNo");
 				    </div>
 				    <div class="col-md-2">
 				    <input type="hidden" name="${_csrf.parameterName}"	value="${_csrf.token}" />
-				    <button type="submit" name="ViewDetails" value="ViewDetails" class="btn btn-info btn-sm">Change</button>
+				    <!-- <button type="submit" name="ViewDetails" value="ViewDetails" class="btn btn-info btn-sm">Change</button> -->
 				   	<input type="button" value="Modify" class="btn  btn-sm misc1-btn" onclick="assignRASA()" >
 				   
 				    </div>
@@ -69,22 +68,25 @@ String empNo=(String)request.getAttribute("empNo");
 				    
 				    <div class="row" style="margin-top: 4px;">
 				    
-				    <div class="col-md-2" ></div>
-				    <div class="col-md-8" >
+				    <div class="col-md-12" >
 				     <div class="table-responsive">
 
-		              <table class="table table-bordered table-hover table-striped table-condensed"  > 
+		              <table class="table table-bordered table-hover table-striped table-condensed" id="myTable" > 
                                <thead>
                                <tr>
+                               <th>SN</th>
                                <th>Officer Type</th>
                                <th>Officer Name</th>
                                <th>Status</th>
                                </tr>
                                </thead>
                                <tbody>
-                              <%if(ReccSanc!=null&&ReccSanc.size()>0){
+                              <%
+                              int slno=0;
+                              if(ReccSanc!=null&&ReccSanc.size()>0){
                               for(Object[] ls:ReccSanc){%>
 	                            <tr> 
+	                              <td align="center"><%=++slno %></td>
 	                             <td style='text-align:left;'><%=ls[2]%></td>
                                   <td style='text-align:left;'><%=ls[0]%>, <%=ls[1]%></td>
                                  <td style='text-align:center;'><%=ls[3]%></td>
@@ -107,7 +109,7 @@ String empNo=(String)request.getAttribute("empNo");
 				    </div>
   
    </div>
-</div>   
+ 
 				       
    <%LeaveRaSa ReccSancById=(LeaveRaSa)request.getAttribute("ReccSancById");
    List<Object[]> RaSaStatus=(List<Object[]>)request.getAttribute("RaSaStatus");

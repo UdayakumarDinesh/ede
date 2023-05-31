@@ -168,33 +168,45 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 						<tr> <td style="border: 0;text-decoration:underline;">Kind Attn: Incharge - P&A</td> </tr>
 						<tr> <td style="border: 0;"> I here by declare my hometown as under for entering the same in personal / official records.</td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;">NAME<label style="margin-left:174px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[8]!=null) {%> <%=HomFormData[8] %> <%} %>" readonly>  </td> </tr>
-						<tr> <td style="border: 0;">EMP. NO.<label style="margin-left:156px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[1]!=null) {%> <%=HomFormData[1] %> <%} %>" readonly> </td> </tr>
-						<tr> <td style="border: 0;">DESIGNATION<label style="margin-left:121px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[9]!=null) {%> <%=HomFormData[9] %> <%} %>" readonly> </td> </tr>
-						<tr> <td style="border: 0;">HOMETOWN<label style="margin-left:132px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[2]!=null) {%> <%=HomFormData[2] %> <%} %>" readonly> </td> </tr>
-						<tr> <td style="border: 0;">STATE<label style="margin-left:172px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[4]!=null) {%> <%=HomFormData[4] %> <%} %>" readonly> </td> </tr>
-						<tr> <td style="border: 0;">NEAREST RAILWAYSTATION<label style="margin-left:22px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[3]!=null) {%> <%=HomFormData[3] %> <%} %>" readonly> </td> </tr>
+						<tr> <td style="border: 0;">NAME<label style="margin-left:174px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[8]!=null) {%> <%=HomFormData[8] %> <%} %>" readonly style="color: blue;">  </td> </tr>
+						<tr> <td style="border: 0;">EMP. NO.<label style="margin-left:156px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[1]!=null) {%> <%=HomFormData[1] %> <%} %>" readonly style="color: blue;"> </td> </tr>
+						<tr> <td style="border: 0;">DESIGNATION<label style="margin-left:121px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[9]!=null) {%> <%=HomFormData[9] %> <%} %>" readonly style="color: blue;"> </td> </tr>
+						<tr> <td style="border: 0;">HOMETOWN<label style="margin-left:132px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[2]!=null) {%> <%=HomFormData[2] %> <%} %>" readonly style="color: blue;"> </td> </tr>
+						<tr> <td style="border: 0;">STATE<label style="margin-left:172px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[4]!=null) {%> <%=HomFormData[4] %> <%} %>" readonly style="color: blue;"> </td> </tr>
+						<tr> <td style="border: 0;">NEAREST RAILWAYSTATION<label style="margin-left:22px">:&nbsp;&nbsp;</label> <input type="text" value="<%if(HomFormData!=null && HomFormData[3]!=null) {%> <%=HomFormData[3] %> <%} %>" readonly style="color: blue;"> </td> </tr>
 					    <tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;"><%if(HomFormData!=null && HomFormData[8]!=null) {%> <%=HomFormData[8] %> <%} %></td> </tr>
+						<tr> <td style="border: 0;color: blue;"><%if(HomFormData!=null && HomFormData[8]!=null) {%> <%=HomFormData[8] %> <%} %></td> </tr>
 						<tr> <td style="border: 0;"> <b>Signature of Employee</b> </td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"> <b>Date</b>  &nbsp;&nbsp;:&nbsp;&nbsp;
+						                            <label style="color: blue;">
 						                            <%for(Object[] apprInfo : ApprovalEmpData){ %>
 							                        <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
 					   			                	<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
 					   		                    	<%break;
 					   		                     	} %>
-						   	                    	<%} %>
+						   	                    	<%} %></label>
 						   	  </td> 
 					    </tr>
 					  </tbody>					  
 					</table>										   			
-				   <br>				   				  
+				   <br>	
+				   <div style="border:0px;width: 100%; text-align: right;"> <b>Incharge-P&A </b>
+				   <br>	
+				   <br><label style="color: blue;">
+				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;} %>
+				   		<%} %> 
+				   		</label>
+				   </div>			   				  
 			   </div>			   			  
 			
 </body>

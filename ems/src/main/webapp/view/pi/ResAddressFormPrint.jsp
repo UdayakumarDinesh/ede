@@ -162,48 +162,49 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;"> </td> </tr>
 						<tr>		
-						  <td style="border: 0;width:78%">From <label style="margin-left: 30px;">:</label>&nbsp;<%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%}else if(PerFormData!=null &&PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %> </td>
+						  <td style="border: 0;width:78%">From <label style="margin-left: 30px;">:</label>&nbsp;<label style="color: blue;"><%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%}else if(PerFormData!=null &&PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %></label> </td>
 						  <td style="border: 0;width:17%;">To &nbsp;: &nbsp;P&A Dept</td>
 						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No. <label style="margin-left: 6px;">:</label>&nbsp;<%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%}else if(PerFormData!=null && PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></td> </tr>
+						 <tr>  <td style="border: 0;">Emp. No. <label style="margin-left: 6px;">:</label>&nbsp;<label style="color: blue;"><%if(ResFormData!=null && ResFormData[12]!=null){ %> <%=ResFormData[12] %> <%}else if(PerFormData!=null && PerFormData[9]!=null){ %> <%=PerFormData[9] %> <%} %></label></td> </tr>
 						  <tr> 
-						  	<td style="border: 0;">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %> <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>		<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %> <%break;} %><%} %> </td>	 
+						  	<td style="border: 0;">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;<label style="color: blue;"><%for(Object[] apprInfo : ApprovalEmpData){ %> <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>		<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %> <%break;} %><%} %></label> </td>	 
 					   	</tr>	
 						  <tr> <td style="border: 0;"></td> </tr>
 						  <tr> <td style="border: 0;"></td> </tr>
 						 <tr> 	
 						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
 						     This is to inform you that I have changed my residence w.e.f.&nbsp;
-						     <input type="text" value="<%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%> <%}else if(PerFormData!=null && PerFormData[6]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"") %> <%} %>" style="width:15%;text-align:center;" readonly>
+						     <input type="text" value="<%if(ResFormData!=null && ResFormData[3]!=null){ %><%=DateTimeFormatUtil.SqlToRegularDate(ResFormData[3]+"")%> <%}else if(PerFormData!=null && PerFormData[6]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(PerFormData[6]+"") %> <%} %>" style="width:15%;text-align:center;color: blue;" readonly>
 						     and the present address and the telephone number is as under:
 						   </td> 
 						 </tr> 
 						     <tr> <td style="border: 0;"></td> </tr>
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[2]!=null){ %> <%=ResFormData[2]%> <%} else if(PerFormData!=null && PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %>" readonly></td> </tr>			
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[2]!=null){ %> <%=ResFormData[2]%> <%} else if(PerFormData!=null && PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %>" readonly style="color: blue;"></td> </tr>			
 						 	<tr> 
 						 	<td style="border: 0;">
 						 	  <input type="text" value="<% if(ResFormData!=null){%> <%=ResFormData[9]+", "+ResFormData[8]+" - "+ResFormData[10]%>
-						 		                  <%} else if(PerFormData!=null ){%> <%=PerFormData[3]+", "+PerFormData[4]+" - "+PerFormData[5]%> <%} %>" readonly>
+						 		                  <%} else if(PerFormData!=null ){%> <%=PerFormData[3]+", "+PerFormData[4]+" - "+PerFormData[5]%> <%} %>" readonly style="color: blue;">
 						 	 </td> 
 						 	 </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[4]!=null){ %> <%="Mobile: "+ResFormData[4]%> <%}else if(PerFormData!=null && PerFormData[7]!=null){ %> <%="Mobile: "+PerFormData[7]%> <%} %> " readonly></td> </tr>	
+						 	<tr> <td style="border: 0;"> <input type="text" value="<%if(ResFormData!=null && ResFormData[4]!=null){ %> <%="Mobile: "+ResFormData[4]%> <%}else if(PerFormData!=null && PerFormData[7]!=null){ %> <%="Mobile: "+PerFormData[7]%> <%} %> " readonly style="color: blue;"></td> </tr>	
 						 	<tr> <td style="border: 0;"></td> </tr>
 						 	<tr> <td style="border: 0;"> </td> </tr>
 						 	<tr> <td style="border: 0;">The same may be recorded in the office records.</td> </tr>	
 						 						       
 					    </tbody>
 					</table>
-					<br>	
+					<br>
+					<div style="width:100%;text-align: right;margin-left:-5px;color: blue;"><%if(ResFormData!=null && ResFormData[11]!=null){ %> <%=ResFormData[11] %> <%}else if(PerFormData!=null &&PerFormData[8]!=null){ %> <%=PerFormData[8] %> <%} %></div>	
 					<div style="width:100%;text-align: right;margin-left:-5px;">	
 						Signature of Employee<br>
-						<%for(Object[] apprInfo : ApprovalEmpData){ %>
+						<%-- <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
 				   				<%=apprInfo[2] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<%} %>
 				   		<%} %> 
 				   		
-				   		
+				   		 --%>
 					</div>		
 					<br>								     
 				   <hr style="border:solid 1px;margin-left:20px;">
@@ -217,7 +218,7 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 				    <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
 						Intimation of change of address received on  &nbsp;<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
-				   				<span style="text-decoration: underline;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
+				   				<span style="text-decoration: underline;color: blue;"><%=rdf.format(sdtf.parse(apprInfo[4].toString())) %></span>
 				   				
 				   			<%
 				   				break;
@@ -230,13 +231,14 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 				   <div style="border:0px;width: 100%; text-align: right;"> 
 				   		Incharge-P&A
 				   		<br>
+				   		<label style="color: blue;">
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
 				   				<%=apprInfo[2] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<%} %>
 				   		<%} %> 
-				   
+				         </label>
 				   </div>
 				   <br>				   				  
 			   </div>			   			  	
