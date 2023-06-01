@@ -947,6 +947,24 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		return newspaperList;
 	}
 	
+	private static final String NEWSPAPERREMARKSHISTORY  ="SELECT cat.NewspaperApplyId,cat.Remark,cs.NewsPaperStatusCode,e.EmpName,ed.Designation FROM pis_newspaper_status cs,pis_newspaperapply_trans cat,pis_newspaper ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.NewsPaperStatusCode = cat.NewspapertatusCode AND ca.NewspaperId = cat.NewspaperApplyId AND TRIM(cat.Remark)<>'' AND ca.NewspaperId=:NewspaperId ORDER BY cat.ActionDate ASC";
+
+	@Override
+	public List<Object[]> newsPaperRemarksHistory(String NewspaperId) throws Exception {
+		
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(NEWSPAPERREMARKSHISTORY);
+			query.setParameter("NewspaperId", NewspaperId);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO newsPaperRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	private static final String POALLBANK="SELECT a.NewspaperId, a.EmpNo, em.EmpName, des.Designation, a.ClaimMonth, a.ClaimYear, a.NewspaperStatusCode, b.NewsPaperStatus, b.StatusColor FROM pis_newspaper a, employee em, employee_desig des,  pis_newspaper_status b WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND em.DesigId=des.DesigId AND a.NewspaperStatusCode='VDG' AND a.NewspaperStatusCode=b.NewsPaperStatusCode";
 
 	@Override

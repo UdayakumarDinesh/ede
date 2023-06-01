@@ -888,6 +888,12 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		return dao.TelePhoneAllApprovedOrNot(claimMonth, claimYear);
 	}
 
+	@Override
+	public List<Object[]> newsPaperRemarksHistory(String NewspaperId) throws Exception {
+		
+		return dao.newsPaperRemarksHistory(NewspaperId);
+	}
+
 
 	///////////////////*telephone*//////////////////////////////////////
 }

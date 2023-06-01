@@ -97,6 +97,7 @@ public interface NewsPaperDao {
 	public List<Object[]> getTelephoneUserPrintMultiData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleData(String TeleForwardId);
 	public List<Object[]> getTelephoneUserPrintSingleDataByMonth(String TeleForwardId,String teleId);//me added
+	public List<Object[]> newsPaperRemarksHistory(String NewspaperId) throws Exception;
 	
 	
 	

@@ -2,7 +2,7 @@
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Date"%>
-<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.text.SimpleDateFormat,java.util.List"%>
 <%@ page language="java"%>
 
 <!DOCTYPE html>
@@ -28,7 +28,7 @@ table {
 	width: 720px;
 }
 
-tr, th, td {
+#mainTable tr, th, td {
 	border: 2px solid black;
 }
 
@@ -123,6 +123,7 @@ tr, th, td {
 
 	<%
 	Object[] NewspaperUserPrintData = (Object[]) request.getAttribute("NewspaperUserPrintData");
+	List<Object[]> newsPaperRemarksHistory = (List<Object[]>)request.getAttribute("newsPaperRemarksHistory");
 	String LabLogo = (String) request.getAttribute("LabLogo");
 	String isApproval = (String) request.getAttribute("isApproval");
 	String PayableRupee = "Not Available";
@@ -182,7 +183,7 @@ tr, th, td {
 				<div class="borderDiv" align="center">
 				<div align="center">
 				
-					<table height="110" style="margin-top: 30px;">
+					<table height="110" style="margin-top: 30px;" id="mainTable">
 						<tr>
 							<td rowspan="2"><img
 								style="width: 80px; height: 90px; margin: 0px 0 0 15px;"
@@ -348,6 +349,32 @@ tr, th, td {
 					</div>
 
 				</div>
+				
+				<br>
+				<div class="row">
+					  <br>
+						<%if(newsPaperRemarksHistory.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(newsPaperRemarksHistory.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : newsPaperRemarksHistory){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
 				<form action="#">
 					<%
 					if (NewspaperUserPrintData != null && (NewspaperUserPrintData[11].toString().equalsIgnoreCase("CRT")

@@ -48,7 +48,7 @@ public interface NewsPaperService {
 	public NewspaperContingent findNewspaperContingent(String ContingentId) throws Exception ;
 	public long newspaperClaimsApprove(String contingentid,String Username, String action, String remarks,String LoginType,String EmpNo, Long EmpId ) throws Exception;
 	public List<Object[]> newspaperContningentApprTransById(Long ContingentId)throws Exception;
-	
+	public List<Object[]> newsPaperRemarksHistory(String NewspaperId) throws Exception;
 	
 	
 	

@@ -340,7 +340,7 @@ public class NewspaperController {
 			request.setAttribute("LabDetails", service.getLabDetails());
 			request.setAttribute("LabCode", ses.getAttribute("LabCode"));
 			request.setAttribute("NewsClaimHeader", NewsClaimHeader);
-
+            request.setAttribute("newsPaperRemarksHistory", service.newsPaperRemarksHistory(NewspaperId));
 
 			request.setAttribute("LabLogo", getLabLogoAsBase64());
 
