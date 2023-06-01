@@ -782,7 +782,7 @@ public class NewspaperController {
 				req.setAttribute("NewspapepListToBill", service.findApprovedNewspaperList(todate));
 				
 			}
-			
+
 			return "newspaper/NewspaperListToBill";
 		} 
 		catch (Exception e) {
