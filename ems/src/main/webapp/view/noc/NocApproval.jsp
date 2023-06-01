@@ -249,7 +249,19 @@ body{
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
 						 		
-						 	<%} %>	
+						 	<%}else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Intimation For Exam")){ %> 
+						 	
+					 		<button type="submit" class="btn btn-sm" name="ExamId" value="<%=obj[4] %>" formaction="ExamIntimationPreview.htm"   formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+					 			<i class="fa-solid fa-eye"></i>
+					 		</button>
+					 		
+					 		 <button type="submit" class="btn btn-sm" name="ExamId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+											<i style="color: #019267" class="fa-solid fa-download"></i>
+							</button>    
+						 	
+						 	
+						 	
+						 	<%} %>
 						 
 						 	
 						 	</td>
@@ -304,18 +316,17 @@ body{
 		<form action="" method="POST" id="">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <!--  <div class="table-responsive"> -->
-              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable1">
+              <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable1" >
 				<thead>
 					<tr>
-					   
+					
 					   <th style="width:0%">SN</th>
 					   <th style="width:50%">Employee Name</th>
                        <th style="width:15%">Type</th>
                        <th style="width:15%">Status</th>
                        <th style="width:15%">Action</th>
                        
-					  
-                  	</tr>
+                     </tr>
 				</thead>
                  <tbody>
                     <% int SN1=0;
@@ -366,7 +377,29 @@ body{
 									    	</button>
 								    		
 								    	
-								    	<%}}%> 		    	
+								    	<%}}%> 	
+								    	
+								    	
+								    	 <% if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Intimation For Exam")){ 
+							    		 
+							    		 if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
+								    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="IntimationTransactionStatus.htm" formmethod="GET"  name="ExamId" value="<%=obj[4] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button>
+							
+							
+							            <%} 
+								    	else{%>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="IntimationTransactionStatus.htm" value="<%=obj[4] %>" name="ExamId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;<%=obj[8] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button>
+								    		
+								    	
+								    	<%}}%> 	
+								    	
+								    	
+								    	
+								    		    	
 								    	<%-- <%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
 								    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" value="<%=obj[4] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
 									    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
@@ -389,7 +422,14 @@ body{
 								</button> 
                             
                             
-                            <%} %>
+                            <%}
+                            else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Intimation For Exam")){%>
+                            
+                            <button type="submit" class="btn btn-sm" name="ExamId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+								</button> 
+                            
+                       <%} %>
                             
                             <% if(LoginType.toString().equalsIgnoreCase("P") && obj[5].toString().equalsIgnoreCase("A")){ 
                             	
@@ -431,7 +471,7 @@ body{
 <script>
 
 $("#myTable1").DataTable({
-    "lengthMenu": [ 50, 75, 100],
+    "lengthMenu": [ 5, 10, 25,50,75,100],
     "pagingType": "simple"
 
 });

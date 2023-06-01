@@ -9,6 +9,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,11 +22,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.noc.model.ExamIntimation;
+import com.vts.ems.noc.model.ExamIntimationTrans;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportTrans;
 import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadTrans;
-
+import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.Passport;
@@ -183,7 +190,7 @@ public class NocDaoImpl implements NocDao {
 		
 	}
 	
-	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpNo FROM employee a, pis_admins b WHERE a.EmpNo=b.PandAAdmin AND b.IsActive=1 LIMIT 1";
+	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpNo FROM employee a, pis_admins b WHERE a.EmpNo=b.EmpAdmin AND b.IsActive=1 AND b.AdminType='P' LIMIT 1";
 	@Override
 	public List<String> GetPandAAdminEmpNos()throws Exception
 	{
@@ -267,7 +274,7 @@ public class NocDaoImpl implements NocDao {
 		}		
 	}
 	
-	private static final String GETPANDAEMPNAME  ="SELECT DISTINCT a.EmpNo,a.EmpName FROM employee a, pis_admins b WHERE a.EmpNo=b.PandAAdmin AND b.IsActive=1 LIMIT 1";
+	private static final String GETPANDAEMPNAME  ="SELECT DISTINCT a.EmpNo,a.EmpName FROM employee a, pis_admins b WHERE a.EmpNo=b.EmpAdmin AND b.IsActive=1 AND b.AdminType='P' LIMIT 1";
 	@Override
 	public Object[] GetPandAEmpName() throws Exception
 	{
@@ -285,6 +292,8 @@ public class NocDaoImpl implements NocDao {
 			return null;
 		}		
 	}
+	
+	
 	
 	private static final String GETEMPDGMPANDAEMPNO  ="SELECT dgm.dgmempno , e2.empname FROM employee e, division_master dm,dgm_master dgm , employee e2 WHERE e.divisionid=dm.divisionid AND dm.dgmid=dgm.dgmid AND dgm.dgmempno=e2.empno AND e.empno=:empno";
 	@Override
@@ -536,7 +545,7 @@ public class NocDaoImpl implements NocDao {
 		
 	}
 
-	public static final String NOCPROCABROADTLIST="SELECT pa.NocProcId,pa.NocProcAbroadNo,pa.ProcAbroadStatus,pa.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode FROM noc_proceeding_abroad pa,pis_approval_status c,employee e WHERE pa.isActive='1' AND pa.NocstatusCode=c.PisStatuscode AND e.EmpNo=pa.EmpNo AND pa.EmpNo=:EmpNo ORDER BY pa.NocProcId DESC";
+	public static final String NOCPROCABROADTLIST="SELECT pa.NocProcId,pa.NocProcAbroadNo,pa.ProcAbroadStatus,pa.Remarks,e.EmpName,c.PISStatus,c.PisStatusColor,c.pisstatuscode,pa.InitiatedDate FROM noc_proceeding_abroad pa,pis_approval_status c,employee e WHERE pa.isActive='1' AND pa.NocstatusCode=c.PisStatuscode AND e.EmpNo=pa.EmpNo AND pa.EmpNo=:EmpNo ORDER BY pa.NocProcId DESC";
 	@Override
 	public List<Object[]> getProcAbroadList(String empNo) throws Exception {
 		
@@ -719,7 +728,7 @@ public class NocDaoImpl implements NocDao {
 		}		
 	}
 
-	private static final String NOCPROCEEDINGABROADREMARKHISTORY="SELECT trans.NocProcId,trans.Remarks,e.EmpName FROM noc_proc_abroad_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocProcId=:procAbrId ORDER BY trans.ActionDate ASC";
+	private static final String NOCPROCEEDINGABROADREMARKHISTORY="SELECT trans.NocProcId,trans.Remarks,e.EmpName,trans.ActionDate,trans.NocStatusCode FROM noc_proc_abroad_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocProcId=:procAbrId ORDER BY trans.ActionDate ASC";
 	@Override
 	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId) throws Exception {
 		
@@ -746,7 +755,164 @@ public class NocDaoImpl implements NocDao {
 		manager.flush();
 		return nocpa.getNocProcId();
 	}
+
+	
+	private static final String EMPGENDER="SELECT empd.Title,empd.Gender FROM employee_details empd,noc_proceeding_abroad n WHERE n.EmpNo = empd.EmpNo AND n.isActive='1' AND  n.NocProcId=:procAbrId";
+	@Override
+	public Object[] getEmpGender(String procAbrId) throws Exception {
+		
+		 try {
+				
+				Query query= manager.createNativeQuery(EMPGENDER);
+				query.setParameter("procAbrId", procAbrId);
+				List<Object[]> list =  (List<Object[]>)query.getResultList();
+				if(list.size()>0) {
+					return list.get(0);
+				}else {
+					return null;
+				}
+				
+			} catch (Exception e) {
+				logger.error(new Date()  + "Inside DAO getEmpGender " + e);
+				e.printStackTrace();
+				return null;
+			}		
+		}
+
+	@Override
+	public long ExamDetailsAdd(ExamIntimation exam) throws Exception {
+		
+		manager.persist(exam);
+		manager.flush();
+		return exam.getExamId();
+		
+	}
+
+	private static final String EXAMINTIMATIONLIST="SELECT a.ExamId,a.ExamName,a.ProbableDate,DATE(InitiatedDate),c.PISStatus,c.PisStatusColor,c.pisstatuscode,a.IntimationStatus,a.IntimateStatusCode FROM intimation_exam a,pis_approval_status c WHERE a.isActive='1' AND a.IntimateStatusCode=c.PisStatuscode AND a.EmpNo=:empNo ORDER BY a.ExamId DESC";
+	@Override
+	public List<Object[]> getExamIntimationDetails(String empNo) throws Exception {
+		
+		Query query=manager.createNativeQuery(EXAMINTIMATIONLIST);
+		query.setParameter("empNo", empNo);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	@Override
+	public long ExamIntimationTransAdd(ExamIntimationTrans transaction) throws Exception {
+		
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getIntimationTransId();
+	}
+
+	@Override
+	public ExamIntimation getExamId(long examId) throws Exception {
+		
+			
+			try {
+				ExamIntimation exam = manager.find(ExamIntimation.class,(examId));
+				return exam ;
+			} catch (Exception e) {
+				logger.error(new Date() + "Inside DAO getExamId() "+e);
+				e.printStackTrace();
+				return null;
+			}	
+			
+		}
+
+	@Override
+	public long ExamDetailsUpdate(ExamIntimation exam) throws Exception {
+		
+		manager.merge(exam);
+		manager.flush();
+		return exam.getExamId();
+		
+	}	
+	
+private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTransId,e.empno,e.empname,des.designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor FROM intimation_exam_trans tra,intimation_exam ie,employee e,employee_desig des,pis_approval_status sta WHERE tra.ExamId=ie.ExamId  AND tra.ActionBy=e.EmpNo AND e.desigid=des.desigid  AND tra.IntimateStatusCode=sta.PisStatusCode AND ie.ExamId=:examId ORDER BY actiondate";
+	@Override
+	public List<Object[]> getExamIntimationTransactionList(String examId) throws Exception {
+	
+		
+		Query query=manager.createNativeQuery(INTIMATIONEXAMTRANSCATION);
+		query.setParameter("examId", examId);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	private static final String EXAMINTIMATIONDETAILS="CALL Intimation_Exam(:examId)";
+	@Override
+	public Object[] getIntimationData(String examId) throws Exception {
+		
+		
+		try {
+			
+			Query query= manager.createNativeQuery(EXAMINTIMATIONDETAILS);
+			query.setParameter("examId", examId);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getIntimationData " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+
+	@Override
+	public ExamIntimation IntimatedExam(String examId) throws Exception {
+		
+		ExamIntimation intimate= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<ExamIntimation> cq= cb.createQuery(ExamIntimation.class);
+			Root<ExamIntimation> root= cq.from(ExamIntimation.class);					
+			Predicate p1=cb.equal(root.get("ExamId") , Long.parseLong(examId));
+			cq=cq.select(root).where(p1);
+			TypedQuery<ExamIntimation> allquery = manager.createQuery(cq);
+			intimate= allquery.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date()  + "Inside DAO IntimatedExam " + e);
+		}
+		return intimate;
+	}
+
+	@Override
+	public long IntimationDataEdit(ExamIntimation exam) throws Exception {
+		
+		try {
+			manager.merge(exam);
+			manager.flush();
+			
+			return exam.getExamId();
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO IntimationDataEdit " + e);
+			e.printStackTrace();
+			return 0;
+		}
+	}
+
+	private static final String INTIMATIONREMARK="SELECT trans.ExamId,trans.Remarks,e.EmpName,trans.ActionDate,trans.IntimateStatusCode FROM intimation_exam_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.ExamId=:examId  ORDER BY trans.ActionDate ASC";
+	@Override
+	public List<Object[]> getIntimationRemarks(String examId) throws Exception {
+	
+		Query query=manager.createNativeQuery(INTIMATIONREMARK);
+		query.setParameter("examId", examId);
+		return (List<Object[]>)query.getResultList();
+	}
 }
+
+	
+
+		
+		
+	
+
 	
 
 	

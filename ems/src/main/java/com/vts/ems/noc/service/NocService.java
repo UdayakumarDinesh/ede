@@ -3,6 +3,8 @@ package com.vts.ems.noc.service;
 import java.util.List;
 
 import com.vts.ems.master.model.LabMaster;
+import com.vts.ems.noc.model.ExamIntimation;
+import com.vts.ems.noc.model.ExamIntimationDto;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -77,6 +79,25 @@ public interface NocService {
 	public long DeptDetailsUpdate(NocProceedingAbroadDto dto, String userId)throws Exception;
 
 	public long ProcAbroadPandAFromUpdate(NocProceedingAbroadDto dto, String userId)throws Exception;
+
+	public Object[] getEmpGender(String procAbrId) throws Exception;
+
+	public long ExamDetailsAdd(ExamIntimationDto dto, String userId)throws Exception;
+
+	public  List<Object[]> getExamIntimationDetails(String empNo)throws Exception;
+
+	public long ExamDetailsUpdate(ExamIntimationDto dto, String userId) throws Exception;
+
+	public List<Object[]> ExamIntimationTransactionList(String examId)throws Exception;
+
+	public Object[] getIntimationData(String examId)throws Exception;
+
+	public ExamIntimation IntimatedExam(String examId) throws Exception;
+
+	public long IntimationForExamForward(String examId, String username, String action, String remarks, String empNo,
+			String loginType) throws Exception;
+
+	public List<Object[]> getIntimationRemarks(String examId)throws Exception;
 	
 
 	

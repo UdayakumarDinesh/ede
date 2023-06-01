@@ -2,6 +2,7 @@
 <%@ page import="java.util.*"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="com.vts.ems.pis.model.Employee"%>
+<%@page import="java.text.SimpleDateFormat"%>
 
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
@@ -47,6 +48,8 @@ body{
 
  <%	
 	
+    SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
+    SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
     Object[] CeoName = (Object[])request.getAttribute("CeoName");
     Object[] PandAEmpName = (Object[])request.getAttribute("PandAEmpName");
 	Object[] DGMEmpName = (Object[])request.getAttribute("DGMEmpName");
@@ -60,7 +63,8 @@ body{
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
 	
 	Object[] empData=(Object[])request.getAttribute("EmpData");
-	 Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
+	Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
+	Object[] EmpPassport= (Object[])request.getAttribute("EmpPassport");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
 	List<Object[]> NocProcAbraodList=(List<Object[]>)request.getAttribute("NocProcAbraodList");
@@ -122,8 +126,8 @@ body{
 							<tr>
 								<th style="width: 6%">Select</th>
 								<th style="width: 10%">NOC Proceeding Abroad</th>
-							    <!-- <th style="width: 25%">NOC Date</th> -->
-								<th style="width: 11%">Status</th>
+							    <th style="width: 10%">Initiated Date</th> 
+								<th style="width: 15%">Status</th>
 								<th style="width: 8%">Action</th>
 							</tr>
 						</thead>
@@ -135,7 +139,7 @@ body{
 								<td style="text-align: center;"><%if(toUserStatus.contains(obj[7].toString()) ){ %><input type="radio" name="ProcAbrId" value="<%=obj[0]%>"><%}
 								else{%><input type="radio" name="ProcAbrId" value="<%=obj[0]%>" disabled>  <%} %></td>
 								<td style="text-align: center;"><%=obj[1] %></td>
-								<!-- <td></td> -->
+								<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[8].toString()))%></td> 
 								<td style="text-align: center;">
 								
 								  
@@ -184,7 +188,7 @@ body{
 				<div class="row text-center">
 					<div class="col-md-12">
 						
-						<button type="submit" class="btn btn-sm add-btn" formaction="ProcAbroadAdd.htm"  <% if(NocEmpList==null){ %> onclick="message()" <%} %>>ADD</button>
+						<button type="submit" class="btn btn-sm add-btn" formaction="ProcAbroadAdd.htm"  <% if(NocEmpList==null){ %> onclick=" return message('E')" <%} else if (EmpPassport==null){%> onclick=" return message('P')" <%} %> >ADD</button>
 						<button type="submit" class="btn btn-sm edit-btn" formaction="ProcAbroadEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCProcAbroad)">EDIT</button>
 						<!-- <button type="submit" class="btn btn-sm delete-btn" formaction="" name="action" value="DELETECIR" Onclick="Delete(NOCPassport)">DELETE</button> -->
 						
@@ -236,7 +240,7 @@ body{
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
+	               		<% if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #BCAAA3;" >
 	                			P&A - <%=PandAEmpName[1] %>
 	                		</td>
@@ -245,7 +249,7 @@ body{
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(CeoName!=null ){ %>
+	               		<% if(CeoName!=null ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
 	                			CEO - <%=CeoName[1] %>
 	                		</td>
@@ -253,40 +257,8 @@ body{
 	               		<%} %>
 	               	</tr>		   
 		                	
-	               	<%-- <tr>
-	                 	<%if( !CEO.equalsIgnoreCase(emp.getEmpNo()) ) {%>
-	               		<td class="trdown" style="background: #E8E46E;" >	
-				              <%=emp.getEmpName() %>
-	                	</td>
-	                	<%} %>
-	                	<%if(GroupHeadName!=null && !GHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
-	                		<td class="trdown" style="background: #B39DDB;" >	
-				                <%=GroupHeadName[1] %>
-	                		</td>
-	               		 <%} %>
-	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
-	                		<td class="trdown" style="background: #90CAF9;" >	
-				                <%=DivisionHeadName[1] %>
-	                		</td>
-	               		 <%} %>
-	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
-	                		<td class="trdown" style="background: #FBC7F7;" >	
-				                <%=DGMEmpName[1] %>
-	                		</td>
-	               		 <%} %>
-	               		 <%if(PandAEmpName!=null && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
-	               			<td class="trdown" style="background: #BCAAA3;" >	
-			                	<%=PandAEmpName[1] %>
-		           			</td>
-		           		 <%} %>
-		           		 <%if(CeoName!=null ){ %>
-	               			<td class="trdown" style="background: #4DB6AC;" >	
-			                	<%=CeoName[1] %>
-		           			</td>
-		           		 <%} %>
-		            	</tr>   --%>           	
-			           </table>			             
-			       </div>
+	              </table>			             
+			  </div>
 
 
 		</div>
@@ -337,12 +309,19 @@ function Delete(NOCProcAbroad){
 	} */
 }
 
-function message(){
+function message(action){
 	
+	if(action==='E'){
 	alert("Approval of Permanent and Residential address is mandatory before applying NOC for Proceeding Abroad");
 	event.preventDefault();
 	return false;
+}
+	else if(action==='P'){
+		alert("Passport Details Are Not Available.Please contact Admin");
+		event.preventDefault();
+		return false;
 	
+	}
 }
 
 </script>

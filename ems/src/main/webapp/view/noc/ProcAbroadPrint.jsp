@@ -2,6 +2,9 @@
 <%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
 <%@page import="java.text.DecimalFormat"%>
 <%@page import="java.util.Date"%>
+ <%@page import="java.util.List"%>
+ <%@page import="java.util.ArrayList"%>
+ <%@page import="java.util.Arrays"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
@@ -172,7 +175,9 @@ td{
        SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
        String LabLogo = (String)request.getAttribute("lablogo");
        Object[] Ceoname=(Object[])request.getAttribute("CeoName");
-    
+       List<Object[]> RemarksHistory=(List<Object[]>)request.getAttribute("NOCProceedingAbroadRemarkHistory");
+       
+       List<String> RecommendStatus = Arrays.asList("VGI","VDI","VDG");
 	%>
 
 
@@ -189,7 +194,7 @@ td{
 				
 			</tr>
 			<tr>
-				<td>Date of Issue : <% if (obj[54]!=null){%><%=rdf.format(sdf.parse(obj[54].toString())) %><%} %>
+				<td>Date of Issue : <% if (obj[53]!=null){%><%=rdf.format(sdf.parse(obj[53].toString())) %><%} %>
 				</td>
 				
 			</tr>
@@ -472,7 +477,7 @@ td{
 	</tr> --%>
 	
 	<tr>
-	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;19. Going : <span class="text-blue"><% if(obj[34].toString().equalsIgnoreCase("A")) {%>Alone<%} else {%>With Family<%} %> </span>
+	<td style="width:400px;text-align: left;border: 0;padding:-15"><h4> &nbsp;19. Whether going alone or with family : <span class="text-blue"><% if(obj[34].toString().equalsIgnoreCase("A")) {%>Alone<%} else {%>With Family<%} %> </span>
 	   </h4></td>
       </tr>
       
@@ -579,14 +584,14 @@ td{
               I undertake that I will return my Identity Card before proceeding abroad <br>&emsp; 
               I undertake that I shall not settle permanently abroad and rejoin my duty after expiry of leave
             <br>
-              <% if(obj[45].toString().equalsIgnoreCase("N")) {%> 
+              <% if(obj[44].toString().equalsIgnoreCase("N")) {%> 
 		  
            I am not under contractual obligation to serve STARC for any specific period.
 		
 		<%} else{ %>
 	        
             I am under contractual obligation to serve STARC for a period from 
-              <span class="text-blue"><%=rdf.format(sdf.parse(obj[46].toString())) %></span>  to   <span class="text-blue"><%=rdf.format(sdf.parse(obj[47].toString())) %></span>
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[45].toString())) %></span>  to   <span class="text-blue"><%=rdf.format(sdf.parse(obj[46].toString())) %></span>
               
               <%} %>
           </h4>		   			
@@ -597,50 +602,77 @@ td{
 	<br>
 	
 	
-	 <div  style="margin-left:430px !important;" > Signature of the Applicant</div>	
-	 <% if(obj[50]!=null) {%><div  style="margin-left:440px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(obj[50].toString())) %></span> </div> <%} %>
+	 <div  style="margin-left:330px !important;" > Signature of the Applicant</div>	
+	 <% if(obj[49]!=null) {%><div  style="margin-left:400px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(obj[49].toString().substring(0, 10)) +" "+obj[49].toString().substring(11,19) %></span> </div>
+	 
+	 <hr>
+	  <%} %>
 	 
 	 
 	 
-	  <% if(obj[55]!=null && obj[56]!=null && obj[57]!=null){ %>
+	  <% if(obj[54]!=null && obj[55]!=null && obj[56]!=null){ %>
 	  
-	  <h1 class="break1"></h1>
-	  
-	    <div><span style="margin-top:0px;font-weight: 600;font-size: 16px;text-decoration: underline;text-align:center;">Filled by Department</span></div> 
+	 
+	    <div><span style="margin-top:0px;font-weight: 600;font-size: 16px;text-decoration: underline;text-align:center;">Filled by Department in which individual is Employed</span></div> 
 	 <table style="margin-left:20px; margin-top:5px;border-collapse: collapse;font-family:FontAwesome; width:650px;"> 
 	 
 	 <tr>
 		 <td style="width:650px;text-align: left;border: 0;padding: -15px;"><h4> 1. Is the applicant handling any classified work divulgence of which may affect the security of service and the country?
-		 : &nbsp; <span class="text-blue"><% if(obj[55].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
+		 : &nbsp; <span class="text-blue"><% if(obj[54].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
          </h4></td>
       </tr>
 	 
 	 <tr>
 		 <td style="width:650px;text-align: left;border: 0;padding: -15px;"><h4> 2. Is the individuals visit recommended even if the answer to Sl.No.1 above is in the affirmative
-		 : &nbsp; <span class="text-blue"><% if(obj[56].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
+		 : &nbsp; <span class="text-blue"><% if(obj[55].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
          </h4></td>
       </tr>
 	 
 	 <tr>
 		 <td style="width:650px;text-align: left;border: 0;padding: -15px;"><h4> 3.Whether the leave will be granted for proceeding abroad
-		 : &nbsp; <span class="text-blue"><% if(obj[57].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
+		 : &nbsp; <span class="text-blue"><% if(obj[56].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %> </span> 
          </h4></td>
       </tr>
 	 
 	 </table>
+	 
+	 <br>
+	 <br>
+	 <% int count=1;
+	 
+	 for(Object[] rh:RemarksHistory) {
+		 
+		 if(RecommendStatus.contains(rh[4].toString())){
+		 
+			 if(count==1){%>
+				 <div align="left" style="margin-left:370px !important;">Recommended By :<span class="text-blue"><%=rh[2] %></span> </div>
+	              <div  align="left" style="margin-left:370px !important;">Recommended On :<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(rh[3].toString().substring(0, 10)) +" "+rh[3].toString().substring(11,19) %> </span></div>
+	              
+	              <br>
+			<%} 
+		else{%>
+	 <div align="left" style="margin-left:5px !important;">Recommended By :<span class="text-blue"><%=rh[2] %></span> </div>
+	 <div  align="left" style="margin-left:5px !important;">Recommended On :<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(rh[3].toString().substring(0, 10)) +" "+rh[3].toString().substring(11,19) %> </span></div>
+	 <br>
+	 
+	 <%}count++;
+	
+			 }} %>
+	 
 	 <%} %>
 	 
 	
 	 
-	<% if(obj[58]!=null  && obj[61]!=null){ %>
+	<% if(obj[57]!=null  && obj[60]!=null){ %>
 	    
-	     <hr>
+	     <h1 class="break1"></h1>
+	   
 		  <div style="margin-top:0px;font-weight: 600;font-size: 16px;text-decoration: underline;text-align:center;">Filled by P&A Department</div> 
 		  <table style="margin-left:10px; margin-top:5px;border-collapse: collapse;font-family:FontAwesome; width:650px;">
 		  
 		  
 		 <tr>
-		     <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;1.(a) Are the entries given by the applicant in paras 1 to 6 in Part - I correct? :&nbsp;<span class="text-blue"><% if(obj[58].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %></span></h4></td>
+		     <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;1.(a) Are the entries given by the applicant in paras 1 to 6 in Part - I correct? :&nbsp;<span class="text-blue"><% if(obj[57].toString().equalsIgnoreCase("Y")){ %>Yes<%} else{ %>No<%} %></span></h4></td>
             
          </tr>
           
@@ -651,7 +683,7 @@ td{
             </tr>
             
           <tr>
-             <td class="text-blue" style="border: 0;text-align: justify;padding: 0px;"><%=obj[59] %></td>
+             <td class="text-blue" style="border: 0;text-align: justify;padding: 0px;"><%=obj[58] %></td>
           </tr>
           
           <%} %>
@@ -672,29 +704,29 @@ td{
             
             </tr>
             <tr>
-            <td class="text-blue" style="border: 0;text-align: justify;padding: 0px;"><%=obj[60] %></td>
+            <td class="text-blue" style="border: 0;text-align: justify;padding: 0px;"><%=obj[59] %></td>
             
            </tr>
            <%} %>
         
         <tr>
           
-            <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3.Are any financial dues outstanding against the 	:
+            <td style="width:650px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3.Are any financial dues outstanding against the 
                 applicant? :&nbsp;<span class="text-blue">
-            <% if(obj[61].toString().equalsIgnoreCase("Y")){ %> Yes<%} else{ %>No<%} %> </span></h4></td>
+            <% if(obj[60].toString().equalsIgnoreCase("Y")){ %> Yes<%} else{ %>No<%} %> </span></h4></td>
           
           </tr>
           
         
            <tr>
-           <td style="width:350px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3. Applicant is :&nbsp; <% if(obj[45].toString().equalsIgnoreCase("N")) {%>
+           <td style="width:350px;text-align: justify;border: 0;padding: -12px;"><h4>&nbsp;3. Applicant is :  <% if(obj[45].toString().equalsIgnoreCase("N")) {%>
 		  
             not under contractual obligation to serve STARC for any specific period. <%} 
 		
-		     else if(obj[45].toString().equalsIgnoreCase("Y")){ %>
+		     else if(obj[44].toString().equalsIgnoreCase("Y")){ %>
 	        
                under contractual obligation to serve STARC for a period from 
-              <span class="text-blue"><%=rdf.format(sdf.parse(obj[46].toString())) %></span>  to <span class="text-blue" ><%=rdf.format(sdf.parse(obj[47].toString())) %></span>
+              <span class="text-blue"><%=rdf.format(sdf.parse(obj[45].toString())) %></span> to <br><span class="text-blue" >&nbsp;<%=rdf.format(sdf.parse(obj[46].toString())) %></span>
               
             <%} %> </h4></td>
              
@@ -704,19 +736,32 @@ td{
         </table> 
         
         <br>
-         <% if (obj[53]!=null){ %><div  style="margin-left:420px !important;" ><span class="text-blue"><%=obj[53]%></span></div><%} %>
-	 <div  style="margin-left:470px !important;">P&A.Incharge </div> 
-      <%} %>
+        <br>
+         <% if (obj[52]!=null){ %><div  style="margin-left:340px !important;" >P&A.Incharge : <span class="text-blue"><%=obj[52]%></span></div><%} %>
+	
+         <% for(Object[] rh:RemarksHistory) {
+		 
+		 if(rh[4].toString().equalsIgnoreCase("VPA")){%>
+		 
+	        <div style="margin-left:420px !important;" >Verified On : <span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(rh[3].toString().substring(0, 10)) +" "+rh[3].toString().substring(11,19) %></span>
+	
+	     <%}} %>
+		 
+		 
+	
+		 <%} %>
        
        
         
         <br>
+        <br>
+        <br>
         
-	 <% if(obj[49].toString().equalsIgnoreCase("APR")){ %>
-		 <div style="margin-top:0x;text-align:center;"> 
-		                         <span style="font-weight: 600; font-size: 16px;margin-left:0px;">APPROVED</span><br><br>
-						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">CEO:&nbsp;<span class="text-blue" ><% if (Ceoname!=null){%><%=Ceoname[1] %><%} %></span></span><br>
-								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[54].toString().substring(0, 10)) +" "+obj[54].toString().substring(11,19) %></span></span><br>
+	 <% if(obj[48].toString().equalsIgnoreCase("APR")){ %>
+		 <div align="center" style="margin-left:-450px;text-align:center;"> 
+		                         <span style="font-weight: 600; font-size: 16px;">APPROVED</span><br><br><br>
+						        <span style="font-weight: 500; font-size: 16px;">CEO:&nbsp;<span class="text-blue" ><% if (Ceoname!=null){%><%=Ceoname[1] %><%} %></span></span><br>
+								<span style="font-weight: 400; font-size: 16px;">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[53].toString().substring(0, 10)) +" "+obj[53].toString().substring(11,19) %></span></span><br>
 		</div>	
 		<%} %>
 	 

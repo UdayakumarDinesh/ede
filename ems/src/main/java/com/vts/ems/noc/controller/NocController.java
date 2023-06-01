@@ -44,12 +44,14 @@ import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.font.FontProvider;
 import com.vts.ems.Admin.Service.AdminService;
-
+import com.vts.ems.noc.model.ExamIntimation;
+import com.vts.ems.noc.model.ExamIntimationDto;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadDto;
 import com.vts.ems.noc.service.NocService;
+import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.Passport;
 import com.vts.ems.pis.service.PisService;
 import com.vts.ems.utils.CharArrayWriterResponse;
@@ -348,26 +350,7 @@ public class NocController {
 			}
    }
 	
-		
 	
-//	  @RequestMapping(value = "PassportNOCPrint.htm", method =
-//	  {RequestMethod.GET,RequestMethod.POST}) public String
-//	  PassportNOCPrint(HttpServletRequest req, HttpSession ses, RedirectAttributes
-//	  redir) throws Exception {
-//	  
-//	  String UserId=(String)ses.getAttribute("Username"); String EmpId =
-//	  ses.getAttribute("EmpId").toString(); logger.info(new
-//	  Date()+"Inside PassportNOCPrint.htm "+UserId); try {
-//	  
-//	  req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
-//	  req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId)); return
-//	  "noc/PassportPrint";
-//	  
-//	  } catch (Exception e) { e.printStackTrace(); logger.error(new
-//	  Date()+" Inside PassportNOCPrint.htm "+UserId, e); return "static/Error"; } }
-//	 
-//	
-//	
 	@RequestMapping(value = "PassportPreview.htm", method = {RequestMethod.GET,RequestMethod.POST})
 	public String PassportPreview(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 	{
@@ -504,12 +487,7 @@ public class NocController {
 				NocPassport Noc=service.getNocPassportById(Long.parseLong(passportid));
 				String NocStatusCode = Noc.getNocStatusCode();
 				
-//				NocPassportDto dto=  NocPassportDto.builder()
-//						.NocPassportId(Long.parseLong(passportid))
-//						.NocStatusCode(NocStatusCode)
-//						.Remarks(req.getParameter("remarks"))
-//				        .build();
-				
+			
 				long save=service.NOCPassportForward(passportid,UserId,action,remarks,EmpNo,LoginType);
 				if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI") || 
 						NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE")) {
@@ -625,32 +603,7 @@ public class NocController {
 			}
 		}
 	 
-//	 @RequestMapping(value = "PassportNOCCertificate.htm")
-//		public String PassportNOCCertificate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-//		{
-//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-//			String EmpNo = (String) ses.getAttribute("EmpNo");
-//	    	
-//			String Username = (String) ses.getAttribute("Username");
-//			ses.setAttribute("formmoduleid", "34");			
-//			ses.setAttribute("SidebarActive","PassportNOCCertificate_htm");	
-//			logger.info(new Date() +"Inside PassportNOCCertificate.htm"+Username);		
-//			try {				
-//				
-//				String passportid=req.getParameter("Passportid");
-//				
-//				 req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
-//				 req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
-//				 
-//				return "noc/NocPassportCertificate";
-//				
-//			}catch (Exception e) {
-//				logger.error(new Date() +" Inside PassportNOCCertificate.htm"+Username, e);
-//				e.printStackTrace();	
-//				return "static/Error";
-//			}
-//			
-//		}
+
 	 
 	 @RequestMapping(value = "PassportNOCCertificate.htm", method=RequestMethod.GET)
 		public void PassportNOCCertificate(HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
@@ -746,6 +699,7 @@ public class NocController {
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 
 				 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
+				 req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
 				 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				 req.setAttribute("NocProcAbraodList",service.getProcAbroadList(EmpNo));
 				
@@ -822,14 +776,9 @@ public class NocController {
 			logger.info(new Date()+"Inside ProcAbroadAddSubmit.htm "+UserId);
 			try {
 				
-				String Exptamt=req.getParameter("ExpectedAmount");
-				System.out.println("Exptamt----"+req.getParameter("ExpectedAmount"));
-				
+			    
 				NocProceedingAbroadDto dto=  NocProceedingAbroadDto.builder()
 						
-						
-						
-						 .PassportExist(req.getParameter("PassportExist"))
 						 .EmpNo(EmpNo)
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
@@ -855,9 +804,7 @@ public class NocController {
 						 .Nationality(req.getParameter("Nationality"))
 						 .Relationship(req.getParameter("Relationship"))
 						 .RelationshipAddress(req.getParameter("RelationshipAddress"))
-						
 						 .LostPassport(req.getParameter("LostPassport"))
-						 .PassportType(req.getParameter("Passporttype"))
 						 .ContractualObligation(req.getParameter("ContractualObligation"))
 						 .FromDate(sdf.format(rdf.parse(req.getParameter("fromdate"))))
 					     .ToDate(sdf.format(rdf.parse(req.getParameter("todate"))))
@@ -902,7 +849,7 @@ public class NocController {
 						
 						 .NocProcId(Long.parseLong(ProcAbrId))
 						 .EmpNo(EmpNo)
-						 .PassportExist(req.getParameter("PassportExist"))
+						
 						 .RelationType(req.getParameter("RelationType"))
 						 .RelationName(req.getParameter("RelationName"))
 						 .RelationOccupation(req.getParameter("RelationOccupation"))
@@ -928,7 +875,6 @@ public class NocController {
 						 .Relationship(req.getParameter("Relationship"))
 						 .RelationshipAddress(req.getParameter("RelationshipAddress"))
 						 .LostPassport(req.getParameter("LostPassport"))
-						 .PassportType(req.getParameter("Passporttype"))
 						 .ContractualObligation(req.getParameter("ContractualObligation"))
 						 .FromDate(sdf.format(rdf.parse(req.getParameter("fromdate"))))
 					     .ToDate(sdf.format(rdf.parse(req.getParameter("todate"))))
@@ -967,7 +913,7 @@ public class NocController {
 			try {
 				
 				String ProcAbrId=req.getParameter("ProcAbrId");
-				System.out.println("ProcAbrId---"+req.getParameter("ProcAbrId"));
+				
 				req.setAttribute("TransactionList", service.NOCProcAbroadTransactionList(ProcAbrId));
 				
 				return "noc/NocTranscationStatus";
@@ -999,7 +945,7 @@ public class NocController {
 		List<String> PandAs = service.GetPandAAdminEmpNos();
 		String ProcAbrId=req.getParameter("ProcAbrId");
 		String isApproval = req.getParameter("isApproval");
-		System.out.println("isApproval----"+isApproval);
+		
 		NocProceedingAbroad ProcAbroad =service.getNocProceedingAbroadById(Long.parseLong(ProcAbrId));
 			
 		req.setAttribute("isApproval", isApproval);
@@ -1042,6 +988,7 @@ public class NocController {
 			    String ProcAbrId=req.getParameter("ProcAbrId");
 			    req.setAttribute("CeoName", service.GetCeoName());
 			    req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
+			    req.setAttribute("NOCProceedingAbroadRemarkHistory",service.getProceedinAbraodRemarksHistory(ProcAbrId));
 			    req.setAttribute("lablogo",getLabLogoAsBase64());
 			    String path = req.getServletContext().getRealPath("/view/temp");
 			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
@@ -1075,35 +1022,7 @@ public class NocController {
 				fis.close();
 				Path pathOfFile2 = Paths.get(path + "/NOCProceedingAbroad.pdf");
 				Files.delete(pathOfFile2);
-//			String filename="ProceedingAbroad-"+ProcAbrId.toString().trim().replace("/", "-");
-//			String path=req.getServletContext().getRealPath("/view/temp");
-//			req.setAttribute("path",path);
-//	        
-//	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-//			req.getRequestDispatcher("/view/noc/ProcAbroadPrint.jsp").forward(req, customResponse);
-//			String html = customResponse.getOutput();        
-//	        
-//	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
-//	         
-//	        res.setContentType("application/pdf");
-//	        res.setHeader("Content-disposition","attachment;filename="+filename+".pdf");
-//	       
-//	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
-//	        File f=new File(path +File.separator+ filename+".pdf");
-//	        FileInputStream fis = new FileInputStream(f);
-//	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
-//	        res.setHeader("Content-Length",String.valueOf(f.length()));
-//	        byte[] buffer = new byte[1024];
-//	        int len = 0;
-//            while ((len = fis.read(buffer)) >= 0) {
-//	            os.write(buffer, 0, len);
-//	        } 
-//	        os.close();
-//	        fis.close();
-//	       
-//	       
-//	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
-//	        Files.delete(pathOfFile);	
+	
 			
 		}
 			   
@@ -1259,6 +1178,7 @@ public class NocController {
 				    req.setAttribute("lablogo",getLabLogoAsBase64());
 				    req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				    req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
+				    req.setAttribute("EmpGender", service.getEmpGender(ProcAbrId));
 				    String path = req.getServletContext().getRealPath("/view/temp");
 				    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 					req.getRequestDispatcher("/view/noc/NocProcAbroadCertificate.jsp").forward(req, customResponse);
@@ -1298,7 +1218,287 @@ public class NocController {
 				}
 			
 		}
-		
-	
+	 
+	 @RequestMapping(value = "IntimateExam.htm")
+		public String IntimationForExam(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			
+			ses.setAttribute("formmoduleid", "34");  
+		    ses.setAttribute("SidebarActive", "IntimateExam_htm");
+			String UserId=(String)ses.getAttribute("Username");
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			
+			logger.info(new Date()+"Inside IntimationForExam.htm "+UserId);
+			try {
+				
+				
+				String CEO = service.GetCEOEmpNo();
+				List<String> PandAs = service.GetPandAAdminEmpNos();
+				List<String> DGMs = service.GetDGMEmpNos();
+				List<String> DHs = service.GetDHEmpNos();
+				List<String> GHs = service.GetGHEmpNos();
+				
+				 req.setAttribute("CEOEmpNos", CEO);
+				 req.setAttribute("PandAsEmpNos", PandAs);
+				 req.setAttribute("DGMEmpNos", DGMs);
+				 req.setAttribute("DivisionHeadEmpNos", DHs);
+				 req.setAttribute("GroupHeadEmpNos", GHs);
+				 
+				 req.setAttribute("CeoName", service.GetCeoName());
+				 req.setAttribute("PandAEmpName", service.GetPandAEmpName());
+				 
+				 if(!DGMs.contains(EmpNo)) {
+						req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
+					}
+				 req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
+				 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 
+				 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
+				 
+				 req.setAttribute("ExamIntimationDetails", service .getExamIntimationDetails(EmpNo));
+				
+				return "noc/IntimationForExam";
+						 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside IntimationForExam.htm "+UserId, e); 
+			    return "static/Error"; 
+			}
+	   }
+	 
+	 @RequestMapping(value = "ExamDetailsAddSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public String IntimationExamAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside IntimationExamAdd.htm "+UserId);
+			try {
+				
+				ExamIntimationDto dto = new ExamIntimationDto();
+						
+						dto.setEmpNo(EmpNo);
+						dto.setExamName(req.getParameter("ExamName"));
+						dto.setProbableDate(sdf.format(rdf.parse(req.getParameter("ProbableDate"))));
+				
+						long save =service.ExamDetailsAdd(dto,UserId);
+						
+						 if (save > 0) {
+				  				
+			                  redir.addAttribute("result", "Intimation For Exam Added Succesfully");
+
+			 			} else {
+			                  redir.addAttribute("resultfail", "Intimation For Exam Add Unsuccessful");
+			 			}
+						 
+			        return "redirect:/IntimateExam.htm";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside IntimationExamAdd.htm "+UserId, e); 
+			    return "static/Error"; 
+			}
+		}
+			
+	 
+	 @RequestMapping(value = "ExamDetailsEditSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public String IntimationExamUpdate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside ExamDetailsEditSubmit.htm "+UserId);
+			try {
+				
+				 String ExamId=req.getParameter("ExamId");
+				 
+				 ExamIntimationDto dto = new ExamIntimationDto();
+				 dto.setExamId(Long.parseLong(ExamId));
+				    dto.setExamName(req.getParameter("ExamName"));
+					dto.setProbableDate(sdf.format(rdf.parse(req.getParameter("ProbableDate"))));
+				 
+					long update =service.ExamDetailsUpdate(dto,UserId);
+					
+				 if (update > 0) {
+		  				
+	                  redir.addAttribute("result", "Intimation For Exam Updated Succesfully");
+
+	 			} else {
+	                  redir.addAttribute("resultfail", "Intimation For Exam Update Unsuccessful");
+	 			}
+	 
+			        return "redirect:/IntimateExam.htm";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside ExamDetailsEditSubmit.htm "+UserId, e); 
+			    return "static/Error"; 
+			}
+		}
+	 
+	 @RequestMapping(value = "IntimationTransactionStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
+		public String IntimationTransactionStatus(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+		{
+		    String UserId = (String) ses.getAttribute("Username");
+			logger.info(new Date() +"Inside IntimationTransactionStatus.htm "+UserId);
+			try {
+				
+				 String ExamId=req.getParameter("ExamId");
+				
+				req.setAttribute("TransactionList", service.ExamIntimationTransactionList(ExamId));
+				
+				return "noc/NocTranscationStatus";
+			}catch (Exception e) {
+				e.printStackTrace();
+				logger.error(new Date() +" Inside IntimationTransactionStatus.htm "+UserId, e);
+				return "static/Error";
+			}
+		}
+
+	 @RequestMapping(value = "ExamIntimationPreview.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public String ExamIntimationPreview(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside ExamIntimationPreview.htm "+UserId);
+			try {
+				List<String> PandAs = service.GetPandAAdminEmpNos();
+				 String ExamId=req.getParameter("ExamId");
+				 String isApproval = req.getParameter("isApproval");
+				 
+				 req.setAttribute("PandAsEmpNos", PandAs);
+				 req.setAttribute("isApproval", isApproval);
+				 req.setAttribute("CeoName", service.GetCeoName());
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 req.setAttribute("RemarksHistory",service.getIntimationRemarks(ExamId) );
+				 req.setAttribute("ExamIntimationDetails",service.getIntimationData(ExamId) );
+				 req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
+			     return "noc/IntimateExamPreview";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside ExamDetailsEditSubmit.htm "+UserId, e); 
+			    return "static/Error"; 
+			}
+		}
+	 
+
+	 @RequestMapping(value = "ExamIntimationLetterDownload.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public void ExamIntimationLetterDownload(HttpServletRequest req, HttpSession ses, RedirectAttributes redir,HttpServletResponse res)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside ExamIntimationLetterDownload.htm "+UserId);
+			try {
+				
+				 String ExamId=req.getParameter("ExamId");
+				 
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 req.setAttribute("ExamIntimationDetails",service.getIntimationData(ExamId) );
+				 req.setAttribute("RemarksHistory",service.getIntimationRemarks(ExamId) );
+				 req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
+				 String path = req.getServletContext().getRealPath("/view/temp");
+			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/noc/IntimationExamLetterDownload.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();
+				byte[] data = html.getBytes();
+				InputStream fis1 = new ByteArrayInputStream(data);
+				PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/IntimationExamLetterDownload.pdf"));
+				pdfDoc.setTagged();
+				Document document = new Document(pdfDoc, PageSize.LEGAL);
+				document.setMargins(50, 100, 150, 50);
+				ConverterProperties converterProperties = new ConverterProperties();
+				FontProvider dfp = new DefaultFontProvider(true, true, true);
+				converterProperties.setFontProvider(dfp);
+				HtmlConverter.convertToPdf(fis1, pdfDoc, converterProperties);
+				/*
+				 * document.close(); pdfDoc.close(); fis1.close();
+				 */
+				res.setContentType("application/pdf");
+				res.setHeader("Content-disposition", "inline;filename=IntimationExamLetterDownload.pdf");
+				File f = new File(path + "/IntimationExamLetterDownload.pdf");
+				FileInputStream fis = new FileInputStream(f);
+				DataOutputStream os = new DataOutputStream(res.getOutputStream());
+				res.setHeader("Content-Length", String.valueOf(f.length()));
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while ((len = fis.read(buffer)) >= 0) {
+					os.write(buffer, 0, len);
+				}
+				os.close();
+				fis.close();
+				Path pathOfFile2 = Paths.get(path + "/IntimationExamLetterDownload.pdf");
+				Files.delete(pathOfFile2);
+			 
+//			     return "noc/IntimationExamLetterDownload";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside ExamIntimationLetterDownload.htm "+UserId, e); 
+			   
+			}
+		}
+	 
+	 @RequestMapping(value = "IntimationForExamForward.htm")
+		public String IntimationForExamForward(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception {
+			
+			String Username = (String) ses.getAttribute("Username");
+			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
+			String EmpNo = (String) ses.getAttribute("EmpNo");
+	    	String LoginType=(String)ses.getAttribute("LoginType");
+			logger.info(new Date() +"Inside IntimationForExamForward.htm"+Username);
+			try {
+				
+				
+				String ExamId=req.getParameter("ExamId");
+				String action = req.getParameter("Action");
+				String remarks = req.getParameter("remarks");
+				
+				ExamIntimation exam = service.IntimatedExam(ExamId);
+				String  IntimationStatusCode = exam.getIntimateStatusCode();
+				
+				long count = service.IntimationForExamForward(ExamId, Username, action,remarks,EmpNo,LoginType);
+				if(IntimationStatusCode.equalsIgnoreCase("INI") || IntimationStatusCode.equalsIgnoreCase("RDG") || IntimationStatusCode.equalsIgnoreCase("RPA") ) {
+					if (count > 0) {
+						redir.addAttribute("result", "Intimation For Exam Forwarded Successful");
+					} else {
+						redir.addAttribute("resultfail", "Intimation For Exam  Forward Unsuccessful");	
+					}	
+					return "redirect:/IntimateExam.htm";
+				}
+				else  
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "Intimation For Exam verification Successful");
+					} else {
+						redir.addAttribute("resultfail", "Intimation For Exam verification Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm";
+				}
+				
+			}catch (Exception e) {
+				logger.error(new Date() +" Inside IntimationForExamForward.htm"+Username, e);
+				e.printStackTrace();	
+				return "static/Error";
+			}
+			
+		}
 }
 

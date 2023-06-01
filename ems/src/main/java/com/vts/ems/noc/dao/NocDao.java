@@ -4,6 +4,8 @@ import java.util.List;
 
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
+import com.vts.ems.noc.model.ExamIntimation;
+import com.vts.ems.noc.model.ExamIntimationTrans;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportTrans;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -102,6 +104,29 @@ public interface NocDao {
 	public long DeptDetailsUpdate(NocProceedingAbroad nocpa)throws Exception;
 
 	public long ProcAbroadPandAFromUpdate(NocProceedingAbroad nocpa)throws Exception;
+
+	public Object[] getEmpGender(String procAbrId)throws Exception;
+
+	public long ExamDetailsAdd(ExamIntimation exam)throws Exception;
+
+	public List<Object[]> getExamIntimationDetails(String empNo)throws Exception;
+
+	public long ExamIntimationTransAdd(ExamIntimationTrans transaction)throws Exception;
+
+	public ExamIntimation getExamId(long examId)throws Exception;
+
+	public long ExamDetailsUpdate(ExamIntimation exam)throws Exception;
+
+	public List<Object[]> getExamIntimationTransactionList(String examId)throws Exception;
+
+	public Object[] getIntimationData(String examId)throws Exception;
+
+	public ExamIntimation IntimatedExam(String examId)throws Exception;
+
+	public long IntimationDataEdit(ExamIntimation exam)throws Exception;
+
+	public List<Object[]> getIntimationRemarks(String examId)throws Exception;
+
 
 	
 }

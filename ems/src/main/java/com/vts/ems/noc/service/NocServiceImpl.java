@@ -24,12 +24,17 @@ import org.springframework.stereotype.Service;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.noc.dao.NocDao;
+import com.vts.ems.noc.model.ExamIntimation;
+import com.vts.ems.noc.model.ExamIntimationDto;
+import com.vts.ems.noc.model.ExamIntimationTrans;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocPassportTrans;
 import com.vts.ems.noc.model.NocProceedingAbroad;
 import com.vts.ems.noc.model.NocProceedingAbroadDto;
 import com.vts.ems.noc.model.NocProceedingAbroadTrans;
+import com.vts.ems.pi.model.PisAddressPerTrans;
+import com.vts.ems.pis.model.AddressPer;
 import com.vts.ems.pis.model.DivisionMaster;
 import com.vts.ems.pis.model.Employee;
 import com.vts.ems.pis.model.Passport;
@@ -554,7 +559,7 @@ public class NocServiceImpl implements NocService {
 		NocProceedingAbroad nocpa=NocProceedingAbroad.builder()
 				
 				        .EmpNo(dto.getEmpNo())
-				        .PassportExist(dto.getPassportExist())
+				      
 				        .NocProcAbroadNo(NocProcAbroadNo)
 				        .RelationType(dto.getRelationType())
 				        .RelationName(dto.getRelationName())
@@ -580,10 +585,7 @@ public class NocServiceImpl implements NocService {
 				        .Nationality(dto.getNationality())
 				        .Relationship(dto.getRelationship())
 				        .RelationshipAddress(dto.getRelationshipAddress())
-				      
-				        
 				        .LostPassport(dto.getLostPassport())
-				        .PassportType(dto.getPassportType())
 				        .ContractualObligation(dto.getContractualObligation())
 				        .FromDate(dto.getFromDate())
 				        .ToDate(dto.getToDate())
@@ -657,9 +659,7 @@ public class NocServiceImpl implements NocService {
 		    nocpa.setNationality(dto.getNationality());
 		    nocpa.setRelationship(dto.getRelationship());
 		    nocpa.setRelationshipAddress(dto.getRelationshipAddress());
-		    
 		    nocpa.setLostPassport(dto.getLostPassport());
-		    nocpa.setPassportType(dto.getPassportType());
 		    nocpa.setContractualObligation(dto.getContractualObligation());
 		    nocpa.setFromDate(dto.getFromDate());
 		    nocpa.setToDate(dto.getToDate());
@@ -996,6 +996,256 @@ public class NocServiceImpl implements NocService {
 		return dao.ProcAbroadPandAFromUpdate(nocpa);
 		
 	}
+
+	@Override
+	public Object[] getEmpGender(String procAbrId) throws Exception {
+		
+		return dao.getEmpGender(procAbrId);
+	}
+
+	@Override
+	public long ExamDetailsAdd(ExamIntimationDto dto, String userId) throws Exception {
+		
+//		ExamIntimationTrans transaction = ExamIntimationTrans.builder()	
+//				.ExamId(dto.getExamId())
+//				.IntimateStatusCode("INI")
+//				.ActionBy(dto.getEmpNo())
+//				.ActionDate(sdtf.format(new Date()))
+//				.build();
+//		
+//		 dao.ExamIntimationTransAdd(transaction);
+		
+		
+		ExamIntimation exam = new ExamIntimation();
+		
+		exam.setEmpNo(dto.getEmpNo());
+		exam.setExamName(dto.getExamName());
+		exam.setProbableDate(dto.getProbableDate());
+		exam.setInitiatedDate(sdf1.format(new Date()));
+		exam.setIntimationStatus("N");
+		exam.setIntimateStatusCode("INI");
+		exam.setInitimateStatusCodeNext("INI");
+		exam.setCreatedBy(userId);
+		exam.setCreatedDate(sdf1.format(new Date()));
+		exam.setIsActive(1);
+		dao.ExamDetailsAdd(exam);
+		
+		ExamIntimationTrans transaction = ExamIntimationTrans.builder()	
+				.ExamId(exam.getExamId())
+				.IntimateStatusCode("INI")
+				.ActionBy(dto.getEmpNo())
+				.ActionDate(sdtf.format(new Date()))
+				.build();
+		
+		return  dao.ExamIntimationTransAdd(transaction);
+		
+		
+	}
+
+	@Override
+	public List<Object[]> getExamIntimationDetails(String empNo) throws Exception {
+		
+		return dao.getExamIntimationDetails(empNo);
+	}
+
+	@Override
+	public long ExamDetailsUpdate(ExamIntimationDto dto, String userId) throws Exception {
+	
+		ExamIntimation exam =dao.getExamId(dto.getExamId());
+		
+		exam.setExamId(dto.getExamId());
+		exam.setExamName(dto.getExamName());
+		exam.setProbableDate(dto.getProbableDate());
+		exam.setInitiatedDate(sdf1.format(new Date()));
+		exam.setIntimationStatus("N");
+		exam.setIntimateStatusCode("INI");
+		exam.setInitimateStatusCodeNext("INI");
+		exam.setModifiedBy(userId);
+		exam.setModifiedDate(sdf1.format(new Date()));
+		exam.setIsActive(1);
+		
+		return dao.ExamDetailsUpdate(exam);
+	}
+
+	@Override
+	public List<Object[]> ExamIntimationTransactionList(String examId) throws Exception {
+		
+		return dao.getExamIntimationTransactionList(examId);
+	}
+
+	@Override
+	public Object[] getIntimationData(String examId) throws Exception {
+		
+		return dao.getIntimationData(examId);
+	}
+
+	@Override
+	public ExamIntimation IntimatedExam(String examId) throws Exception {
+		
+		return dao.IntimatedExam(examId);
+	}
+
+	@Override
+	public long IntimationForExamForward(String examId, String username, String action, String remarks, String empNo,
+			String loginType) throws Exception {
+		
+		try {
+			ExamIntimation exam = dao.IntimatedExam(examId);
+			Employee emp = dao.getEmpData(exam.getEmpNo());
+			String formempno = emp.getEmpNo();
+			
+		    
+			String  IntimateStatusCode = exam.getIntimateStatusCode();
+			String InitimateStatusCodeNext = exam.getInitimateStatusCodeNext();
+			List<String> DGMs = dao.GetDGMEmpNos();
+//			List<String> DHs = dao.GetDHEmpNos();
+//			List<String> GHs = dao.GetGHEmpNos();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			String CEO = dao.GetCEOEmpNo();
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+			
+			if(action.equalsIgnoreCase("A"))
+			{
+//				if( (pisStatusCode.equalsIgnoreCase("VDG") && pisStatusCodeNext.equalsIgnoreCase("VPA") ) || 
+//				     (pisStatusCode.equalsIgnoreCase("FWD") && pisStatusCodeNext.equalsIgnoreCase("VPA") ) ){
+//					
+//				}
+				// first time forwarding
+				if(IntimateStatusCode.equalsIgnoreCase("INI") || IntimateStatusCode.equalsIgnoreCase("RDG") || IntimateStatusCode.equalsIgnoreCase("RPA") ) 
+				{
+					exam.setIntimateStatusCode("FWD");
+					exam.setForwardedDate(sdf1.format(new Date()));
+					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || loginType.equalsIgnoreCase("P")) 
+					{
+						
+	              
+	                    exam.setIntimateStatusCode("VPA");
+	                    exam.setInitimateStatusCodeNext("VPA");
+	                    exam.setIsActive(1);
+	                    exam.setIntimationStatus("A");				
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						exam.setInitimateStatusCodeNext("VPA");
+					}
+					else 
+					{
+						exam.setInitimateStatusCodeNext("VDG");
+					}					
+				}
+				//approving	flow 
+				else
+				{
+					
+                    			    					
+					exam.setIntimateStatusCode(InitimateStatusCodeNext);
+					if(InitimateStatusCodeNext.equalsIgnoreCase("VDG")) {
+						exam.setInitimateStatusCodeNext("VPA");
+					}else if(InitimateStatusCodeNext.equalsIgnoreCase("VPA")) {
+						
+	                    exam.setIsActive(1);
+	                    exam.setIntimationStatus("A");
+	                    exam.setApprovedDate(sdf1.format(new Date()));
+					}
+				}
+				
+				exam.setRemarks(remarks);
+				dao.IntimationDataEdit(exam);
+				
+			}
+			else if(action.equalsIgnoreCase("R")) 
+			{
+				if(InitimateStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					exam.setIntimateStatusCode("RDG");	
+				}
+				else if(InitimateStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					exam.setIntimateStatusCode("RPA");	
+				}
+				
+				
+				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					exam.setInitimateStatusCodeNext("VPA");
+				}
+				else 
+				{
+					exam.setInitimateStatusCodeNext("VDG");
+				}
+				exam.setRemarks(remarks);
+				dao.IntimationDataEdit(exam);
+			}
+			
+			ExamIntimationTrans transaction = ExamIntimationTrans.builder()	
+					
+					.ExamId(exam.getExamId())
+					.IntimateStatusCode(exam.getIntimateStatusCode())
+					.Remarks(remarks)
+					.ActionBy(empNo)
+					.ActionDate(sdtf.format(new Date()))
+					.build();
+			
+			 dao.ExamIntimationTransAdd(transaction);
+			
+			
+			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+
+			
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && exam.getIntimationStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("IntimateExam.htm");
+				notification.setNotificationMessage("Intimation For Exam Request Approved");
+				notification.setNotificationBy(empNo);
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( exam.getInitimateStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0).toString():null);
+				}
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved Intimation For Exam  Request From <br>"+emp.getEmpName());
+				notification.setNotificationBy(empNo);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("IntimateExam.htm");
+				notification.setNotificationMessage("Pntimation For Exam Request Returned");
+				notification.setNotificationBy(empNo);
+			}
+			
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(username);
+			notification.setCreatedDate(sdtf.format(new Date()));
+		
+			dao.AddNotifications(notification);		
+			
+			return 1;
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside IntimationForExamForward "+ e);
+			e.printStackTrace();
+			return 0;
+		}		
+	}
+
+	@Override
+	public List<Object[]> getIntimationRemarks(String examId) throws Exception {
+	
+		return dao.getIntimationRemarks(examId);
+	}
+		
+		
+	
 
 }
 

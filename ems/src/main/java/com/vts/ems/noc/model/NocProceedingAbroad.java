@@ -26,7 +26,6 @@ public class NocProceedingAbroad {
 	private long NocProcId;
 	private String NocProcAbroadNo;
     private String EmpNo;
-    private String PassportExist;
     private String RelationType; 
     private String RelationName; 
     private String RelationOccupation;
@@ -52,7 +51,6 @@ public class NocProceedingAbroad {
     private String Relationship;
     private String RelationshipAddress;
     private String LostPassport;
-    private String PassportType;
     private String ContractualObligation;
     private String FromDate;
     private String ToDate;

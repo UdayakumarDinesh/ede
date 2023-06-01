@@ -104,27 +104,7 @@ body{
 			  <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			    <div class="form-group">
 			        <div class="row">
-			         
-			         
-			           <div class="col-md-2">
-			                <label> Passport Type:</label>
-			                
-			                 <% if(EmpPassport!=null ) { %>
-			                    <input  class="form-control input-sm " type="text" name="PassportExist" readonly value="Renewal">
-			                    
-			                    <%}
-			                    else{%>
-			                    <select name="PassportExist" class="form-control select2"  id="passporttype" required="required">
-			                        
-			                    	 <option value="New">New</option>
-			                    	   <option value="Renewal">Renewal</option>
-			                    </select>
-			                   <%} %>
-			                
-			             
-			     </div>
-			
-			           <div class="col-md-2">
+			          <div class="col-md-2">
 			                <label>Name</label> 
 			            	<input type="text" name="Name" value="<%=NocEmpList[0] %>" class="form-control input-sm" readonly >
 			            </div>			
@@ -231,8 +211,8 @@ body{
 			                <select name="EmployeeInvolvement" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                   
-			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("N")){ %> selected <%}}%>>NO</option>
-			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("Y")){ %> selected <%}}%>>YES</option>
+			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("N")){ %> selected <%}}%>>No</option>
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getEmployeeInvolvement().toString().equals("Y")){ %> selected <%}}%>>Yes</option>
 			                   
 			                </select>
 			                   
@@ -240,17 +220,16 @@ body{
 			           </div>
 			              
 			             <div class="col-md-6" style="margin-left:-271px;">
-			                <label> Whether Annual Property Return of the
-                                    previous year has been filed  </label>
+			                <label> Whether Annual Property Return of the previous year has been filed  </label>
                             
                             
                              <div class="col-md-9" style="margin-left:-13px;">  
-			               <select name="PropertyFiled" class="form-control select2"  required="required">
-			                <option value="" selected="selected" disabled="disabled">Select</option>
+			                  <select name="PropertyFiled" class="form-control select2"  required="required">
+			                    <option value="" selected="selected" disabled="disabled">Select</option>
 			                     
-			                      <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("N")){ %> selected <%}}%>>NO</option>
-			                       <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("Y")){ %> selected <%}}%>>YES</option>
-			                </select>
+			                      <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("N")){ %> selected <%}}%>>No</option>
+			                       <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getPropertyFiled().toString().equals("Y")){ %> selected <%}}%>>Yes</option>
+			                   </select>
 			                   
 			                   </div>
 			              </div>
@@ -258,7 +237,7 @@ body{
 			           </div>
 			    </div> 
 			    
-			    <div class="form-group" >
+			     <div class="form-group" >
 			  
 			        <div class="row">
 			         <% if( EmpPassport!=null) { %>
@@ -294,7 +273,7 @@ body{
 			         
 			       <%} %>
 			      
-			        <div class="col-md-2" id="ptype">
+			        <!-- <div class="col-md-2" id="ptype">
 			                <label>Passport Type</label><br>
                               <select  name="PassportType" class="form-control select2"  data-live-search="true" style="width:200px;">
                               
@@ -339,10 +318,9 @@ body{
 	                       	     <input type="text" class="form-control input-sm pistodate"  style="width: 110px;" value="" name="ValidTo" id="pistodate"   />
 	                      
                        </div>  
-                       
+                        -->
                        </div>
-                       </div>   
-                       
+                       </div>                    
                        
 			      <div class="form-group">
 			        <div class="row">
@@ -355,8 +333,8 @@ body{
 			                <select name="ForeignVisit" class="form-control select2"  id="fvisit" required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                   
-			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("N")){ %> selected <%}}%> >NO</option>
-			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("Y")){ %> selected <%}}%> >YES</option>
+			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("N")){ %> selected <%}}%> >No</option>
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getForeignVisit().toString().equals("Y")){ %> selected <%}}%> >Yes</option>
 			                   
 			                </select>
 			                   
@@ -405,7 +383,7 @@ body{
 			            
 			                <div class="col-md-3" >
 			                <label> Probable duration of stay at each country	 </label>
-			                <input class="form-control input-sm"  type="text" id="" name="StayDuration"  min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getStayDuration() %><%} %>" >
+			                <input class="form-control input-sm"  type="text" id="" name="StayDuration" placeholder="(In Days)" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getStayDuration() %><%} %>" >
 			                     
 			                   
 			            </div> 
@@ -470,17 +448,14 @@ body{
 			                
 			                <select name="FinancedBy" class="form-control select2"  id="trip" required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
-			                    <option value="S" <% if(ProcAbroad!=null){  if(ProcAbroad.getFinancedBy().toString().equals("S")){ %> selected <%}}%>>SELF</option>
-			                    <option value="OP" <% if(ProcAbroad!=null){  if(ProcAbroad.getFinancedBy().toString().equals("OP")){ %> selected <%}}%>>OTHER PERSON</option>
+			                    <option value="S" <% if(ProcAbroad!=null){  if(ProcAbroad.getFinancedBy().toString().equals("S")){ %> selected <%}}%>>Self</option>
+			                    <option value="OP" <% if(ProcAbroad!=null){  if(ProcAbroad.getFinancedBy().toString().equals("OP")){ %> selected <%}}%>>Other Person</option>
 			                   
 			                </select>
 			               
                           </div>
                           
-                          
-			            
-			             
-			             <div class="col-md-3" id="amt">
+                          <div class="col-md-3" id="amt">
 			                <label>If so the source of amount being spent<span class="mandatory"	style="color: red;">*</span></label>
 
 			                 <input class="form-control input-sm" type="text" id="" name="AmountSource"  min="0" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getAmountSource() %><%} %>"  >
@@ -499,40 +474,31 @@ body{
 			              </div>
 			            
 			             <div class="col-md-3" id="rel" >
-			                <label>Relationship  <span class="mandatory"	style="color: red;">*</span></label>
+			                <label>Relationship <span class="mandatory"	style="color: red;">*</span></label>
 			                <input class="form-control input-sm"  type="text" id="" name="Relationship"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getRelationship() %><%}%>" >
 			                     
-			                   
-			            </div> 
+			             </div> 
 			            
 			             <div class="col-md-3" id="add" >
 			                <label>Address <span class="mandatory"	style="color: red;">*</span></label>
 			                <input class="form-control input-sm"  type="text" id="" name="RelationshipAddress"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getRelationshipAddress() %><%}%>" >
 			                     
 			            </div> 
-			                  
-			           
-			         </div>
 			            
-			            
-			       </div>
-			       
-			       
-			       
-			    <div class="form-group">
+			          </div>
+			        </div>
+			        
+			      <div class="form-group">
 			  
 			        <div class="row">
-			        
-			       
-			       
-			        <div class="col-md-4">
+			          <div class="col-md-4">
 			                <label> Details of passport lost, if any </label>
 			                <input type="text" id="" name="LostPassport"   value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getLostPassport() %><%} else{%>NA<%} %>"
 			                    class=" form-control input-sm " >
 			             
 			            </div>
 			            
-			             <div class="col-md-2">
+			            <%--  <div class="col-md-2">
 			                <label> Passport Type Required </label>
 			                <select name="Passporttype" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
@@ -541,33 +507,12 @@ body{
 			                    <option value="Diplomatic" <% if(ProcAbroad!=null){  if(ProcAbroad.getPassportType().toString().equals("Diplomatic")){ %> selected <%}}%> >Diplomatic</option>
 			                </select>
 			             
-			            </div>
-			            
-			          
-			         </div>
-			        
-			     </div>
-			     
-			     <div class="form-group">
-			       <div class="row">
-			        <div class="col-md-4" style="width:50px;">
-			                <label > Are you likely to accept any foreign Hospitality </label>
-                            <select name="Hospatility" class="form-control select2"  id=""  required="required" style="width:300px;">
-			                 
-			                    <option value="" selected="selected" disabled="disabled">Select</option>
-			                  
-			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("N")){ %> selected <%}}%> >NO</option>
-			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("Y")){ %> selected <%}}%> >YES</option>
-			                </select>
-			                   
-			               
-			        </div> 
-			       
+			            </div> --%>
 			            
 			            
-			        <div class="col-md-2">
+			             <div class="col-md-2">
 			                <label>I certify that</label>
-			                <select name="ContractualObligation" class="form-control select2"  style="width:310%;" id="Certify"  required="required">
+			                <select name="ContractualObligation" class="form-control select2"  style="width:300%;" id="Certify"  required="required">
 			                 <!-- <option value="" selected="selected" disabled="disabled">Select</option>  -->
 			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getContractualObligation().toString().equals("N")){ %> selected <%}}%> >I am not under contractual obligation to serve STARC for any specific period </option>
 			                    <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getContractualObligation().toString().equals("Y")){ %> selected <%}}%> > I am under contractual obligation to serve STARC for a specific period</option>
@@ -576,9 +521,7 @@ body{
 			             
 			            </div>
 			            
-			            
-			            
-			             <div class="col-md-1"  style="margin-left:356px;" id="showfromdate">
+			            <div class="col-md-1"  style="margin-left:356px;" id="showfromdate">
 			                <label>From Date </label>
 			               <div class=" input-group">
 							    <input type="text" class="form-control input-sm mydate"  style="width:105px;" value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getFromDate() %><%} %>"   id="fromdate" name="fromdate"  required="required"  > 
@@ -600,6 +543,24 @@ body{
 							</div>
 			            </div>
 			            
+			          </div>
+			        
+			     </div>
+			     
+			     <div class="form-group">
+			       <div class="row">
+			            <div class="col-md-4" style="width:50px;">
+			                <label > Are you likely to accept any foreign Hospitality </label>
+                            <select name="Hospatility" class="form-control select2"  id=""  required="required" style="width:300px;">
+			                 
+			                    <option value="" selected="selected" disabled="disabled">Select</option>
+			                  
+			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("N")){ %> selected <%}}%> >No</option>
+			                     <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getHospatility().toString().equals("Y")){ %> selected <%}}%> >Yes</option>
+			                </select>
+			               </div> 
+			       
+			            
 			           </div>
 			     </div>
 			     
@@ -608,15 +569,12 @@ body{
 			       
 			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Submit')">Submit</button>
 			    	  <input type="hidden" name="ProcAbroadId" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getNocProcId() %><%} %>"> 
-			    	
 			</div>
 			    
 			  </form>
 			</div>
 		</div>
 	 </div>
-
-
 
 	
 <script type="text/javascript">
