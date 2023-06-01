@@ -114,7 +114,7 @@
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(LocalDate.now().toString()))%></td>
 											<%} %>
 											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
-														 <button class="btn btn-sm btn-link w-100 " formaction="ContingentTransaction.htm" name="contingentid" value="<%=obj[0]%>" formtarget="_blank" 
+														 <button class="btn btn-sm btn-link w-100 " formaction="" name="contingentid" value="<%=obj[0]%>" formtarget="_blank" 
 														 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[8] %>; font-weight: 600;" >
 														 
 														  &nbsp;<%=obj[6] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>

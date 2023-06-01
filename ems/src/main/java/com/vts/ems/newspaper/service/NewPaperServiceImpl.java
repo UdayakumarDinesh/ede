@@ -512,6 +512,16 @@ public class NewPaperServiceImpl implements NewsPaperService {
 				notify.setEmpNo(voEmpno);
 				
 			}
+			else if(action.equalsIgnoreCase("VF")) {
+				contingent.setContingentStatusCode("ABP");
+				contingent.setPO(EmpId);
+				contingent.setContingentDate(LocalDate.now().toString());
+				
+				trans.setStatusCode("ABP");
+				
+				notify.setNotificationMessage("Newspaper Claim Contingent Bill Received");
+				notify.setEmpNo(voEmpno);
+			}
 
 			contingent.setModifiedBy(Username);
 			contingent.setModifiedDate(sdtf.format(new Date()));
