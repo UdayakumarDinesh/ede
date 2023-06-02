@@ -24,6 +24,8 @@ import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.noc.model.ExamIntimation;
 import com.vts.ems.noc.model.ExamIntimationTrans;
+import com.vts.ems.noc.model.NocHigherEducation;
+import com.vts.ems.noc.model.NocHigherEducationTrans;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportTrans;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -905,7 +907,111 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 		query.setParameter("examId", examId);
 		return (List<Object[]>)query.getResultList();
 	}
+
+	@Override
+	public long HigherEducationAdd(NocHigherEducation edu) throws Exception {
+		
+		manager.persist(edu);
+		manager.flush();
+		return edu.getNocEducationId();
+	}
+
+	public static final String MAXOFNOCHIGHEREDUCATIONID="SELECT IFNULL(MAX(NocEducationId),0) as 'MAX' FROM noc_higher_education";
+	@Override
+	public long getMaxOfNocEducId() throws Exception {
+		
+		try {
+				Query query =  manager.createNativeQuery(MAXOFNOCHIGHEREDUCATIONID);
+				BigInteger NocHigherEducId=(BigInteger)query.getSingleResult();
+				return NocHigherEducId.longValue();
+			}catch ( NoResultException e ) {
+				logger.error(new Date() +"Inside DAO getMaxOfNocEducId "+ e);
+				return 0;
+			}
+		}
+
+	@Override
+	public long NocHigherEducTransactionAdd(NocHigherEducationTrans transaction) throws Exception {
+		
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getEducationTransId();
+	}
+
+	public static final String NOCHIGHEREDUCATIONLIST="SELECT a.NocEducationId,a.NocEducationNo,DATE(InitiatedDate),a.NocStatusCode,a.HigherEducationStatus,c.PISStatus,c.PisStatusColor,c.pisstatuscode FROM noc_higher_education a,pis_approval_status c  WHERE a.isActive='1' AND a.NocStatusCode=c.PisStatuscode AND a.EmpNo=:empNo ORDER BY a.NocEducationId DESC";
+	@Override
+	public List<Object[]> getNOCHigherEducationList(String empNo) throws Exception {
+	
+		Query query=manager.createNativeQuery(NOCHIGHEREDUCATIONLIST);
+		query.setParameter("empNo", empNo);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	public static final String NOCHIGHEREDUCATIONTRANSCATIONLIST="SELECT tra.EducationTransId,e.empno,e.empname,des.designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor FROM noc_higher_education_trans tra,noc_higher_education n,employee e,employee_desig des,pis_approval_status sta WHERE tra.NocEducationId=n.NocEducationId  AND tra.ActionBy=e.EmpNo AND e.desigid=des.desigid  AND tra.NocStatusCode=sta.PisStatusCode AND n.NocEducationId=:EducId  ORDER BY actiondate";
+	@Override
+	public List<Object[]> getHigherEducationTransactionList(String nOCHigherEducId) throws Exception {
+		
+		
+		Query query=manager.createNativeQuery(NOCHIGHEREDUCATIONTRANSCATIONLIST);
+		query.setParameter("EducId", nOCHigherEducId);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	@Override
+	public NocHigherEducation getNocHigherEducationById(long NOCHigherEducId) throws Exception {
+		
+		try {
+			NocHigherEducation heduc = manager.find(NocHigherEducation.class,(NOCHigherEducId));
+			return heduc ;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getNocHigherEducationById() "+e);
+			e.printStackTrace();
+			return null;
+		}	
+		
+	}
+
+	@Override
+	public long HigherEducationUpdate(NocHigherEducation edu) throws Exception {
+		
+		manager.merge(edu);
+		manager.flush();
+		return edu.getNocEducationId();
+		
+	}
+
+	public static final String NOCHIGHEREDUCATION="CALL Noc_Higher_Education(:EducationId)";
+	@Override
+	public Object[] getHigherEducationDetails(String NOCHigherEducId) throws Exception {
+		
+	try {
+			Query query= manager.createNativeQuery(NOCHIGHEREDUCATION);
+			query.setParameter("EducationId", NOCHigherEducId);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getHigherEducationDetails " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	  }
+
+	private static final String NOCHIGHEREDUCATIONREMARK="SELECT trans.NocEducationId,trans.Remarks,e.EmpName,trans.ActionDate,trans.NocStatusCode FROM  noc_higher_education_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocEducationId=:NOCHigherEducId  ORDER BY trans.ActionDate ASC ";
+	@Override
+	public List<Object[]> getNocHigherEducationRemarks(String NOCHigherEducId) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCHIGHEREDUCATIONREMARK);
+		query.setParameter("NOCHigherEducId", NOCHigherEducId);
+		return (List<Object[]>)query.getResultList();
+	}
 }
+
+
 
 	
 

@@ -223,6 +223,7 @@ input:focus {
 		 
 		 if(rh[4].toString().equalsIgnoreCase("VDG")){%>
 		 
+		  <div align="left" style="margin-left:17px !important;">Recommended By :<span class="text-blue"><%=rh[2] %></span> </div>
 	        <div style="margin-left:-180px !important;" >Recommended On : <span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(rh[3].toString().substring(0, 10)) +" "+rh[3].toString().substring(11,19) %></span>
 	
 	     <%}} %>
@@ -235,14 +236,18 @@ input:focus {
 				<br>
 				<br>
 				<br>
-				<% if(obj[6].toString().equalsIgnoreCase("VPA")){ %>
+				<% if(obj[6].toString().equalsIgnoreCase("VPA")){ 
+				
+				for(Object[] rh:RemarksHistory) {
+		 
+		 if(rh[4].toString().equalsIgnoreCase("VPA")){%>
 		 <div  align="center"style="margin-left:160px;text-align:center;"> 
 		                         <span style="font-weight: 600; font-size: 14px;margin-left:0px;">APPROVED</span><br><br>
-						        <span style="font-weight: 500; font-size: 14px;margin-left:0px;">P&A InCharge&nbsp;<span class="text-blue" ></span></span><br>
+						        <span style="font-weight: 500; font-size: 14px;margin-left:0px;">P&A InCharge : &nbsp;<span class="text-blue"><%=rh[2] %></span></span><br>
 								<span style="font-weight: 400; font-size: 14px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[7].toString().substring(0, 10)) +" "+obj[7].toString().substring(11,19) %></span></span><br>
 		</div>	
-		<%} %>
-				
+		<%}}} %>
+		
 				
 				</div>		   			  	
 </body>

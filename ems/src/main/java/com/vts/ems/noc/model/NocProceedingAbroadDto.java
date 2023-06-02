@@ -9,7 +9,6 @@ import lombok.Setter;
 @Builder
 public class NocProceedingAbroadDto {
 
-	
 	private long NocProcId;
 	private String NocProcAbroadNo;
     private String EmpNo;

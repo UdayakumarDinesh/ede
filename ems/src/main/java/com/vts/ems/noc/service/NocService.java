@@ -5,6 +5,8 @@ import java.util.List;
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.noc.model.ExamIntimation;
 import com.vts.ems.noc.model.ExamIntimationDto;
+import com.vts.ems.noc.model.NocHigherEducation;
+import com.vts.ems.noc.model.NocHigherEducationDto;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -98,6 +100,20 @@ public interface NocService {
 			String loginType) throws Exception;
 
 	public List<Object[]> getIntimationRemarks(String examId)throws Exception;
+
+	public long HigherEducationAdd(NocHigherEducationDto dto, String userId)throws Exception;
+
+	public List<Object[]> getNOCHigherEducationList(String empNo)throws Exception;
+
+	public List<Object[]> HigherEducationTransactionList(String nOCHigherEducId)throws Exception;
+
+	public NocHigherEducation getNocHigherEducationById(long  NOCHigherEducId)throws Exception;
+
+	public long NOCHigherEducationUpdate(NocHigherEducationDto dto, String userId)throws Exception;
+
+	public Object[] getHigherEducationDetails(String NOCHigherEducId)throws Exception;
+
+	public List<Object[]> getNocHigherEducationRemarks(String NOCHigherEducId)throws Exception;
 	
 
 	

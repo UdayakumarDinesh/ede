@@ -187,21 +187,26 @@
 		 
 		 if(rh[4].toString().equalsIgnoreCase("VDG")){%>
 		 
+		 <div  align="left" style="margin-left:45px !important;" >Recommended By :<span class="text-blue"><%=rh[2] %></span> </div>
 	        <div style="margin-left:-460px !important;" >Recommended On : <span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(rh[3].toString().substring(0, 10)) +" "+rh[3].toString().substring(11,19) %></span>
-	
+	        </div>
 	     <%}} %>
 		 
 				
 				
 				<br>
 				<br>
-				 <% if(obj[6].toString().equalsIgnoreCase("VPA")){ %>
-		 <div style="margin-left:430px;text-align:center;"> 
+				 <% if(obj[6].toString().equalsIgnoreCase("VPA")){ 
+				 
+				 for(Object[] rh:RemarksHistory) {
+		 
+		 if(rh[4].toString().equalsIgnoreCase("VPA")){%>
+		 <div style="margin-left:15px;text-align:center;"> 
 		                         <span style="font-weight: 600; font-size: 16px;margin-left:0px;">APPROVED</span><br><br>
-						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">P&A InCharge&nbsp;<span class="text-blue" ></span></span><br>
+						        <span style="font-weight: 500; font-size: 16px;margin-left:0px;">P&A InCharge : &nbsp;<span class="text-blue"><%=rh[2] %></span></span><br>
 								<span style="font-weight: 400; font-size: 16px; ">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(obj[7].toString().substring(0, 10)) +" "+obj[7].toString().substring(11,19) %></span></span><br>
 		</div>	
-		<%} %>
+		<%}}} %>
 				
 			  <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>
 			 

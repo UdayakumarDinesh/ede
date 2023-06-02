@@ -6,6 +6,8 @@ import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.noc.model.ExamIntimation;
 import com.vts.ems.noc.model.ExamIntimationTrans;
+import com.vts.ems.noc.model.NocHigherEducation;
+import com.vts.ems.noc.model.NocHigherEducationTrans;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportTrans;
 import com.vts.ems.noc.model.NocProceedingAbroad;
@@ -126,6 +128,25 @@ public interface NocDao {
 	public long IntimationDataEdit(ExamIntimation exam)throws Exception;
 
 	public List<Object[]> getIntimationRemarks(String examId)throws Exception;
+
+	public long HigherEducationAdd(NocHigherEducation edu)throws Exception;
+
+	public long getMaxOfNocEducId()throws Exception;
+
+	public long NocHigherEducTransactionAdd(NocHigherEducationTrans transaction)throws Exception;
+
+	public List<Object[]> getNOCHigherEducationList(String empNo)throws Exception;
+
+	public List<Object[]> getHigherEducationTransactionList(String nOCHigherEducId)throws Exception;
+
+	public NocHigherEducation getNocHigherEducationById(long NOCHigherEducId)throws Exception;
+
+	public long HigherEducationUpdate(NocHigherEducation edu)throws Exception;
+
+	public Object[] getHigherEducationDetails(String NOCHigherEducId)throws Exception;
+
+	public List<Object[]> getNocHigherEducationRemarks(String NOCHigherEducId)throws Exception;
+
 
 
 	

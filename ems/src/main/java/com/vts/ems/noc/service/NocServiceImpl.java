@@ -27,6 +27,9 @@ import com.vts.ems.noc.dao.NocDao;
 import com.vts.ems.noc.model.ExamIntimation;
 import com.vts.ems.noc.model.ExamIntimationDto;
 import com.vts.ems.noc.model.ExamIntimationTrans;
+import com.vts.ems.noc.model.NocHigherEducation;
+import com.vts.ems.noc.model.NocHigherEducationDto;
+import com.vts.ems.noc.model.NocHigherEducationTrans;
 import com.vts.ems.noc.model.NocPassport;
 import com.vts.ems.noc.model.NocPassportDto;
 import com.vts.ems.noc.model.NocPassportTrans;
@@ -1243,9 +1246,102 @@ public class NocServiceImpl implements NocService {
 	
 		return dao.getIntimationRemarks(examId);
 	}
+
+	@Override
+	public long HigherEducationAdd(NocHigherEducationDto dto, String userId) throws Exception {
+	
+		LocalDate today= LocalDate.now();
+		String year="";
+		year=String.valueOf(today.getYear()).substring(2, 4);
+		long maxNocEduId = dao.getMaxOfNocEducId()+1;
 		
+		String NocHigherEducNo="";
+		NocHigherEducNo="NOC/HE-"+year+"/"+maxNocEduId;
+		
+		NocHigherEducationTrans transaction = NocHigherEducationTrans.builder()	
+				.NocEducationId(maxNocEduId)
+				.NocStatusCode("INI")
+				.ActionBy(dto.getEmpNo())
+				.ActionDate(sdtf.format(new Date()))
+				.build();
+		
+		 dao.NocHigherEducTransactionAdd(transaction);
+		
+		NocHigherEducation edu= new NocHigherEducation();
+		
+		
+		edu.setNocEducationNo(NocHigherEducNo);
+		edu.setEmpNo(dto.getEmpNo());
+		edu.setInstitutionType(dto.getInstitutionType());
+		edu.setAcademicYear(dto.getAcademicYear());
+		edu.setCourse(dto.getCourse());
+		edu.setSpecialization(dto.getSpecialization());
+		edu.setEducationType(dto.getEducationType());
+		edu.setQualifiactionRequired(dto.getQualifiactionRequired());
+		edu.setHigherEducationStatus("N");
+		edu.setNocStatusCode("INI");
+		edu.setNocStatusCodeNext("INI");
+		edu.setInitiatedDate(sdf1.format(new Date()));
+		edu.setCreatedBy(userId);
+		edu.setCreatedDate(sdf1.format(new Date()));
+		edu.setIsActive(1);
+		
+		return dao.HigherEducationAdd(edu);
+	}
+
+	@Override
+	public List<Object[]> getNOCHigherEducationList(String empNo) throws Exception {
+		
+		return dao.getNOCHigherEducationList(empNo);
+	}
+
+	@Override
+	public List<Object[]> HigherEducationTransactionList(String nOCHigherEducId) throws Exception {
+		
+		return dao.getHigherEducationTransactionList(nOCHigherEducId);
+	}
+
+	@Override
+	public NocHigherEducation getNocHigherEducationById(long NOCHigherEducId) throws Exception {
+		
+		return dao.getNocHigherEducationById(NOCHigherEducId);
+	}
+
+	@Override
+	public long NOCHigherEducationUpdate(NocHigherEducationDto dto, String userId) throws Exception {
+	
+		NocHigherEducation edu =dao.getNocHigherEducationById(dto.getNocEducationId());
+		
+		edu.setNocEducationId(dto.getNocEducationId());
+		edu.setInstitutionType(dto.getInstitutionType());
+		edu.setAcademicYear(dto.getAcademicYear());
+		edu.setCourse(dto.getCourse());
+		edu.setSpecialization(dto.getSpecialization());
+		edu.setEducationType(dto.getEducationType());
+		edu.setQualifiactionRequired(dto.getQualifiactionRequired());
+		edu.setHigherEducationStatus("N");
+		edu.setNocStatusCode("INI");
+		edu.setNocStatusCodeNext("INI");
+		edu.setModifiedBy(userId);
+		edu.setModifiedDate(sdf1.format(new Date()));
+		edu.setIsActive(1);
+		
+		
+		return dao.HigherEducationUpdate(edu);
+	}
+
+	@Override
+	public Object[] getHigherEducationDetails(String NOCHigherEducId) throws Exception {
+		
+		return dao.getHigherEducationDetails(NOCHigherEducId);
+	}
+
+	@Override
+	public List<Object[]> getNocHigherEducationRemarks(String NOCHigherEducId) throws Exception {
+		
+		return dao.getNocHigherEducationRemarks(NOCHigherEducId);
+	}
 		
 	
-
 }
 
