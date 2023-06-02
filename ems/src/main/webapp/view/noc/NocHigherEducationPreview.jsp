@@ -292,7 +292,6 @@ body {
 						
 					 </div> 
 				<%} %>
-					
 					 <input type="hidden" name="EducationId" value="<%=obj[15]%>"> 
 					</form>
 				</div>
