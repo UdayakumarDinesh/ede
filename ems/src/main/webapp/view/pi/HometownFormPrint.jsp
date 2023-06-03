@@ -180,20 +180,43 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;color: blue;"><%if(HomFormData!=null && HomFormData[8]!=null) {%> <%=HomFormData[8] %> <%} %></td> </tr>
+						<%-- <tr> <td style="border: 0;color: blue;"><%if(HomFormData!=null && HomFormData[8]!=null) {%> <%=HomFormData[8] %> <%} %></td> </tr> --%>
 						<tr> <td style="border: 0;"> <b>Signature of Employee</b> </td> </tr>
+						<tr> <td style="border: 0;">
+						 <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
+				   				Employee : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Forwarded On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		<%} %> 
+						</td> </tr>
 						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;"></td> </tr>
-						<tr> <td style="border: 0;"> <b>Date</b>  &nbsp;&nbsp;:&nbsp;&nbsp;
+						<tr> <td style="border: 0;">
+						 <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Forwarded On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		<%} %> 
+				   		<tr> <td style="border: 0;"></td> </tr>
+						<tr> <td style="border: 0;">
+						 <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Forwarded On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		<%} %> 
+						</td> </tr>
+						 <%--<tr> <td style="border: 0;"> <b>Date</b>  &nbsp;&nbsp;:&nbsp;&nbsp;
 						                            <label style="color: blue;">
 						                            <%for(Object[] apprInfo : ApprovalEmpData){ %>
 							                        <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
 					   			                	<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
 					   		                    	<%break;
 					   		                     	} %>
-						   	                    	<%} %></label>
+						   	                    	<%} %></label> 
 						   	  </td> 
-					    </tr>
+					    </tr> --%>
 					  </tbody>					  
 					</table>										   			
 				   <br>	

@@ -98,6 +98,7 @@ public class PIServiceImp implements PIService{
 //			List<String> DHs = dao.GetDHEmpNos();
 //			List<String> GHs = dao.GetGHEmpNos();
 			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			List<String> SOs = dao.GetSOEmpNos();			
 			String CEO = dao.GetCEOEmpNo();
 			
 			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
@@ -105,7 +106,8 @@ public class PIServiceImp implements PIService{
 			if(action.equalsIgnoreCase("A"))
 			{
 				// first time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+				   pisStatusCode.equalsIgnoreCase("RSO") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					address.setPisStatusCode("FWD");
 					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
@@ -123,9 +125,13 @@ public class PIServiceImp implements PIService{
 						address.setIsActive(1);
 						address.setResAdStatus("A");				
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno)) 
 					{
 						address.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						address.setPisStatusCodeNext("VSO");
 					}
 					else 
 					{
@@ -138,6 +144,9 @@ public class PIServiceImp implements PIService{
 					
 					address.setPisStatusCode(pisStatusCodeNext);
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+						address.setPisStatusCodeNext("VSO");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VSO")) {
 						address.setPisStatusCodeNext("VPA");
 					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
 						pisdao.ResAddrUpdate(address.getEmpid());
@@ -162,15 +171,23 @@ public class PIServiceImp implements PIService{
 				{
 					address.setPisStatusCode("RDG");	
 				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VSO")) 
+				{
+					address.setPisStatusCode("RSO");	
+				}
 				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					address.setPisStatusCode("RPA");	
 				}
 				
 				
-				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				if(SOs.contains(formempno)) 
 				{
 					address.setPisStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					address.setPisStatusCodeNext("VSO");
 				}
 				else 
 				{
@@ -206,15 +223,12 @@ public class PIServiceImp implements PIService{
 			{
 				if( address.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
 				{
-					notification.setEmpNo(DGMEmpNo);					
+					notification.setEmpNo(DGMEmpNo);
+					notification.setNotificationUrl("IntimationApprovals.htm");
+					notification.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
+					notification.setNotificationBy(ForwardingEmpNo);
 				}
-				else if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				}
-				notification.setNotificationUrl("IntimationApprovals.htm");
-				notification.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
-				notification.setNotificationBy(ForwardingEmpNo);
+				
 			}
 			else if(action.equalsIgnoreCase("R"))
 			{
@@ -228,9 +242,52 @@ public class PIServiceImp implements PIService{
 			notification.setIsActive(1);
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			dao.AddNotifications(notification);		
-			
+		    
+			if( !address.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !address.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				dao.AddNotifications(notification);
+			}
+								
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(address.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("IntimationApprovals.htm");
+						  notification1.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(ForwardingEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  dao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("IntimationApprovals.htm");
+						   notification1.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(ForwardingEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}
 			return 1;
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside ResAddressForward "+ e);
@@ -347,6 +404,7 @@ public class PIServiceImp implements PIService{
 			List<String> DGMs = dao.GetDGMEmpNos();
 //			List<String> DHs = dao.GetDHEmpNos();
 //			List<String> GHs = dao.GetGHEmpNos();
+			List<String> SOs = dao.GetSOEmpNos();
 			List<String> PandAs = dao.GetPandAAdminEmpNos();
 			String CEO = dao.GetCEOEmpNo();
 			
@@ -359,7 +417,8 @@ public class PIServiceImp implements PIService{
 //					
 //				}
 				// first time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
+				   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					address.setPisStatusCode("FWD");
 					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
@@ -378,9 +437,13 @@ public class PIServiceImp implements PIService{
 						address.setIsActive(1);
 						address.setPerAdStatus("A");				
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno)) 
 					{
 						address.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						address.setPisStatusCodeNext("VSO");
 					}
 					else 
 					{
@@ -390,12 +453,15 @@ public class PIServiceImp implements PIService{
 				//approving	flow 
 				else
 				{
-					
-                    			    					
+					                   			    					
 					address.setPisStatusCode(pisStatusCodeNext);
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+						address.setPisStatusCodeNext("VSO");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VSO")) {
 						address.setPisStatusCodeNext("VPA");
-					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
 						pisdao.PerAddrUpdate(address.getEmpid());
 	                    Object[] perToAddressId = dao.PerToAddressId(address.getEmpid());
 	                    String fromDate = DateTimeFormatUtil.SqlToRegularDate(address.getFrom_per_addr().toString());
@@ -418,15 +484,22 @@ public class PIServiceImp implements PIService{
 				{
 					address.setPisStatusCode("RDG");	
 				}
+				if(pisStatusCodeNext.equalsIgnoreCase("VSO")) 
+				{
+					address.setPisStatusCode("RSO");	
+				}
 				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					address.setPisStatusCode("RPA");	
 				}
 				
-				
-				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				if(SOs.contains(formempno) ) 
 				{
 					address.setPisStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					address.setPisStatusCodeNext("VSO");
 				}
 				else 
 				{
@@ -462,15 +535,12 @@ public class PIServiceImp implements PIService{
 			{
 				if( address.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
 				{
-					notification.setEmpNo(DGMEmpNo);					
+					notification.setEmpNo(DGMEmpNo);	
+					notification.setNotificationUrl("IntimationApprovals.htm");
+					notification.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
+					notification.setNotificationBy(ForwardingEmpNo);
 				}
-				else if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0).toString():null);
-				}
-				notification.setNotificationUrl("IntimationApprovals.htm");
-				notification.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
-				notification.setNotificationBy(ForwardingEmpNo);
+								
 			}
 			else if(action.equalsIgnoreCase("R"))
 			{
@@ -485,7 +555,51 @@ public class PIServiceImp implements PIService{
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
 		
-			dao.AddNotifications(notification);		
+			if( !address.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !address.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				dao.AddNotifications(notification);
+			}
+			
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(address.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("IntimationApprovals.htm");
+						  notification1.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(ForwardingEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  dao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("IntimationApprovals.htm");
+						   notification1.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(ForwardingEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}
 			
 			return 1;
 		}catch (Exception e) {
@@ -586,6 +700,7 @@ public class PIServiceImp implements PIService{
 			List<String> DGMs = dao.GetDGMEmpNos();
 //			List<String> DHs = dao.GetDHEmpNos();
 //			List<String> GHs = dao.GetGHEmpNos();
+			List<String> SOs = dao.GetSOEmpNos();
 			List<String> PandAs = dao.GetPandAAdminEmpNos();
 			String CEO = dao.GetCEOEmpNo();
 			
@@ -595,7 +710,8 @@ public class PIServiceImp implements PIService{
 			{
 //			
 				// first time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
+				   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					mobile.setPisStatusCode("FWD");
 					if(PandAs.contains(formempno) || CEO.equalsIgnoreCase(formempno) || LoginType.equalsIgnoreCase("P")) 
@@ -616,9 +732,13 @@ public class PIServiceImp implements PIService{
 						mobile.setIsActive(1);
 						mobile.setMobileStatus("A");				
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno) ) 
 					{
 						mobile.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						mobile.setPisStatusCodeNext("VSO");
 					}
 					else 
 					{
@@ -632,8 +752,12 @@ public class PIServiceImp implements PIService{
 					mobile.setPisStatusCode(pisStatusCodeNext);
 					
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) {
+						mobile.setPisStatusCodeNext("VSO");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VSO")) {
 						mobile.setPisStatusCodeNext("VPA");
-					}else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {
 						
 						 dao.MobileStatusUpdate(mobile.getEmpNo());
 						    Object[] mobileNumber = dao.GetMobileNumberId(mobile.getEmpNo());
@@ -659,15 +783,23 @@ public class PIServiceImp implements PIService{
 				{
 					mobile.setPisStatusCode("RDG");	
 				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VSO")) 
+				{
+					mobile.setPisStatusCode("RSO");	
+				}
 				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					mobile.setPisStatusCode("RPA");	
 				}
 				
 				
-				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				if(SOs.contains(formempno)) 
 				{
 					mobile.setPisStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					mobile.setPisStatusCodeNext("VSO");
 				}
 				else 
 				{
@@ -703,15 +835,11 @@ public class PIServiceImp implements PIService{
 			{
 				if( mobile.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
 				{
-					notification.setEmpNo(DGMEmpNo);					
+				   notification.setEmpNo(DGMEmpNo);					
+				   notification.setNotificationUrl("IntimationApprovals.htm");
+				   notification.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
+				   notification.setNotificationBy(ApprEmpNo);
 				}
-				else if(mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				}
-				notification.setNotificationUrl("IntimationApprovals.htm");
-				notification.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
-				notification.setNotificationBy(ApprEmpNo);
 			}
 			else if(action.equalsIgnoreCase("R"))
 			{
@@ -726,7 +854,51 @@ public class PIServiceImp implements PIService{
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
 		
-			dao.AddNotifications(notification);		
+			if( !mobile.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				dao.AddNotifications(notification);
+			}
+			
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(mobile.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("IntimationApprovals.htm");
+						  notification1.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(ApprEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  dao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("IntimationApprovals.htm");
+						   notification1.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(ApprEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}		
 			
 			return 1;
 		}catch (Exception e) {
@@ -816,9 +988,10 @@ public class PIServiceImp implements PIService{
 			
 			String CEO = dao.GetCEOEmpNo();
 			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			List<String> SOs = dao.GetSOEmpNos();
 			List<String> DGMs = dao.GetDGMEmpNos();
-			List<String> DHs = dao.GetDHEmpNos();
-			List<String> GHs = dao.GetGHEmpNos();
+//			List<String> DHs = dao.GetDHEmpNos();
+//			List<String> GHs = dao.GetGHEmpNos();
 			
 			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
 			
@@ -827,7 +1000,8 @@ public class PIServiceImp implements PIService{
 			{
 //			
 				// first time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
+				   pisStatusCode.equalsIgnoreCase("RSO") || pisStatusCode.equalsIgnoreCase("RPA") ) 
 				{
 					hometown.setPisStatusCode("FWD");
 					
@@ -839,9 +1013,13 @@ public class PIServiceImp implements PIService{
 						hometown.setIsActive(1);
 						hometown.setHometownStatus("A");	
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno) ) 
 					{
 						hometown.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						hometown.setPisStatusCodeNext("VSO");
 					}					
 					else 
 					{
@@ -858,8 +1036,12 @@ public class PIServiceImp implements PIService{
 					
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
 					{
+						hometown.setPisStatusCodeNext("VSO");
+					}
+					if(pisStatusCodeNext.equalsIgnoreCase("VSO")) 
+					{
 						hometown.setPisStatusCodeNext("VPA");
-					}					
+					}
 					else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) {	
 						dao.HometownStatusUpdate(hometown.getEmpNo());
 						hometown.setIsActive(1);
@@ -878,15 +1060,23 @@ public class PIServiceImp implements PIService{
 				{
 					hometown.setPisStatusCode("RDG");	
 				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VSO")) 
+				{
+					hometown.setPisStatusCode("RSO");	
+				}
 				else if(pisStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					hometown.setPisStatusCode("RPA");	
 				}
 				
 				
-				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				if(SOs.contains(formempno) ) 
 				{
 					hometown.setPisStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					hometown.setPisStatusCodeNext("VSO");
 				}
 				else 
 				{
@@ -907,8 +1097,8 @@ public class PIServiceImp implements PIService{
 			dao.HometownTransactionAdd(transaction);
 							
 			String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
-			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
-			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+//			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+//			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
 		
 			//Notification
 			EMSNotification notification = new EMSNotification();
@@ -923,15 +1113,16 @@ public class PIServiceImp implements PIService{
 			{
 				if( hometown.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
 				{
-					notification.setEmpNo(DGMEmpNo);					
+					notification.setEmpNo(DGMEmpNo);	
+					notification.setNotificationUrl("IntimationApprovals.htm");
+					notification.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
+					notification.setNotificationBy(ApprEmpNo);
 				}
-				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				}
-				notification.setNotificationUrl("IntimationApprovals.htm");
-				notification.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
-				notification.setNotificationBy(ApprEmpNo);
+//				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+//				{
+//					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+//				}
+				
 			}
 			else if(action.equalsIgnoreCase("R"))
 			{
@@ -946,7 +1137,51 @@ public class PIServiceImp implements PIService{
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
 		
-			dao.AddNotifications(notification);		
+			if( !hometown.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				dao.AddNotifications(notification);
+			}
+			
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("IntimationApprovals.htm");
+						  notification1.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(ApprEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  dao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("IntimationApprovals.htm");
+						   notification1.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(ApprEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}		
 			
 			return 1;
 		}catch (Exception e) {
@@ -1062,6 +1297,12 @@ public class PIServiceImp implements PIService{
 	public long AddNotifications(EMSNotification notification) throws Exception {
 		
 		return dao.AddNotifications(notification);
+	}
+
+	@Override
+	public List<String> GetSOEmpNos() throws Exception {
+		
+		return dao.GetSOEmpNos();
 	}
 
 	

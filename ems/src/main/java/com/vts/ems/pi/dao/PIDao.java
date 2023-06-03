@@ -94,5 +94,6 @@ public interface PIDao {
 	public List<Object[]> mobNumberRemarksHistory(String MobileNumberId) throws Exception;
 	public List<Object[]> hometownRemarksHistory(String HometownId) throws Exception;
 	public Object[] GetApprovalFlowEmp(String empno) throws Exception;
+	public List<String> GetSOEmpNos() throws Exception;
 	
 }

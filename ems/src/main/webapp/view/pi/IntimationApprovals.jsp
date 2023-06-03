@@ -130,18 +130,30 @@
                             	<button type="submit" class="btn btn-sm" name="resaddressId" value="<%=form[4] %>" formaction="PersonalIntimation.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="resaddressId" value="<%=form[4]%>" formaction="AddressFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
 						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Permanent Address")){ %>
 						 		<button type="submit" class="btn btn-sm" name="peraddressId" value="<%=form[4] %>" formaction="PersonalIntimation.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="peraddressId" value="<%=form[4]%>" formaction="AddressFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+									<i style="color: #019267" class="fa-solid fa-download"></i>
+							    </button>
 						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Mobile Number")){ %>
 						 		<button type="submit" class="btn btn-sm" name="mobileNumberId" value="<%=form[4] %>" formaction="MobileNumberPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="mobilenumberId" value="<%=form[4]%>" formaction="MobileFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
 						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Hometown")){ %>
 						 		<button type="submit" class="btn btn-sm" name="hometownId" value="<%=form[4] %>" formaction="HometownPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="hometownId" value="<%=form[4]%>" formaction="HometownFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
 						 	<%} %>
 						 	</td>
                             

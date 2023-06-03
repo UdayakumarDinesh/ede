@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-       <%@page import="java.util.List"%>
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil,java.util.List" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -32,7 +32,7 @@ hr{
 <%
 Object[] approval = (Object[])request.getAttribute("ApprovalList");
 List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
-
+List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
 %>
 
 
@@ -41,7 +41,7 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 	<div class="card-header page-top">
 		<div class="row">
 			<div class="col-md-5">
-				<h5  >CHSS Approval Authority</h5>
+				<h5> Approval Authority</h5>
 			</div>
 				<div class="col-md-7 ">
 					<ol class="breadcrumb ">
@@ -75,7 +75,9 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 		
 			<div class="card" >
 			
-					<div class="card-body main-card">
+					<div class="card-body">
+					<h5>CHSS Approval Authority</h5>
+			        <hr>
         			<%if(approval!=null){ %>
         		  <form action="ChssApprovalEdit.htm" method="POST" name="myfrm1" id="myfrm1" enctype="multipart/form-data" >
         		  <%}else{%> 	 						
@@ -179,7 +181,53 @@ List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 	 		      <br>
 	  </div>
 	
-		   	 </div>				
+		   	 </div>	
+		   	 
+		   	 <br>
+		   	<!----------------------------- P&A And F&A And SO ---------------------------->  
+		   	 <div class="card" >
+				<div class="card-body ">
+				  <h5>P&A / F&A / SO Approval Authority</h5>
+			        <hr>			
+					<form action="ChssApproval.htm" method="POST" id="empForm">
+						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>						
+						<div class="table-responsive">					
+				   			<table class="table table-bordered table-hover table-striped table-condensed"  id="myTable"> 				   			
+								<thead>
+									<tr>
+										<th> Select   </th>
+										<th> Admin </th>
+										<th> Admin Role </th>
+										<th> Admin From </th>
+										<th> Admin To </th>
+									</tr>
+								</thead>
+								<tbody>
+									<% if(list!=null){ for(Object[] obj:list){ %>
+										<tr>										   
+											<td style="text-align: center;width: 5%;">
+							                  <input type="radio" name="adminsId" value="<%=obj[0] %>"> 
+											</td>
+											<td style="text-align: left;width: 40%%;"><%=obj[5]+", "+obj[6]%></td>
+											<td style="text-align: center;width: 15%;"><%if("P".equalsIgnoreCase(obj[2].toString())){%>P&A Admin<%} else if("F".equalsIgnoreCase(obj[2].toString())){%>F&A Admin<%}else{ %>Scrutiny Officer<%} %></td>
+											<td style="text-align: center;width: 15%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
+							                <td style="text-align: center;width: 15%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>
+										</tr>
+									 <%} }%>
+								</tbody>
+							</table>
+						</div>			
+						<div class="row text-center">
+						<div class="col-md-12">
+						
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDAdmins"   >ADD </button>
+							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITAdmins"  Onclick="Edit(empForm)" >EDIT </button>
+						</div>
+						</div>
+						<input type="hidden" name="Admins" value="Y">
+			   </form>		
+			  </div>
+			  </div>			
 	        </div>
 	        </div>
 	    
@@ -194,5 +242,18 @@ function CommentsModel()
 	
 }
 </script>
+<script type="text/javascript">
+function Edit(empForm) {
 
+	var fields = $("input[name='adminsId']").serializeArray();
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Admin");
+
+		event.preventDefault();
+		return false;
+	}
+	return true;
+}
+
+</script>
 </html>

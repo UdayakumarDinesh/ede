@@ -1983,7 +1983,8 @@ public class MasterController {
 				 redir.addAttribute("resultfail", "Admin Add Unsuccessful");
 			}
 			
-			return "redirect:/PandAFandAAdmin.htm";
+//			return "redirect:/PandAFandAAdmin.htm";
+			return "redirect:/ChssApproval.htm";
 		} catch (Exception e) {
 			logger.error(new Date() +"Inside PandAFandAAdd.htm "+UserId,e);
 			e.printStackTrace();
@@ -2031,7 +2032,8 @@ public class MasterController {
 				 redir.addAttribute("resultfail", "Admin Update Unsuccessful");
 			}
 			
-			 return "redirect:/PandAFandAAdmin.htm";
+//			 return "redirect:/PandAFandAAdmin.htm";
+			return "redirect:/ChssApproval.htm";
 		} catch (Exception e) {
 			logger.error(new Date() +"Inside PandAFandAEdit.htm "+UserId,e);
 			e.printStackTrace();

@@ -86,7 +86,7 @@
 	
 	/* Employee emp=(Employee)request.getAttribute("EmployeeD"); */
 	Object[] empData=(Object[])request.getAttribute("EmpData");
-	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA");
+	List<String> toUserStatus  = Arrays.asList("INI","RDG","RSO","RPA");
 %>
 <div class="card-header page-top ">
 		<div class="row">

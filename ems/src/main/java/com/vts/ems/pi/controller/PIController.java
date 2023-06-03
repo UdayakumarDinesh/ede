@@ -330,7 +330,8 @@ public class PIController {
 				String  pisStatusCode = address.getPisStatusCode();
 				
 				long count = service.PerAddressForward(perAddressId, Username, action,remarks,EmpNo,LoginType);
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+				   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
 						redir.addAttribute("result", "Address application Sent for verification Successfully");
 					} else {
@@ -627,7 +628,8 @@ public class PIController {
 				String  pisStatusCode = address.getPisStatusCode();
 				
 				long count = service.ResAddressForward(resAddressId, Username, action,remarks,EmpNo,LoginType);
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+				   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
 						redir.addAttribute("result", "Address application Sent for verification Successfully");
 					} else {
@@ -1029,7 +1031,8 @@ public class PIController {
 				String mobileNumberId = req.getParameter("mobileNumberId").trim();
 					
 					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-				
+					List<String> PandAs = service.GetPandAAdminEmpNos();
+					req.setAttribute("PandAsEmpNos", PandAs);
 					if(mobileNumberId!=null) {
 						String isApproval = req.getParameter("isApproval");
 						if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
@@ -1078,7 +1081,8 @@ public class PIController {
 				if(pisStatusCode2.equalsIgnoreCase("VPA") && pisStatusCodeNext2.equalsIgnoreCase("VPA")) {									
 					service.UpdateEmployeeMobileNumber(mobile2.getMobileNumber().trim(), mobile2.getAltMobileNumber().trim(), mobile2.getEmpNo());
 				}
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA") ) {
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
+				   pisStatusCode.equalsIgnoreCase("RSO") || pisStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
 						redir.addAttribute("result", "Mobile Form Sent for verification Successfully");
 					} else {
@@ -1329,7 +1333,8 @@ public class PIController {
 				try {
 					String hometownId = req.getParameter("hometownId");	
 					req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
-					
+					List<String> PandAs = service.GetPandAAdminEmpNos();
+					req.setAttribute("PandAsEmpNos", PandAs);
 					if(hometownId!=null) {
 						String isApproval = req.getParameter("isApproval");
 						if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
@@ -1378,7 +1383,8 @@ public class PIController {
 					pisservice.EmployeeHometownWithStatusUpdate(hometown2.getHometown(), "N", hometown2.getEmpNo() );
 				}
 				
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RPA")) {
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
+				   pisStatusCode.equalsIgnoreCase("RSO") || pisStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
 						redir.addAttribute("result", "Hometown application Sent for verification Successfully");
 					} else {

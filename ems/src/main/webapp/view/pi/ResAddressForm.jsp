@@ -56,8 +56,11 @@ Date date = new Date();
 
 String isApproval = (String)request.getAttribute("isApproval");
 
-List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+List<String> toUserStatus  = Arrays.asList("INI","RSO","RDG","RPA");
 List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
+
+List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+String empNo = (String)session.getAttribute("EmpNo");
 %>
 <div class="card-header page-top ">
 		<div class="row">
@@ -236,10 +239,16 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 						   <b >Remarks :</b><br>
 						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
 					   </div>
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Verify	
+					   
+					   <%if(PandAs.contains(empNo)) {%>
+					   <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							Verify 	
 						</button>
-					
+						<%}else{ %>
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							 Recommend	
+						</button>
+						<%} %>					
 				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
 							 Return
 						</button>
@@ -254,7 +263,6 @@ List<String> toDGMStatus  = Arrays.asList("FWD","RPA","RPA","RCE");
 	   </div>  
 	  </div>							
 	</div>	
- </div>
 </body>
 
 <script>

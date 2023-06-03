@@ -87,5 +87,6 @@ public interface PIService {
 	public List<Object[]> hometownRemarksHistory(String HometownId) throws Exception;
 	public Object[] GetApprovalFlowEmp(String empno) throws Exception;
 	public long AddNotifications(EMSNotification notification) throws Exception;
+	public List<String> GetSOEmpNos() throws Exception;
 	
 }

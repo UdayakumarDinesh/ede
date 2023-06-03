@@ -23,21 +23,21 @@
 		<div class="row">
 			<div class="col-md-3">
 			<%if(PandA!=null){ %>
-				<h5>P&A And F&A Edit</h5>
+				<h5>Approval Authority Edit</h5>
 				<%}else{ %>
-				<h5>P&A And F&A Add</h5>
+				<h5>Approval Authority Add</h5>
 				<%}%>
 			</div>
 			
 				<div class="col-md-9 ">
 					<ol class="breadcrumb ">
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
-					    <li class="breadcrumb-item "><a href="MasterDashBoard.htm"> Master </a></li> 
-						<li class="breadcrumb-item "><a href="PandAFandAAdmin.htm">P&A And F&A</a></li>
+					    <li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li> 
+						<!-- <li class="breadcrumb-item "><a href="PandAFandAAdmin.htm">P&A And F&A</a></li> -->
 						<%if(PandA!=null){ %>						
-						<li class="breadcrumb-item active " aria-current="page">P&A And F&A Edit</li>
+						<li class="breadcrumb-item active " aria-current="page">Approval Authority Edit</li>
 						<%}else{ %>
-						<li class="breadcrumb-item active " aria-current="page">P&A And F&A Add</li>
+						<li class="breadcrumb-item active " aria-current="page">Approval Authority Add</li>
 						<%} %>
 					</ol>
 				</div>
@@ -70,6 +70,7 @@
 											    <select class="form-control select2"  name="adminType" id="adminType" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width: 80%;">
 	                                               <option value="P" <%if(PandA!=null && PandA.getAdminType()!=null && "P".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>P&A Admin</option>
 	                                               <option value="F" <%if(PandA!=null && PandA.getAdminType()!=null && "F".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>F&A Admin</option>
+	                                               <option value="S" <%if(PandA!=null && PandA.getAdminType()!=null && "S".equalsIgnoreCase(PandA.getAdminType())) {%> selected="selected" <%} %>>Scrutiny Officer</option>
 											    </select>
 											  </td>
 											<%-- <td ><select class="form-control select2"  name="" id="fanda" data-container="body" data-live-search="true"  required="required" style="font-size: 25px;width: 80%;">
@@ -179,19 +180,6 @@ function checkEdit(frmid){
 	
 }
 
-$( "#fdate" ).daterangepicker({
-    "singleDatePicker" : true,
-    "linkedCalendars" : false,
-    "showCustomRangeLabel" : true,
-    "minDate" :new Date(),  
-    "cancelClass" : "btn-default",
-    showDropdowns : true,
-    locale : {
-    	format : 'DD-MM-YYYY'
-    }
-});
-
-
 $( "#fdate" ).change( function(){
     
 	$( "#tdate" ).daterangepicker({
@@ -213,7 +201,7 @@ $( "#fdate" ).daterangepicker({
     "singleDatePicker" : true,
     "linkedCalendars" : false,
     "showCustomRangeLabel" : true,
-    "minDate" :new Date(),  
+    /* "minDate" :new Date(),  */ 
     "cancelClass" : "btn-default",
     showDropdowns : true,
     locale : {
@@ -226,14 +214,16 @@ $( "#tdate" ).daterangepicker({
 	"singleDatePicker" : true,
     "linkedCalendars" : false,
     "showCustomRangeLabel" : true,
-    "minDate" :$("#fdate").val(),  
-    "startDate" : $("#fdate").val(),
+    /* "minDate" :$("#fdate").val(),  
+    "startDate" : $("#fdate").val(), */
     "cancelClass" : "btn-default",
     showDropdowns : true,
     	locale : {
     	format : 'DD-MM-YYYY'
     } 
 });
+
+
 
 
 </script>

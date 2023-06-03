@@ -101,7 +101,7 @@ List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
 							                  <input type="radio" name="adminsId" value="<%=obj[0] %>"> 
 											</td>
 											<td style="text-align: left;width: 40%%;"><%=obj[5]+", "+obj[6]%></td>
-											<td style="text-align: center;width: 15%;"><%if("P".equalsIgnoreCase(obj[2].toString())){%>P&A Admin<%} else{%>F&A Admin<%} %></td>
+											<td style="text-align: center;width: 15%;"><%if("P".equalsIgnoreCase(obj[2].toString())){%>P&A Admin<%} else if("F".equalsIgnoreCase(obj[2].toString())){%>F&A Admin<%}else{ %>Scrutiny Officer<%} %></td>
 											<td style="text-align: center;width: 15%;"><%if(obj[3]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[3]+"")%><%}else{%>--<%}%></td>							
 							                <td style="text-align: center;width: 15%;"><%if(obj[4]!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(obj[4]+"")%><%}else{%>--<%}%></td>
 										</tr>
@@ -122,6 +122,20 @@ List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
 	</div>
 </div>
 </body>
+<script type="text/javascript">
+function Edit(empForm) {
+
+	var fields = $("input[name='adminsId']").serializeArray();
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Admin");
+
+		event.preventDefault();
+		return false;
+	}
+	return true;
+}
+
+</script>
 </html>
 
 

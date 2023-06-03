@@ -307,6 +307,29 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 		    	String action = (String)req.getParameter("Action");
 		    	ses.setAttribute("SidebarActive", "ChssApproval_htm");
 		    	try {
+		    		
+                    String Admins = req.getParameter("Admins");
+		    		
+		    		if("Y".equalsIgnoreCase(Admins)) {
+		    		String adminsId = req.getParameter("adminsId");
+					
+					List<Object[]> emp = masterservice.getEmployeeList();
+					req.setAttribute("emplist", emp);
+					if("ADDAdmins".equalsIgnoreCase(action)) {
+						
+						return "masters/PandAFandAAdminAddEdit";
+					}
+					else if("EDITAdmins".equalsIgnoreCase(action)) {
+						 req.setAttribute("PandA", masterservice.getPandAFandAById(Long.parseLong(adminsId)));
+						return "masters/PandAFandAAdminAddEdit";
+					}
+//					else {				
+//						req.setAttribute("PandAFandAData", masterservice.PandAFandAAdminData());
+//						
+//						return "masters/PandAFandAAdmin";
+//					}
+		    		}
+		    		
 		    		if("ADD".equalsIgnoreCase(action)) {
 		    			String processing   = (String)req.getParameter("processing");
 		    			String verification = (String)req.getParameter("verification");
@@ -331,8 +354,13 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 								Object[] approvallist=service.getChssAprovalList();
 								req.setAttribute("ApprovalList", approvallist);
 								req.setAttribute("emplist", pisservice.GetAllEmployee());
+								req.setAttribute("PandAFandAData", masterservice.PandAFandAAdminData());
 				    	return "Admin/CHSSApproval";
 		    		}
+		    	
+		    		
+		    		
+					
 				} catch (Exception e) {
 					logger.error(new Date() +"Inside ChssApproval.htm "+UserId , e);
 					e.printStackTrace();

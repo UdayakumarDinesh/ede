@@ -67,7 +67,7 @@
 	List<Object[]> home =(List<Object[]>)request.getAttribute("HometownDetails");
 	
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RSO","RPA","RCE");
 	
 	List<String> HometownAllowedEmpNo = (List<String>)request.getAttribute("HometownAllowedEmpNo");
 	int size = home.size();
