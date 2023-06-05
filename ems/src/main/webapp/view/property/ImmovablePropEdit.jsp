@@ -2,6 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.List,com.vts.ems.property.model.PisImmovableProperty"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +17,7 @@
 PisImmovableProperty imm = (PisImmovableProperty)request.getAttribute("ImmProperty");
 List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 Object[] empData=(Object[])request.getAttribute("EmpData");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
 %>
 
 <div class="card-header page-top">
@@ -26,6 +30,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
+					<li class="breadcrumb-item "><a href="AcquiringDisposing.htm">Acquiring / Disposing </a></li>
 					<li class="breadcrumb-item active " aria-current="page">Immovable Property</li>
 				</ol>
 			</div>	
@@ -166,7 +171,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" value="<%if(imm!=null && imm.getTransArrangement()!=null){%><%=imm.getTransArrangement()%><%}%>" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
 			        </div>
 			        <div class="col-md-4" id="dealing">			         
-			            <label>Nature of dealing:<span class="mandatory" >*</span></label>
+			            <label>Nature of dealing:</label>
 			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" value="<%if(imm!=null && imm.getDealingNature()!=null){%><%=imm.getDealingNature()%><%}%>" maxlength="225" placeholder="Enter Dealing Nature" required>
 			        </div>	
 			        <div class="col-md-4">			         
@@ -188,16 +193,22 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			            <label>Extent :<span class="mandatory">*</span></label>
 			           <input class="form-control" type="text" name="partialInterest" id="partialInterest" value="<%if(imm!=null && imm.getPartialInterest()!=null){%><%=imm.getPartialInterest()%><%}%>" maxlength="225" >
 			        </div>
+			        <div class="col-md-2" id="extentinname" >			         
+			            <label>Extent in name of?:<span class="mandatory" >*</span></label>
+			           <input class="form-control" type="text" name="extentInNameOf" id="extentInNameOf" value="<%if(imm!=null && imm.getExtentInNameOf()!=null){%><%=imm.getExtentInNameOf()%><%}%>" maxlength="225">
+			        </div>
 			        <div class="col-md-2" id="finance" <%if(imm!=null && imm.getFinanceSource()!=null && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >
 			           <label>Source for finance:<span class="mandatory" >*</span></label>
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Personal savings</option>
-			               <option value="Other sources" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Other sources</option>
+			               <option value="Home loan" <%if(imm!=null && imm.getFinanceSource()!=null && "Home loan".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Home loan</option>
+			               <option value="Land loan" <%if(imm!=null && imm.getFinanceSource()!=null && "Land loan".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Land loan</option>
+			               <option value="Other sources" <%if(imm!=null && imm.getFinanceSource()!=null && !finaceSource.contains(imm.getFinanceSource()) ) {%>selected <%} %> >Other sources</option>
 			           </select>
 			        </div>
-			        <div class="col-md-2" id="others" <%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >			         
+			        <div class="col-md-2" id="others" <%if(imm!=null && imm.getFinanceSource()!=null && !finaceSource.contains(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState())){ %> style="display:block;" <%}else{ %> style="display:none;"<%} %> >			         
 			            <label>Other Sources:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState()) ){ %><%=imm.getFinanceSource()%><%}%>" maxlength="225" placeholder="Enter Source Details">
+			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(imm!=null && imm.getFinanceSource()!=null && !finaceSource.contains(imm.getFinanceSource()) && "A".equalsIgnoreCase(imm.getTransState()) ){ %><%=imm.getFinanceSource()%><%}%>" maxlength="225" placeholder="Enter Source Details">
 			        </div>
 			        <div class="col-md-2" id="sanction" <%if(imm!=null && imm.getTransState()!=null && "D".equalsIgnoreCase(imm.getTransState())){ %> style="visibility: visible;" <%}else{ %> style="visibilty: hidden;"<%} %> >
 			           <label>Requisite Sanctioned?<span class="mandatory" >*</span></label>
@@ -238,6 +249,7 @@ function CommentsModel(){
 	var pincode = $('#CityPinTextBox').val();
 	var applicantInterest = $('#applicantInterest').val();
 	var partialInterest = $('#partialInterest').val();
+	var extentInNameOf = $('#extentInNameOf').val();
 	var price = $('#price').val();
 	var financeSource = $('#financeSource').val();
 	var otherSource = $('#otherSource').val();
@@ -246,7 +258,7 @@ function CommentsModel(){
 	var partyName = $('#partyName').val();	
 	var partyAddress = $('#partyAddress').val();	
 	var transArrangement = $('#transArrangement').val();	
-	var dealingNature = $('#dealingNature').val();	
+	/* var dealingNature = $('#dealingNature').val(); */	
 	var osParticulars = $('#osParticulars').val().trim();	
 	var osShare = $('#osShare').val().trim();	
 	
@@ -271,6 +283,9 @@ function CommentsModel(){
 	}else if(applicantInterest=="P" && (partialInterest==null || partialInterest=="" || partialInterest=="null") ){
 		alert('Enter Extent Details!');
 		return false;
+	}else if(applicantInterest=="P" && (extentInNameOf==null || extentInNameOf=="" || extentInNameOf=="null") ){
+		alert('Enter Extent In the Name Of Details!');
+		return false;
 	}else if(price==null || price=="" || price=="null" ){
 		alert('Enter Property Price!');
 		return false;
@@ -289,10 +304,10 @@ function CommentsModel(){
 	}else if(transArrangement==null || transArrangement=="" || transArrangement=="null" ){
 		alert('Enter Transaction Arrangement Details!');
 		return false;
-	}else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
+	}/* else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
 		alert('Enter Nature of dealing Details!');
 		return false;
-	}else{
+	} */else{
 		if(confirm('Are You Sure to submit')){
 			$('#myform').submit();
 			return true;
@@ -404,12 +419,14 @@ $( document ).ready(function() {
 	 
 	 if(interest=="P"){
 		$('#extent').show();
+		$('#extentinname').show();
 
 	} else{
 		$('#extent').hide();
+		$('#extentinname').hide();
 	}
 	 
-	if(financeSource=="Personal savings"){
+	if(financeSource=="Personal savings" || financeSource=="Home loan" || financeSource=="Land loan"){
 	    $('#others').hide(); 
 	} else{
 	    $('#others').show(); 
@@ -420,10 +437,12 @@ $( document ).ready(function() {
 	var interest = $('#applicantInterest').val();
 	  if(interest=="P"){
 		$('#extent').show();
+		$('#extentinname').show();
 		/* $("#interest").removeClass("col-md-4"); */
 		}
 	  else{
 		$('#extent').hide();
+		$('#extentinname').hide();
 		/* $("#interest").addClass("col-md-4"); */
 		}
 }); 

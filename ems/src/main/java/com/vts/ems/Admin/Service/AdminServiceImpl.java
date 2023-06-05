@@ -415,5 +415,11 @@ public class AdminServiceImpl implements AdminService{
 		return dao.ContractEmpEditComments(masteredit);
 	}
 
+	@Override
+	public Long revokeAdmin(String AdminsId, String ModifiedBy, String ModifiedDate) throws Exception {
+		
+		return dao.revokeAdmin(AdminsId, ModifiedBy, ModifiedDate);
+	}
+
 	
 }

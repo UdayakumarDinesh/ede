@@ -51,6 +51,7 @@ Object[] emp = (Object[])request.getAttribute("EmpData");
 
 String empNo = (String)session.getAttribute("EmpNo");
 String CEO = (String)request.getAttribute("CEOEmpNo");
+List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
 
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
 List<Object[]> ImmIntimationRemarks = (List<Object[]>)request.getAttribute("ImmIntimationRemarks");
@@ -60,11 +61,28 @@ SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 
-List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA","RCE");
-List<String> adminRemarks  = Arrays.asList("VDG","VPA","APR");
+List<String> toUserStatus  = Arrays.asList("INI","RDG","RSO","RPA","RCE");
+List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
 int slno=0;
 %>
-
+<div class="card-header page-top ">
+		<div class="row">
+			<div class="col-md-4">
+				<h5 style="width:113%;">Immovable Property - Form</h5>
+			</div>
+			<div class="col-md-8" >
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+				    <li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
+					<li class="breadcrumb-item "><a href="AcquiringDisposing.htm">Acquiring / Disposing </a></li>
+					<li class="breadcrumb-item active " aria-current="page">Immovable Property</li>
+				  </ol>
+				</nav>
+			</div>			
+		</div>
+</div> 
 <div class="page card dashboard-card" id="dashboardcard">
   <div class="card-body" align="center">
 		<div align="center">
@@ -170,7 +188,7 @@ int slno=0;
 								    <td style="border-bottom: 0;border-top: 0;"></td>
 								    <td>(d) Whether the applicant&apos;s interest in the property is in full or part (in case of partial interest, the extent of such interest must be indicated)</td>
 								    <%if(imm!=null && imm.getApplicantInterest()!=null && "F".equalsIgnoreCase(imm.getApplicantInterest())) {%><td colspan="2" style="color: blue;">Full</td>
-								    <%}else if(imm!=null && imm.getApplicantInterest()!=null && "P".equalsIgnoreCase(imm.getApplicantInterest()) ){%><td colspan="2" style="color: blue;"> <%="Part -"+imm.getPartialInterest() %></td> <%} %>
+								    <%}else if(imm!=null && imm.getApplicantInterest()!=null && "P".equalsIgnoreCase(imm.getApplicantInterest()) ){%><td colspan="2" style="color: blue;"> <%="Part -"+imm.getPartialInterest() %> (In the Name of <%=imm.getExtentInNameOf()%>)</td> <%} %>
 								</tr>
 								<tr>
 								    <td style="border-bottom: 1;border-top: 0;"></td>
@@ -189,11 +207,11 @@ int slno=0;
 								<tr>
 								    <td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
-								    <td colspan="2" style="color: blue">
-								     <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource())) {%>
-								      Personal savings
-								      <%}else if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>
-								      <%=imm.getFinanceSource()%>
+								    <td colspan="2" style="color: blue">							     
+								      <% if(imm!=null && imm.getFinanceSource()!=null && !finaceSource.contains(imm.getFinanceSource()) ) {%>
+								      <%=imm.getFinanceSource()%>							      
+								      <%}else if(imm!=null && imm.getFinanceSource()!=null) {%>
+								      <%=imm.getFinanceSource() %>
 								      <%} %>
 								    </td>
 								</tr>
@@ -248,7 +266,7 @@ int slno=0;
 								<tr>
 									<td style="border-top: 0;"></td>
 									<td>(d) Nature of official dealing with the party  </td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getDealingNature()!=null ) {%> <%=imm.getDealingNature() %> <%}%></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getDealingNature()!=null && !imm.getDealingNature().isEmpty()) {%> <%=imm.getDealingNature() %> <%}else{%>-<%} %></td>
 								</tr>
 								
 								<%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState()) && imm.getMode()!=null && "Gift".equalsIgnoreCase(imm.getMode())) {%>
@@ -292,7 +310,7 @@ int slno=0;
 						     <div style="" align="right">Signature of the employee</div>
 						     
 						     <!--Remarks of Administration  -->
-						     <% if( CEO.equalsIgnoreCase(empNo) || imm!=null && adminRemarks.contains(imm.getPisStatusCode()) ){ %>	
+						     <% if( CEO.equalsIgnoreCase(empNo) || PandAs.contains(empNo) || imm!=null && adminRemarks.contains(imm.getPisStatusCode()) ){ %>	
 						     <hr style="border: solid 1px;">				     
 						     <div style="width: 100%;border: 0;text-align: center;margin-top:5%;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
@@ -344,62 +362,79 @@ int slno=0;
 							</div>
 							<%} %>
 					   </div>
-					   
+					          
 				             <%			             
 				             long diff = DateTimeFormatUtil.dayDifference(imm.getTransDate().toString());
 				             
 				             if(imm!=null && toUserStatus.contains(imm.getPisStatusCode()) && diff<=30){ %>	
-		           				   		     
-					          <div align="left">
+				             <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					          </div>
-				   	
+					          </div>	           			
 				   		      <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
 							     <i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
 						      </button>
+						      
 					        <%} %>
-					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ 
-						     if(imm!=null && ( imm.getPisStatusCode().toString().equalsIgnoreCase("FWD") ||
-						    	imm.getPisStatusCode().toString().equalsIgnoreCase("VDG") )&& !CEO.equalsIgnoreCase(empNo)  ){ %>
-						     <div align="left">
+					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ %>						     
+					         <% if( CEO.equalsIgnoreCase(empNo)){ %>
+					         <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					         </div>
-				   		     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Verify	
-						     </button>
-					
-				   		    <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
-							 Return
-						    </button>
-					        <%} %>	
-					        <% if(imm!=null && imm.getPisStatusCode().toString().equalsIgnoreCase("VPA") || CEO.equalsIgnoreCase(empNo)){ %>
-					        <div align="left">
-						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					   </div>
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Approve	
-						</button>
-					
-				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
-							 Return
-						</button>
-					<%} }%>
-					<%if(( CEO.equalsIgnoreCase(empNo) || ( imm!=null && imm.getPisStatusCode().toString().equalsIgnoreCase("APR") )) ) {%>
-                      <div class="row" style="margin-top: 5%;">
-                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
-                      </div>
+					          </div>
+					          <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Approve?');" >
+							    Approve	
+						      </button>
+						      						
+						      <button type="submit" class="btn btn-sm delete-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="D" onclick="return disapprove();" >
+							    Disapprove	
+						      </button>
+						      
+					         <%}else if(PandAs.contains(empNo)) {%>
+					         <div align="left">
+						        <b >Remarks :</b><br>
+						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					          </div>
+				   		       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							     Verify	
+						       </button>
+						       
+					         <%}else{ %>
+					         <div align="left">
+						        <b >Remarks :</b><br>
+						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					          </div>
+				   		       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Recommend?');" >
+							     Recommend	
+						       </button>
+						       
+						      <%} %>	
+				   		       <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ImmovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
+							    Return
+						       </button>	
+						    				       							   		  
+					  <%} %>
+					<%if( CEO.equalsIgnoreCase(empNo)  && (imm!=null && imm.getPisStatusCode().equalsIgnoreCase("VPA"))) {%> 
+                       <div class="row" style="margin-top: 5%;">
+                         <div class="col-md-12"><b style="color: black"> APPROVED / NOT APPROVED <br>CEO</b><br></div>
+                      </div> 
+                      <%} %>
                       <div class="row">
-                         <div class="col-md-12" style="color: blue;"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+                         <div class="col-md-12" style="color: blue;">
+                         <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
-				   				<%=apprInfo[2] %><br>
+				   			<b style="color: black">APPROVED</b><br>
+				   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			<% break;} %>
+				   			<% break;
+				   			}else if(apprInfo[8].toString().equalsIgnoreCase("DPR")){ %>
+				   			<b style="color: black">NOT APPROVED</b><br>
+			   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
+			   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+			   			<% break;} %>
 				   		<%} %> </div>
                       </div>
-                       <%} %>	     
+                      <%--  <%} %>	 --%>     
 						</div>
 						<input type="hidden" name="immPropertyId" value="<%if(imm!=null){ %><%=imm.getImmPropertyId()%><%}%>">
 					</form>
@@ -415,11 +450,20 @@ function validateTextBox() {
     	return confirm('Are You Sure To Return?');
     	
     } else {
-        alert("Please enter Remarks");
+        alert("Please enter Remarks to Return");
         return false;
     }
 }
 
+function disapprove() {
+    if (document.getElementById("remarksarea").value.trim() != "") {
+    	return confirm('Are You Sure To Disappove?');
+    	
+    } else {
+        alert("Please enter Remarks to Disapprove");
+        return false;
+    }
+}
 </script>
 
 </body>

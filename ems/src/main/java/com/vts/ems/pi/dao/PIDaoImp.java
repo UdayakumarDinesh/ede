@@ -437,12 +437,12 @@ public class PIDaoImp implements PIDao{
 	}
 	
 	private static final String RESADDRESSTRANSACTIONAPPROVALDATA="SELECT tra.ResTransactionId,\r\n"
-			+ "(SELECT empno FROM pis_address_res_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.ResTransactionId DESC LIMIT 1) AS 'empno',\r\n"
-			+ "(SELECT empname FROM pis_address_res_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.ResTransactionId DESC LIMIT 1) AS 'empname',\r\n"
-			+ "(SELECT designation FROM pis_address_res_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.ResTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "(SELECT empno FROM pis_address_res_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.address_res_id=t.address_res_id ORDER BY t.ResTransactionId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_address_res_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.address_res_id=t.address_res_id ORDER BY t.ResTransactionId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_address_res_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode AND par.address_res_id=t.address_res_id ORDER BY t.ResTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
 			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode \r\n"
-			+ "FROM pis_address_res_trans tra, pis_approval_status sta,employee emp,pis_address_res par \r\n"
-			+ "WHERE par.address_res_id = tra.address_res_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND sta.pisstatuscode IN ('FWD','VDG','VSO','VPA')AND par.address_res_id =:addressresid  GROUP BY sta.pisstatuscode ORDER BY actiondate ASC;";
+			+ "FROM pis_address_res_trans tra, pis_approval_status sta,employee emp,pis_address_res par\r\n"
+			+ "WHERE par.address_res_id = tra.address_res_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND sta.pisstatuscode IN ('FWD','VDG','VSO','VPA')AND par.address_res_id =:addressresid  GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
 	@Override
 	public List<Object[]> ResAddressTransactionApprovalData(String addressresid)throws Exception
 	{
@@ -516,12 +516,12 @@ public class PIDaoImp implements PIDao{
 	}
 
 	private static final String PERADDRESSTRANSACTIONAPPROVALDATA="SELECT tra.PerTransactionId,\r\n"
-			+ "(SELECT empno FROM pis_address_per_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.pertransactionid DESC LIMIT 1) AS 'empno',\r\n"
-			+ "(SELECT empname FROM pis_address_per_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.pertransactionid DESC LIMIT 1) AS 'empname',\r\n"
-			+ "(SELECT designation FROM pis_address_per_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.pertransactionid DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "(SELECT empno FROM pis_address_per_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.address_per_id=t.address_per_id ORDER BY t.pertransactionid DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_address_per_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.address_per_id=t.address_per_id ORDER BY t.pertransactionid DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_address_per_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.pertransactionid AND par.address_per_id=t.address_per_id DESC LIMIT 1) AS 'Designation',\r\n"
 			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode\r\n"
 			+ "FROM pis_address_per_trans tra, pis_approval_status sta,employee emp,pis_address_per par \r\n"
-			+ "WHERE par.address_per_id = tra.address_per_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND sta.pisstatuscode IN ('FWD','VDG','VSO','VPA')AND par.address_per_id =:peraddressId GROUP BY sta.pisstatuscode ORDER BY actiondate ASC;";
+			+ "WHERE par.address_per_id = tra.address_per_id AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND sta.pisstatuscode IN ('FWD','VDG','VSO','VPA')AND par.address_per_id =:peraddressId GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
 	@Override
 	public List<Object[]> PerAddressTransactionApprovalData(String peraddressId) throws Exception {
 		
@@ -717,12 +717,12 @@ public class PIDaoImp implements PIDao{
 	}
 	
 	private static final String MOBILETRANSACTIONAPPROVALDATA="SELECT tra.MobTransactionId,\r\n"
-			+ "(SELECT empno FROM pis_mobile_number_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.MobTransactionId DESC LIMIT 1) AS 'empno',\r\n"
-			+ "(SELECT empname FROM pis_mobile_number_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.MobTransactionId DESC LIMIT 1) AS 'empname',\r\n"
-			+ "(SELECT designation FROM pis_mobile_number_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.MobTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "(SELECT empno FROM pis_mobile_number_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.MobileNumberId=t.MobileNumberId ORDER BY t.MobTransactionId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_mobile_number_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.MobileNumberId=t.MobileNumberId ORDER BY t.MobTransactionId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_mobile_number_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode AND par.MobileNumberId=t.MobileNumberId ORDER BY t.MobTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
 			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode \r\n"
 			+ "FROM pis_mobile_number_trans tra, pis_approval_status sta,employee emp,pis_mobile_number par \r\n"
-			+ "WHERE par.MobileNumberId = tra.MobileNumberId AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND sta.pisstatuscode IN ('FWD','VDG','VSO','VPA')AND par.MobileNumberId =:mobileNumberId GROUP BY sta.pisstatuscode ORDER BY actiondate ASC;";
+			+ "WHERE par.MobileNumberId = tra.MobileNumberId AND tra.PisStatusCode = sta.PisStatusCode AND tra.actionby=emp.empno AND sta.pisstatuscode IN ('FWD','VDG','VSO','VPA')AND par.MobileNumberId =:mobileNumberId GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
 	@Override
 	public List<Object[]> MobileTransactionApprovalData(String mobileNumberId) throws Exception {
 		
@@ -974,12 +974,12 @@ public class PIDaoImp implements PIDao{
 	}
 	
 	private static final String HOMETOWNTRANSACTIONAPPROVALDATA="SELECT tra.HomTransactionId,\r\n"
-			+ "(SELECT empno FROM pis_hometown_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.HomTransactionId DESC LIMIT 1) AS 'empno',\r\n"
-			+ "(SELECT empname FROM pis_hometown_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.HomTransactionId DESC LIMIT 1) AS 'empname',\r\n"
-			+ "(SELECT designation FROM pis_hometown_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode ORDER BY t.HomTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "(SELECT empno FROM pis_hometown_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.HometownId=t.HometownId ORDER BY t.HomTransactionId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_hometown_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND par.HometownId=t.HometownId ORDER BY t.HomTransactionId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_hometown_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode AND par.HometownId=t.HometownId ORDER BY t.HomTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
 			+ "MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode \r\n"
 			+ "FROM pis_hometown_trans tra,pis_approval_status sta,employee emp,pis_hometown par \r\n"
-			+ "WHERE par.HometownId=tra.HometownId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND sta.PisStatusCode IN ('FWD','VDG','VSO','VPA') AND par.HometownId=:hometownId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC;";
+			+ "WHERE par.HometownId=tra.HometownId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND sta.PisStatusCode IN ('FWD','VDG','VSO','VPA') AND par.HometownId=:hometownId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
 	@Override
 	public List<Object[]> HometownTransactionApprovalData(String hometownId) throws Exception {
 		
@@ -1195,7 +1195,7 @@ public class PIDaoImp implements PIDao{
 		return list;
 	}
 	
-	private static final String GETAPPROVALEMP="CALL tour_approvalflow(:empno)";
+	private static final String GETAPPROVALEMP="CALL pis_approvalflow(:empno)";
 	@Override
 	public Object[] GetApprovalFlowEmp(String empno)throws Exception
 	{

@@ -29,6 +29,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
+					<li class="breadcrumb-item "><a href="AcquiringDisposing.htm">Acquiring / Disposing </a></li>
 					<li class="breadcrumb-item active " aria-current="page">Movable Property</li>
 				</ol>
 			</div>	
@@ -129,7 +130,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
 			        </div>
 			         <div class="col-md-4" id="dealing" >			         
-			            <label>Nature of dealing:<span class="mandatory" >*</span></label>
+			            <label>Nature of dealing:</label>
 			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" maxlength="225" placeholder="Enter Dealing Nature" required>
 			        </div>	 
 			        
@@ -148,6 +149,8 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			           <label>Source for finance:<span class="mandatory" >*</span></label>
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" >Personal savings</option>
+			               <option value="Home loan" >Home loan</option>
+			               <option value="Land loan" >Land loan</option>
 			               <option value="Other sources" >Other sources</option>
 			           </select>
 			        </div>
@@ -199,7 +202,7 @@ function CommentsModel(){
 	var partyName = $('#partyName').val();	
 	var partyAddress = $('#partyAddress').val();	
 	var transArrangement = $('#transArrangement').val();	
-	var dealingNature = $('#dealingNature').val();	
+	/* var dealingNature = $('#dealingNature').val();	 */
 	
     if( (description=="Four Wheeler" || description=="Two Wheeler") && (makeAndModel==null || makeAndModel=="" || makeAndModel=="null") ){
 		alert('Enter Registration Details!');
@@ -219,10 +222,10 @@ function CommentsModel(){
 	}else if(transArrangement==null || transArrangement=="" || transArrangement=="null" ){
 		alert('Enter Transaction Arrangement Details!');
 		return false;
-	}else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
+	}/* else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
 		alert('Enter Nature of dealing Details!');
 		return false;
-	}else if(price==null || price=="" || price=="null" ){
+	} */else if(price==null || price=="" || price=="null" ){
 		alert('Enter Property Price!');
 		return false;
 	}else{

@@ -272,29 +272,12 @@ function validateTextBox() {
     	return confirm('Are You Sure To Return?');
     	
     } else {
-        alert("Please enter Remarks");
+        alert("Please enter Remarks to Return");
         return false;
     }
 }
 
 </script>
 
-<%if(LoginType.equalsIgnoreCase("p") && LoginType!=null) {%>
-<script type="text/javascript">
-$('#data-input').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"minDate" :new Date(), 
-	//"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-
-</script>
-<%} %>
 
 </html>

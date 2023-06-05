@@ -323,11 +323,16 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 						 req.setAttribute("PandA", masterservice.getPandAFandAById(Long.parseLong(adminsId)));
 						return "masters/PandAFandAAdminAddEdit";
 					}
-//					else {				
-//						req.setAttribute("PandAFandAData", masterservice.PandAFandAAdminData());
-//						
-//						return "masters/PandAFandAAdmin";
-//					}
+					else if("Revoke".equalsIgnoreCase(action)){				
+						
+						Long result = service.revokeAdmin(adminsId,UserId,sdtf.format(new Date()));
+						if (result != 0) {
+			    			redir.addAttribute("result", "Admin Revoked Successfully");
+						} else {
+							redir.addAttribute("resultfail", "Admin Revoked UnSuccessful");
+						}
+						return "redirect:/ChssApproval.htm";
+					}
 		    		}
 		    		
 		    		if("ADD".equalsIgnoreCase(action)) {

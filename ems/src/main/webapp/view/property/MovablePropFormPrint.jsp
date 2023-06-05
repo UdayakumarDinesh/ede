@@ -137,6 +137,7 @@ input:focus {
 PisMovableProperty mov =(PisMovableProperty)request.getAttribute("movPropFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
 String CEO = (String)request.getAttribute("CEOEmpNo");
+List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
 String empNo = (String)session.getAttribute("EmpNo");
 
 String LabLogo = (String)request.getAttribute("LabLogo");
@@ -144,7 +145,8 @@ SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 
-List<String> adminRemarks  = Arrays.asList("VDG","VPA","APR");
+List<String> adminRemarks  = Arrays.asList("VDG","VPA","VSO","APR");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
 int slno=0;
 %>
     
@@ -237,11 +239,11 @@ int slno=0;
 								    <td style="width: 5%;border-bottom: 0;"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
 								    <td colspan="2" style="color: blue;">
-								    <%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource())) {%>
-								      Personal savings
-								     <%} else if(mov!=null && mov.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(mov.getFinanceSource()) ) {%>
-								     <%=mov.getFinanceSource()%>
-								     <%} %>
+								    <% if(mov!=null && mov.getFinanceSource()!=null && !finaceSource.contains(mov.getFinanceSource()) ) {%>
+								      <%=mov.getFinanceSource()%>							      
+								      <%}else if(mov!=null && mov.getFinanceSource()!=null) {%>
+								      <%=mov.getFinanceSource() %>
+								      <%} %>
 								    </td>
 								</tr>
 								<%-- <%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource())) {%>
@@ -339,11 +341,21 @@ int slno=0;
 						   		<%} %>
 						   		</label>
 						     </div>
+						     <%if(CEO.equalsIgnoreCase(empNo)) {%>
 						     <div style="color: blue;" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
+						     <%} %>
 						     <div style="" align="right">Signature of the employee</div>
+						      <div align="right">
+						        <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			   <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
+				   				Employee : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Forwarded On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		     <%} %> 
+						     </div>
 						     
 						     <!--Remarks of Administration  -->
-						     <% if( CEO.equalsIgnoreCase(empNo) || mov!=null && adminRemarks.contains(mov.getPisStatusCode()) ){ %>	
+						     <% if( CEO.equalsIgnoreCase(empNo) || PandAs.contains(empNo) || mov!=null && adminRemarks.contains(mov.getPisStatusCode()) ){ %>	
 						     <hr style="border: solid 1px;margin-left:20px;">				     
 						     <div style="width: 100%;border: 0;text-align: center;margin-top: 20px;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
@@ -356,32 +368,57 @@ int slno=0;
 						     </div>	
 						     <%} %>	
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">Submitted for kind information.</div>	
-						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
+						      <%} %>	
+						      <!-- <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A  -->
 				              <br>	
 				              <br>
-				              <label style="color: blue;">
-				   		     <%for(Object[] apprInfo : ApprovalEmpData){ %>
-				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			 <% break;} %>
+				              <div style="width:100%;text-align: left;margin-left: 10px;">
+				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			    <%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		        <%} %> 
+				             </div>
+				             <br>
+				             <div style="width:100%;text-align: left;margin-left: 10px;">
+				             <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			  <%} %>
 				   		     <%} %> 
-				   		      </label>
-				             </div>				            
-				             <%} %>
-				              <%if( ( CEO.equalsIgnoreCase(empNo) || ( mov!=null && mov.getPisStatusCode().toString().equalsIgnoreCase("APR") )) ) {%>
-                      <div class="row" style="margin-top: 40px;">
-                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
-                      </div>
-                      <div class="row">
-                         <div class="col-md-12" style="color: blue;"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+				            </div>
+				             <br>
+				            <!--  </div>	 -->			            
+				             <div style="border:0px;width: 100%; text-align: right;"> 
+				   		
+				   		    <br>
+				   		
+				   		   <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				Verified By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Verified On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		   <%} %> 
+				         
+				           </div>				             				          
+                       <br><br>
+                       <div class="row">
+                         <div class="col-md-12">
+                         <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			<% break;} %>
+				   			<b style="color: black">APPROVED</b> <br><br>
+				   				Approved By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Approved On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<% break;
+				   			}else if(apprInfo[8].toString().equalsIgnoreCase("DPR")){ %>
+				   			<b style="color: black">NOT APPROVED</b><br><br>
+			   				    Disapproved By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   			    Disapproved On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+			   			<% break;} %>
 				   		<%} %> </div>
                       </div>
-                       <%} %>
       </div>
 
 </body>

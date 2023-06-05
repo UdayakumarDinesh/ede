@@ -48,7 +48,7 @@ List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
 						<li class="breadcrumb-item ml-auto"><a	href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home </a></li>
 						<!-- <li class="breadcrumb-item "><a href="PisAdminDashboard.htm"> Admin </a></li> -->
 						
-						<li class="breadcrumb-item active " aria-current="page">CHSS Approval Authority</li>
+						<li class="breadcrumb-item active " aria-current="page">Approval Authority</li>
 					</ol>
 				</div>
 			</div>
@@ -218,10 +218,10 @@ List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
 							</table>
 						</div>			
 						<div class="row text-center">
-						<div class="col-md-12">
-						
-							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDAdmins"   >ADD </button>
-							<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITAdmins"  Onclick="Edit(empForm)" >EDIT </button>
+						<div class="col-md-12">	
+							<button type="submit" class="btn btn-sm add-btn" name="Action" value="ADDAdmins">ADD</button>
+							&nbsp;<button type="submit" class="btn btn-sm edit-btn" name="Action" value="EDITAdmins"  Onclick="Edit(empForm)">EDIT</button>
+							&nbsp;<button type="submit" class="btn btn-sm delete-btn" name="Action" value="Revoke" Onclick="return Revoke()">REVOKE</button>
 						</div>
 						</div>
 						<input type="hidden" name="Admins" value="Y">
@@ -255,5 +255,23 @@ function Edit(empForm) {
 	return true;
 }
 
+function Revoke() {
+
+	var fields = $("input[name='adminsId']").serializeArray();
+
+	if (fields.length === 0) {
+		alert("Please Select Atleast One Admin");
+
+		event.preventDefault();
+		return false;
+	}else {
+		if(confirm("Are you sure To Revoke?")){
+			return true;
+		}else{
+			return false;
+		}
+		
+	}
+}
 </script>
 </html>

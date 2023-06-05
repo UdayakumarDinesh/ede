@@ -330,30 +330,59 @@ public class PIController {
 				String  pisStatusCode = address.getPisStatusCode();
 				
 				long count = service.PerAddressForward(perAddressId, Username, action,remarks,EmpNo,LoginType);
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
-				   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
-					if (count > 0) {
-						redir.addAttribute("result", "Address application Sent for verification Successfully");
-					} else {
-						redir.addAttribute("resultfail", "Address application Sent for verification Unsuccessful");	
-					}	
-					return "redirect:/PersonalIntimation.htm";
+				
+				if(action.equalsIgnoreCase("A")) {
+					
+					if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+					   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
+						if (count > 0) {
+							redir.addAttribute("result", "Permanent Address application Sent for verification Successfully");
+						} else {
+							redir.addAttribute("resultfail", "Permanent Address application Sent for verification Unsuccessful");	
+						}	
+						return "redirect:/PersonalIntimation.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+					{
+						  if(count>0) {
+							redir.addAttribute("result", "Permanent Address Recommended Successfully");
+						  }else {
+							redir.addAttribute("resultfail", "Permanent Address Recommend Unsuccessful");
+						  }
+						
+						return "redirect:/IntimationApprovals.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+						
+						  if(count>0) {
+							redir.addAttribute("result", "Permanent Address Verification Successful");
+						  }else {
+							redir.addAttribute("resultfail", "Permanent Address Verification Unsuccessful");
+						  }
+									
+						return "redirect:/IntimationApprovals.htm";
+					}
+					 
 				}
-				else  
-				{
-					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successful");
-					} else {
-						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
-					}	
+				else if(action.equalsIgnoreCase("R")) {
+					if(count>0) {
+						redir.addAttribute("result", "Permanent Address Returned Successfully");
+					  }else {
+						redir.addAttribute("resultfail", "Permanent Address Returned Unsuccessful");
+					  }
 					return "redirect:/IntimationApprovals.htm";
 				}
+			
+				return "redirect:/IntimationApprovals.htm";
+				
+				
 				
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside PerAddressFormSubmit.htm"+Username, e);
 				e.printStackTrace();	
 				return "static/Error";
 			}
+			
 			
 		}
 	   
@@ -628,24 +657,50 @@ public class PIController {
 				String  pisStatusCode = address.getPisStatusCode();
 				
 				long count = service.ResAddressForward(resAddressId, Username, action,remarks,EmpNo,LoginType);
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
-				   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
-					if (count > 0) {
-						redir.addAttribute("result", "Address application Sent for verification Successfully");
-					} else {
-						redir.addAttribute("resultfail", "Address application Sent for verification Unsuccessful");	
-					}	
-					return "redirect:/PersonalIntimation.htm";
+				
+                  if(action.equalsIgnoreCase("A")) {
+					
+					if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+					   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
+						if (count > 0) {
+							redir.addAttribute("result", "Residential Address application Sent for verification Successfully");
+						} else {
+							redir.addAttribute("resultfail", "Residential Address application Sent for verification Unsuccessful");	
+						}	
+						return "redirect:/PersonalIntimation.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+					{
+						  if(count>0) {
+							redir.addAttribute("result", "Residential Address Recommended Successfully");
+						  }else {
+							redir.addAttribute("resultfail", "Residential Address Recommend Unsuccessful");
+						  }
+						
+						return "redirect:/IntimationApprovals.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+						
+						  if(count>0) {
+							redir.addAttribute("result", "Residential Address Verification Successful");
+						  }else {
+							redir.addAttribute("resultfail", "Residential Address Verification Unsuccessful");
+						  }
+									
+						return "redirect:/IntimationApprovals.htm";
+					}
+					 
 				}
-				else  
-				{
-					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successful");
-					} else {
-						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
-					}	
+				else if(action.equalsIgnoreCase("R")) {
+					if(count>0) {
+						redir.addAttribute("result", "Residential Address Returned Successfully");
+					  }else {
+						redir.addAttribute("resultfail", "Residential Address Returned Unsuccessful");
+					  }
 					return "redirect:/IntimationApprovals.htm";
 				}
+			
+				return "redirect:/IntimationApprovals.htm";
 				
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside ResAddressFormSubmit.htm"+Username, e);
@@ -1081,25 +1136,51 @@ public class PIController {
 				if(pisStatusCode2.equalsIgnoreCase("VPA") && pisStatusCodeNext2.equalsIgnoreCase("VPA")) {									
 					service.UpdateEmployeeMobileNumber(mobile2.getMobileNumber().trim(), mobile2.getAltMobileNumber().trim(), mobile2.getEmpNo());
 				}
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
-				   pisStatusCode.equalsIgnoreCase("RSO") || pisStatusCode.equalsIgnoreCase("RPA") ) {
-					if (count > 0) {
-						redir.addAttribute("result", "Mobile Form Sent for verification Successfully");
-					} else {
-						redir.addAttribute("resultfail", "Mobile Form Sent for verification Unsuccessful");	
-					}	
-					return "redirect:/PIHomeTownMobile.htm";
+				
+                if(action.equalsIgnoreCase("A")) {
+					
+					if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+					   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
+						if (count > 0) {
+							redir.addAttribute("result", "Mobile Number application Sent for verification Successfully");
+						} else {
+							redir.addAttribute("resultfail", "Mobile Number application Sent for verification Unsuccessful");	
+						}	
+						return "redirect:/PIHomeTownMobile.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+					{
+						  if(count>0) {
+							redir.addAttribute("result", "Mobile Number Recommended Successfully");
+						  }else {
+							redir.addAttribute("resultfail", "Mobile Number Recommend Unsuccessful");
+						  }
+						
+						return "redirect:/IntimationApprovals.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+						
+						  if(count>0) {
+							redir.addAttribute("result", "Mobile Number Verification Successful");
+						  }else {
+							redir.addAttribute("resultfail", "Mobile Number Verification Unsuccessful");
+						  }
+									
+						return "redirect:/IntimationApprovals.htm";
+					}
+					 
 				}
-				else  
-				{
-					if (count > 0) {
-						redir.addAttribute("result", "Address verification Successful");
-					} else {
-						redir.addAttribute("resultfail", "Address verification Unsuccessful");	
-					}	
+				else if(action.equalsIgnoreCase("R")) {
+					if(count>0) {
+						redir.addAttribute("result", "Mobile Number Returned Successfully");
+					  }else {
+						redir.addAttribute("resultfail", "Mobile Number Returned Unsuccessful");
+					  }
 					return "redirect:/IntimationApprovals.htm";
 				}
-				
+			
+				return "redirect:/IntimationApprovals.htm";
+
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside MobileFormSubmit.htm"+Username, e);
 				e.printStackTrace();	
@@ -1107,31 +1188,7 @@ public class PIController {
 			}
 			
 		}
-		
-//		@RequestMapping(value = "MobileApprovals.htm")
-//		public String MobileApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-//		{
-//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-//			String EmpNo = (String) ses.getAttribute("EmpNo");
-//	    	String LoginType=(String)ses.getAttribute("LoginType");
-//			String Username = (String) ses.getAttribute("Username");
-//			logger.info(new Date() +"Inside MobileApprovals.htm.htm"+Username);		
-//			try {				
-//				
-//				ses.setAttribute("formmoduleid", formmoduleid);			
-//				ses.setAttribute("SidebarActive","MobileApprovals_htm");	
-//				
-//				req.setAttribute("MobApprovalList", service.MobileApprovalsList(EmpNo, LoginType));
-//				
-//				return "pi/MobileApproval";
-//			}catch (Exception e) {
-//				logger.error(new Date() +" Inside MobileApprovals.htm"+Username, e);
-//				e.printStackTrace();	
-//				return "static/Error";
-//			}
-//			
-//		}
-		
+			
 		@RequestMapping(value = "MobileFormDownload.htm")
 		public void MobileNumberFormDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
 		{
@@ -1382,25 +1439,50 @@ public class PIController {
 				if(pisStatusCode2.equalsIgnoreCase("VPA") && pisStatusCodeNext2.equalsIgnoreCase("VPA")) {
 					pisservice.EmployeeHometownWithStatusUpdate(hometown2.getHometown(), "N", hometown2.getEmpNo() );
 				}
-				
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") ||
-				   pisStatusCode.equalsIgnoreCase("RSO") || pisStatusCode.equalsIgnoreCase("RPA") ) {
-					if (count > 0) {
-						redir.addAttribute("result", "Hometown application Sent for verification Successfully");
-					} else {
-						redir.addAttribute("resultfail", "Hometown application Sent for verification Unsuccessful");	
-					}	
-					return "redirect:/PIHomeTownMobile.htm";
+
+                if(action.equalsIgnoreCase("A")) {
+					
+					if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+					   pisStatusCode.equalsIgnoreCase("RSO") ||	pisStatusCode.equalsIgnoreCase("RPA") ) {
+						if (count > 0) {
+							redir.addAttribute("result", "Hometown application Sent for verification Successfully");
+						} else {
+							redir.addAttribute("resultfail", "Hometown application Sent for verification Unsuccessful");	
+						}	
+						return "redirect:/PIHomeTownMobile.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+					{
+						  if(count>0) {
+							redir.addAttribute("result", "Hometown Recommended Successfully");
+						  }else {
+							redir.addAttribute("resultfail", "Hometown Recommend Unsuccessful");
+						  }
+						
+						return "redirect:/IntimationApprovals.htm";
+					}
+					else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+						
+						  if(count>0) {
+							redir.addAttribute("result", "Hometown Verification Successful");
+						  }else {
+							redir.addAttribute("resultfail", "Hometown Verification Unsuccessful");
+						  }
+									
+						return "redirect:/IntimationApprovals.htm";
+					}
+					 
 				}
-				else  
-				{
-					if (count > 0) {
-						redir.addAttribute("result", "Hometown verification Successful");
-					} else {
-						redir.addAttribute("resultfail", "Hometown verification Unsuccessful");	
-					}	
+				else if(action.equalsIgnoreCase("R")) {
+					if(count>0) {
+						redir.addAttribute("result", "Hometown Returned Successfully");
+					  }else {
+						redir.addAttribute("resultfail", "Hometown Returned Unsuccessful");
+					  }
 					return "redirect:/IntimationApprovals.htm";
 				}
+			
+				return "redirect:/IntimationApprovals.htm";
 				
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside HometownFormSubmit.htm"+Username, e);
@@ -1409,31 +1491,7 @@ public class PIController {
 			}
 			
 	    }
-		
-//		@RequestMapping(value = "HometownApprovals.htm")
-//		public String HometownApprovals(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
-//		{
-//			String EmpId = ((Long) ses.getAttribute("EmpId")).toString();
-//			String EmpNo = (String) ses.getAttribute("EmpNo");
-//	    	String LoginType=(String)ses.getAttribute("LoginType");
-//			String Username = (String) ses.getAttribute("Username");
-//			logger.info(new Date() +"Inside HometownApprovals.htm"+Username);		
-//			try {				
-//				
-//				ses.setAttribute("formmoduleid", formmoduleid);			
-//				ses.setAttribute("SidebarActive","HometownApprovals_htm");	
-//				
-//				req.setAttribute("HomApprovalList", service.HometownApprovalsList(EmpNo, LoginType));
-//				
-//				return "pi/HometownApproval";
-//			}catch (Exception e) {
-//				logger.error(new Date() +" Inside HometownApprovals.htm"+Username, e);
-//				e.printStackTrace();	
-//				return "static/Error";
-//			}
-//			
-//		}
-		
+	
 		@RequestMapping(value = "HometownTransStatus.htm" , method={RequestMethod.POST,RequestMethod.GET})
 		public String HometownTransStatus(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
 		{

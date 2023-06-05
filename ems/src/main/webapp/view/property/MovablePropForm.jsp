@@ -51,6 +51,7 @@ max-height: 489px !important;
 String LabLogo=(String) request.getAttribute("LabLogo");
 PisMovableProperty mov =(PisMovableProperty)request.getAttribute("movPropFormData");
 String CEO = (String)request.getAttribute("CEOEmpNo");
+List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
 String empNo = (String)session.getAttribute("EmpNo");
 Object[] emp = (Object[])request.getAttribute("EmpData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
@@ -61,11 +62,29 @@ SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 
-List<String> toUserStatus  = Arrays.asList("INI","RPA","RCE");
- List<String> adminRemarks  = Arrays.asList("VDG","VPA","APR"); 
+List<String> toUserStatus  = Arrays.asList("INI","RDG","RSO","RPA","RCE");
+List<String> adminRemarks  = Arrays.asList("VDG","VPA","VSO","APR"); 
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
 int slno=0;
 %>
 
+<div class="card-header page-top ">
+		<div class="row">
+			<div class="col-md-4">
+				<h5 style="width:113%;">Immovable Property - Form</h5>
+			</div>
+			<div class="col-md-8" >
+				<nav aria-label="breadcrumb">
+				  <ol class="breadcrumb ">
+				    <li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i>Home</a></li>
+				    <li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
+					<li class="breadcrumb-item "><a href="AcquiringDisposing.htm">Acquiring / Disposing </a></li>
+					<li class="breadcrumb-item active " aria-current="page">Movable Property</li>
+				  </ol>
+				</nav>
+			</div>			
+		</div>
+</div> 
 <div class="page card dashboard-card" id="dashboardcard">
   <div class="card-body" align="center">
 		<div align="center">
@@ -210,7 +229,7 @@ int slno=0;
 								</tr>
 								<tr>
 									<td style="width: 5%;border-top:0"></td>
-									<td>(b) How the transaction was arranged / to be arranged (whether through any statutory body or a private agency through advertisement or through friends and relatives, full particulars to be given).</td>
+									<td>(b) How the transaction was arranged / to be arranged.</td>
 									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getTransArrangement()!=null) {%> <%=mov.getTransArrangement() %> <%} %></td>
 								</tr>
 								
@@ -234,7 +253,7 @@ int slno=0;
 								<tr>
 									<td style="border-top: 0;"></td>
 									<td>(d) Nature of official dealing with the party  </td>
-									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getDealingNature()!=null ) {%> <%=mov.getDealingNature() %> <%}%></td>
+									<td colspan="2" style="color: blue;"><%if(mov!=null && mov.getDealingNature()!=null ) {%> <%=mov.getDealingNature() %> <%} else{%>-<%} %></td>
 								</tr>
 								
 								<%if(mov!=null&& mov.getTransState()!=null && "A".equalsIgnoreCase(mov.getTransState()) && mov.getMode()!=null && "Gift".equalsIgnoreCase(mov.getMode())) {%>
@@ -278,7 +297,7 @@ int slno=0;
 						     <div style="" align="right">Signature of the employee</div>
 						     
 						     <!--Remarks of Administration  -->
-						     <% if(  CEO.equalsIgnoreCase(empNo) || mov!=null && adminRemarks.contains(mov.getPisStatusCode()) ){ %>	
+						     <% if(  CEO.equalsIgnoreCase(empNo) || PandAs.contains(empNo) || mov!=null && adminRemarks.contains(mov.getPisStatusCode()) ){ %>	
 						     <hr style="border: solid 1px;">				     
 						     <div style="width: 100%;border: 0;text-align: center;margin-top:5%;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
@@ -344,47 +363,64 @@ int slno=0;
 						      </button>
 					        <%} %>
 
-					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){ 
-					         if(mov!=null && ( mov.getPisStatusCode().toString().equalsIgnoreCase("FWD") ||
-					        		 mov.getPisStatusCode().toString().equalsIgnoreCase("VDG") ) && !CEO.equalsIgnoreCase(empNo)  ){%>						     
-						     <div align="left">
+					        <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){%>						     
+						     <% if( CEO.equalsIgnoreCase(empNo)){ %>
+					         <div align="left">
 						        <b >Remarks :</b><br>
 						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					         </div>
-				   		     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Verify	
-						     </button>
-					
-				   		    <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
-							 Return
-						    </button>
-					        <%} %>	
-					        <% if( (mov!=null && mov.getPisStatusCode().toString().equalsIgnoreCase("VPA")) || CEO.equalsIgnoreCase(empNo) ){ %>
-					        <div align="left">
-						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
-					   </div>
-				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
-							 Approve	
-						</button>
-					
-				   		<button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
-							 Return
-						</button>
-					<%} }%>
-					<%if(( CEO.equalsIgnoreCase(empNo) || ( mov!=null && mov.getPisStatusCode().toString().equalsIgnoreCase("APR") )) ) {%>
-                      <div class="row" style="margin-top: 5%;">
-                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
-                      </div>
+					          </div>
+					          <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Approve?');" >
+							    Approve	
+						      </button>
+						      						
+						      <button type="submit" class="btn btn-sm delete-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="D" onclick="return disapprove();" >
+							    Disapprove	
+						      </button>
+						      
+					         <%}else if(PandAs.contains(empNo)) {%>
+					         <div align="left">
+						        <b >Remarks :</b><br>
+						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					          </div>
+				   		       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							     Verify	
+						       </button>
+						       
+					         <%}else{ %>
+					         <div align="left">
+						        <b >Remarks :</b><br>
+						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+					          </div>
+				   		       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Recommend?');" >
+							     Recommend	
+						       </button>
+						       
+						      <%} %>	
+				   		       <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
+							    Return
+						       </button>	
+						    				       							   		  
+					  <%} %>
+					<%if( CEO.equalsIgnoreCase(empNo)  && (mov!=null && mov.getPisStatusCode().equalsIgnoreCase("VPA"))) {%> 
+                       <div class="row" style="margin-top: 5%;">
+                         <div class="col-md-12"><b style="color: black"> APPROVED / NOT APPROVED <br>CEO</b><br></div>
+                      </div> 
+                      <%} %>
                       <div class="row">
-                         <div class="col-md-12" style="color: blue"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+                         <div class="col-md-12" style="color: blue;">
+                         <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
-				   				<%=apprInfo[2] %><br>
+				   			<b style="color: black">APPROVED</b><br>
+				   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			<% break;} %>
+				   			<% break;
+				   			}else if(apprInfo[8].toString().equalsIgnoreCase("DPR")){ %>
+				   			<b style="color: black">NOT APPROVED</b><br>
+			   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
+			   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+			   			<% break;} %>
 				   		<%} %> </div>
-                      </div>
-                       <%} %>		     
+                      </div>		     
 						</div>
 						<input type="hidden" name="movPropertyId" value="<%if(mov!=null){ %><%=mov.getMovPropertyId()%><%}%>">
 					</form>
@@ -400,11 +436,19 @@ function validateTextBox() {
     	return confirm('Are You Sure To Return?');
     	
     } else {
-        alert("Please enter Remarks");
+        alert("Please enter Remarks to Return");
         return false;
     }
 }
-
+function disapprove() {
+    if (document.getElementById("remarksarea").value.trim() != "") {
+    	return confirm('Are You Sure To Disappove?');
+    	
+    } else {
+        alert("Please enter Remarks to Disapprove");
+        return false;
+    }
+}
 </script>
 
 </body>

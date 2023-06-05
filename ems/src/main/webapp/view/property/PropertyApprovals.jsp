@@ -127,13 +127,19 @@
                             <td ><%=form[3]%></td>
                             <td style="text-align: center;">
                              <%if(form[3]!=null && form[3].toString().equalsIgnoreCase("Immovable Property") ){%>
-                            	<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=form[4] %>" formaction="ImmovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+                            	<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=form[4]%>" formaction="ImmovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="immPropertyId" value="<%=form[4]%>" formaction="ImmovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
 						 	<%}else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Movable Property") ){ %>  
-						 	<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4] %>" formaction="MovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 	    <button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4]%>" formaction="MovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
 						 			<i class="fa-solid fa-eye"></i>
 						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4]%>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
 						 	<%} %>                         
 						 	</td>
                             
