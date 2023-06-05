@@ -152,7 +152,6 @@ public interface NocDao {
 	public Long EditNocHe(NocHigherEducation noc)throws Exception;
 
 	public Long NocHigherEducationTransAdd(NocHigherEducationTrans transaction)throws Exception;
-	
 	public List<String> GetSOEmpNos() throws Exception;
 
 	public List<Object[]> getHigherEducationApprovalData(String nOCHigherEducId) throws Exception;
