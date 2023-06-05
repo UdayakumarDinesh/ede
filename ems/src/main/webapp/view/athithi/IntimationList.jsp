@@ -226,7 +226,7 @@
 	               			<%} %>
 	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
 	               			<td class="trup"  style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
-	                			DGM - <%=EmpApprFlow[1]%>
+	                			DGM - <%=EmpApprFlow[2]%>
 	                		</td>
 	                		
 	                		<td rowspan="2">
@@ -235,7 +235,7 @@
 	               		 <%} %>	                		                		
 	                		<%if(CeoName!=null){ %>
 	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
-	                			CEO - <%=EmpApprFlow[4]%>
+	                			CEO - <%=EmpApprFlow[6]%>
 	                		</td> 
 	                		<%} %>
 	               		

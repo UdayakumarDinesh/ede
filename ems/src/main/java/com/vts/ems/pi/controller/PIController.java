@@ -104,6 +104,7 @@ public class PIController {
 			
 			req.setAttribute("CEOEmpNos", CEO);
 			req.setAttribute("PandAsEmpNos", PandAs);		
+			req.setAttribute("SOEmpNos", service.GetSOEmpNos());		
 			req.setAttribute("DGMEmpNos", DGMs);
 			
 			req.setAttribute("CeoName", service.GetCeoName());
@@ -878,6 +879,8 @@ public class PIController {
 				
 				req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 				req.setAttribute("PandAsEmpNos", PandAs);
+				
+				req.setAttribute("SOEmpNos", service.GetSOEmpNos());
 				
 				if(!DGMs.contains(EmpNo)) {
 					req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));

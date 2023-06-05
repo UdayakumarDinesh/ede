@@ -45,6 +45,7 @@
 	
 	String CEO = (String)request.getAttribute("CEOEmpNos");
 	List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+	List<String> SOs = (List<String>)request.getAttribute("SOEmpNos");
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
 	Object[] EmpApprFlow = (Object[])request.getAttribute("EmpApprFlow");
 	
@@ -322,7 +323,8 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               			<%} %>
-	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
+	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !SOs.contains(empData[0].toString()) 
+	               		&& !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
 	               			<td class="trup"  style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
 	                			DGM <br> <%=EmpApprFlow[2]%>
 	                		</td>
@@ -331,6 +333,7 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		 <%} %>
+	                		  <%if( !SOs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %> 
 	                		 <td class="trup"  style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);" >
 	                			SO <br> <%=EmpApprFlow[3]%>
 	                		</td> 
@@ -338,6 +341,7 @@
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td> 
+	                	  <%} %>
 	                		<%if(PandAEmpName!=null && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
 	                		<td class="trup" style="background: linear-gradient(to top, #ff9966 10%, transparent 115%);">
 	                			P & A <br> <%=EmpApprFlow[5]%>

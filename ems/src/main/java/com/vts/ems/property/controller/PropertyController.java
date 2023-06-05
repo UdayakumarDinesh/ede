@@ -108,6 +108,7 @@ public class PropertyController {
 			
 			req.setAttribute("PandAEmpName", piservice.GetPandAEmpName());
 			req.setAttribute("PandAsEmpNos", PandAs);
+			req.setAttribute("SOEmpNos", piservice.GetSOEmpNos());
 			
 			if(!DGMs.contains(EmpNo)) {
 				req.setAttribute("DGMEmpName", piservice.GetEmpDGMEmpName(EmpNo));
