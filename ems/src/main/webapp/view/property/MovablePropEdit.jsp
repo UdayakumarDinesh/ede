@@ -2,6 +2,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <%@page import="java.util.List,com.vts.ems.property.model.PisMovableProperty"%>
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +21,7 @@
  PisMovableProperty mov = (PisMovableProperty)request.getAttribute("MovProperty");
 List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 Object[] empData=(Object[])request.getAttribute("EmpData");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
 %>
 
 <div class="card-header page-top">
@@ -30,6 +34,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				<ol class="breadcrumb">
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
+					<li class="breadcrumb-item "><a href="AcquiringDisposing.htm">Acquiring / Disposing </a></li>
 					<li class="breadcrumb-item active " aria-current="page">Movable Property</li>
 				</ol>
 			</div>	
@@ -130,7 +135,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			            <input class="form-control" type="text" name="transArrangement" id="transArrangement" value="<%if(mov!=null && mov.getTransArrangement()!=null){%><%=mov.getTransArrangement()%><%}%>" maxlength="500" placeholder="Enter how transaction arranged or to be arrange" required>
 			        </div>
 			         <div class="col-md-4" id="dealing" >			         
-			            <label>Nature of dealing:<span class="mandatory" >*</span></label>
+			            <label>Nature of dealing:</label>
 			            <input class="form-control" type="text" name="dealingNature" id="dealingNature" value="<%if(mov!=null && mov.getDealingNature()!=null){%><%=mov.getDealingNature()%><%}%>" maxlength="225" placeholder="Enter Dealing Nature" required>
 			        </div>	 
 			        
@@ -149,12 +154,14 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			           <label>Source for finance:<span class="mandatory" >*</span></label>
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" <%if(mov!=null && mov.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(mov.getFinanceSource()) ) {%>selected <%} %> >Personal savings</option>
-			               <option value="Other sources" <%if(mov!=null && mov.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(mov.getFinanceSource()) ) {%>selected <%} %> >Other sources</option>
+			                <option value="Home loan" <%if(mov!=null && mov.getFinanceSource()!=null && "Home loan".equalsIgnoreCase(mov.getFinanceSource()) ) {%>selected <%} %> >Home loan</option>
+			               <option value="Land loan" <%if(mov!=null && mov.getFinanceSource()!=null && "Land loan".equalsIgnoreCase(mov.getFinanceSource()) ) {%>selected <%} %> >Land loan</option>
+			               <option value="Other sources" <%if(mov!=null && mov.getFinanceSource()!=null && !finaceSource.contains(mov.getFinanceSource()) ) {%>selected <%} %> >Other sources</option>
 			           </select>
 			        </div>
 			        <div class="col-md-2" id="others" >			         
 			            <label>Other Sources:<span class="mandatory" >*</span></label>
-			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(mov!=null && mov.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(mov.getFinanceSource()) && "A".equalsIgnoreCase(mov.getTransState()) ){ %><%=mov.getFinanceSource()%><%}%>" maxlength="225" placeholder="Enter Source Details" required>
+			           <input class="form-control" type="text" name="otherSource" id="otherSource" value="<%if(mov!=null && mov.getFinanceSource()!=null && !finaceSource.contains(mov.getFinanceSource()) && "A".equalsIgnoreCase(mov.getTransState()) ){ %><%=mov.getFinanceSource()%><%}%>" maxlength="225" placeholder="Enter Source Details" required>
 			        </div>
 			        <div class="col-md-2" id="sanction">
 			           <label>Requisite Sanctioned?<span class="mandatory" >*</span></label>
@@ -201,7 +208,7 @@ function CommentsModel(){
 	var partyName = $('#partyName').val();	
 	var partyAddress = $('#partyAddress').val();	
 	var transArrangement = $('#transArrangement').val();	
-	var dealingNature = $('#dealingNature').val();	
+	/* var dealingNature = $('#dealingNature').val();	 */
 	
     if( (description=="Four Wheeler" || description=="Two Wheeler") && (makeAndModel==null || makeAndModel=="" || makeAndModel=="null") ){
 		alert('Enter Registration Details!');
@@ -221,10 +228,10 @@ function CommentsModel(){
 	}else if(transArrangement==null || transArrangement=="" || transArrangement=="null" ){
 		alert('Enter Transaction Arrangement Details!');
 		return false;
-	}else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
+	}/* else if(dealingNature==null || dealingNature=="" || dealingNature=="null" ){
 		alert('Enter Nature of dealing Details!');
 		return false;
-	}else if(price==null || price=="" || price=="null" ){
+	} */else if(price==null || price=="" || price=="null" ){
 		alert('Enter Property Price!');
 		return false;
 	}else{
@@ -338,7 +345,7 @@ function checknegative(str) {
 			$("#party").addClass("col-md-4");
 		}
 		 
-		if(financeSource=="Personal savings"){
+		if(financeSource=="Personal savings" || financeSource=="Home loan" || financeSource=="Land loan"){
 		   $('#others').hide(); 
 		} else{
 			$('#others').show(); 

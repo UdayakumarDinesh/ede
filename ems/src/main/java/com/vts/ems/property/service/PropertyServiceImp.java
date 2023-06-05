@@ -74,6 +74,7 @@ public class PropertyServiceImp implements PropertyService{
 		imm.setDescription(immovable.getDescription());
 		imm.setApplicantInterest(immovable.getApplicantInterest());
 		imm.setPartialInterest(immovable.getPartialInterest());
+		imm.setExtentInNameOf(immovable.getExtentInNameOf());
 		imm.setOsParticulars(immovable.getOsParticulars());
 		imm.setOsShare(immovable.getOsShare());
 		imm.setPrice(immovable.getPrice());
@@ -128,8 +129,9 @@ public class PropertyServiceImp implements PropertyService{
 			String pisStatusCode = immovable.getPisStatusCode();
 			String pisStatusCodeNext = immovable.getPisStatusCodeNext();
 			
-			List<String> PandAs = pidao.GetPandAAdminEmpNos();
 			String CEO = pidao.GetCEOEmpNo();
+			List<String> PandAs = pidao.GetPandAAdminEmpNos();
+            List<String> SOs = pidao.GetSOEmpNos();
 			List<String> DGMs = pidao.GetDGMEmpNos();
 			
 			DivisionMaster formEmpDivisionMaster = pidao.GetDivisionData(emp.getDivisionId());
@@ -137,7 +139,7 @@ public class PropertyServiceImp implements PropertyService{
 			if(action.equalsIgnoreCase("A"))
 			{
 				// First time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || 
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG") || pisStatusCode.equalsIgnoreCase("RSO") || 
 				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
 				{
 					immovable.setPisStatusCode("FWD");
@@ -152,9 +154,13 @@ public class PropertyServiceImp implements PropertyService{
 					{
 						immovable.setPisStatusCodeNext("APR");
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno) ) 
 					{
 						immovable.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						immovable.setPisStatusCodeNext("VSO");
 					}
 					else
 					{
@@ -167,6 +173,10 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					immovable.setPisStatusCode(pisStatusCodeNext);					
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						immovable.setPisStatusCodeNext("VSO");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VSO"))
 					{
 						immovable.setPisStatusCodeNext("VPA");
 					}
@@ -193,6 +203,10 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					immovable.setPisStatusCode("RDG");	
 				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VSO"))
+				{
+					immovable.setPisStatusCode("RSO");
+				}
 				else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
 				{
 					immovable.setPisStatusCode("RPA");
@@ -207,15 +221,30 @@ public class PropertyServiceImp implements PropertyService{
 				{ 
 					immovable.setPisStatusCodeNext("APR");					
 				}		
-				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				else if(SOs.contains(formempno) ) 
 				{
 					immovable.setPisStatusCodeNext("VPA");
-				}else
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					immovable.setPisStatusCodeNext("VSO");
+				}
+				else
 				{
 					immovable.setPisStatusCodeNext("VDG");
 				}
 				immovable.setRemarks(remarks);
 				dao.editImmovableProperty(immovable);
+			}
+			// Disapproved By CEO
+			else if(action.equalsIgnoreCase("D")) {
+				
+				immovable.setPisStatusCode("DPR");
+				immovable.setPisStatusCodeNext("DPR");					
+				immovable.setIsActive(1);
+				immovable.setImmStatus("D");	
+				immovable.setRemarks(remarks);
+				dao.editImmovableProperty(immovable);	
 			}
 			
 			// Transaction
@@ -245,10 +274,10 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					notification.setEmpNo(DGMEmpNo);					
 				}
-				else if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				}
+//				else if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+//				{
+//					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+//				}
 				else if( immovable.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
 				{
 					notification.setEmpNo(CEO);					
@@ -265,13 +294,64 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationMessage("Immovable Property Request Returned");
 				notification.setNotificationBy(apprEmpNo);
 			}
+			else if(action.equalsIgnoreCase("D"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("AcquiringDisposing.htm");
+				notification.setNotificationMessage("Immovable Property Request Disapproved");
+				notification.setNotificationBy(apprEmpNo);
+			}
 			
 			notification.setNotificationDate(LocalDate.now().toString());
 			notification.setIsActive(1);
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
 		
-			pidao.AddNotifications(notification);	
+			if( !immovable.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				pidao.AddNotifications(notification);
+			}
+								
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("PropertyApprovals.htm");
+						  notification1.setNotificationMessage("Recieved Immovable Property Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(apprEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  pidao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("PropertyApprovals.htm");
+						   notification1.setNotificationMessage("Recieved Immovable Property Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(apprEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							pidao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}	
 			
 			return 1L;
 		}catch (Exception e) {
@@ -357,8 +437,9 @@ public class PropertyServiceImp implements PropertyService{
 			String pisStatusCode = movable.getPisStatusCode();
 			String pisStatusCodeNext = movable.getPisStatusCodeNext();
 			
-			List<String> PandAs = pidao.GetPandAAdminEmpNos();
 			String CEO = pidao.GetCEOEmpNo();
+			List<String> PandAs = pidao.GetPandAAdminEmpNos();
+			List<String> SOs = pidao.GetSOEmpNos();
             List<String> DGMs = pidao.GetDGMEmpNos();
 			
 			DivisionMaster formEmpDivisionMaster = pidao.GetDivisionData(emp.getDivisionId());
@@ -366,7 +447,7 @@ public class PropertyServiceImp implements PropertyService{
 			if(action.equalsIgnoreCase("A"))
 			{
 				// First time forwarding
-				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")||
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")|| pisStatusCode.equalsIgnoreCase("RSO")||
 				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
 				{
 					movable.setPisStatusCode("FWD");
@@ -381,9 +462,13 @@ public class PropertyServiceImp implements PropertyService{
 					{
 						movable.setPisStatusCodeNext("APR");
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno) ) 
 					{
 						movable.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						movable.setPisStatusCodeNext("VSO");
 					}
 					else
 					{
@@ -396,6 +481,10 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					movable.setPisStatusCode(pisStatusCodeNext);					
 					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						movable.setPisStatusCodeNext("VSO");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VSO"))
 					{
 						movable.setPisStatusCodeNext("VPA");
 					}
@@ -422,6 +511,10 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					movable.setPisStatusCode("RDG");	
 				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VSO"))
+				{
+					movable.setPisStatusCode("RSO");
+				}
 				else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
 				{
 					movable.setPisStatusCode("RPA");
@@ -436,9 +529,13 @@ public class PropertyServiceImp implements PropertyService{
 				{ 
 					movable.setPisStatusCodeNext("APR");					
 				}
-				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				else if(SOs.contains(formempno) ) 
 				{
 					movable.setPisStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					movable.setPisStatusCodeNext("VSO");
 				}
 				else
 				{
@@ -447,6 +544,16 @@ public class PropertyServiceImp implements PropertyService{
 				movable.setRemarks(remarks);
 				dao.editMovableProperty(movable);
 			}
+			// Disapproved By CEO
+						else if(action.equalsIgnoreCase("D")) {
+							
+							movable.setPisStatusCode("DPR");
+							movable.setPisStatusCodeNext("DPR");					
+							movable.setIsActive(1);
+							movable.setMovStatus("D");	
+							movable.setRemarks(remarks);
+							dao.editMovableProperty(movable);	
+						}
 			
 			// Transaction		
 			PisMovablePropertyTrans transaction = PisMovablePropertyTrans.builder()
@@ -475,10 +582,10 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					notification.setEmpNo(DGMEmpNo);					
 				}
-				else if(movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-				}
+//				else if(movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+//				{
+//					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+//				}
 				else if( movable.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
 				{
 					notification.setEmpNo(CEO);					
@@ -495,13 +602,64 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationMessage("Movable Property Request Returned");
 				notification.setNotificationBy(apprEmpNo);
 			}
+			else if(action.equalsIgnoreCase("D"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("AcquiringDisposing.htm");
+				notification.setNotificationMessage("Movable Property Request Disapproved");
+				notification.setNotificationBy(apprEmpNo);
+			}
 			
 			notification.setNotificationDate(LocalDate.now().toString());
 			notification.setIsActive(1);
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
 		
-			pidao.AddNotifications(notification);	
+			if( !movable.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				pidao.AddNotifications(notification);
+			}
+								
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(movable.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("PropertyApprovals.htm");
+						  notification1.setNotificationMessage("Recieved Movable Property Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(apprEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  pidao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("PropertyApprovals.htm");
+						   notification1.setNotificationMessage("Recieved Movable Property Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(apprEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							pidao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}		
 			
 			return 1L;
 		}catch (Exception e) {

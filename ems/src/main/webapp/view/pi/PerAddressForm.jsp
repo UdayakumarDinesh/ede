@@ -256,54 +256,11 @@ function validateTextBox() {
     	return confirm('Are You Sure To Return?');
     	
     } else {
-        alert("Please enter Remarks");
+        alert("Please enter Remarks to Return");
         return false;
     }
 }
 
 </script>
 
-<script>
-  var loginType = '<%=LoginType%>';
-  var dataInput = document.getElementById("data-input");
-  if (loginType === "P") {
-    dataInput.disabled = false;
-  }
-</script>
-<%if(LoginType.equalsIgnoreCase("p") && LoginType!=null) {%>
-<script type="text/javascript">
-$('#data-input').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,
-	"minDate" :new Date(), 
-	//"startDate" : new Date(),
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-
-</script>
-<%} %>
-<script type="text/javascript">
-function DremarkRequired(action)
-{
-	if(action === 'N'){
-		$('#Responcemsg').attr('required', true);
-		if($('#Responcemsg').val().trim()===''){
-			alert('Please Fill Remarks to Reject! ');
-			return false;
-		}else{
-				return confirm('Are You Sure To Reject?');
-		}
-		
-	}else{
-		$('#Responcemsg').attr('required', false);
-		return confirm('Are You Sure To Accept?');
-	}
-	
-}
-</script>
 </html>

@@ -78,7 +78,7 @@
                         <div class="form-group">
                             <label>Mobile From<span class="mandatory">*</span></label>
                             
-                            <input type="text"  value="<%if(mobile!=null && mobile.getMobileFrom()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(mobile.getMobileFrom().toString())%> <%}%>" class="form-control input-sm " id="formRes" name="fromRes" required="required" placeholder="Enter Discipline" >   
+                            <input type="text"  value="<%if(mobile!=null && mobile.getMobileFrom()!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(mobile.getMobileFrom().toString())%> <%}%>" class="form-control input-sm " id="formRes" name="fromRes" required="required" placeholder="Enter Discipline" readonly>   
                         </div>
                        </div>
 		         
@@ -152,7 +152,7 @@ $('#formRes').daterangepicker({
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
 	//"minDate" :new Date(), 
-	"startDate" : new Date(),
+	//"startDate" : new Date(),
 	"cancelClass" : "btn-default",
 	showDropdowns : true,
 	locale : {

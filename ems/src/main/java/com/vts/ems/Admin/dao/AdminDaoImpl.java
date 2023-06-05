@@ -761,5 +761,24 @@ private static final String USERNAMECOUNTINEDIT="SELECT COUNT(ContractEmpId) FRO
 			return 0l;
 		}
 	}
-	 
+
+	private static final String REVOKEADMIN ="UPDATE pis_admins SET ModifiedBy=:ModifiedBy,ModifiedDate=:ModifiedDate,IsActive='0' WHERE AdminsId=:AdminsId";
+	@Override
+	public Long revokeAdmin(String AdminsId, String ModifiedBy, String ModifiedDate) throws Exception {
+		try {
+			Query query = manager.createNativeQuery(REVOKEADMIN);
+			query.setParameter("ModifiedBy", ModifiedBy);
+			query.setParameter("ModifiedDate", ModifiedDate);
+			query.setParameter("AdminsId", Long.parseLong(AdminsId));
+			
+			return (long)query.executeUpdate();
+			
+		}catch (Exception e) {
+			logger.error(new Date() + "Inside DAO revokeAdmin "+e);
+			e.printStackTrace();
+			return 0l;
+		}
+	}
+	
+	
 }

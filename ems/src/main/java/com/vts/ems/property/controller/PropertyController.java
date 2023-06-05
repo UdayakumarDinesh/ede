@@ -108,6 +108,7 @@ public class PropertyController {
 			
 			req.setAttribute("PandAEmpName", piservice.GetPandAEmpName());
 			req.setAttribute("PandAsEmpNos", PandAs);
+			req.setAttribute("SOEmpNos", piservice.GetSOEmpNos());
 			
 			if(!DGMs.contains(EmpNo)) {
 				req.setAttribute("DGMEmpName", piservice.GetEmpDGMEmpName(EmpNo));
@@ -193,6 +194,7 @@ public class PropertyController {
 			
 			if("P".equalsIgnoreCase(applicantInterest)) {
 				immovable.setPartialInterest(req.getParameter("partialInterest").trim());
+				immovable.setExtentInNameOf(req.getParameter("extentInNameOf").trim());
 			}
 			
 			if(osParticulars!=null) {
@@ -312,6 +314,7 @@ public class PropertyController {
 			
 			if("P".equalsIgnoreCase(applicantInterest)) {
 				immovable.setPartialInterest(req.getParameter("partialInterest").trim());
+				immovable.setExtentInNameOf(req.getParameter("extentInNameOf").trim());
 			}
 			
 			if(osParticulars!=null) {
@@ -410,6 +413,7 @@ public class PropertyController {
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
 			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
 			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
 			    req.setAttribute("ImmIntimationRemarks", service.immPropertyRemarksHistory(immPropertyId));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));
@@ -439,22 +443,75 @@ public class PropertyController {
 			
 			long count = service.immovablePropForward(immPropertyId, Username, action, remarks, EmpNo, LoginType);
 			
-			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")||
+			String CEOEmpNo = piservice.GetCEOEmpNo();
+			if(action.equalsIgnoreCase("A")) {
+
+			if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")|| pisStatusCode.equalsIgnoreCase("RSO")||
 			   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
 			{
-				if(count>0) {
+				if(count>0 && !CEOEmpNo.equalsIgnoreCase(EmpNo)) {
 					redir.addAttribute("result", "Immovable Property Application Sent For Verification Successfully");
-				}else {
+				}
+				else if(count>0 && CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+					redir.addAttribute("result", "Immovable Property Approved Successfully");
+				}
+				else if(count<0 && CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+					redir.addAttribute("resultfail", "Immovable Property Approve Unsuccessful");
+				}
+				else {
 					redir.addAttribute("resultfail","Immovable Property Application Sent For Verification Unsuccessful");
 				}
 				return "redirect:/AcquiringDisposing.htm";
 			}
-			else {
+			
+			else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+			{
+				  if(count>0) {
+					redir.addAttribute("result", "Immovable Property Recommended Successfully");
+				  }else {
+					redir.addAttribute("resultfail", "Immovable Property Recommend Unsuccessful");
+				  }
+				
+				return "redirect:/PropertyApprovals.htm";
+			}
+			else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+				
+				  if(count>0) {
+					redir.addAttribute("result", "Immovable Property Verification Successful");
+				  }else {
+					redir.addAttribute("resultfail", "Immovable Property Verification Unsuccessful");
+				  }
+							
+				return "redirect:/PropertyApprovals.htm";
+			}
+			else if(pisStatusCode.equalsIgnoreCase("VPA")) {
+    
+					if(count>0) {
+						redir.addAttribute("result", "Immovable Property Approved Successfully");
+					   }else {
+						redir.addAttribute("resultfail", "Immovable Property Approve Unsuccessful");
+					   }
+				}					
+				return "redirect:/PropertyApprovals.htm";
+			}				
+			
+			else if(action.equalsIgnoreCase("R")) {
 				if(count>0) {
-					redir.addAttribute("result", "Immovable Property verification Successful");
+					redir.addAttribute("result", "Immovable Property Returned Successfully");
+				  }else {
+					redir.addAttribute("resultfail", "Immovable Property Returned Unsuccessful");
+				  }
+				return "redirect:/PropertyApprovals.htm";
+			}
+			else if(action.equalsIgnoreCase("D")) {
+				if(count>0) {
+					redir.addAttribute("result", "Immovable Property Disapproved Successfully");
 				}else {
-					redir.addAttribute("resultfail", "Immovable Property verification Unsuccessful");
+					redir.addAttribute("resultfail", "Immovable Property Disapprove Unsuccessful");
 				}
+				return "redirect:/PropertyApprovals.htm";
+			}
+			else {
 				return "redirect:/PropertyApprovals.htm";
 			}
 			
@@ -463,6 +520,7 @@ public class PropertyController {
 			e.printStackTrace();
 			return "static/Error";
 		}
+	
 	}
 	
 	@RequestMapping(value="PropertyApprovals.htm")
@@ -523,6 +581,7 @@ public class PropertyController {
 				PisImmovableProperty immovableProperty = service.getImmovablePropertyById(Long.parseLong(immPropertyId.trim()));
 			    req.setAttribute("ImmPropFormData",immovableProperty );	
 			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
 			    req.setAttribute("ApprovalEmpData", service.immPropTransactionApprovalData(immPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(immovableProperty.getEmpNo().trim()));	
 				filename="Immovable_Property";
@@ -817,6 +876,7 @@ public class PropertyController {
 			    req.setAttribute("movPropFormData",movableProperty );	
 			    req.setAttribute("ApprovalEmpData", service.movPropTransactionApprovalData(movPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(movableProperty.getEmpNo().trim()));
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
 			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("MovIntimationRemarks", service.movPropertyRemarksHistory(movPropertyId));
 			}
@@ -845,24 +905,77 @@ public class PropertyController {
 			
 			long count = service.movablePropForward(movPropertyId, Username, action, remarks, EmpNo, LoginType);
 			
-			if( pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")||
-			    pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
-			{
-				if(count>0) {
-					redir.addAttribute("result", "Movable Property Application Sent For Verification Successfully");
-				}else {
-					redir.addAttribute("resultfail","Movable Property Application Sent For Verification Unsuccessful");
+		    String CEOEmpNo = piservice.GetCEOEmpNo();
+			if(action.equalsIgnoreCase("A")) {
+
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")|| pisStatusCode.equalsIgnoreCase("RSO")||
+				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
+				{
+					if(count>0 && !CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+						redir.addAttribute("result", "Movable Property Application Sent For Verification Successfully");
+					}
+					else if(count>0 && CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+						redir.addAttribute("result", "Movable Property Approved Successfully");
+					}
+					else if(count<0 && CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+						redir.addAttribute("resultfail", "Movable Property Approve Unsuccessful");
+					}
+					else {
+						redir.addAttribute("resultfail","Movable Property Application Sent For Verification Unsuccessful");
+					}
+					return "redirect:/AcquiringDisposing.htm";
 				}
-				return "redirect:/AcquiringDisposing.htm";
-			}
-			else {
-				if(count>0) {
-					redir.addAttribute("result", "Movable Property verification Successful");
-				}else {
-					redir.addAttribute("resultfail", "Movable Property verification Unsuccessful");
+				
+				else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+				{
+					  if(count>0) {
+						redir.addAttribute("result", "Movable Property Recommended Successfully");
+					  }else {
+						redir.addAttribute("resultfail", "Movable Property Recommend Unsuccessful");
+					  }
+					
+					return "redirect:/PropertyApprovals.htm";
 				}
-				return "redirect:/PropertyApprovals.htm";
-			}
+				else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+					
+					  if(count>0) {
+						redir.addAttribute("result", "Movable Property Verification Successful");
+					  }else {
+						redir.addAttribute("resultfail", "Movable Property Verification Unsuccessful");
+					  }
+								
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else if(pisStatusCode.equalsIgnoreCase("VPA")) {
+	    
+						if(count>0) {
+							redir.addAttribute("result", "Movable Property Approved Successfully");
+						   }else {
+							redir.addAttribute("resultfail", "Movable Property Approve Unsuccessful");
+						   }
+					}					
+					return "redirect:/PropertyApprovals.htm";
+				}				
+				
+				else if(action.equalsIgnoreCase("R")) {
+					if(count>0) {
+						redir.addAttribute("result", "Movable Property Returned Successfully");
+					  }else {
+						redir.addAttribute("resultfail", "Movable Property Returned Unsuccessful");
+					  }
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else if(action.equalsIgnoreCase("D")) {
+					if(count>0) {
+						redir.addAttribute("result", "Movable Property Disapproved Successfully");
+					}else {
+						redir.addAttribute("resultfail", "Movable Property Disapprove Unsuccessful");
+					}
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else {
+					return "redirect:/PropertyApprovals.htm";
+				}
 			
 		}catch (Exception e) {
 			logger.info(new Date()+"Inside MovablePropFormSubmit.htm"+Username,e);
@@ -884,7 +997,8 @@ public class PropertyController {
 			String filename="";
 			if(movPropertyId!=null) {
 				PisMovableProperty movableProperty = service.getMovablePropertyById(Long.parseLong(movPropertyId.trim()));
-			    req.setAttribute("movPropFormData",movableProperty );	
+			    req.setAttribute("movPropFormData",movableProperty );
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
 			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
 			    req.setAttribute("ApprovalEmpData", service.movPropTransactionApprovalData(movPropertyId.trim()));
 			    req.setAttribute("EmpData", service.getEmpNameDesig(movableProperty.getEmpNo().trim()));

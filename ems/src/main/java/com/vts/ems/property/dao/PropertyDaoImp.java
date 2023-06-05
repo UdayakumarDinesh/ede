@@ -122,7 +122,13 @@ public class PropertyDaoImp implements PropertyDao{
 		}		
 	}
 	
-	private static final String IMMPROPTRANSACTIONAPPROVALDATA="SELECT tra.ImmTransactionId,emp.EmpNo,emp.EmpName,des.Designation,MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode FROM pis_immovable_property_trans tra,pis_approval_status sta,employee emp,employee_desig des,pis_immovable_property par WHERE par.ImmPropertyId=tra.ImmPropertyId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND emp.DesigId=des.DesigId AND sta.PisStatusCode IN ('FWD','VPA','APR') AND par.ImmPropertyId=:ImmPropertyId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
+	private static final String IMMPROPTRANSACTIONAPPROVALDATA="SELECT tra.ImmTransactionId,\r\n"
+			+ "(SELECT empno FROM pis_immovable_property_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND t.ImmPropertyId=par.ImmPropertyId ORDER BY t.ImmTransactionId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_immovable_property_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND t.ImmPropertyId=par.ImmPropertyId ORDER BY t.ImmTransactionId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_immovable_property_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode AND t.ImmPropertyId=par.ImmPropertyId ORDER BY t.ImmTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode \r\n"
+			+ "FROM pis_immovable_property_trans tra,pis_approval_status sta,employee emp,pis_immovable_property par \r\n"
+			+ "WHERE par.ImmPropertyId=tra.ImmPropertyId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND sta.PisStatusCode IN ('FWD','VDG','VSO','VPA','APR','DPR') AND par.ImmPropertyId=:ImmPropertyId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
 	@Override
 	public List<Object[]> immPropTransactionApprovalData(String ImmPropertyId) throws Exception {
 		
@@ -229,7 +235,13 @@ public class PropertyDaoImp implements PropertyDao{
 		
 	}
 
-	private static final String MOVPROPTRANSAPPROVALDATA = "SELECT tra.MovTransactionId,emp.EmpNo,emp.EmpName,des.Designation,MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode FROM pis_movable_property_trans tra,pis_approval_status sta,employee emp,employee_desig des,pis_movable_property par WHERE par.MovPropertyId=tra.MovPropertyId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND emp.DesigId=des.DesigId AND sta.PisStatusCode IN ('FWD','VPA','APR') AND par.MovPropertyId=:MovPropertyId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
+	private static final String MOVPROPTRANSAPPROVALDATA = "SELECT tra.MovTransactionId,\r\n"
+			+ "(SELECT empno FROM pis_movable_property_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND t.MovPropertyId=par.MovPropertyId ORDER BY t.MovTransactionId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_movable_property_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND t.MovPropertyId=par.MovPropertyId ORDER BY t.MovTransactionId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_movable_property_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode AND t.MovPropertyId=par.MovPropertyId ORDER BY t.MovTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode \r\n"
+			+ "FROM pis_movable_property_trans tra,pis_approval_status sta,employee emp,pis_movable_property par \r\n"
+			+ "WHERE par.MovPropertyId=tra.MovPropertyId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND sta.PisStatusCode IN ('FWD','VDG','VSO','VPA','APR','DPR') AND par.MovPropertyId=:MovPropertyId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
 	@Override
 	public List<Object[]> movPropTransactionApprovalData(String movPropertyId) {
 		

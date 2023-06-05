@@ -254,7 +254,7 @@ function validateTextBox() {
     	return confirm('Are You Sure To Return?');
     	
     } else {
-        alert("Please enter Remarks");
+        alert("Please enter Remarks to Return");
         return false;
     }
 }

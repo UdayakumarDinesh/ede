@@ -254,7 +254,7 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 				   		
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				Incharge-P&A : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Verified By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
 				   				Verified On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
 				   			<%} %>
 				   		<%} %> 

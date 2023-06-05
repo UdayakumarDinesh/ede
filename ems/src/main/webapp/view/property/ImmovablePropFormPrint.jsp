@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<%@ page import="java.util.List,java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%> 
-<%@ page import="com.vts.ems.property.model.PisImmovableProperty" %>    
+<%@ page import="java.util.Date,java.text.SimpleDateFormat,com.vts.ems.utils.DateTimeFormatUtil"%> 
+<%@ page import="com.vts.ems.property.model.PisImmovableProperty" %>  
+<%@page import="java.util.List,java.util.ArrayList,java.util.Arrays"%>
+<%@page import="com.ibm.icu.impl.UResource.Array"%>  
 <!DOCTYPE html>
 <html>
 <%
@@ -54,6 +56,7 @@ Object[] emp = (Object[])request.getAttribute("EmpData");
 				}
 
 				@top-center {
+				
 					margin-top: 30px;
 					content: "";
 
@@ -80,6 +83,7 @@ div
 {
 	width: 650px !important;
 }
+
 table{
 	align: left;
 	width: 650px !important;
@@ -134,10 +138,17 @@ input:focus {
 <%
 PisImmovableProperty imm= (PisImmovableProperty)request.getAttribute("ImmPropFormData");
 List<Object[]> ApprovalEmpData = (List<Object[]>)request.getAttribute("ApprovalEmpData");
+
+String empNo = (String)session.getAttribute("EmpNo");
+String CEO = (String)request.getAttribute("CEOEmpNo");
+List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+
 String LabLogo = (String)request.getAttribute("LabLogo");
 SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
 int slno=0;
 %>
 
@@ -229,7 +240,7 @@ int slno=0;
 								    <td style="border-bottom: 0;border-top: 0;"></td>
 								    <td>(d) Whether the applicant&apos;s interest in the property is in full or part</td>
 								    <%if(imm!=null && imm.getApplicantInterest()!=null && "F".equalsIgnoreCase(imm.getApplicantInterest())) {%><td colspan="2" style="color: blue;">Full</td>
-								    <%}else if(imm!=null && imm.getApplicantInterest()!=null && "P".equalsIgnoreCase(imm.getApplicantInterest()) ){%><td colspan="2" style="color: blue;"> <%="Part -"+imm.getPartialInterest() %></td> <%} %>
+								    <%}else if(imm!=null && imm.getApplicantInterest()!=null && "P".equalsIgnoreCase(imm.getApplicantInterest()) ){%><td colspan="2" style="color: blue;"> <%="Part -"+imm.getPartialInterest() %>(In the Name of <%=imm.getExtentInNameOf()%>)</td> <%} %>
 								</tr>
 								<tr>
 								    <td style="border-bottom: 1;border-top: 0;"></td>
@@ -248,11 +259,11 @@ int slno=0;
 								<tr>
 								    <td style="width: 5%;border-bottom: 0;text-align: center"><%=++slno%>.</td>
 								    <td>In case of  acquisition, source or sources from which financed / proposed to be financed - (Attach supporting documents)</td>
-								    <td colspan="2" style="color: blue;">
-								     <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource())) {%>
-								      Personal savings
-								      <%}else if(imm!=null && imm.getFinanceSource()!=null && !"Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>
-								      <%=imm.getFinanceSource()%>
+								   <td colspan="2" style="color: blue">							     
+								      <% if(imm!=null && imm.getFinanceSource()!=null && !finaceSource.contains(imm.getFinanceSource()) ) {%>
+								      <%=imm.getFinanceSource()%>							      
+								      <%}else if(imm!=null && imm.getFinanceSource()!=null) {%>
+								      <%=imm.getFinanceSource() %>
 								      <%} %>
 								    </td>
 								</tr>
@@ -307,7 +318,7 @@ int slno=0;
 								<tr>
 									<td style="border-top: 0;"></td>
 									<td>(d) Nature of official dealing with the party  </td>
-									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getDealingNature()!=null ) {%> <%=imm.getDealingNature() %> <%}%></td>
+									<td colspan="2" style="color: blue;"><%if(imm!=null && imm.getDealingNature()!=null && !imm.getDealingNature().isEmpty()) {%> <%=imm.getDealingNature() %> <%}else{%>-<%} %></td>
 								</tr>
 								
 								<%if(imm!=null&& imm.getTransState()!=null && "A".equalsIgnoreCase(imm.getTransState()) && imm.getMode()!=null && "Gift".equalsIgnoreCase(imm.getMode())) {%>
@@ -324,6 +335,7 @@ int slno=0;
 								</tr>
 						 </table>
 						 
+						  <!--DECLARATION  -->
 						 <%if(slno<=13) {%>
 						 <div style="width: 100%;border: 0;text-align: center;margin-top:100px;"> <b style="font-size:18px;text-decoration:underline">DECLARATION</b> </div>
 						 <%}else{ %>
@@ -350,10 +362,21 @@ int slno=0;
 						   		<%} %>
 						   	</label>
 						     </div>
-						     <div style="color: blue;" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div>
+						     <%if(CEO.equalsIgnoreCase(empNo)) {%>
+						      <div style="color: blue;" align="right" ><%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %></div> 
+						      <%} %>
 						     <div style="" align="right">Signature of the employee</div>
+						     <div align="right">
+						        <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			   <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
+				   				Employee : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Forwarded On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		     <%} %> 
+						     </div>
 						     
-						     <% if( imm!=null && "APR".equalsIgnoreCase(imm.getPisStatusCode()) ){ %>	
+						      <!--Remarks of Administration  -->
+						      <% if( CEO.equalsIgnoreCase(empNo) || PandAs.contains(empNo) || imm!=null && adminRemarks.contains(imm.getPisStatusCode()) ){ %>	
 						     <hr style="border: solid 1px;margin-left:20px;">				     
 						     <div style="width: 100%;border: 0;text-align: center;margin-top:20px;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
 						     <br>
@@ -366,32 +389,56 @@ int slno=0;
 						     </div>	
 						     <%} %>	
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">Submitted for kind information.</div>	
-						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
+						      <!-- <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A  -->
+				              <%} %>
 				              <br>	
 				              <br>
-				              <label style="color: blue;">
-				   		     <%for(Object[] apprInfo : ApprovalEmpData){ %>
-				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			 <% break;} %>
-				   		     <%} %>
-				   		     </label> 
+				              <div style="width:100%;text-align: left;margin-left: 10px;">
+				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			    <%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		        <%} %> 
 				             </div>
-				             <%} %>
-				             <%if( imm!=null && imm.getPisStatusCode().toString().equalsIgnoreCase("APR") ) {%>
-                      <div class="row" style="margin-top: 40px;">
-                         <div class="col-md-12"><b style="color: black"> SANCTIONED / NOT SANCTIONED <br>CEO</b><br></div>
-                      </div>
-                      <div class="row">
-                         <div class="col-md-12" style="color: blue;"><%for(Object[] apprInfo : ApprovalEmpData){ %>
+				             <br>
+				             <div style="width:100%;text-align: left;margin-left: 10px;">
+				             <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			  <%} %>
+				   		     <%} %> 
+				            </div>
+				             <br>
+				              <div style="border:0px;width: 100%; text-align: right;"> 
+				   		
+				   		    <br>
+				   		
+				   		   <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				Verified By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Verified On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		   <%} %> 
+				         
+				           </div>				             				          
+                       <br><br>
+                       <div class="row">
+                         <div class="col-md-12">
+                         <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			<% break;} %>
+				   			<b style="color: black">APPROVED</b> <br><br>
+				   				Approved By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Approved On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<% break;
+				   			}else if(apprInfo[8].toString().equalsIgnoreCase("DPR")){ %>
+				   			<b style="color: black">NOT APPROVED</b><br><br>
+			   				    Disapproved By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   			    Disapproved On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+			   			<% break;} %>
 				   		<%} %> </div>
                       </div>
-                       <%} %>
        </div>
 </body>
 </html>

@@ -220,16 +220,16 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 					  </tbody>					  
 					</table>										   			
 				   <br>	
-				   <div style="border:0px;width: 100%; text-align: right;"> <b>Incharge-P&A </b>
-				   <br>	
-				   <br><label style="color: blue;">
+				   <div style="border:0px;width: 100%; text-align: right;"> 				   		
+				   		<br>
+				   		
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
-				   			<% break;} %>
+				   				Verified By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Verified On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
 				   		<%} %> 
-				   		</label>
+				         
 				   </div>			   				  
 			   </div>			   			  
 			

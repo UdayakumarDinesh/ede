@@ -37,6 +37,7 @@ private static final long serialVersionUID = 1L;
 	private String Ownership;
 	private String ApplicantInterest;
 	private String PartialInterest;
+	private String ExtentInNameOf;
 	private String OsParticulars;
 	private String OsShare;
 	private Double Price;

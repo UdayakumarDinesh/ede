@@ -81,6 +81,7 @@
 	
 	String CEO = (String)request.getAttribute("CEOEmpNos");
 	List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+	List<String> SOs = (List<String>)request.getAttribute("SOEmpNos");
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
 	
 	
@@ -328,7 +329,7 @@
 	               	<div class="row"  style="text-align: center; padding-top: 10px; padding-bottom: 15px; " >
 	              <table align="center"  >
 	               		<tr>
-	               		<%if( !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
+	               		<%if(  !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ) {%>
 	                		<td class="trup" style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
 	                			User <br> <%=session.getAttribute("EmpName")%>
 	                		</td>
@@ -336,30 +337,33 @@
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               			<%} %>
-	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
+	               		<%if(DGMEmpName!=null && !DGMs.contains(empData[0].toString()) && !SOs.contains(empData[0].toString()) 
+	               		&& !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>                		
 	               			<td class="trup"  style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
-	                			DGM <br> <%=EmpApprFlow[1]%>
+	                			DGM <br> <%=EmpApprFlow[2]%>
 	                		</td>
 	                		
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		 <%} %>
-	                		<%-- <td class="trup"  style="background: linear-gradient(to top, #6ba5df 10%, transparent 115%);" >
-	                			F & A <br> <%=EmpApprFlow[2]%>
+	               		 <%if( !SOs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %> 
+	                		 <td class="trup"  style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);" >
+	                			SO <br> <%=EmpApprFlow[3]%>
 	                		</td> 
 	                		
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-	                		</td> --%>
+	                		</td> 
+	                	  <%} %>
 	                		<%if(PandAEmpName!=null && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
-	                		<td class="trup" style="background: linear-gradient(to top, #42f2f5 10%, transparent 115%);">
-	                			P & A <br> <%=EmpApprFlow[3]%>
+	                		<td class="trup" style="background: linear-gradient(to top, #ff9966 10%, transparent 115%);">
+	                			P & A <br> <%=EmpApprFlow[5]%>
 	                		</td>	                		 
 	                		<%} %>
 	                		<%if(CeoName!=null && CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
 	                		<td class="trup" style="background: linear-gradient(to top, #eb76c3 10%, transparent 115%);">
-	                			CEO <br> <%=EmpApprFlow[4]%>
+	                			CEO <br> <%=EmpApprFlow[6]%>
 	                		</td> 
 	                		<%} %>
 	               		

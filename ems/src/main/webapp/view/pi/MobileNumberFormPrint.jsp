@@ -192,16 +192,16 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 					    </tbody>
 					</table>
 					<br>
-					<div style="width:100%;text-align: right;margin-left:-5px;color: blue;">	<%if(MobFormData!=null && MobFormData[8]!=null){ %><%=MobFormData[8] %> <%} %>	</div>		
+					<%-- <div style="width:100%;text-align: right;margin-left:-5px;color: blue;">	<%if(MobFormData!=null && MobFormData[8]!=null){ %><%=MobFormData[8] %> <%} %>	</div>		 --%>
 					<div style="width:100%;text-align: right;margin-left:-5px;">	
 						Signature of Employee<br>
-						<%-- <%for(Object[] apprInfo : ApprovalEmpData){ %>
+						
+						 <%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   				Employee : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Forwarded On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
 				   			<%} %>
 				   		<%} %> 
-				   		 --%>
 				   		
 					</div>		
 					<br>								     
@@ -225,20 +225,37 @@ SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 				   </div>
 				   
 				   <br><br>
-				   <div style="width:100%;text-align: right;margin-left:-5px;"> </div>	
-				   <div style="border:0px;width: 100%; text-align: right;"> 
-				   		Incharge-P&A
-				   		<br>
-				   		<label style="color: blue;">
-				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
-				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				<%=apprInfo[2] %><br>
-				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   <div style="width:100%;text-align: left;margin-left: 10px;">
+				   <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
 				   			<%} %>
 				   		<%} %> 
-				        </label>
-				   </div>
-				   <br>				   				  
+				    </div>
+				    <br>
+				    <div style="width:100%;text-align: left;margin-left: 10px;">
+				   <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		<%} %> 
+				    </div>
+				    <br>
+				    
+				   <div style="border:0px;width: 100%; text-align: right;"> 
+				   		
+				   		<br>
+				   		
+				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				Verified By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %><br></label>
+				   				Verified On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			<%} %>
+				   		<%} %> 
+				         
+				   </div>							   				  
 			   </div>			   			  
 			
 </body>

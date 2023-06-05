@@ -59,7 +59,7 @@ public interface AdminService {
 	public Long ContractEmpEditComments(MasterEdit masteredit, MasterEditDto masterdto)throws Exception;
 	public List<Object[]> FormOptionList(String LoginType) throws Exception;
 	public List<Object[]> HeaderModuleDropDownList(String LoginType, String FormOptionId) throws Exception;
-	
+	public Long revokeAdmin(String AdminsId,String ModifiedBy,String ModifiedDate) throws Exception;
 	
 	
 }
