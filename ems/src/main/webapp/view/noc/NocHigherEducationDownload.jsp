@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
+<%@page import="java.util.List"%>
+<%@page import="java.util.Arrays"%>
 <!DOCTYPE html>
 <html>
 <%
@@ -40,7 +43,7 @@ Object[] obj=(Object[])request.getAttribute("NOCHigherEducationDetails");
 					content: "";
 					margin-top: 30px;
 					margin-right: 10px;
-					content: "<%=obj[14]%>";
+					content: "<%=obj[15]%>";
 				}
 
 				@top-left {
@@ -111,6 +114,13 @@ th,td
 
 	text-align: center;
 }
+.text-blue
+{
+	color: blue;
+	font-weight:500px;
+	font-size: 15px;
+}
+
 </style>
 
 </head>
@@ -121,6 +131,8 @@ th,td
      
       String LabLogo = (String)request.getAttribute("lablogo");
       int slno=0;
+      List<Object[]> approveddata=(List<Object[]>)request.getAttribute("HigherEducationApprovalData");
+      List<String> RecommendStatus = Arrays.asList("VGI","VDI","VDG","VSO");
 %>
 
 
@@ -178,31 +190,38 @@ th,td
 								   <td colspan="2" style="color: blue;"><%=obj[8] %></td>
 								 </tr>
 								  
+								  
+								<tr>
+								  	<td style="width: 5%;text-align: center"><%=++slno%>.</td>
+								   <td >Institution Name</td>
+								   <td colspan="2" style="color: blue;"><%=obj[9] %></td>
+								 </tr> 
+								  
 								<tr>
 								  	<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 								   <td >Academic Year</td>
-								   <td colspan="2" style="color: blue;"><%=obj[9].toString().substring(0,4) %></td>
+								   <td colspan="2" style="color: blue;"><%=obj[10] %></td>
 								 </tr>
 								 
 								 <tr>
 								 
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td style="width:20%;text-align: left">Name of Course</td>
-								 	<td colspan="2" style="color: blue;"><%=obj[10] %></td>
-								</tr> 
-								
-								 <tr>
-								 
-									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
-									<td style="width:20%;text-align: left">Specialization</td>
 								 	<td colspan="2" style="color: blue;"><%=obj[11] %></td>
 								</tr> 
 								
 								 <tr>
 								 
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
-									<td style="width:20%;text-align: left">Education Type</td>
+									<td style="width:20%;text-align: left">Specialization</td>
 								 	<td colspan="2" style="color: blue;"><%=obj[12] %></td>
+								</tr> 
+								
+								 <tr>
+								 
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
+									<td style="width:20%;text-align: left">Education Type</td>
+								 	<td colspan="2" style="color: blue;"><%=obj[13] %></td>
 								</tr> 
 								
 								
@@ -210,7 +229,7 @@ th,td
 								 
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td style="width:25%;text-align: left">Essential Education Qualification</td>
-								 	<td colspan="2"style="color: blue;"><%=obj[13] %></td>
+								 	<td colspan="2"style="color: blue;"><%=obj[14] %></td>
 								</tr> 
 								
 								 <tr>
@@ -246,7 +265,63 @@ th,td
 								
 				</div>				
 					
+<br>
+<br>
+                <div  style="margin-left:400px !important;" > Signature of the Applicant</div>	
+                   <% if(obj[21]!=null) {%><div   style="margin-left:400px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(obj[21].toString().substring(0, 10)) +" "+obj[21].toString().substring(11,19) %></span> </div>
+	                    
+	                  <%} %>
 
+<br>
+                 <% int count=1;
+	 
+	 for(Object[] ad :approveddata) {
+		 
+		if(count==1){%>
+				 <div align="left" style="margin-left:400px !important;">Recommended By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
+	              <div  align="left" style="margin-left:400px !important;">Recommended On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
+	              
+	              <br>
+			<%} else if(RecommendStatus.contains(ad[8].toString())){%>
+		
+		<div align="left" style="margin-left:5px !important;">Recommended By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
+	    <div align="left" style="margin-left:5px !important;">Recommended On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
+	    <br>
+	 
+	   <%}
+			else if(ad[8].toString().equalsIgnoreCase("VPA")){%>
+		
+				<div align="left" style="margin-left:5px !important;">Verified By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
+			    <div align="left" style="margin-left:5px !important;">Verified On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
+		
+		
+	<% } 
+		
+			else if(ad[8].toString().equalsIgnoreCase("APR")){%>
+			
+		
+		<div align="center" style="margin-left:0px;text-align:center;"> 
+		                         <span style="font-weight: 600; font-size: 16px;">APPROVED</span><br><br>
+						        <span style="font-weight: 500; font-size: 14px;">Approved By:&nbsp;<span class="text-blue" ><%=ad[2] %></span></span><br>
+								<span style="font-weight: 400; font-size: 14px;">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %></span></span><br>
+		</div>
+		
+		 <%}
+		
+			else if(ad[8].toString().equalsIgnoreCase("DPR")){%>
+		 
+		<br>
+		<div align="center" style="margin-left:0px;text-align:center;"> 
+		                        <span style="font-weight: 600; font-size: 16px;">DISAPPROVED</span><br><br><br>
+						        <span style="font-weight: 500; font-size: 14px;">DisApproved By:&nbsp;<span class="text-blue" ><%=ad[2] %></span></span><br>
+								<span style="font-weight: 400; font-size: 14px;">DisApproved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %></span></span><br>
+		</div> 
+		
+	<%}count++;} %>
+	 
+
+
+ 	
 
 
 

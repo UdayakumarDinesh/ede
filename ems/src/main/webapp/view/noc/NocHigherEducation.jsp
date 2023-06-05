@@ -61,11 +61,13 @@ body{
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
 	
+	 Object[] emplist = (Object[])request.getAttribute("NocApprovalFlow"); 
+	
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE","RSO");
 	
 	List<Object[]> NOCHigherEducationList=(List<Object[]>)request.getAttribute("NOCHigherEducationList");
 	
@@ -75,11 +77,11 @@ body{
 
 	<div class="card-header page-top ">
 		<div class="row">
-			<div class="col-md-5">
+			<div class="col-md-6">
 				<h5>NOC Higher Education <small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			</div>
-			<div class="col-md-7 ">
+			<div class="col-md-6 ">
 				<ol class="breadcrumb ">
 					<li class="breadcrumb-item ml-auto"><a
 						href="MainDashBoard.htm"><i
@@ -137,8 +139,8 @@ body{
 						<% for(Object[] obj : NOCHigherEducationList){ %>
 						
 						<tr>
-								<td style="text-align: center;"><input type="radio" name="EducationId" value="<%=obj[0] %>">
-								<!-- <input type="radio" name="" value="" disabled>  </td> -->
+								<td style="text-align: center;"><%if(toUserStatus.contains(obj[3].toString()) ){ %><input type="radio" name="EducationId" value="<%=obj[0] %>"><%} 
+								else{%><input type="radio" name="EducationId" value="<%=obj[0] %>" disabled>  <%} %></td>
 								<td style="text-align: center;"><%=obj[1] %></td>
 								<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[2].toString())) %></td> 
 								<td style="text-align: center;">
@@ -185,7 +187,7 @@ body{
 						
 						<button type="submit" class="btn btn-sm add-btn" formaction="HigherEducationAdd.htm" >ADD</button>
 						<button type="submit" class="btn btn-sm edit-btn" formaction="HigherEducationEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCHigherEducation)">EDIT</button>
-						
+						<!-- <button type="submit" class="btn btn-sm add-btn" formaction="NOCHigherEducationLetter.htm"  name="EducationId" value='2' formmethod="GET" formtarget="blank"  >PRINT</button> -->
 						
 					</div>
 				</div>
@@ -210,7 +212,7 @@ body{
 	                	<%} %>
 	               		<%if(GroupHeadName!=null && !GHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #B39DDB;">
-	                			Group Head - <%=GroupHeadName[1] %>
+	                			Group Head - <%=emplist[0] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
@@ -219,25 +221,41 @@ body{
 	               		<%} %>
 	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #90CAF9;">
-	                			Division Head - <%=DivisionHeadName[1] %>
+	                			Division Head - <%=emplist[1] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
+	               		<% if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM -  <%=DGMEmpName[1] %>
+	                			DGM -  <%=emplist[2] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
+	               		
+	               		
+	               		
+	               		<% if(emplist[3]!=null && !PandAs.contains(emp.getEmpNo()) ){ %>
+	               			<td class="trup" style="background: #F99B7D;" >
+	                			SO- <%=emplist[3] %>
+	                		</td>
+	                		
+	                		<%} %>
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		
+	               		
+	               		
 	               		<% if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #BCAAA3;" >
-	                			P&A - <%=PandAEmpName[1] %>
+	                			P&A - <%=emplist[4] %>
 	                		</td>
 	                		
 	                		<td rowspan="2">
@@ -246,7 +264,7 @@ body{
 	               		<%} %>
 	               		<% if(CeoName!=null ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
-	                			CEO - <%=CeoName[1] %>
+	                			CEO - <%=emplist[5] %>
 	                		</td>
 	             
 	               		<%} %>

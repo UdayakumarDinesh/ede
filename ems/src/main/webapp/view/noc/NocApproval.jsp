@@ -43,7 +43,8 @@ body{
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	List<Object[]> ApprovedList=(List<Object[]>)request.getAttribute("ApprovedList");
 	String LoginType=(String)request.getAttribute("LoginType");
-	
+	List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+	List<String> Sos = (List<String>)request.getAttribute("SosEmpNos");
 	
 	
 	String status="";
@@ -92,84 +93,7 @@ body{
 	<%} %>
 <br>
   		
-   <%-- 	<div class="card-body main-card">
-   		
-   		  <form action="" method="POST" >
-             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <div class="table-responsive">
-             <table class="table table-hover  table-striped table-condensed table-bordered table-fixed" id="myTable">
-				<thead>
-					<tr>
-					   <th style="width:5%">SN</th>
-					   <th style="width:40%">Employee Name</th>
-                       <th style="width:15%">Type</th>
-                       <th style="width:25%">Action</th>
-                  	</tr>
-				</thead>
-                 <tbody>
-                       <% int SN=0;
-                         for(Object[] obj:ApprovalList){ %>
-                        	 
-                      <tr>
-                             
-                            <td style="text-align: center;"><%=++SN%></td>
-                            
-                            <td ><%=obj[2]%></td>
-                            <td style="text-align: center;"><%=obj[3]%></td>
-                            <td style="text-align: center;">
-                             <%if(form[3]!=null && form[3].toString().equalsIgnoreCase("Residential Address") ){%>
-                            	<button type="submit" class="btn btn-sm" name="resaddressId" value="<%=form[4] %>" formaction="PersonalIntimation.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
-						 			<i class="fa-solid fa-eye"></i>
-						 		</button>
-						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Permanent Address")){ %>
-						 		<button type="submit" class="btn btn-sm" name="peraddressId" value="<%=form[4] %>" formaction="PersonalIntimation.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
-						 			<i class="fa-solid fa-eye"></i>
-						 		</button>
-						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Mobile Number")){ %>
-						 		<button type="submit" class="btn btn-sm" name="mobileNumberId" value="<%=form[4] %>" formaction="MobileNumberPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
-						 			<i class="fa-solid fa-eye"></i>
-						 		</button>
-						 	<% if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Passport")){ %>
-						 		<button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4] %>" formaction="PassportPreview.htm"   formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
-						 			<i class="fa-solid fa-eye"></i>
-						 		</button>
-						 		 <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
-												<i style="color: #019267" class="fa-solid fa-download"></i>
-								</button> 
-						 	<%} else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Proceeding Abroad")){ %> 
-						 	
-						 		<button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4] %>" formaction="ProcAbroadPreview.htm"   formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
-						 			<i class="fa-solid fa-eye"></i>
-						 		</button>
-						 		
-						 		 <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[4]%>" formaction="ProcAbroadPrint.htm"  formmethod="GET" data-toggle="tooltip" data-placement="top" data-original-title="Download">
-												<i style="color: #019267" class="fa-solid fa-download"></i>
-								</button> 
-						 		
-						 	<%} %>	
-						 
-						 	<% if(obj[5].toString().equalsIgnoreCase("APR")){ %>
-						 	     <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[4]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Certificate">
-												<i style="color: #5C469C" class="fa fa-envelope"></i>
-								</button> 
-						 	   
-						 	
-						 	<%} %>
-						 	</td>
-                            
-                        </tr>
-                      <%} %>
-                          
-                 </tbody>
-   
-            </table>
-          </div>
-          <input type="hidden" name="isApproval" value="Y">
-         </form>
-     
-     
-	</div> --%>
-	
+  
 	<div class="row w-100" style="margin-bottom: 10px;">
 		<div class="col-12">
          <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist" style="background-color: #E1E5E8;padding:0px;">
@@ -257,12 +181,23 @@ body{
 					 		
 					 		 <button type="submit" class="btn btn-sm" name="ExamId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 											<i style="color: #019267" class="fa-solid fa-download"></i>
+							</button> 
+							
+							
+							   
+						 	<%}
+						 	
+                              else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Higher Education")){ %> 
+						 	
+					 		<button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4] %>" formaction="NOCHigherEducationPreview.htm"   formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+					 			<i class="fa-solid fa-eye"></i>
+					 		</button>
+					 		
+					 		 <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4]%>" formaction="NOCHigherEducationDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+											<i style="color: #019267" class="fa-solid fa-download"></i>
 							</button>    
 						 	
-						 	
-						 	
 						 	<%} %>
-						 
 						 	
 						 	</td>
                             
@@ -278,7 +213,7 @@ body{
 				
 			  </div>
  
-	<!-- Approved List -->	
+	<!---------------------------------------------- Approved List ----------------------------------------------------->	
 	
 		<div class="tab-pane fade" id="pills-imm-property" role="tabpanel" aria-labelledby="pills-imm-property-tab">
 		
@@ -398,13 +333,25 @@ body{
 								    	<%}}%> 	
 								    	
 								    	
-								    	
-								    		    	
-								    	<%-- <%}else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("E") ){ %>
-								    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCProcTransactionStatus.htm" value="<%=obj[4] %>" name="ProcAbrId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
-									    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
-									    	</button> --%>
+								    	 <% if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Higher Education")){ 
+							    		 
+							    		 if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
+								    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCHigherEducationTransactionStatus.htm" formmethod="GET"  name="EducationId" value="<%=obj[4] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button>
+							
+							
+							            <%} 
+								    	else{%>
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCHigherEducationTransactionStatus.htm" value="<%=obj[4] %>" name="EducationId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
+									    		&nbsp;<%=obj[8] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+									    	</button>
 								    		
+								    	
+								    	<%}}%> 	
+								    	
+								    	
+								    
 							 
                             </td>
                            
@@ -425,13 +372,21 @@ body{
                             <%}
                             else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Intimation For Exam")){%>
                             
-                            <button type="submit" class="btn btn-sm" name="ExamId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+                            <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
                             
-                       <%} %>
+                       <%} 
+                              else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Higher Education")){%>
                             
-                            <% if(LoginType.toString().equalsIgnoreCase("P") && obj[5].toString().equalsIgnoreCase("A")){ 
+                            <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4]%>" formaction="NOCHigherEducationDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+												<i style="color: #019267" class="fa-solid fa-download"></i>
+								</button> 
+                       
+                       
+                      <%} %>
+                            
+                            <% if(PandAs.contains(empData[0]) && obj[5].toString().equalsIgnoreCase("A")){ 
                             	
                             	if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Passport")){%>
                           
@@ -448,7 +403,26 @@ body{
 								</button> 
                             	
                             	
+                           <%}
+                            else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Higher Education")){%>
+                        	
+                       	 <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4]%>" formaction="NOCHigherEducationLetter.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Letter">
+											<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+							</button> 
+                            
                            <%}} %>
+                           
+                            <% if(Sos.contains(empData[0]) && obj[5].toString().equalsIgnoreCase("A")){ 
+                            	
+                            	if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Higher Education")){%>
+                            	
+                              	 <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4]%>" formaction="NOCHigherEducationLetter.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Letter">
+       											<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+       							</button> 
+                            
+                            
+                            <%}} %>
+                           
 						 	
 						 	 </td>
                         </tr>

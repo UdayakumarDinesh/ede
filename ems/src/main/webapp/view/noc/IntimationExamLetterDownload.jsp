@@ -205,6 +205,7 @@ input:focus {
 						 						       
 					    </tbody>
 					</table>
+					</div>
 					<br>
 					<br>
 					<br>

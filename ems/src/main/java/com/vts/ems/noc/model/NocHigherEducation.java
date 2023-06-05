@@ -21,12 +21,13 @@ public class NocHigherEducation {
 	private String NocEducationNo;
 	private String EmpNo;
 	private String InstitutionType;
+	
 	private String AcademicYear;
 	private String Course;
 	private String Specialization; 
     private String EducationType;
     private String QualifiactionRequired;
-    private String Declaration; 
+    private String InstitutionName;
     private String Remarks; 
     private String HigherEducationStatus;
     private String NocStatusCode;

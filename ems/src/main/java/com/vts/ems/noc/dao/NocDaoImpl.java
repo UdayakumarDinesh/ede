@@ -192,7 +192,7 @@ public class NocDaoImpl implements NocDao {
 		
 	}
 	
-	private static final String GETPANDAADMINEMPNOS="SELECT DISTINCT a.EmpNo FROM employee a, pis_admins b WHERE a.EmpNo=b.EmpAdmin AND b.IsActive=1 AND b.AdminType='P' LIMIT 1";
+	private static final String GETPANDAADMINEMPNOS="SELECT a.EmpNo FROM employee a, pis_admins b WHERE a.EmpNo=b.EmpAdmin AND b.IsActive=1 AND b.AdminType='P'";
 	@Override
 	public List<String> GetPandAAdminEmpNos()throws Exception
 	{
@@ -1009,7 +1009,133 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 		query.setParameter("NOCHigherEducId", NOCHigherEducId);
 		return (List<Object[]>)query.getResultList();
 	}
+
+	@Override
+	public NocHigherEducation HigherEducation(String nOCHigherEducId) throws Exception {
+		
+		NocHigherEducation noc= null;
+		try {
+			CriteriaBuilder cb= manager.getCriteriaBuilder();
+			CriteriaQuery<NocHigherEducation> cq= cb.createQuery(NocHigherEducation.class);
+			Root<NocHigherEducation> root= cq.from(NocHigherEducation.class);					
+			Predicate p1=cb.equal(root.get("NocEducationId") , Long.parseLong(nOCHigherEducId));
+			cq=cq.select(root).where(p1);
+			TypedQuery<NocHigherEducation> allquery = manager.createQuery(cq);
+			noc= allquery.getResultList().get(0);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date()  + "Inside DAO IntimatedExam " + e);
+		}
+		return noc;
+	}
+
+	@Override
+	public Long EditNocHe(NocHigherEducation noc) throws Exception {
+		
+		try {
+			manager.merge(noc);
+			manager.flush();
+
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO EditNocHe "+e);
+			e.printStackTrace();
+		}
+		return noc.getNocEducationId();
+	}
+		
+	
+
+	@Override
+	public Long NocHigherEducationTransAdd(NocHigherEducationTrans transaction) throws Exception {
+		
+		
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getNocEducationId();
+	}
+	
+	private static final String GETSOEMPNOS="SELECT a.EmpAdmin FROM pis_admins a WHERE a.AdminType IN ('S') AND a.IsActive=1";
+	@Override
+	public List<String> GetSOEmpNos()throws Exception
+	{
+		try {			
+			Query query= manager.createNativeQuery(GETSOEMPNOS);
+			List<String> list =  (List<String>)query.getResultList();
+			return list;
+		}
+		catch (Exception e) 
+		{
+			logger.error(new Date()  + "Inside DAO GetSOEmpNos " + e);
+			e.printStackTrace();
+			return new ArrayList<String>();
+		}
+	}
+
+	private static final String NOCHIGHEREDUCATIONAPPROVALDATA=" SELECT tra.NocEducationId,\r\n"
+			+ "	(SELECT empno FROM noc_higher_education_trans t , employee e  WHERE e.empno = t.actionby AND t.NocStatusCode =  sta.pisstatuscode ORDER BY t.EducationTransId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM noc_higher_education_trans t , employee e  WHERE e.empno = t.actionby AND t.NocStatusCode =  sta.pisstatuscode ORDER BY t.EducationTransId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM noc_higher_education_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.NocStatusCode =  sta.pisstatuscode ORDER BY t.EducationTransId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode \r\n"
+			+ "FROM  noc_higher_education_trans tra, pis_approval_status sta,employee emp,noc_higher_education par \r\n"
+			+ "WHERE par.NocEducationId = tra.NocEducationId AND tra.NocStatusCode = sta.pisstatuscode AND \r\n"
+			+ "tra.actionby=emp.empno AND sta.pisstatuscode IN ('VGI','VDI','VDG','VSO','VPA','APR','DPR') AND par.NocEducationId =:NOCHigherEducId \r\n"
+			+ "GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
+	@Override
+	public List<Object[]> getHigherEducationApprovalData(String nOCHigherEducId) throws Exception {
+		
+
+		Query query=manager.createNativeQuery(NOCHIGHEREDUCATIONAPPROVALDATA);
+		query.setParameter("NOCHigherEducId", nOCHigherEducId);
+		return (List<Object[]>)query.getResultList();
+	}
+
+	private static final String NOCAPPROVALFLOW="CALL Noc_ApprovalFlow(:EmpNo)";
+	@Override
+	public Object[] getNocApprovalFlow(String empNo) throws Exception {
+	
+		try {
+			Query query= manager.createNativeQuery(NOCAPPROVALFLOW);
+			query.setParameter("EmpNo", empNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getNocApprovalFlow " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	  }
+
+	private static final String PANDANAME= "SELECT e.EmpName,dg.Designation FROM employee e,noc_higher_education_trans trans,employee_desig dg WHERE  e.desigid=dg.desigid AND e.EmpNo=trans.ActionBy AND trans.NocStatusCode IN('VPA') AND trans.NoceducationId=:HigherEducId LIMIT 1";
+	@Override
+	public Object[] getPandAName(String NOCHigherEducId) throws Exception {
+		
+		try {
+			Query query= manager.createNativeQuery(PANDANAME);
+			query.setParameter("HigherEducId", NOCHigherEducId);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getPandAName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
 }
+
+	
+
+
 
 
 

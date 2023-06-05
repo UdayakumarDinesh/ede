@@ -1,6 +1,7 @@
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@page import="java.util.Arrays"%>
 <%@ page import="java.time.LocalDate"%>
 
 <!DOCTYPE html>
@@ -366,16 +367,16 @@ $(document).ready(function() {
 					  return result[e]
 					});
 				var module = "";
-				for (i = 0; i < values.length; i++) {
-					
-					
 				
+				for (i =values.length-1; i >=0; i-- ){
+					
 					module+="<a class='dropdown-item d-flex align-items-center' id='"+values[i].NotificationId+"'  onclick='RemNotification("+values[i].NotificationId+")' href='"+values[i].NotificationUrl+"'  style=' font-family:'Quicksand', sans-serif; '> <div> <i class='fa fa-arrow-right' aria-hidden='true' style='color:green'></i></div> <div style='margin-left:20px'> " +values[i].NotificationMessage+" </div> </a> <div class='dropdown-divider logoutdivider'></div>";
+					
 					if(i>4){
 						break;
 					}
-			   
-				}
+						
+					}
 			
 				if(values.length==0){
 					

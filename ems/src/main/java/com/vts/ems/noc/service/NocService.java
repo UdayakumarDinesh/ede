@@ -114,6 +114,23 @@ public interface NocService {
 	public Object[] getHigherEducationDetails(String NOCHigherEducId)throws Exception;
 
 	public List<Object[]> getNocHigherEducationRemarks(String NOCHigherEducId)throws Exception;
+
+	public NocHigherEducation HigherEducation(String nOCHigherEducId)throws Exception;
+
+	public long NOCHigherEducationForward(String NOCHigherEducId, String username, String action, String remarks,
+			String empNo, String loginType)throws Exception;
+
+	public List<Object[]> getHigherEducationApprovalData(String nOCHigherEducId)throws Exception;
+
+	public List<String> GetSOsEmpNos()throws Exception;
+
+	public List<String> GetSosEmpNos()throws Exception;
+
+	public Object[] getNocApprovalFlow(String empNo)throws Exception;
+
+	public Object[] getPandAName(String nOCHigherEducId)throws Exception;
+
+	
 	
 
 	

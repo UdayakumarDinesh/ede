@@ -445,7 +445,7 @@ public class AdminDaoImpl implements AdminDao{
 		   }
 	}
 	
-	private static final String ALLNOTIFICATION="SELECT notificationdate,notificationmessage,notificationurl,notificationid FROM ems_notification WHERE EmpNo=:empno AND isactive=1";
+	private static final String ALLNOTIFICATION="SELECT notificationdate,notificationmessage,notificationurl,notificationid FROM ems_notification WHERE EmpNo=:empno AND isactive=1 ORDER BY notificationid DESC";
 	public List<Object[]> AllNotificationLists(String EmpNo)throws Exception
 	{
 		try {

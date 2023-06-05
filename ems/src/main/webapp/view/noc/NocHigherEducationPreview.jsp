@@ -29,11 +29,17 @@ th,td
 	
 }
 
+.text-blue
+{
+	color: blue;
+	font-weight:500px;
+	font-size: 16px;
+}
 
 body {
   
-   overflow-x: hidden;
-  overflow-y: hidden; 
+   overflow-x: hidden; 
+  /* overflow-y: hidden;  */
 }
 </style>
 </head>
@@ -54,6 +60,8 @@ body {
 	
 	
 	 List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+	 
+	 List<String> RecommendStatus = Arrays.asList("VGI","VDI","VDG","VSO");
 	int slno=0;
 	
 %>
@@ -157,31 +165,38 @@ body {
 								   <td colspan="2" style="color: blue;"><%=obj[8] %></td>
 								 </tr>
 								  
+								  
+								 <tr>
+								  	<td style="width: 5%;text-align: center"><%=++slno%>.</td>
+								   <td >Institution Name</td>
+								   <td colspan="2" style="color: blue;"><%=obj[9] %></td>
+								 </tr>
+								  
 								<tr>
 								  	<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 								   <td >Academic Year</td>
-								   <td colspan="2" style="color: blue;"><%=obj[9].toString().substring(0,4) %></td>
+								   <td colspan="2" style="color: blue;"><%=obj[10] %></td>
 								 </tr>
 								 
 								 <tr>
 								 
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td style="width:20%;text-align: left">Name of Course</td>
-								 	<td colspan="2" style="color: blue;"><%=obj[10] %></td>
-								</tr> 
-								
-								 <tr>
-								 
-									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
-									<td style="width:20%;text-align: left">Specialization</td>
 								 	<td colspan="2" style="color: blue;"><%=obj[11] %></td>
 								</tr> 
 								
 								 <tr>
 								 
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
-									<td style="width:20%;text-align: left">Education Type</td>
+									<td style="width:20%;text-align: left">Specialization</td>
 								 	<td colspan="2" style="color: blue;"><%=obj[12] %></td>
+								</tr> 
+								
+								 <tr>
+								 
+									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
+									<td style="width:20%;text-align: left">Education Type</td>
+								 	<td colspan="2" style="color: blue;"><%=obj[13] %></td>
 								</tr> 
 								
 								
@@ -189,7 +204,7 @@ body {
 								 
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td style="width:25%;text-align: left">Essential Education Qualification</td>
-								 	<td colspan="2"style="color: blue;"><%=obj[13] %></td>
+								 	<td colspan="2"style="color: blue;"><%=obj[14] %></td>
 								</tr> 
 								
 								 <tr>
@@ -201,13 +216,13 @@ body {
 									
 									
 									a)&nbsp; All expenses for the course shall be borne by me.<br>
-									b)&nbsp;  No official / special leave /flexible working hours will use for attending classes
+									b)&nbsp;  No official / special leave / flexible working hours will use for attending classes
 									
 									    or for appearing in examinations / Projects etc.<br>
 									
 									c)&nbsp;  I will not refuse any official duty / outstation duty during the period.<br>
 									
-									d)&nbsp;  Pursuing the course will not hamper date -to-day official activities.<br>
+									d)&nbsp;  Pursuing the course will not hamper date - to - day official activities.<br>
 									
 									e)&nbsp;  Publication of research papers ,if any will be with the prior approval of CEO.<br>
 									
@@ -223,10 +238,14 @@ body {
 						</table>
 						</div>	
 					
+					 <% if(obj[21]!=null) {%><div   style="margin-left:500px !important;">Forwarded On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(obj[21].toString().substring(0, 10)) +" "+obj[21].toString().substring(11,19) %></span> </div>
+	                    
+	                  <%} %>
+					
 					
 					   <% if(RemarksHistory.size()>1){ %>
 				  
-				  <div class="col-md-5" align="left" style="margin-left:1rem;margin-top:2rem; padding:0px;border: 1px solid black;border-radius: 5px;">
+				  <div class="col-md-5" align="left" style="margin-left:-30rem;margin-top:2rem; padding:0px;border: 1px solid black;border-radius: 5px;">
 				<table style="margin: 3px;padding: 0px;">
 					<tr>
 						<td style="border:none;padding: 0px">
@@ -248,8 +267,8 @@ body {
 			</div>
 			<%} %>
 					
-					<% if(obj[17]!=null && toUserStatus.contains(obj[17].toString())) { %>
-	  	<div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
+					<% if(obj[18]!=null && toUserStatus.contains(obj[18].toString())) { %>
+	  	      <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
 					 <textarea class="w-100 form-control" rows="3" cols="100"   name="remarks"  maxlength="500"></textarea>
 				  </div>
@@ -272,27 +291,34 @@ body {
 				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Approve?');" >
 							Approve
 						</button>
+						
+						<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="D" onclick="return RemarkMandatory();" >
+							Disapprove
+						</button>
+						
 					<% } else if (PandAs.contains(empData[0].toString())){ %>
 					
-				     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="A"  onclick=" return verify()"  >
+				     <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="A"  onclick="return confirm('Are You Sure To Verify?');"  >
 							Verify
 						</button>
 						
 					<%}else{%>
 						
-                           <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="A"  onclick=" return message()" >
+                           <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="A"  onclick="return confirm('Are You Sure To Recommend?');"  >
 								Recommend
 							</button>
 						
 					<%} %>
 				  
-				  <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="R" onclick="return validateTextBox();">
+				  <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="R" onclick="return validateTextBox();" >
 							 Return
 						</button>
 						
 					 </div> 
 				<%} %>
-					 <input type="hidden" name="EducationId" value="<%=obj[15]%>"> 
+				
+					 <input type="hidden" name="EducationId" value="<%=obj[16]%>"> 
+					 
 					</form>
 				</div>
 			</div>
@@ -309,6 +335,19 @@ function validateTextBox() {
         alert("Please enter Remarks");
         return false;
     }
+    
+}
+
+function RemarkMandatory(){
+	 if (document.getElementById("remarksarea").value.trim() != "") {
+	    	return confirm('Are You Sure To disapproval?');
+	    	
+	    } else {
+	        alert("Please enter Remarks");
+	        return false;
+	    }
+	
+	
 }
 
 </script>

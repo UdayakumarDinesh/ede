@@ -147,6 +147,23 @@ public interface NocDao {
 
 	public List<Object[]> getNocHigherEducationRemarks(String NOCHigherEducId)throws Exception;
 
+	public NocHigherEducation HigherEducation(String nOCHigherEducId)throws Exception;
+
+	public Long EditNocHe(NocHigherEducation noc)throws Exception;
+
+	public Long NocHigherEducationTransAdd(NocHigherEducationTrans transaction)throws Exception;
+	
+	public List<String> GetSOEmpNos() throws Exception;
+
+	public List<Object[]> getHigherEducationApprovalData(String nOCHigherEducId) throws Exception;
+
+	public Object[] getNocApprovalFlow(String empNo) throws Exception;
+
+	public Object[] getPandAName(String NOCHigherEducId)throws Exception;
+
+	
+
+
 
 
 	

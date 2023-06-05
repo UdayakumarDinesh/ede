@@ -548,10 +548,13 @@ public class NocController {
 					todate=DateTimeFormatUtil.RegularToSqlDate(todate);
 				}
 	
-			
+				 List<String> PandAs = service.GetPandAAdminEmpNos();
+				 List<String> Sos = service.GetSosEmpNos();
 				 req.setAttribute("fromdate", fromdate);
 				 req.setAttribute("todate", todate);
 				 req.setAttribute("tab", req.getParameter("tab"));
+				 req.setAttribute("PandAsEmpNos", PandAs);
+				 req.setAttribute("SosEmpNos", Sos);
 				 req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				 req.setAttribute("ApprovedList", service.NocApprovedList(EmpNo,fromdate,todate));
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
@@ -1240,6 +1243,7 @@ public class NocController {
 				List<String> DGMs = service.GetDGMEmpNos();
 				List<String> DHs = service.GetDHEmpNos();
 				List<String> GHs = service.GetGHEmpNos();
+				List<String> SOs = service.GetSOsEmpNos();
 				
 				 req.setAttribute("CEOEmpNos", CEO);
 				 req.setAttribute("PandAsEmpNos", PandAs);
@@ -1249,6 +1253,7 @@ public class NocController {
 				 
 				 req.setAttribute("CeoName", service.GetCeoName());
 				 req.setAttribute("PandAEmpName", service.GetPandAEmpName());
+				
 				 
 				 if(!DGMs.contains(EmpNo)) {
 						req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
@@ -1520,9 +1525,11 @@ public class NocController {
 				
 				String CEO = service.GetCEOEmpNo();
 				List<String> PandAs = service.GetPandAAdminEmpNos();
+					
 				List<String> DGMs = service.GetDGMEmpNos();
 				List<String> DHs = service.GetDHEmpNos();
 				List<String> GHs = service.GetGHEmpNos();
+				
 				
 				 req.setAttribute("CEOEmpNos", CEO);
 				 req.setAttribute("PandAsEmpNos", PandAs);
@@ -1530,10 +1537,12 @@ public class NocController {
 				 req.setAttribute("DivisionHeadEmpNos", DHs);
 				 req.setAttribute("GroupHeadEmpNos", GHs);
 				 
+				 req.setAttribute("NocApprovalFlow", service.getNocApprovalFlow(EmpNo));
 				 req.setAttribute("CeoName", service.GetCeoName());
 				 req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 				 
 				 if(!DGMs.contains(EmpNo)) {
+					 
 						req.setAttribute("DGMEmpName", service.GetEmpDGMEmpName(EmpNo));
 					}
 				 req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
@@ -1593,6 +1602,7 @@ public class NocController {
 				
 						dto.setEmpNo(EmpNo);
 						dto.setInstitutionType(req.getParameter("InstitutionType"));
+						dto.setInstitutionName(req.getParameter("InstitutionName"));
 						dto.setAcademicYear(req.getParameter("AcademicYear"));
 						dto.setCourse(req.getParameter("CourseName"));
 						dto.setSpecialization(req.getParameter("Specialization"));
@@ -1670,6 +1680,7 @@ public class NocController {
 				dto.setNocEducationId(Long.parseLong(NOCHigherEducId));
 				dto.setEmpNo(EmpNo);
 				dto.setInstitutionType(req.getParameter("InstitutionType"));
+				dto.setInstitutionName(req.getParameter("InstitutionName"));
 				dto.setAcademicYear(req.getParameter("AcademicYear"));
 				dto.setCourse(req.getParameter("CourseName"));
 				dto.setSpecialization(req.getParameter("Specialization"));
@@ -1770,6 +1781,7 @@ public class NocController {
 				 req.setAttribute("PandAsEmpNos", PandAs);
 				 req.setAttribute("CeoName", service.GetCeoName());
 				 req.setAttribute("NOCHigherEducationDetails", service.getHigherEducationDetails(NOCHigherEducId));
+				 req.setAttribute("HigherEducationApprovalData", service.getHigherEducationApprovalData(NOCHigherEducId) );
 				 req.setAttribute("lablogo",getLabLogoAsBase64());
 				 
 				String path = req.getServletContext().getRealPath("/view/temp");
@@ -1829,15 +1841,24 @@ public class NocController {
 			try {
 				
 				
-				String ExamId=req.getParameter("ExamId");
+				 String NOCHigherEducId=req.getParameter("EducationId");
+				 System.out.println("NOCHigherEducId---"+NOCHigherEducId);
 				String action = req.getParameter("Action");
 				String remarks = req.getParameter("remarks");
 				
-				ExamIntimation exam = service.IntimatedExam(ExamId);
-				String  IntimationStatusCode = exam.getIntimateStatusCode();
 				
-				long count = service.IntimationForExamForward(ExamId, Username, action,remarks,EmpNo,LoginType);
-				if(IntimationStatusCode.equalsIgnoreCase("INI") || IntimationStatusCode.equalsIgnoreCase("RDG") || IntimationStatusCode.equalsIgnoreCase("RPA") ) {
+				NocHigherEducation education = service.HigherEducation(NOCHigherEducId);
+				
+			    String NocStatusCode = education.getNocStatusCode();
+				
+				long count = service.NOCHigherEducationForward(NOCHigherEducId, Username, action,remarks,EmpNo,LoginType);
+				
+				if(action.equalsIgnoreCase("A")) {
+					
+				   if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI")
+						|| NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RSO") || NocStatusCode.equalsIgnoreCase("RPA") ||
+						NocStatusCode.equalsIgnoreCase("RCE")) {
+						
 					if (count > 0) {
 						redir.addAttribute("result", "NOC For Higher Education Forwarded Successful");
 					} else {
@@ -1845,16 +1866,70 @@ public class NocController {
 					}	
 					return "redirect:/HigherEducation.htm";
 				}
-				else  
+				
+				   else if(NocStatusCode.equalsIgnoreCase("FWD") || NocStatusCode.equalsIgnoreCase("VGI")  || NocStatusCode.equalsIgnoreCase("VDI") || NocStatusCode.equalsIgnoreCase("VDG") ) { 
+						   
+					   
+					   if (count > 0) {
+							redir.addAttribute("result", "NOC For Higher Education Recommended Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC For Higher Education Recommend Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+				   else if(NocStatusCode.equalsIgnoreCase("VSO")) {
+						  
+					   
+					   if (count > 0) {
+							redir.addAttribute("result", "NOC For Higher Education Verified Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC For Higher Education Verify Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+                      else if(NocStatusCode.equalsIgnoreCase("VPA")) {
+						  
+					     if (count > 0) {
+							redir.addAttribute("result", "NOC For Higher Education  Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC For Higher Education  Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+                      
+ 				   
+				}
+				
+				if(action.equalsIgnoreCase("D")) 
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "NOC For Higher Education verification Successful");
+						redir.addAttribute("result", "NOC For Higher Education DisApprove Successfull");
 					} else {
-						redir.addAttribute("resultfail", "NOC For Higher Education verification Unsuccessful");	
+						redir.addAttribute("resultfail", "NOC For Higher Education DisApprove Unsuccessful");	
 					}	
 					return "redirect:/NocApproval.htm";
 				}
 				
+				
+				if(action.equalsIgnoreCase("R")) 
+				{
+					if (count > 0) {
+						redir.addAttribute("result", "NOC For Higher Education Returned Successful");
+					} else {
+						redir.addAttribute("resultfail", "NOC For Higher Education Return Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm";
+				}
+				
+				return "redirect:/HigherEducation.htm";
+			
+			
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside NOCHigherEducationForward.htm"+Username, e);
 				e.printStackTrace();	
@@ -1862,6 +1937,67 @@ public class NocController {
 			}
 			
 		}
+		
+		@RequestMapping(value = "NOCHigherEducationLetter.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public void NOCHIGHEREDUCATIONLetter(HttpServletRequest req, HttpSession ses, RedirectAttributes redir,HttpServletResponse res)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside NOCHigherEducationLetter.htm "+UserId);
+			try {
+				
+				String NOCHigherEducId=req.getParameter("EducationId");
+				
+				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				 req.setAttribute("NOCHigherEducationDetails", service.getHigherEducationDetails(NOCHigherEducId));
+				 req.setAttribute("P&ANameDesig", service.getPandAName(NOCHigherEducId));
+				 req.setAttribute("lablogo",getLabLogoAsBase64());
+				 String path = req.getServletContext().getRealPath("/view/temp");
+			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+				req.getRequestDispatcher("/view/noc/NocHigherEducationLetter.jsp").forward(req, customResponse);
+				String html = customResponse.getOutput();
+				byte[] data = html.getBytes();
+				InputStream fis1 = new ByteArrayInputStream(data);
+				PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/NOCHigherEducationLetter.pdf"));
+				pdfDoc.setTagged();
+				Document document = new Document(pdfDoc, PageSize.LEGAL);
+				document.setMargins(50, 100, 150, 50);
+				ConverterProperties converterProperties = new ConverterProperties();
+				FontProvider dfp = new DefaultFontProvider(true, true, true);
+				converterProperties.setFontProvider(dfp);
+				HtmlConverter.convertToPdf(fis1, pdfDoc, converterProperties);
+				/*
+				 * document.close(); pdfDoc.close(); fis1.close();
+				 */
+				res.setContentType("application/pdf");
+				res.setHeader("Content-disposition", "inline;filename=NOCHigherEducationLetter.pdf");
+				File f = new File(path + "/NOCHIGHEREDUCATIONLetter.pdf");
+				FileInputStream fis = new FileInputStream(f);
+				DataOutputStream os = new DataOutputStream(res.getOutputStream());
+				res.setHeader("Content-Length", String.valueOf(f.length()));
+				byte[] buffer = new byte[1024];
+				int len = 0;
+				while ((len = fis.read(buffer)) >= 0) {
+					os.write(buffer, 0, len);
+				}
+				os.close();
+				fis.close();
+				Path pathOfFile2 = Paths.get(path + "/NOCHigherEducationLetter.pdf");
+				Files.delete(pathOfFile2);
+			 
+//			     return "noc/IntimationExamLetterDownload";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside NOCHigherEducationLetter.htm "+UserId, e); 
+			   
+			}
+		}
+		
 }
 
 

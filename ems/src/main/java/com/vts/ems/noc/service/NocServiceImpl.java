@@ -1273,6 +1273,7 @@ public class NocServiceImpl implements NocService {
 		edu.setNocEducationNo(NocHigherEducNo);
 		edu.setEmpNo(dto.getEmpNo());
 		edu.setInstitutionType(dto.getInstitutionType());
+		edu.setInstitutionName(dto.getInstitutionName());
 		edu.setAcademicYear(dto.getAcademicYear());
 		edu.setCourse(dto.getCourse());
 		edu.setSpecialization(dto.getSpecialization());
@@ -1314,6 +1315,7 @@ public class NocServiceImpl implements NocService {
 		
 		edu.setNocEducationId(dto.getNocEducationId());
 		edu.setInstitutionType(dto.getInstitutionType());
+		edu.setInstitutionName(dto.getInstitutionName());
 		edu.setAcademicYear(dto.getAcademicYear());
 		edu.setCourse(dto.getCourse());
 		edu.setSpecialization(dto.getSpecialization());
@@ -1341,7 +1343,378 @@ public class NocServiceImpl implements NocService {
 		
 		return dao.getNocHigherEducationRemarks(NOCHigherEducId);
 	}
+
+	@Override
+	public NocHigherEducation HigherEducation(String nOCHigherEducId) throws Exception {
 		
+		return dao.HigherEducation(nOCHigherEducId);
+	}
+
+	@Override
+	public long NOCHigherEducationForward(String NOCHigherEducId, String username, String action, String remarks,
+			String empNo, String loginType) throws Exception {
+		
+		try {
+			
+			NocHigherEducation noc =dao.HigherEducation(NOCHigherEducId);
+			Employee emp = dao.getEmpDataByEmpNo(noc.getEmpNo());
+			String formempno = emp.getEmpNo();
+			String  NocStatusCode = noc.getNocStatusCode();
+			String NocStatusCodeNext = noc.getNocStatusCodeNext();
+			
+			String CEO = dao.GetCEOEmpNo();
+			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			List<String> SOs = dao.GetSOEmpNos();	
+			List<String> DGMs = dao.GetDGMEmpNos();
+			List<String> DHs = dao.GetDHEmpNos();
+			List<String> GHs = dao.GetGHEmpNos();
+			
+			
+			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
+			
+			
+			// Accepted
+			if(action.equalsIgnoreCase("A"))
+			{
+//			
+				// first time forwarding
+				if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI") || 
+						NocStatusCode.equalsIgnoreCase("RSO")	|| NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE") ) 
+				{
+					noc.setNocStatusCode("FWD");
+					noc.setForwardedDate(sdf1.format(new Date()));
+					if(CEO.equalsIgnoreCase(formempno) ) 
+					{ 
+					    //dao.HometownStatusUpdate(noc.getEmpNo());
+
+						noc.setNocStatusCode("APR");
+						noc.setNocStatusCodeNext("APR");
+						noc.setIsActive(1);
+						noc.setHigherEducationStatus("A");	
+						noc.setApprovedDate(sdf1.format(new Date()));
+					}
+					else if(PandAs.contains(formempno) || loginType.equalsIgnoreCase("P")) 
+					{
+						noc.setNocStatusCodeNext("APR");
+					}
+					else if(SOs.contains(formempno)) 
+					{
+						noc.setNocStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						noc.setNocStatusCodeNext("VSO");
+					}
+					else if(DHs.contains(formempno) || emp.getDivisionId()==0)
+					{
+						noc.setNocStatusCodeNext("VDG");
+					}
+					else if(GHs.contains(formempno) || emp.getGroupId()==0)
+					{
+						noc.setNocStatusCodeNext("VDI");
+					}
+					else 
+					{
+						noc.setNocStatusCodeNext("VGI");
+					}
+					
+				}
+				
+				//approving	flow 
+				else
+				{
+				   
+					noc.setNocStatusCode(NocStatusCodeNext);
+					
+					if(NocStatusCodeNext.equalsIgnoreCase("VGI"))
+					{
+						noc.setNocStatusCodeNext("VDI");
+					}
+					else if(NocStatusCodeNext.equalsIgnoreCase("VDI")) 
+					{
+						noc.setNocStatusCodeNext("VDG");
+					}
+					
+					else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						noc.setNocStatusCodeNext("VSO");
+					}
+					
+					else if(NocStatusCodeNext.equalsIgnoreCase("VSO")) 
+					{
+						noc.setNocStatusCodeNext("VPA");
+					}
+					
+					else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
+					{
+						noc.setNocStatusCodeNext("APR");
+					}
+					else if(NocStatusCodeNext.equalsIgnoreCase("APR")) {	
+						//dao.HometownStatusUpdate(noc.getEmpNo());
+						noc.setIsActive(1);
+						noc.setHigherEducationStatus("A");
+						noc.setApprovedDate(sdf1.format(new Date()));
+					}
+				}
+				
+				noc.setRemarks(remarks);
+				dao.EditNocHe(noc);
+						
+			}
+			
+			//Returned
+			else if(action.equalsIgnoreCase("R")) 
+			{
+				// Setting PisStatusCode
+				if(NocStatusCodeNext.equalsIgnoreCase("VGI")) 
+				{
+					noc.setNocStatusCode(NocStatusCodeNext);
+				}
+			    else if(NocStatusCodeNext.equalsIgnoreCase("VDI")) 
+				{
+			    	noc.setNocStatusCode("RDI");	
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					noc.setNocStatusCode("RDG");	
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("VSO")) 
+				{
+					noc.setNocStatusCode("RSO");	
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
+				{
+					noc.setNocStatusCode("RPA");	
+				}
+				else if(NocStatusCodeNext.equalsIgnoreCase("APR")) 
+				{
+					noc.setNocStatusCode("RCE");	
+				}
+				
+				//Setting PisStatusCodeNext
+				if(CEO.equalsIgnoreCase(formempno) ) 
+				{ 
+					noc.setNocStatusCodeNext("APR");					
+				}
+				else if(PandAs.contains(formempno) || loginType.equalsIgnoreCase("P")) 
+				{
+					noc.setNocStatusCodeNext("APR");
+				}
+				if(SOs.contains(formempno)) 
+				{
+					noc.setNocStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					noc.setNocStatusCodeNext("VSO");
+				}
+				else if(DHs.contains(formempno) || emp.getDivisionId()==0)
+				{
+					noc.setNocStatusCodeNext("VDG");
+				}
+				else if(GHs.contains(formempno)  || emp.getGroupId()==0)
+				{
+					noc.setNocStatusCodeNext("VDI");
+				}
+				else 
+				{
+					noc.setNocStatusCodeNext("VGI");
+				}
+				
+				noc.setRemarks(remarks);
+				dao.EditNocHe(noc);
+			}
+			
+			else if(action.equalsIgnoreCase("D")) {
+				
+				noc.setNocStatusCode("DPR");
+				noc.setNocStatusCodeNext("DPR");
+				noc.setRemarks(remarks);
+				dao.EditNocHe(noc);
+			}
+			
+			NocHigherEducationTrans transaction = NocHigherEducationTrans.builder()	
+					.NocEducationId(noc.getNocEducationId())
+					.NocStatusCode(noc.getNocStatusCode())
+					.Remarks(remarks)
+					.ActionBy(empNo)
+					.ActionDate(sdtf.format(new Date()))
+					.build();
+			
+		 dao.NocHigherEducationTransAdd(transaction);
+							
+			    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
+				String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
+				String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+				
+				
+		
+			//Notification
+				
+				
+				if(action.equalsIgnoreCase("A") && noc.getHigherEducationStatus().equalsIgnoreCase("A"))
+				{
+					
+					
+					if(PandAs.size()>0) {
+						   for(String PandAEmpNo : PandAs) {
+							   EMSNotification notification1 = new EMSNotification();
+							   notification1.setEmpNo(PandAEmpNo);
+							   notification1.setNotificationUrl("NocApproval.htm?tab=closed");
+								notification1.setNotificationMessage("NOC Higher Education Request Approved For <br>"+emp.getEmpName());
+								notification1.setNotificationBy(empNo);
+							   notification1.setNotificationDate(LocalDate.now().toString());
+							   notification1.setIsActive(1);
+							   notification1.setCreatedBy(username);
+							   notification1.setCreatedDate(sdtf.format(new Date()));
+										
+								dao.AddNotifications(notification1);  
+						      }
+						   }
+						
+					
+				}
+				
+				
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && noc.getHigherEducationStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("HigherEducation.htm");
+				notification.setNotificationMessage("NOC Higher Education Request Approved");
+				notification.setNotificationBy(empNo);
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( noc.getNocStatusCodeNext().equalsIgnoreCase("VGI")) 
+				{
+					notification.setEmpNo(GIEmpNo);					
+				}
+				else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDI")) 
+				{
+					notification.setEmpNo(DIEmpNo);					
+				}
+				else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if(noc.getNocStatusCodeNext().equalsIgnoreCase("APR")) 
+				{
+					notification.setEmpNo(CEO);
+				}
+				
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Higher Education Change Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(empNo);
+			}
+				else if(action.equalsIgnoreCase("R"))
+				{
+					notification.setEmpNo(emp.getEmpNo());
+					notification.setNotificationUrl("HigherEducation.htm");
+					notification.setNotificationMessage("NOC Higher Education Request Returned");
+					notification.setNotificationBy(empNo);
+				}
+				
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				
+				
+				if( !noc.getNocStatusCodeNext().equalsIgnoreCase("VSO") && !noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+					dao.AddNotifications(notification);
+				}
+				
+				
+				
+			 if( noc.getNocStatusCodeNext().equalsIgnoreCase("VSO")) 
+				{
+					
+				if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification2 = new EMSNotification();
+						  notification2.setEmpNo(SOEMpNo);
+						  notification2.setNotificationUrl("NocApproval.htm");
+						  notification2.setNotificationMessage("Recieved NOC Higher Education Change Request <br> From "+emp.getEmpName());
+						  notification2.setNotificationBy(empNo);
+						  notification2.setNotificationDate(LocalDate.now().toString());
+						  notification2.setIsActive(1);
+						  notification2.setCreatedBy(username);
+						  notification2.setCreatedDate(sdtf.format(new Date()));
+									
+						  dao.AddNotifications(notification2);  
+					 
+					   }
+				}
+				
+        		}
+			 
+				if(noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")) 
+				{
+					{
+						   if(PandAs.size()>0) {
+						   for(String PandAEmpNo : PandAs) {
+							   EMSNotification notification3 = new EMSNotification();
+							   notification3.setEmpNo(PandAEmpNo);
+							   notification3.setNotificationUrl("NocApproval.htm");
+							   notification3.setNotificationMessage("Recieved NOC Higher Education Change Request <br> From"+emp.getEmpName());
+							   notification3.setNotificationBy(empNo);
+							   notification3.setNotificationDate(LocalDate.now().toString());
+							   notification3.setIsActive(1);
+							   notification3.setCreatedBy(username);
+							   notification3.setCreatedDate(sdtf.format(new Date()));
+										
+								dao.AddNotifications(notification3);  
+						      }
+						   }
+					     }
+					
+				}
+				
+				
+			
+			return 1;
+			
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside NOCHigherEducationForward "+ e);
+			e.printStackTrace();
+			return 0;
+		
+		}
+		
+	
+	}
+
+	@Override
+	public List<Object[]> getHigherEducationApprovalData(String nOCHigherEducId) throws Exception {
+		
+		return dao.getHigherEducationApprovalData(nOCHigherEducId);
+	}
+
+	@Override
+	public List<String> GetSOsEmpNos() throws Exception {
+		
+		return dao.GetSOEmpNos();	
+	}
+
+	@Override
+	public List<String> GetSosEmpNos() throws Exception {
+		
+		return dao.GetSOEmpNos();
+	}
+
+	@Override
+	public Object[] getNocApprovalFlow(String empNo) throws Exception {
+		
+		return dao.getNocApprovalFlow(empNo);
+	}
+
+	@Override
+	public Object[] getPandAName(String NOCHigherEducId) throws Exception {
+	
+		return dao.getPandAName(NOCHigherEducId);
+	}
+
 	
 }
 

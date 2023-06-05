@@ -34,6 +34,8 @@ body {
    	   Object[] empData=(Object[])request.getAttribute("EmpData");
    	   
    	  NocHigherEducation noc=(NocHigherEducation)request.getAttribute("HigherEducation");
+   	  
+   	 /*  System.out.println("year---"+noc.getAcademicYear()); */
   %>
 
 <div class="card-header page-top">
@@ -107,13 +109,21 @@ body {
 							</select>
 			            </div>
 			
+			           <div class="col-md-3">
+			                <label>Institution Name</label> 
+			                 <input type="text" name="InstitutionName" value="<% if(noc!=null && noc.getInstitutionName()!=null){ %><%=noc.getInstitutionName() %><%} %>"
+			                    class=" form-control input-sm " placeholder="Enter Institution Name"  required="required" >
+			            	
+			            </div>	
+			            
+			            
 			           <div class="col-md-2">
 			                <label>Academic Year</label> 
-			                <input  class="form-control date"  data-date-format="yyyy-mm-dd" id="datepicker1" name="AcademicYear"  value="<% if(noc!=null && noc.getAcademicYear()!=null) {%><%=noc.getAcademicYear().toString().substring(0,4) %><%} %>"  placeholder="Enter Academic Year"  required="required" >
+			                <input  class="form-control date"   id="datepicker1" name="AcademicYear"  <%-- value="<% if(noc!=null && noc.getAcademicYear()!=null) {%><%=noc.getAcademicYear().toString().substring(0,4) %><%} %>" --%>  placeholder="Enter Academic Year"  required="required" >
 			            	
 			            </div>			
 			            	
-			            <div class="col-md-3">
+			            <div class="col-md-2">
 			                <label>Name of Course </label>
 			                <input type="text" id="" name="CourseName" value="<% if(noc!=null && noc.getCourse()!=null){ %><%=noc.getCourse() %><%} %>"
 			                    class=" form-control input-sm " placeholder="Enter Course Name"  required="required" >
@@ -126,7 +136,15 @@ body {
 			                     >
 			            </div>
 			            
-			            <div class="col-md-2">
+			            
+			             
+				  </div>
+			    </div>
+			
+			     <div class="form-group">
+			        <div class="row">
+			        
+			        <div class="col-md-2">
 			                <label>Education Type</label><br>
 			                 <select class=" form-control select2" name="EducationType" required="required">
 			                  <option value="" selected="selected" disabled="disabled">Select</option>
@@ -138,12 +156,7 @@ body {
 								
 							</select>
 			            </div>
-			             
-				  </div>
-			    </div>
-			
-			     <div class="form-group">
-			        <div class="row">
+			            
 			          <div class="col-md-4">
 			                <label>Essential Educational Qualification  </label>
 			                <input type="text" id="" name="QualificationRequired"   value="<% if(noc!=null && noc.getQualifiactionRequired()!=null){ %><%=noc.getQualifiactionRequired() %><%} %>"
@@ -196,6 +209,11 @@ $(document).ready(function(){
     		 viewMode: "years", 
     		    minViewMode: "years"
     });
+	 <%if(noc!=null && noc.getAcademicYear()!=null){%> 
+	  document.getElementById("datepicker1").value =<%=noc.getAcademicYear()%> 
+	  <%}else{%>
+	  document.getElementById("datepicker1").value =new Date().getFullYear()
+	  <%}%>
 	
 <%--  <% if(DeclarationYear!=null){%>
   document.getElementById("datepicker1").value = <%=DeclarationYear %>

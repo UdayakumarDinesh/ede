@@ -11,12 +11,13 @@ public class NocHigherEducationDto {
 	private String NocEducationNo;
 	private String EmpNo;
 	private String InstitutionType;
+	private String InstitutionName;
 	private String AcademicYear;
 	private String Course;
 	private String Specialization; 
     private String EducationType;
     private String QualifiactionRequired;
-    private String Declaration; 
+  
     private String Remarks; 
     private String HigherEducationStatus;
     private String NocStatusCode;
