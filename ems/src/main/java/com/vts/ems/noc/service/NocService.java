@@ -132,6 +132,10 @@ public interface NocService {
 
 	public Object[] getEmpQualification(String empNo)throws Exception;
 
+	public ExamIntimation getIntimationById(long  ExamId)throws Exception;
+
+	public List<Object[]> IntimationApprovalData(String examId)throws Exception;
+
 	
 	
 

@@ -790,7 +790,7 @@ public class NocDaoImpl implements NocDao {
 		
 	}
 
-	private static final String EXAMINTIMATIONLIST="SELECT a.ExamId,a.ExamName,a.ProbableDate,DATE(InitiatedDate),c.PISStatus,c.PisStatusColor,c.pisstatuscode,a.IntimationStatus,a.IntimateStatusCode FROM intimation_exam a,pis_approval_status c WHERE a.isActive='1' AND a.IntimateStatusCode=c.PisStatuscode AND a.EmpNo=:empNo ORDER BY a.ExamId DESC";
+	private static final String EXAMINTIMATIONLIST="SELECT a.ExamId,a.IntimationExamNo,DATE(InitiatedDate),c.PISStatus,c.PisStatusColor,c.pisstatuscode,a.IntimationStatus,a.IntimateStatusCode FROM intimation_exam a,pis_approval_status c WHERE a.isActive='1' AND a.IntimateStatusCode=c.PisStatuscode AND a.EmpNo=:empNo ORDER BY a.ExamId DESC";
 	@Override
 	public List<Object[]> getExamIntimationDetails(String empNo) throws Exception {
 		
@@ -1155,7 +1155,58 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 			return null;
 		}		
 	}
-}
+
+	public static final String MAXOFINTIMATIONID="SELECT IFNULL(MAX(ExamId),0) as 'MAX' FROM intimation_exam";
+	@Override
+	public long getmaxIntimationId() throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(MAXOFINTIMATIONID);
+			BigInteger IntimationId=(BigInteger)query.getSingleResult();
+			return IntimationId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO getmaxIntimationId "+ e);
+			return 0;
+		}
+	}
+
+	@Override
+	public ExamIntimation getIntimationById(long examId) throws Exception {
+		
+
+		try {
+			ExamIntimation exam = manager.find(ExamIntimation.class,(examId));
+			return exam ;
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO getIntimationById() "+e);
+			e.printStackTrace();
+			return null;
+		}	
+		
+	   }
+
+	
+	public static final String INTIMATIONAPPROVALDATA="SELECT tra.IntimationTransId,(SELECT empno FROM  intimation_exam_trans t , employee e \r\n"
+			+ " WHERE e.empno = t.actionby AND t.IntimateStatusCode =  sta.pisstatuscode ORDER BY t.IntimateStatusCode DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM intimation_exam_trans t , employee e  WHERE e.empno = t.actionby AND t.IntimateStatusCode =  sta.pisstatuscode ORDER BY t.IntimationTransId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "\r\n"
+			+ "(SELECT designation FROM intimation_exam_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.IntimateStatusCode =  sta.pisstatuscode ORDER BY t.IntimationTransId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode \r\n"
+			+ "FROM  intimation_exam_trans tra, pis_approval_status sta,employee emp,intimation_exam par \r\n"
+			+ "WHERE par.ExamId = tra.ExamId AND tra.IntimateStatusCode = sta.pisstatuscode AND \r\n"
+			+ "tra.actionby=emp.empno AND sta.pisstatuscode IN ('VDG','VSO','VPA','APR','DPR') AND par.ExamId =:examId \r\n"
+			+ "GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
+	
+	@Override
+	public List<Object[]> getIntimationApprovalData(String examId) throws Exception {
+		
+		Query query=manager.createNativeQuery(INTIMATIONAPPROVALDATA);
+		query.setParameter("examId", examId );
+		return (List<Object[]>)query.getResultList();
+	}
+	}
+
+
 
 	
 

@@ -61,8 +61,11 @@ body{
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
+	List<String> SOs = (List<String>)request.getAttribute("SOEmpNos");
 	
 	Object[] empData=(Object[])request.getAttribute("EmpData");
+	
+	 Object[] emplist = (Object[])request.getAttribute("NocApprovalFlow"); 
 	
 	List<Object[]> ExamIntimationList=(List<Object[]>)request.getAttribute("ExamIntimationDetails");
 	
@@ -118,16 +121,15 @@ body{
 		<div class="card-body">
 		<!-- <div class="card-body main-card"> -->
 
-			<form action="#" method="POST" >
+			<form action="#" method="POST" id="IntimationForExam" >
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 				 <div class="table-responsive"> 
 					 	<table class="table table-bordered table-hover table-striped table-condensed"  id="table"> 
 						<thead>
 							<tr>
-								<th style="width: 6%">SN</th>
-								<th style="width: 10%">Exam Name</th>
-								<th style="width: 10%">Probable Date </th>
-							    <th style="width: 10%">Initiated Date</th> 
+								<th style="width: 6%">Select</th>
+								<th style="width: 10%">Initiation Number</th>
+								<th style="width: 10%">Initiated Date</th> 
 								<th style="width: 15%">Status</th>
 								<th style="width: 8%">Action</th>
 							</tr>
@@ -140,14 +142,15 @@ body{
 						for(Object[] obj: ExamIntimationList) {%>
 						
 						<tr>
-								<td style="text-align: center;"><%=++count%></td>
+								<td style="text-align: center;"><% if(toUserStatus.contains(obj[7].toString()) ){ %><input type="radio" name="ExamId" value="<%=obj[0] %>"><%} 
+								else{%><input type="radio" name="ExamId" value="<%=obj[0] %>" disabled>  <%} %></td>
+								
 								<td style="text-align: center;"><%=obj[1] %></td>
-								<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[2].toString())) %></td>
-								<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[3].toString())) %></td> 
+								<td style="text-align: center;"><%=rdf.format(sdf.parse(obj[2].toString())) %></td> 
 								<td style="text-align: center;">
-									<%if(obj[5]!=null){%>
+								<%if(obj[4]!=null){%>
 								  
-								 	<%if(obj[7]!=null && obj[7].toString().equalsIgnoreCase("A") ){ %>
+								 	<%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="IntimationTransactionStatus.htm" formmethod="GET"  name="ExamId" value="<%=obj[0] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
@@ -155,27 +158,16 @@ body{
 							    	<%} 
 							    	else{%>
 							    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="IntimationTransactionStatus.htm" value="<%=obj[0] %>" name="ExamId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
-								    		&nbsp;<%=obj[4] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								    		&nbsp;<%=obj[3] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
-							    		
-							    	
 							    	<%} %>  
 								 
 								<%} %>
-								
-								
 								</td>
+								
 								<td style="text-align: center;">
 								 
-								 <input type="hidden" name="ExamName<%=obj[0]%>"   id="ExamName<%=obj[0]%>"   value="<%=obj[1] %>" >
-								<input type="hidden" name="probabledate<%=obj[0]%>"   id="probabledate<%=obj[0]%>"  value="<%=rdf.format(sdf.parse(obj[2].toString())) %>" >  
 								
-								<%if(toUserStatus.contains(obj[8].toString()) ){ %> 
-								
-							   <button type="button" class="btn btn-sm " name="ExamId" value="<%=obj[0]%>" onclick="openeditmodal('<%=obj[0] %>')" data-toggle="tooltip" data-placement="top" data-original-title="Edit">
-								 <i class="fa fa-edit" style="color:#FC4F00;"></i></button>
-								 
-								 <%} %>
 								  <button type="submit" class="btn btn-sm " name="ExamId" value="<%=obj[0]%>"   formaction="ExamIntimationPreview.htm" formmethod="POST" data-toggle="tooltip" title="" data-original-title="View Details">
 								    <i class="fa fa-eye " style="color: black;"></i>
 							    </button>
@@ -199,7 +191,9 @@ body{
 				<div class="row text-center">
 					<div class="col-md-12">
 						
-						<button type="button" class="btn btn-sm add-btn" onclick="openmodal()">ADD</button>
+					    <button type="submit" class="btn btn-sm add-btn" formaction="IntimationExamAdd.htm" >ADD</button>
+						<button type="submit" class="btn btn-sm edit-btn" formaction="IntimationExamEdit.htm" name="action" value="EDITCIR" Onclick="Edit(IntimationForExam)">EDIT</button>
+						
 						
 					</div>
 				</div>
@@ -218,23 +212,44 @@ body{
 	                		<td class="trup" style="background: #E8E46E;">
 	                			User - <%=emp.getEmpName() %>
 	                		</td>
-	                		<td rowspan="2">
-	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
-	                		</td>
+	                		
 	                	<%} %>
 	               		
-	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
-	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM -  <%=DGMEmpName[1] %>
-	                		</td>
-			                		 
-	                		<td rowspan="2">
+	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) && !SOs.contains(empData[0].toString()) ){ %>
+	               		    
+	               		    <td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
+	               		
+	               		
+	                		<td class="trup" style="background: #FBC7F7;">
+	                			DGM -  <%=emplist[2] %>
+	                		</td>
+			                		 
+	                		
 	               		<%} %>
+	               		
+	               		<% if(!SOs.contains(empData[0].toString()) && PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
+	               		
+	               		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	                		
+	                		<td class="trup" style="background: #90CAF9;" >
+	                			SO- <%=emplist[3] %>
+	                		</td>
+	                		
+	                		
+	                	<%} %>
+	               		
 	               		<% if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
+	               		
+	               		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	                		
 	                		<td class="trup" style="background: #BCAAA3;" >
-	                			P&A - <%=PandAEmpName[1] %>
+	                			P&A -  <%=emplist[4] %>
 	                		</td>
 	                		
 	                	<%} %>
@@ -249,7 +264,7 @@ body{
 	</div>
 	
 	
-	 <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-add-modal">
+	 <%-- <div class="modal bd-example-modal-lg" tabindex="-1" role="dialog" id="my-add-modal">
 		   <div class="modal-dialog modal-lg" role="document" style="width:40%;height: 60% ;">
 			<div class="modal-content">
 					    <div class="modal-header" style="background-color: rgba(0,0,0,.03);">
@@ -327,7 +342,7 @@ body{
 				</div>
 			</div>
 		</div>
-	</div>
+	</div> --%>
 		
 <!-- </div> -->
 
@@ -336,32 +351,16 @@ body{
 			       
 <script type="text/javascript">
 	
+function Edit(IntimationForExam)
+{
+	var fields = $("input[name='ExamId']").serializeArray();
 
-	   	   
-	   
-
-
-
-function openmodal(){
-	
-	$('#my-add-modal').modal('toggle'); 
-	
-	
-}
-
-function openeditmodal(ExamId){
-	
-	
-	 $("#ExamId").val(ExamId);
-	 
-	 console.log("id---"+ExamId);
-	
-	 $('#examname').val($('#ExamName'+ExamId).val())
-
-	   $('#dateedit').val($('#probabledate'+ExamId).val())
-	 
-	
-	$('#my-edit-modal').modal('toggle'); 
+	if (fields.length === 0) {
+		alert("Please Select Atleast One  ");
+        event.preventDefault();
+		return false;
+	}
+	return true;
 	
 }
 

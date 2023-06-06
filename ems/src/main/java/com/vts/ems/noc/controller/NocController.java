@@ -1250,6 +1250,7 @@ public class NocController {
 				 req.setAttribute("DGMEmpNos", DGMs);
 				 req.setAttribute("DivisionHeadEmpNos", DHs);
 				 req.setAttribute("GroupHeadEmpNos", GHs);
+				 req.setAttribute("SOEmpNos", SOs);
 				 
 				 req.setAttribute("CeoName", service.GetCeoName());
 				 req.setAttribute("PandAEmpName", service.GetPandAEmpName());
@@ -1265,6 +1266,7 @@ public class NocController {
 				 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				 
 				 req.setAttribute("ExamIntimationDetails", service .getExamIntimationDetails(EmpNo));
+				 req.setAttribute("NocApprovalFlow", service.getNocApprovalFlow(EmpNo));
 				
 				return "noc/IntimationForExam";
 						 
@@ -1276,7 +1278,7 @@ public class NocController {
 			}
 	   }
 	 
-	 @RequestMapping(value = "ExamDetailsAddSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	 @RequestMapping(value = "IntimationExamAdd.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String IntimationExamAdd(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			
@@ -1286,9 +1288,43 @@ public class NocController {
 			logger.info(new Date()+"Inside IntimationExamAdd.htm "+UserId);
 			try {
 				
+				
+				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				return "noc/IntimationForExamAddEdit";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside IntimationExamAdd.htm "+UserId, e); 
+			    return "static/Error"; 
+			}
+		}
+	 
+	 
+	 
+	 @RequestMapping(value = "IntimationExamAddSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public String IntimationExamAddSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside IntimationExamAddSubmit.htm "+UserId);
+			try {
+				
 				ExamIntimationDto dto = new ExamIntimationDto();
 						
 						dto.setEmpNo(EmpNo);
+						dto.setAdvNo(req.getParameter("AdNo"));
+						dto.setAdvDate(sdf.format(rdf.parse(req.getParameter("AdDate"))));
+						dto.setOrganizationName(req.getParameter("OrgName"));
+						dto.setPlace(req.getParameter("Place"));
+						dto.setPostName(req.getParameter("PostName"));
+						dto.setPostCode(req.getParameter("PostCode"));
+						dto.setPayLevel(req.getParameter("PayLevel"));
+						dto.setApplicationThrough(req.getParameter("ApplThrough"));
+						
 						dto.setExamName(req.getParameter("ExamName"));
 						dto.setProbableDate(sdf.format(rdf.parse(req.getParameter("ProbableDate"))));
 				
@@ -1308,26 +1344,65 @@ public class NocController {
 			} catch (Exception e) 
 			 { 
 				e.printStackTrace(); 
-			    logger.error(new Date()+" Inside IntimationExamAdd.htm "+UserId, e); 
+			    logger.error(new Date()+" Inside IntimationExamAddSubmit.htm "+UserId, e); 
 			    return "static/Error"; 
 			}
 		}
 			
 	 
-	 @RequestMapping(value = "ExamDetailsEditSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
+	 
+	 
+	 @RequestMapping(value = "IntimationExamEdit.htm", method = {RequestMethod.GET,RequestMethod.POST})
+		public String IntimationExamEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
+		{
+			
+		    String UserId=(String)ses.getAttribute("Username");
+			String EmpId =  ses.getAttribute("EmpId").toString();
+			String EmpNo =  ses.getAttribute("EmpNo").toString();
+			logger.info(new Date()+"Inside IntimationExamEdit.htm "+UserId);
+			try {
+				
+				 String ExamId=req.getParameter("ExamId");
+				 
+				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				
+                ExamIntimation exam =service.getIntimationById(Long.parseLong(ExamId));
+				req.setAttribute("ExamIntimation", exam);
+				
+			  return "noc/IntimationForExamAddEdit";
+				
+					 
+			} catch (Exception e) 
+			 { 
+				e.printStackTrace(); 
+			    logger.error(new Date()+" Inside IntimationExamEdit.htm "+UserId, e); 
+			    return "static/Error"; 
+			}
+		}
+	 
+	 
+	 @RequestMapping(value = "IntimationExamEditSubmit.htm", method = {RequestMethod.GET,RequestMethod.POST})
 		public String IntimationExamUpdate(HttpServletRequest req, HttpSession ses, RedirectAttributes redir)  throws Exception 
 		{
 			
 		    String UserId=(String)ses.getAttribute("Username");
 			String EmpId =  ses.getAttribute("EmpId").toString();
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
-			logger.info(new Date()+"Inside ExamDetailsEditSubmit.htm "+UserId);
+			logger.info(new Date()+"Inside IntimationExamEditSubmit.htm "+UserId);
 			try {
 				
 				 String ExamId=req.getParameter("ExamId");
 				 
 				 ExamIntimationDto dto = new ExamIntimationDto();
-				 dto.setExamId(Long.parseLong(ExamId));
+				    dto.setExamId(Long.parseLong(ExamId));
+				    dto.setAdvNo(req.getParameter("AdNo"));
+					dto.setAdvDate(sdf.format(rdf.parse(req.getParameter("AdDate"))));
+					dto.setOrganizationName(req.getParameter("OrgName"));
+					dto.setPlace(req.getParameter("Place"));
+					dto.setPostName(req.getParameter("PostName"));
+					dto.setPostCode(req.getParameter("PostCode"));
+					dto.setPayLevel(req.getParameter("PayLevel"));
+					dto.setApplicationThrough(req.getParameter("ApplThrough"));
 				    dto.setExamName(req.getParameter("ExamName"));
 					dto.setProbableDate(sdf.format(rdf.parse(req.getParameter("ProbableDate"))));
 				 
@@ -1347,7 +1422,7 @@ public class NocController {
 			} catch (Exception e) 
 			 { 
 				e.printStackTrace(); 
-			    logger.error(new Date()+" Inside ExamDetailsEditSubmit.htm "+UserId, e); 
+			    logger.error(new Date()+" Inside IntimationExamEditSubmit.htm "+UserId, e); 
 			    return "static/Error"; 
 			}
 		}
@@ -1380,7 +1455,8 @@ public class NocController {
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
 			logger.info(new Date()+"Inside ExamIntimationPreview.htm "+UserId);
 			try {
-				List<String> PandAs = service.GetPandAAdminEmpNos();
+				
+				 List<String> PandAs = service.GetPandAAdminEmpNos();
 				 String ExamId=req.getParameter("ExamId");
 				 String isApproval = req.getParameter("isApproval");
 				 
@@ -1390,6 +1466,7 @@ public class NocController {
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 req.setAttribute("RemarksHistory",service.getIntimationRemarks(ExamId) );
 				 req.setAttribute("ExamIntimationDetails",service.getIntimationData(ExamId) );
+				 req.setAttribute("IntimationApprovalData", service.IntimationApprovalData(ExamId));
 				 req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			     return "noc/IntimateExamPreview";
 				
@@ -1410,7 +1487,7 @@ public class NocController {
 		    String UserId=(String)ses.getAttribute("Username");
 			String EmpId =  ses.getAttribute("EmpId").toString();
 			String EmpNo =  ses.getAttribute("EmpNo").toString();
-			logger.info(new Date()+"Inside ExamIntimationLetterDownload.htm "+UserId);
+			logger.info(new Date()+"Inside ExamIntimationDownload.htm "+UserId);
 			try {
 				
 				 String ExamId=req.getParameter("ExamId");
@@ -1418,14 +1495,15 @@ public class NocController {
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 req.setAttribute("ExamIntimationDetails",service.getIntimationData(ExamId) );
 				 req.setAttribute("RemarksHistory",service.getIntimationRemarks(ExamId) );
+				 req.setAttribute("IntimationApprovalData", service.IntimationApprovalData(ExamId));
 				 req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 				 String path = req.getServletContext().getRealPath("/view/temp");
 			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-				req.getRequestDispatcher("/view/noc/IntimationExamLetterDownload.jsp").forward(req, customResponse);
+				req.getRequestDispatcher("/view/noc/IntimationExamDownload.jsp").forward(req, customResponse);
 				String html = customResponse.getOutput();
 				byte[] data = html.getBytes();
 				InputStream fis1 = new ByteArrayInputStream(data);
-				PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/IntimationExamLetterDownload.pdf"));
+				PdfDocument pdfDoc = new PdfDocument(new PdfWriter(path + "/IntimationExamDownload.pdf"));
 				pdfDoc.setTagged();
 				Document document = new Document(pdfDoc, PageSize.LEGAL);
 				document.setMargins(50, 100, 150, 50);
@@ -1437,8 +1515,8 @@ public class NocController {
 				 * document.close(); pdfDoc.close(); fis1.close();
 				 */
 				res.setContentType("application/pdf");
-				res.setHeader("Content-disposition", "inline;filename=IntimationExamLetterDownload.pdf");
-				File f = new File(path + "/IntimationExamLetterDownload.pdf");
+				res.setHeader("Content-disposition", "inline;filename=IntimationExamDownload.pdf");
+				File f = new File(path + "/IntimationExamDownload.pdf");
 				FileInputStream fis = new FileInputStream(f);
 				DataOutputStream os = new DataOutputStream(res.getOutputStream());
 				res.setHeader("Content-Length", String.valueOf(f.length()));
@@ -1449,10 +1527,10 @@ public class NocController {
 				}
 				os.close();
 				fis.close();
-				Path pathOfFile2 = Paths.get(path + "/IntimationExamLetterDownload.pdf");
+				Path pathOfFile2 = Paths.get(path + "/IntimationExamDownload.pdf");
 				Files.delete(pathOfFile2);
 			 
-//			     return "noc/IntimationExamLetterDownload";
+
 				
 					 
 			} catch (Exception e) 
@@ -1482,6 +1560,9 @@ public class NocController {
 				String  IntimationStatusCode = exam.getIntimateStatusCode();
 				
 				long count = service.IntimationForExamForward(ExamId, Username, action,remarks,EmpNo,LoginType);
+				
+				if(action.equalsIgnoreCase("A")) {
+				
 				if(IntimationStatusCode.equalsIgnoreCase("INI") || IntimationStatusCode.equalsIgnoreCase("RDG") || IntimationStatusCode.equalsIgnoreCase("RPA") ) {
 					if (count > 0) {
 						redir.addAttribute("result", "Intimation For Exam Forwarded Successful");
@@ -1490,15 +1571,44 @@ public class NocController {
 					}	
 					return "redirect:/IntimateExam.htm";
 				}
-				else  
+				
+				else if(IntimationStatusCode.equalsIgnoreCase("FWD") || IntimationStatusCode.equalsIgnoreCase("VDG") ) { 
+					   
+					   
+					   if (count > 0) {
+							redir.addAttribute("result", "NOC For Higher Education Recommended Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC For Higher Education Recommend Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+				   else if(IntimationStatusCode.equalsIgnoreCase("VSO")) {
+						  
+					   
+					   if (count > 0) {
+							redir.addAttribute("result", "NOC For Higher Education Verified Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC For Higher Education Verify Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				
+				}
+				
+				if(action.equalsIgnoreCase("R"))
 				{
 					if (count > 0) {
-						redir.addAttribute("result", "Intimation For Exam verification Successful");
+						redir.addAttribute("result", "Intimation For Exam Returned Successful");
 					} else {
-						redir.addAttribute("resultfail", "Intimation For Exam verification Unsuccessful");	
+						redir.addAttribute("resultfail", "Intimation For Exam Return Unsuccessful");	
 					}	
 					return "redirect:/NocApproval.htm";
 				}
+				
+				return "redirect:/IntimateExam.htm";
 				
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside IntimationForExamForward.htm"+Username, e);
@@ -1820,7 +1930,7 @@ public class NocController {
 				Path pathOfFile2 = Paths.get(path + "/NocHigherEducationDownload.pdf");
 				Files.delete(pathOfFile2);
 				 
-			    // return "noc/NocHigherEducationDownload";
+			   
 				
 					 
 			} catch (Exception e) 
@@ -1897,16 +2007,14 @@ public class NocController {
                       else if(NocStatusCode.equalsIgnoreCase("VPA")) {
 						  
 					     if (count > 0) {
-							redir.addAttribute("result", "NOC For Higher Education  Successful");
+							redir.addAttribute("result", "NOC For Higher Education Approved  Successful");
 						} else {
-							redir.addAttribute("resultfail", "NOC For Higher Education  Unsuccessful");	
+							redir.addAttribute("resultfail", "NOC For Higher Education  Approve Unsuccessful");	
 						}	
 						return "redirect:/NocApproval.htm"; 
 					   
 				   }
 				   
-                      
- 				   
 				}
 				
 				if(action.equalsIgnoreCase("D")) 
@@ -1953,12 +2061,11 @@ public class NocController {
 				
 				String NOCHigherEducId=req.getParameter("EducationId");
 				List<String> PandAs = service.GetPandAAdminEmpNos();
-				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
-				 req.setAttribute("NOCHigherEducationDetails", service.getHigherEducationDetails(NOCHigherEducId));
-				 //req.setAttribute("P&ANameDesig", service.getPandAName(NOCHigherEducId));
-				 req.setAttribute("PandAsEmpNos", PandAs);
-				 req.setAttribute("lablogo",getLabLogoAsBase64());
-				 String path = req.getServletContext().getRealPath("/view/temp");
+				req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+				req.setAttribute("NOCHigherEducationDetails", service.getHigherEducationDetails(NOCHigherEducId));
+				req.setAttribute("PandAsEmpNos", PandAs);
+				req.setAttribute("lablogo",getLabLogoAsBase64());
+				String path = req.getServletContext().getRealPath("/view/temp");
 			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 				req.getRequestDispatcher("/view/noc/NocHigherEducationLetter.jsp").forward(req, customResponse);
 				String html = customResponse.getOutput();
@@ -1990,9 +2097,6 @@ public class NocController {
 				fis.close();
 				Path pathOfFile2 = Paths.get(path + "/NOCHigherEducationLetter.pdf");
 				Files.delete(pathOfFile2);
-			 
-//			     return "noc/IntimationExamLetterDownload";
-				
 					 
 			} catch (Exception e) 
 			 { 

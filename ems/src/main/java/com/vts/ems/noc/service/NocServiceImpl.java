@@ -1009,19 +1009,27 @@ public class NocServiceImpl implements NocService {
 	@Override
 	public long ExamDetailsAdd(ExamIntimationDto dto, String userId) throws Exception {
 		
-//		ExamIntimationTrans transaction = ExamIntimationTrans.builder()	
-//				.ExamId(dto.getExamId())
-//				.IntimateStatusCode("INI")
-//				.ActionBy(dto.getEmpNo())
-//				.ActionDate(sdtf.format(new Date()))
-//				.build();
-//		
-//		 dao.ExamIntimationTransAdd(transaction);
+		LocalDate today= LocalDate.now();
+		String year="";
+		year=String.valueOf(today.getYear()).substring(2, 4);
+		long maxIntimationId = dao.getmaxIntimationId()+1;
 		
+		String IntimationExamNo="";
+		IntimationExamNo="INT/EXAM-"+year+"/"+maxIntimationId;
 		
+	
 		ExamIntimation exam = new ExamIntimation();
 		
 		exam.setEmpNo(dto.getEmpNo());
+		exam.setIntimationExamNo(IntimationExamNo);
+		exam.setAdvNo(dto.getAdvNo());
+		exam.setAdvDate(dto.getAdvDate());
+		exam.setOrganizationName(dto.getOrganizationName());
+		exam.setPlace(dto.getPlace());
+		exam.setPostName(dto.getPostName());
+		exam.setPostCode(dto.getPostCode());
+		exam.setPayLevel(dto.getPayLevel());
+		exam.setApplicationThrough(dto.getApplicationThrough());
 		exam.setExamName(dto.getExamName());
 		exam.setProbableDate(dto.getProbableDate());
 		exam.setInitiatedDate(sdf1.format(new Date()));
@@ -1057,6 +1065,14 @@ public class NocServiceImpl implements NocService {
 		ExamIntimation exam =dao.getExamId(dto.getExamId());
 		
 		exam.setExamId(dto.getExamId());
+		exam.setAdvNo(dto.getAdvNo());
+		exam.setAdvDate(dto.getAdvDate());
+		exam.setOrganizationName(dto.getOrganizationName());
+		exam.setPlace(dto.getPlace());
+		exam.setPostName(dto.getPostName());
+		exam.setPostCode(dto.getPostCode());
+		exam.setPayLevel(dto.getPayLevel());
+		exam.setApplicationThrough(dto.getApplicationThrough());
 		exam.setExamName(dto.getExamName());
 		exam.setProbableDate(dto.getProbableDate());
 		exam.setInitiatedDate(sdf1.format(new Date()));
@@ -1103,7 +1119,10 @@ public class NocServiceImpl implements NocService {
 			List<String> DGMs = dao.GetDGMEmpNos();
 //			List<String> DHs = dao.GetDHEmpNos();
 //			List<String> GHs = dao.GetGHEmpNos();
+			List<String> SOs = dao.GetSOEmpNos();	
+			
 			List<String> PandAs = dao.GetPandAAdminEmpNos();
+			
 			String CEO = dao.GetCEOEmpNo();
 			
 			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
@@ -1115,7 +1134,8 @@ public class NocServiceImpl implements NocService {
 //					
 //				}
 				// first time forwarding
-				if(IntimateStatusCode.equalsIgnoreCase("INI") || IntimateStatusCode.equalsIgnoreCase("RDG") || IntimateStatusCode.equalsIgnoreCase("RPA") ) 
+				if(IntimateStatusCode.equalsIgnoreCase("INI") || IntimateStatusCode.equalsIgnoreCase("RDG") || IntimateStatusCode.equalsIgnoreCase("RPA")
+						|| IntimateStatusCode.equalsIgnoreCase("RSO")) 
 				{
 					exam.setIntimateStatusCode("FWD");
 					exam.setForwardedDate(sdf1.format(new Date()));
@@ -1128,9 +1148,14 @@ public class NocServiceImpl implements NocService {
 	                    exam.setIsActive(1);
 	                    exam.setIntimationStatus("A");				
 					}
-					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					else if(SOs.contains(formempno)) 
 					{
 						exam.setInitimateStatusCodeNext("VPA");
+					}
+					
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						exam.setInitimateStatusCodeNext("VSO");
 					}
 					else 
 					{
@@ -1139,12 +1164,14 @@ public class NocServiceImpl implements NocService {
 				}
 				//approving	flow 
 				else
-				{
-					
-                    			    					
+				{ 			    					
 					exam.setIntimateStatusCode(InitimateStatusCodeNext);
 					if(InitimateStatusCodeNext.equalsIgnoreCase("VDG")) {
-						exam.setInitimateStatusCodeNext("VPA");
+						exam.setInitimateStatusCodeNext("VSO");
+					}
+						else if(InitimateStatusCodeNext.equalsIgnoreCase("VSO")) {
+							exam.setInitimateStatusCodeNext("VPA");	
+						
 					}else if(InitimateStatusCodeNext.equalsIgnoreCase("VPA")) {
 						
 	                    exam.setIsActive(1);
@@ -1163,15 +1190,24 @@ public class NocServiceImpl implements NocService {
 				{
 					exam.setIntimateStatusCode("RDG");	
 				}
+				else if(InitimateStatusCodeNext.equalsIgnoreCase("VSO")) 
+				{
+					exam.setIntimateStatusCode("RSO");	
+				}
+				
 				else if(InitimateStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					exam.setIntimateStatusCode("RPA");	
 				}
 				
 				
-				if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				if(SOs.contains(formempno)) 
 				{
 					exam.setInitimateStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					exam.setInitimateStatusCodeNext("VSO");
 				}
 				else 
 				{
@@ -1208,31 +1244,79 @@ public class NocServiceImpl implements NocService {
 			{
 				if( exam.getInitimateStatusCodeNext().equalsIgnoreCase("VDG")) 
 				{
-					notification.setEmpNo(DGMEmpNo);					
+					
+					notification.setEmpNo(DGMEmpNo);
+					notification.setNotificationUrl("NocApproval.htm");
+					notification.setNotificationMessage("Recieved Intimation For Exam Request From <br>"+emp.getEmpName());
+					notification.setNotificationBy(empNo);
+									
 				}
-				else if(exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA")) 
-				{
-					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0).toString():null);
-				}
-				notification.setNotificationUrl("NocApproval.htm");
-				notification.setNotificationMessage("Recieved Intimation For Exam  Request From <br>"+emp.getEmpName());
-				notification.setNotificationBy(empNo);
-			}
 			else if(action.equalsIgnoreCase("R"))
 			{
 				notification.setEmpNo(emp.getEmpNo());
 				notification.setNotificationUrl("IntimateExam.htm");
-				notification.setNotificationMessage("Pntimation For Exam Request Returned");
+				notification.setNotificationMessage("Intimation For Exam Request Returned");
 				notification.setNotificationBy(empNo);
 			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));	
+			}
+			
 			
 			notification.setNotificationDate(LocalDate.now().toString());
 			notification.setIsActive(1);
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			dao.AddNotifications(notification);		
 			
+			
+			if( !exam.getInitimateStatusCodeNext().equalsIgnoreCase("VSO") && !exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA")  ) {
+				dao.AddNotifications(notification);
+			}
+			
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(exam.getInitimateStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("NocApproval.htm");
+						  notification1.setNotificationMessage("Recieved Intimation For Exam Request From <br>"+emp.getEmpName());
+						  notification1.setNotificationBy(empNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  dao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("NocApproval.htm");
+						   notification1.setNotificationMessage("Recieved Intimation For Exam Request From <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(empNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+				   
+			}
 			return 1;
 		}catch (Exception e) {
 			logger.error(new Date() +" Inside IntimationForExamForward "+ e);
@@ -1727,6 +1811,18 @@ public class NocServiceImpl implements NocService {
 	public Object[] getEmpQualification(String empNo) throws Exception {
 		
 		return dao.getEmpQualification(empNo);
+	}
+
+	@Override
+	public ExamIntimation getIntimationById(long ExamId) throws Exception {
+		
+		return dao.getIntimationById(ExamId);
+	}
+
+	@Override
+	public List<Object[]> IntimationApprovalData(String examId) throws Exception {
+		
+		return dao.getIntimationApprovalData(examId);
 	}
 
 	

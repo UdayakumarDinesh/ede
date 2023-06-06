@@ -162,6 +162,12 @@ public interface NocDao {
 
 	public Object[] getEmpQualification(String empNo)throws Exception;
 
+	public long getmaxIntimationId()throws Exception;
+
+	public ExamIntimation getIntimationById(long examId)throws Exception;
+
+	public List<Object[]> getIntimationApprovalData(String examId)throws Exception;
+
 	
 
 

@@ -372,7 +372,7 @@ body{
                             <%}
                             else if(obj[3]!=null && obj[3].toString().equalsIgnoreCase("Intimation For Exam")){%>
                             
-                            <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
+                            <button type="submit" class="btn btn-sm" name="ExamId" value="<%=obj[4]%>" formaction="ExamIntimationLetterDownload.htm"  formmethod="GET"  formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
                             

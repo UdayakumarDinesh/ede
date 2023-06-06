@@ -226,7 +226,7 @@ body{
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
-	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
+	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !SOs.contains(empData[0].toString()) ){ %>
 	                		<td class="trup" style="background: #90CAF9;">
 	                			Division Head - <%=emplist[1] %>
 	                		</td>
