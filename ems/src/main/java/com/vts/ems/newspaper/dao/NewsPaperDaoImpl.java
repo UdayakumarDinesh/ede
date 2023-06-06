@@ -1039,7 +1039,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 		return newspaperList;
 	}
 
-	private static final String NEWSPAPERCLAIMLIST="SELECT a.NewspaperId, a.ClaimAmount,a.RestrictedAmount, a.NewspaperStatusCode,  a.isactive, a.NewsAppliedDate, a.ContingentId, a.empno, em.empname, b.ClaimsCount, b.ContingentBillNo, b.ContingentStatusCode, ed.SBIAccNo\r\n"
+	private static final String NEWSPAPERCLAIMLIST="SELECT a.NewspaperId, a.ClaimAmount,a.RestrictedAmount, a.NewspaperStatusCode,  a.isactive, a.NewsAppliedDate, a.ContingentId, a.empno, em.empname, b.ClaimsCount, b.ContingentBillNo, b.ContingentStatusCode, ed.SBIAccNo, a.PayableAmount\r\n"
 			+ "FROM pis_newspaper a, pis_newspaper_contingent b, employee em, employee_details ed\r\n"
 			+ "WHERE a.ContingentId=b.ContingentId AND b.ContingentId=:contingentid AND a.empno=em.empNo AND ed.empNo=a.empno";
 

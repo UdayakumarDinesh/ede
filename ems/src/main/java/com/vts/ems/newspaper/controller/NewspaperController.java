@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.LinkedHashMap;
@@ -24,6 +25,16 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.xssf.usermodel.XSSFFont;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -38,9 +49,11 @@ import com.vts.ems.chss.dto.CHSSContingentDto;
 import com.vts.ems.chss.model.CHSSContingent;
 import com.vts.ems.newspaper.model.NewspaperContingent;
 import com.vts.ems.newspaper.service.NewPaperServiceImpl;
+import com.vts.ems.utils.AmountWordConveration;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
 import com.vts.ems.utils.EmsFileUtils;
+import com.vts.ems.utils.IndianRupeeFormat;
 
 // newspaper and Telephone claim controller
 
@@ -743,6 +756,208 @@ public class NewspaperController {
 			logger.error(new Date() + " Inside NewsPaperExpSancReport.htm " + Username, e);
 			e.printStackTrace();
 			return new ModelAndView("static/Error");
+		}
+
+	}
+	
+	
+	@RequestMapping(value = "NewsConsolidatedExcelDownload.htm")
+	public void NewsConsolidatedExcelDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewsConsolidatedExcelDownload.htm "+UserId);
+		try {	
+			String contingentid = req.getParameter("contingentid");
+			List<Object[]> ContingentList = service.NewspaperContingentClaimList(contingentid);
+			Object[] contingentdata=service.newspaperContingentData(contingentid);
+				
+			IndianRupeeFormat nfc=new IndianRupeeFormat();
+			AmountWordConveration awc = new AmountWordConveration();
+			int rowNo=0;
+			// Creating a worksheet
+			Workbook workbook = new XSSFWorkbook();
+
+			Sheet sheet = workbook.createSheet("Contingent Report");
+			sheet.setColumnWidth(0, 1000);
+			sheet.setColumnWidth(1, 2500);
+			sheet.setColumnWidth(2, 6000);
+			sheet.setColumnWidth(3, 6000);
+			sheet.setColumnWidth(4, 4500);
+			
+			XSSFFont font = ((XSSFWorkbook) workbook).createFont();
+			font.setFontName("Times New Roman");
+			font.setFontHeightInPoints((short) 10);
+			font.setBold(true);
+			// style for file header
+			CellStyle file_header_Style = workbook.createCellStyle();
+			file_header_Style.setLocked(true);
+			file_header_Style.setFont(font);
+			file_header_Style.setWrapText(true);
+			file_header_Style.setAlignment(HorizontalAlignment.CENTER);
+			file_header_Style.setVerticalAlignment(VerticalAlignment.CENTER);
+			
+			// style for table header
+			CellStyle t_header_style = workbook.createCellStyle();
+			t_header_style.setLocked(true);
+			t_header_style.setFont(font);
+			t_header_style.setWrapText(true);
+			// style for table cells
+			CellStyle t_body_style = workbook.createCellStyle();
+			t_body_style.setWrapText(true);
+
+			
+			// File header Row
+			Row file_header_row = sheet.createRow(rowNo++);
+			sheet.addMergedRegion(new CellRangeAddress(0, 0,0, 4));   // Merging Header Cells 
+			Cell cell= file_header_row.createCell(0);
+			cell.setCellValue("Newspaper Contingent Bill Pay Report \r\nRef: "+contingentdata[1].toString());
+			file_header_row.setHeightInPoints((3*sheet.getDefaultRowHeightInPoints()));
+			cell.setCellStyle(file_header_Style);
+			
+			CellStyle file_header_Style2 = workbook.createCellStyle();
+			file_header_Style2.setLocked(true);
+			file_header_Style2.setFont(font);
+			file_header_Style2.setWrapText(true);
+			file_header_Style2.setAlignment(HorizontalAlignment.RIGHT);
+			file_header_Style2.setVerticalAlignment(VerticalAlignment.CENTER);
+			
+			Row file_header_row2 = sheet.createRow(rowNo++);
+			sheet.addMergedRegion(new CellRangeAddress(1, 1,0, 4));   // Merging Header Cells 
+			cell= file_header_row2.createCell(0);
+			cell.setCellValue("Approved On : "+DateTimeFormatUtil.SqlToRegularDate(contingentdata[7].toString()));
+			cell.setCellStyle(file_header_Style2);
+
+			// Table in file header Row
+			Row t_header_row = sheet.createRow(rowNo++);
+			cell= t_header_row.createCell(0); 
+			cell.setCellValue("SN"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(1); 
+			cell.setCellValue("Emp. No."); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(2); 
+			cell.setCellValue("Name"); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(3); 
+			cell.setCellValue("Bank Account No."); 
+			cell.setCellStyle(t_header_style);
+			
+			cell= t_header_row.createCell(4); 
+			cell.setCellValue("Bank Transfer (₹)"); 
+			cell.setCellStyle(t_header_style);
+			
+			
+			
+			long allowedamt=0;
+			int i=0;
+			
+			for (Object[] arrlist : ContingentList) 
+			{ 
+				i++;
+				int k=0;
+			
+				
+				Row t_body_row = sheet.createRow(rowNo++);
+				cell= t_body_row.createCell(0); 
+				cell.setCellValue(i); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(1); 
+				cell.setCellValue(arrlist[7].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(2); 
+				cell.setCellValue(arrlist[8] .toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				cell= t_body_row.createCell(3); 
+				cell.setCellValue(arrlist[12].toString()); 
+				cell.setCellStyle(t_body_style);
+				
+				long empallowedamount = 0;
+//			    for(Object[] obj :ContingentList )
+//				{
+			    	empallowedamount += Math.round( Double.parseDouble(arrlist[13].toString()));
+//				}
+			    allowedamt +=empallowedamount;
+				    
+			    cell= t_body_row.createCell(4); 
+				cell.setCellValue(nfc.rupeeFormat(String.valueOf( empallowedamount))); 
+				cell.setCellStyle(t_body_style);   
+				
+				
+							
+			}
+			// table footer style
+			CellStyle t_footer_style = workbook.createCellStyle();
+			t_footer_style.setLocked(true);
+			t_footer_style.setFont(font);
+			t_footer_style.setWrapText(true);
+			t_footer_style.setFont(font);
+			
+			// table footer total
+			Row f_foot_row = sheet.createRow(rowNo++);
+			cell= f_foot_row.createCell(3); 
+			cell.setCellValue("Total"); 
+			cell.setCellStyle(t_footer_style);
+					
+		    cell= f_foot_row.createCell(4); 
+			cell.setCellValue(nfc.rupeeFormat(String.valueOf( allowedamt))); 
+			cell.setCellStyle(t_footer_style);  
+			
+			
+			//footer style
+			CellStyle file_footer_Style = workbook.createCellStyle();
+			font.setBold(true);
+			file_footer_Style.setLocked(true);
+			file_footer_Style.setWrapText(true);
+			file_footer_Style.setFont(font);
+			// footer text amount
+			Row f_foot_row2 = sheet.createRow(rowNo);
+			sheet.addMergedRegion(new CellRangeAddress(rowNo, rowNo,0, 4));   
+			cell= f_foot_row2.createCell(0);
+			cell.setCellValue("In words Rupees "+awc.convert1(allowedamt)+" Only");
+			cell.setCellStyle(file_footer_Style);
+			rowNo++;
+
+		
+			String path = req.getServletContext().getRealPath("/view/temp");
+			String fileLocation = path.substring(0, path.length() - 1) + "temp.xlsx";
+
+			FileOutputStream outputStream = new FileOutputStream(fileLocation);
+			workbook.write(outputStream);
+			workbook.close();
+			
+			
+			String filename="NewspaperConsolidatedBill-Excel";
+			
+     
+	        res.setContentType("Application/octet-stream");
+	        res.setHeader("Content-disposition","attachment;filename="+filename+".xlsx");
+	        File f=new File(fileLocation);
+	         
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+//	        Path pathOfFile= Paths.get( path+File.separator+filename+".xlsx"); 
+//	        Files.delete(pathOfFile);		
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside NewsConsolidatedExcelDownload.htm "+UserId, e); 
 		}
 
 	}

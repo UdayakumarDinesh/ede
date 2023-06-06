@@ -11,9 +11,7 @@
 <jsp:include page="../static/header.jsp"></jsp:include>
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <title>Newspaper Claim Preview</title>
-<!--  Bootstrap -->
-<link rel="stylesheet"
-	href="vtsfolder/bower_components/bootstrap/dist/css/bootstrap.min.css" />
+
 
 <style type="text/css">
 @media print {
@@ -128,7 +126,6 @@ table {
 	String RistrictedAmt = "Not Available";
 	String ClaimRupee = "Not Available";
 
-	/* String NewsClaimHeader =(String)request.getAttribute("NewsClaimHeader"); */
 
 	if (NewspaperUserPrintData != null) {
 		String ClaimAmountRsPaisA[] = IndianRupeeFormat.getRupeePaisaSplit(NewspaperUserPrintData[2].toString());
@@ -143,6 +140,7 @@ table {
 	}
 
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 	Date today = new Date();
 	%>
 
@@ -157,9 +155,6 @@ table {
 						href="MainDashBoard.htm"><i
 							class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 
-					<!-- 		<li class="breadcrumb-item "><a href="NocApproval.htm">NOC Approval</a></li>
-					<li class="breadcrumb-item active" aria-current="page">
-						Preview</li> -->
 
 					<li class="breadcrumb-item "><a href="NewspaperList.htm">Newspaper
 							Apply</a></li>
@@ -174,11 +169,11 @@ table {
 	<%
 	if (NewspaperUserPrintData != null) {
 	%>
-
+	
 	<div class="page card dashboard-card">
-		<div class="card">
+		<div class="card" align="center">
 			<div class="card-body">
-				<div class="borderDiv" align="center">
+				<div class="borderDiv" >
 					<div align="center">
 
 						<table height="110" style="margin-top: 30px;" id="mainTable">
@@ -286,9 +281,9 @@ table {
 							<div class="decDiv">
 								<div class="decDiv1">Date:</div>
 
-								<div style="margin-right: 80px;">
+								<div style="margin-right: 5px; text-align: right;">
 									Signature of Employee <br> </b>
-					<span style="color: blue"> <%=NewspaperUserPrintData[9]%>,&nbsp;<%=NewspaperUserPrintData[10]%></span> <br> <b> STARC Intercom No: </b>
+					<span style="color: blue"> <%=NewspaperUserPrintData[9]%>,&nbsp;<%=NewspaperUserPrintData[10]%> </span> <br> <%if(!NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("")) {%>  <span style="color: blue"> [Forwarded On: <%if (NewspaperUserPrintData[12] !=null) {%> <%=rdtf.format(NewspaperUserPrintData[12]) %> <%} %>] </span> <%} %><br> <b> STARC Intercom No: </b>
 								</div>
 							</div>
 						</div>
@@ -391,7 +386,7 @@ table {
 						}
 						%>
 					</div>
-					<div class="row">
+					<%-- <div class="row">
 					<%
 							if (NewspaperUserPrintData[24] != null) {
 							%>
@@ -408,7 +403,7 @@ table {
 						<%
 							}
 							%>
-					</div>
+					</div> --%>
 					<form action="#">
 						<%
 						if (NewspaperUserPrintData != null && (NewspaperUserPrintData[11].toString().equalsIgnoreCase("CRT")

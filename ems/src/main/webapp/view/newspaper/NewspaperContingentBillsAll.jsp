@@ -205,11 +205,11 @@
 															<i style="color: #019267" class="fa-solid fa-file-arrow-down"></i>
 														</button>
 														
-														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Excel Download">
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="NewsConsolidatedExcelDownload.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Consolidated Report Excel Download">
 															<i class="fa-solid fa-table"></i>
 														</button>
 														
-														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0]%>" formaction="" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Transaction History">
+														<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0]%>" formaction="NewspaperContingentTransacStatus.htm" formtarget="blank" data-toggle="tooltip" data-placement="top" title="Transaction History">
 															<i class="fa-solid fa-clock-rotate-left"></i>
 														</button>
 																											

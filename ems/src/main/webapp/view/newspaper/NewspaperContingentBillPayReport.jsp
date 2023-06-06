@@ -32,8 +32,8 @@
 			@page {
 				size: 790px 1120px;
 				margin-top: 49px;
-				margin-left: 55px;
-				margin-right: 55px;
+				margin-left: 53px;
+				margin-right: 53px;
 				margin-buttom: 49px;
 				border: 2px solid black;
 
@@ -168,7 +168,7 @@ div, table{
 								<span style="float: right; vertical-align: bottom; text-align: right;">
 								<% if(contingentdata !=null && contingentdata[2] != null) { %> Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %>
 								<%} else if(contingentdata !=null && contingentdata[2] != null){ %>	Dt.&nbsp;<%=dateFormat.format(today)%> <%}%><br>
-								<% if(contingentdata !=null && contingentdata[7] != null){%> <span>  Approved on : Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[7].toString()) %> <%} %></span>
+								<% if(contingentdata !=null && contingentdata[7] != null){%> <span style="margin-top: 10px">  Approved on : Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[7].toString()) %> <%} %></span>
 								</span><br> <span style="font-size: 15px; font-weight: 600;">Ref:
 									<%if( contingentdata != null ){%><%=contingentdata[1] %> <%} %> </span>
 							</div>
@@ -191,8 +191,8 @@ div, table{
 									<th style="text-align: center;">Name</th>
 									<th class="center" style="width: 25%;">Bank Account No.	
 										(&#8377;)</th>
-									<th class="right" style="width: 15%;">Amount Admitted
-										(&#8377;)</th>
+									<th class="right" style="width: 20%;">Bank Transfer (&#8377;)
+										</th>
 								</tr>
 
 								<%
@@ -215,13 +215,13 @@ div, table{
 									<td
 										style="text-align: center; padding-top: 5px; padding-bottom: 5px;"><%=obj[12]%></td>
 									<td
-										style="padding-top: 5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[2].toString()))))%></td>
+										style="padding-top: 5px; padding-bottom: 5px; text-align: right;"><%=nfc.rupeeFormat(String.valueOf(Math.round(Double.parseDouble(obj[13].toString()))))%></td>
 	
 								</tr>
 								<%
 								k++;
 								claimamt += Math.round(Double.parseDouble(obj[1].toString()));
-								allowedamt += Math.round(Double.parseDouble(obj[2].toString()));
+								allowedamt += Math.round(Double.parseDouble(obj[13].toString()));
 								/* 								billscount += Integer.parseInt(obj[25].toString()); */
 								}
 								%>

@@ -215,7 +215,7 @@ tr, th, td {
 			</tr>
 		</table>
 
-		<div style="margin-top: 50px">
+		<div style="margin-top: 20px">
 			<table class="table2">
 				<tr>
 					<td>1.</td>
@@ -290,7 +290,7 @@ tr, th, td {
 			</table>
 		</div>
 
-		<div class="declare">
+		<div class="declare" >
 			I hereby certify that the (i) The newspaper (s) in respect of which
 			reimbursement is claimed, is/are purchased by me. (ii) The
 			subscription amount incurred by me is not less than the amount
@@ -298,11 +298,11 @@ tr, th, td {
 			The amount for which the reimbursement is being claimed has actually
 			been paid by me and has not/will not be claimed by any other source.
 			
-				<p style=" display: inline; float: left; margin-top: 60px;" ><b>Date:</p>
+				<p style=" display: inline; float: left; margin-top: 40px; " ><b>Date:</p>
 
-				<p style=" display: inline; float: right; margin-left: 440px; margin-top: 60px;">
+				<p style=" display: inline; float: right; margin-top: 40px;  text-align: right; ">
 					Signature of Employee <br> </b>
-					<span style="color: blue"> <%=name%>,&nbsp;<%=designation%></span> <br> <b> STARC Intercom No: </b>
+					<span style="color: blue"> <%=NewspaperUserPrintData[9]%>,&nbsp;<%=NewspaperUserPrintData[10]%></span> <br> <%if(!NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("")) {%>  <span style="color: blue"> [Forwarded On: <%if (NewspaperUserPrintData[12] !=null) {%> <%=rdtf.format(NewspaperUserPrintData[12]) %> <%} %>] </span> <%} %><br> <b> STARC Intercom No: </b>
 					
 				</p>
 
@@ -361,24 +361,24 @@ tr, th, td {
 		<!-- <div class="sign">
 			<b style="margin-right: 50px; ">F&A Dept. / FO </b>
 		</div> -->
-
+	<%if(!NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("")) {%>
 		<div class="roww" style="margin-top: 50px;">
 			<main ali style=" display: inline; float: left; text-align: left; margin-left: 20px;">
 				<% if(NewspaperUserPrintData[19] != null) { %>
-				<%=NewspaperUserPrintData[19] %> <%} %>, <br>
+			<span style="color: blue">	<%=NewspaperUserPrintData[19] %> <%} %>, <br>
 				<% if(NewspaperUserPrintData[20] != null) { %>
-				<%=NewspaperUserPrintData[20] %> <%} %> <br>
+				<%=NewspaperUserPrintData[20] %> <%} %></span> <br>
 				<% if(NewspaperUserPrintData[18] != null) { %>
-				[Processed On : <%=rdtf.format(NewspaperUserPrintData[18]) %>] <%} %>
+				[Processed On :<span style="color: blue"> <%=rdtf.format(NewspaperUserPrintData[18]) %>]</span> <%} %>
 
 			</main >
 			<main style=" display: inline; float: right; text-align: right;">
 				<% if(NewspaperUserPrintData[22] != null) { %>
-				<%=NewspaperUserPrintData[22] %> <%} %>, <br>
+				<span style="color: blue"><%=NewspaperUserPrintData[22] %> <%} %>, <br>
 				<% if(NewspaperUserPrintData[23] != null) { %>
-				<%=NewspaperUserPrintData[23] %> <%} %> <br>
+				<%=NewspaperUserPrintData[23] %> <%} %> </span> <br>
 				<% if(NewspaperUserPrintData[21] != null) { %>
-				[Authorized On :<%=rdtf.format(NewspaperUserPrintData[21]) %>] <%} %>
+				[Authorized On :<span style="color: blue"><%=rdtf.format(NewspaperUserPrintData[21]) %>] </span> <%}} %>
 			</main >
 		</div>
 

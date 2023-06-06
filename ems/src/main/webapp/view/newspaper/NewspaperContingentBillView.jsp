@@ -137,10 +137,7 @@ th, td {
 							
 							<%if(billstatus.equalsIgnoreCase("RBV") || billstatus.equalsIgnoreCase("RBA") || billstatus.equalsIgnoreCase("RBD")  ){ %>
 							<span style="font-weight: 600;"> Remark : </span>
-								<span style="font-weight: 600; color: #D82148;"> <%=contingentdata[5] %> </span>					
-							<%}else{ %>    
-							<span style="font-weight: 600;"> Remark : </span>
-								<span style="font-weight: 600; color: #035397;"> <%=contingentdata[5] %> </span>			
+								<span style="font-weight: 600; color: #D82148;"> <%=contingentdata[5] %> </span>							
 							<%} %>
 						</div>
 
