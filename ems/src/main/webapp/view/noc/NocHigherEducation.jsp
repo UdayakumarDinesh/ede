@@ -94,10 +94,7 @@ body{
 		</div>
 		
 		</div>
-	
-	
-	
-		<div align="center">
+	<div align="center">
 		<%	String ses=(String)request.getParameter("result"); 
  	String ses1=(String)request.getParameter("resultfail");
 	if(ses1!=null){ %>
