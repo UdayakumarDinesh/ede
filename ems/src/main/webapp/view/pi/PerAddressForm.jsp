@@ -160,14 +160,35 @@ String empNo = (String)session.getAttribute("EmpNo");
 				   			} %>
 				   		<%} %>. The same has been updated in the personal records.																		
 				   </div>
-				   <br><br>
+				   <%if(PerFormData!=null && !PerFormData[10].toString().equalsIgnoreCase("N")){ %>
+					         <br>
+				              <div style="width:100%;text-align: left;margin-left: 10px;">
+				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			    <%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		        <%} %> 
+				             </div>
+				             <br>
+				             <div style="width:100%;text-align: left;margin-left: 10px;">
+				             <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			  <%} %>
+				   		     <%} %> 
+				            </div>				             				             				          
+                       <br> <br>
+					       <%} %> 
+				   <br>
 				   <div style="width:100%;text-align: right;margin-left:-5%;"> </div>	
 				   <div style="border:0px;width: 100%; text-align: right;"> Incharge - P&A 
 				   <br>	
 				   <br> <label style="color: blue;">
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				<%=apprInfo[2] %><br>
+				   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<% break;} %>
 				   		<%} %> 

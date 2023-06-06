@@ -20,6 +20,8 @@ import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
 import com.vts.ems.property.model.PisMovablePropertyTrans;
+import com.vts.ems.property.model.PisPropertyConstruction;
+import com.vts.ems.property.model.PisPropertyConstructionTrans;
 import com.vts.ems.utils.DateTimeFormatUtil;
 
 @Service
@@ -691,5 +693,35 @@ public class PropertyServiceImp implements PropertyService{
 	public List<Object[]> movPropertyRemarksHistory(String movPropertyId) throws Exception {
 		
 		return dao.movPropertyRemarksHistory(movPropertyId);
+	}
+
+	@Override
+	public List<Object[]> constructionRenovationDetails(String EmpNo) throws Exception {
+		
+		return dao.constructionRenovationDetails(EmpNo);
+	}
+
+	@Override
+	public PisPropertyConstruction getConstructionById(Long ConstructionId) throws Exception {
+		
+		return dao.getConstructionById(ConstructionId);
+	}
+
+	@Override
+	public Long addPropertyConstruction(PisPropertyConstruction construction) throws Exception {
+		
+		return dao.addPropertyConstruction(construction);
+	}
+
+	@Override
+	public Long editPropertyConstruction(PisPropertyConstruction construction) throws Exception {
+		
+		return dao.editPropertyConstruction(construction);
+	}
+
+	@Override
+	public Long addPropertyConstructionTransaction(PisPropertyConstructionTrans transaction) throws Exception {
+		
+		return dao.addPropertyConstructionTransaction(transaction);
 	}
 }

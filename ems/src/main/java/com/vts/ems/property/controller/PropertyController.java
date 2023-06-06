@@ -1051,4 +1051,66 @@ public class PropertyController {
 		}
 
     }
+	
+	@RequestMapping(value="ConstructionRenovation.htm")
+	public String ConstructionRenovationList( HttpServletRequest req, HttpSession ses,RedirectAttributes redir) throws Exception{
+		
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConstructionRenovation.htm"+Username);	
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		
+		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
+			ses.setAttribute("SidebarActive","ConstructionRenovation_htm");
+			
+			String CEO = piservice.GetCEOEmpNo();
+			List<String> PandAs = piservice.GetPandAAdminEmpNos();
+			List<String> DGMs = piservice.GetDGMEmpNos();
+
+            req.setAttribute("CeoName", piservice.GetCeoName());
+            req.setAttribute("CEOEmpNos", CEO);
+			
+			req.setAttribute("PandAEmpName", piservice.GetPandAEmpName());
+			req.setAttribute("PandAsEmpNos", PandAs);
+			req.setAttribute("SOEmpNos", piservice.GetSOEmpNos());
+			
+			if(!DGMs.contains(EmpNo)) {
+				req.setAttribute("DGMEmpName", piservice.GetEmpDGMEmpName(EmpNo));
+			}
+			req.setAttribute("DGMEmpNos", DGMs);
+			req.setAttribute("EmpApprFlow", piservice.GetApprovalFlowEmp(EmpNo));			
+			req.setAttribute("ConstrRenovDetails", service.constructionRenovationDetails(EmpNo));
+			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+			return "property/ConstructionRenovation";
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside ConstructionRenovation.htm"+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="ConstructionAddEdit.htm")
+	public String constructionAddEdit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir ) throws Exception{
+		
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+ "Inside ConstructionAddEdit.htm"+Username);
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		try {
+			String Action = req.getParameter("Action");
+			String immpropertyid = req.getParameter("immpropertyid");
+			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+			
+			if("EDIT".equalsIgnoreCase(Action)) {
+				req.setAttribute("Construction", service.getImmovablePropertyById(Long.parseLong(immpropertyid)));
+				return "property/ConstructionEdit";
+			}else {		
+			    return "property/ConstructionAdd";	
+			}
+		}catch (Exception e) {
+			logger.error(new Date() +" Inside ConstructionAddEdit.htm"+Username, e);
+			e.printStackTrace();	
+			return "static/Error";
+		}
+		
+	}
 }

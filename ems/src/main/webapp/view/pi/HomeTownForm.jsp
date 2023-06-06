@@ -140,12 +140,35 @@ String empNo = (String)session.getAttribute("EmpNo");
 						   	                    	<%} %></label></td> </tr>
 					  </tbody>					  
 					</table>
+					
+					<%if(HomFormData!=null && !HomFormData[5].toString().equalsIgnoreCase("N")){ %>
+					         <br>
+				              <div style="width:100%;text-align: left;margin-left: 10px;">
+				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			    <%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		        <%} %> 
+				             </div>
+				             <br>
+				             <div style="width:100%;text-align: left;margin-left: 10px;">
+				             <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			  <%} %>
+				   		     <%} %> 
+				            </div>				             				             				          
+                       <br> <br>
+					       <%} %> 
+					       
 					<div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
 				   <br>	
 				   <br><label style="color: blue;">
 				   		<%for(Object[] apprInfo : ApprovalEmpData){ %>
 				   			<%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
-				   				<%=apprInfo[2] %><br>
+				   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
 				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
 				   			<% break;} %>
 				   		<%} %> 

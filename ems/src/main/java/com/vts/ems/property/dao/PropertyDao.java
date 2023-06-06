@@ -6,6 +6,8 @@ import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
 import com.vts.ems.property.model.PisMovablePropertyTrans;
+import com.vts.ems.property.model.PisPropertyConstruction;
+import com.vts.ems.property.model.PisPropertyConstructionTrans;
 
 public interface PropertyDao {
 	
@@ -28,4 +30,9 @@ public interface PropertyDao {
     public List<Object[]> immPropertyRemarksHistory(String ImmPropertyId) throws Exception;
     public List<Object[]> propertyApprovedList(String EmpNo,String FromDate,String ToDate) throws Exception;
     public List<Object[]> movPropertyRemarksHistory(String movPropertyId) throws Exception;
+    public List<Object[]> constructionRenovationDetails(String EmpNo) throws Exception;
+    public PisPropertyConstruction getConstructionById(Long ConstructionId) throws Exception;
+    public Long addPropertyConstruction(PisPropertyConstruction construction) throws Exception;
+    public Long editPropertyConstruction(PisPropertyConstruction construction) throws Exception;
+    public Long addPropertyConstructionTransaction(PisPropertyConstructionTrans transaction) throws Exception;
 }

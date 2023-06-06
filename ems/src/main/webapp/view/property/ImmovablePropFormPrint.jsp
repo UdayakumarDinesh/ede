@@ -148,7 +148,7 @@ SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 SimpleDateFormat sdtf= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 SimpleDateFormat rdtf= new SimpleDateFormat("dd-MM-yyyy hh:mm a");
 List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
-List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Hand loan");
 int slno=0;
 %>
 

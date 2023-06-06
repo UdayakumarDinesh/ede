@@ -150,7 +150,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" >Personal savings</option>
 			               <option value="Home loan" >Home loan</option>
-			               <option value="Land loan" >Land loan</option>
+			               <option value="Hand loan" >Hand loan</option>
 			               <option value="Other sources" >Other sources</option>
 			           </select>
 			        </div>

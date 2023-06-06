@@ -64,7 +64,7 @@ SimpleDateFormat rdf= new SimpleDateFormat("dd-MM-yyyy");
 
 List<String> toUserStatus  = Arrays.asList("INI","RDG","RSO","RPA","RCE");
 List<String> adminRemarks  = Arrays.asList("VDG","VPA","VSO","APR"); 
-List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Hand loan");
 int slno=0;
 %>
 
@@ -310,6 +310,29 @@ int slno=0;
 						     </div>	
 						     <%} %>	
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">Submitted for kind information.</div>	
+						      
+						       <%if(mov!=null && !mov.getMovStatus().equalsIgnoreCase("N")){ %>
+					         <br>
+				              <div style="width:100%;text-align: left;margin-left: 10px;">
+				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			    <%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		        <%} %> 
+				             </div>
+				             <br>
+				             <div style="width:100%;text-align: left;margin-left: 10px;">
+				             <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			  <%} %>
+				   		     <%} %> 
+				            </div>
+				             				             				          
+                       <br> <br>
+					       <%} %>
 						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
 				              <br>	
 				              <br>
@@ -349,6 +372,7 @@ int slno=0;
 							</div>
 							<%} %>
 					   </div>
+					       
 				             <%			             
 				             long diff = DateTimeFormatUtil.dayDifference(mov.getTransDate().toString());
 				             

@@ -18,6 +18,8 @@ import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
 import com.vts.ems.property.model.PisMovablePropertyTrans;
+import com.vts.ems.property.model.PisPropertyConstruction;
+import com.vts.ems.property.model.PisPropertyConstructionTrans;
 
 @Transactional
 @Repository
@@ -307,5 +309,68 @@ public class PropertyDaoImp implements PropertyDao{
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	private static final String CONSTRUCTIONDETAILS = "SELECT a.ConstructionId,a.EmpNo,a.PermissionDate,a.LetterNo,a.LetterDate,a.TransactionState,a.EstimatedCost,a.SupervisedBy,a.ConstrCompletedBy,a.ConstrStatus,a.Remarks,b.EmpName,c.PISStatus,c.PisStatusColor,c.PISStatusCode FROM pis_property_construction a,employee b,pis_approval_status c WHERE a.EmpNo=b.EmpNo AND a.PisStatusCode=c.PisStatusCode AND a.IsActive=1 AND a.EmpNo=:EmpNo ORDER BY a.ConstructionId DESC";
+	@Override
+	public List<Object[]> constructionRenovationDetails(String EmpNo) throws Exception {
+		
+		List<Object[]> constrData=null;
+		try {
+			Query query = manager.createNativeQuery(CONSTRUCTIONDETAILS);
+			query.setParameter("EmpNo",EmpNo);
+			constrData =(List<Object[]>) query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO constructionRenovationDetails "+e);
+	
+		}
+		return constrData;
+	}
+	
+	@Override
+	public PisPropertyConstruction getConstructionById(Long ConstructionId) throws Exception {
+		
+		try {	
+			return manager.find(PisPropertyConstruction.class, ConstructionId);
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() + "Inside DAO getConstructionById "+e);
+	        return null;
+		}
+	}
+
+	@Override
+	public Long addPropertyConstruction(PisPropertyConstruction construction) throws Exception {
+		
+		try {
+			manager.persist(construction);
+			manager.flush();
+
+		} catch (Exception e) {
+			logger.error(new Date() + "Inside DAO addPropertyConstruction "+e);
+			e.printStackTrace();
+		}
+		return construction.getConstructionId();
+	}
+
+	@Override
+	public Long editPropertyConstruction(PisPropertyConstruction construction) throws Exception {
+		try {
+			manager.merge(construction);
+			manager.flush();
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside editPropertyConstruction"+e);
+			e.printStackTrace();
+		}
+		return construction.getConstructionId();
+	}
+
+	@Override
+	public Long addPropertyConstructionTransaction(PisPropertyConstructionTrans transaction) throws Exception {
+		
+		manager.persist(transaction);
+		manager.flush();
+		return transaction.getConstrTransactionId();
 	}
 }

@@ -17,7 +17,7 @@
 PisImmovableProperty imm = (PisImmovableProperty)request.getAttribute("ImmProperty");
 List<Object[]> States = (List<Object[]>)request.getAttribute("States");
 Object[] empData=(Object[])request.getAttribute("EmpData");
-List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land loan");
+List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Hand loan");
 %>
 
 <div class="card-header page-top">
@@ -202,7 +202,7 @@ List<String> finaceSource  = Arrays.asList("Personal savings","Home loan","Land 
 			           <select name="financeSource" id="financeSource" class="form-control input-sm select2" required>
 			               <option value="Personal savings" <%if(imm!=null && imm.getFinanceSource()!=null && "Personal savings".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Personal savings</option>
 			               <option value="Home loan" <%if(imm!=null && imm.getFinanceSource()!=null && "Home loan".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Home loan</option>
-			               <option value="Land loan" <%if(imm!=null && imm.getFinanceSource()!=null && "Land loan".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Land loan</option>
+			               <option value="Hand loan" <%if(imm!=null && imm.getFinanceSource()!=null && "Hand loan".equalsIgnoreCase(imm.getFinanceSource()) ) {%>selected <%} %> >Hand loan</option>
 			               <option value="Other sources" <%if(imm!=null && imm.getFinanceSource()!=null && !finaceSource.contains(imm.getFinanceSource()) ) {%>selected <%} %> >Other sources</option>
 			           </select>
 			        </div>
@@ -426,7 +426,7 @@ $( document ).ready(function() {
 		$('#extentinname').hide();
 	}
 	 
-	if(financeSource=="Personal savings" || financeSource=="Home loan" || financeSource=="Land loan"){
+	if(financeSource=="Personal savings" || financeSource=="Home loan" || financeSource=="Hand loan"){
 	    $('#others').hide(); 
 	} else{
 	    $('#others').show(); 
