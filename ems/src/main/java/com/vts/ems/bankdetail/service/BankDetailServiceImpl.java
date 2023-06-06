@@ -55,10 +55,13 @@ public class BankDetailServiceImpl implements BankDetailService{
 		try {
 			List<String> DGMs=dao.GetEmpDGMEmpNo();
 			List<String> PAndAs=dao.GetPandAAdminEmpNos();
+			String PAndA=dao.GetPandAAdminEmpNos().get(0);
 			String DGM=dao.GetDGMEmpNo(empNo);
 			BankDertails bankDertails=dao.findBankById(bankId);
 			Employee emp=dao.findEmpByEmpNo(bankDertails.getEmpNo());
 			bankDertails.setRemarks(remarks);
+			
+			EMSNotification notification = new EMSNotification();
 			
 
 			BankDetChangeTransa bankDetChangeTransa=new BankDetChangeTransa();
@@ -66,15 +69,18 @@ public class BankDetailServiceImpl implements BankDetailService{
 				bankDertails.setBankStatus("N");
 				bankDertails.setBankStatusCode("VDG");
 				bankDetChangeTransa.setBankStatusCode("VDG");
+				notification.setEmpNo(PAndA);
 			}
 			else if(PAndAs.contains(empNo)) {
 				bankDertails.setBankStatus("A");
 				bankDertails.setBankStatusCode("VPA");
 				bankDetChangeTransa.setBankStatusCode("VPA");
+				notification.setEmpNo(DGM);
 			}
 			else {
 				bankDertails.setBankStatusCode("FWD");
 				bankDetChangeTransa.setBankStatusCode("FWD");
+				notification.setEmpNo(DGM);
 			}
 			bankDetChangeTransa.setActionBy(empNo);
 			bankDetChangeTransa.setRemarks(remarks);
@@ -86,8 +92,8 @@ public class BankDetailServiceImpl implements BankDetailService{
 			dao.editBankdetail(bankDertails);
 			dao.addtBankDetChangeTransa(bankDetChangeTransa);
 			
-			EMSNotification notification = new EMSNotification();
-			notification.setEmpNo(DGM);
+			
+			
 			notification.setNotificationUrl("BankDetailapproval.htm");
 			notification.setNotificationMessage("Received Bank Detail Change Request From <br>"+emp.getEmpName());
 			notification.setNotificationBy(empNo);
@@ -95,7 +101,9 @@ public class BankDetailServiceImpl implements BankDetailService{
 			notification.setIsActive(1);
 			notification.setCreatedBy(username);
 			notification.setCreatedDate(sdtf.format(new Date()));
-			dao.addNotification(notification);
+			if(!PAndAs.contains(empNo)) {
+				dao.addNotification(notification);
+			}
 			
 			return bankDertails.getBankDetailId();
 		}catch (Exception e) {
