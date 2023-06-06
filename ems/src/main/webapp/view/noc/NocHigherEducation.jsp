@@ -71,7 +71,6 @@ body{
 	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE","RSO");
 	
 	List<Object[]> NOCHigherEducationList=(List<Object[]>)request.getAttribute("NOCHigherEducationList");
-	
 	Object[] empquali=(Object[])request.getAttribute("EmpQuali");
 	
    %>
