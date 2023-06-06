@@ -301,7 +301,9 @@ tr, th, td {
 				<p style=" display: inline; float: left; margin-top: 60px;" ><b>Date:</p>
 
 				<p style=" display: inline; float: right; margin-left: 440px; margin-top: 60px;">
-					Signature of Employee <br> STARC Intercom No: </b>
+					Signature of Employee <br> </b>
+					<span style="color: blue"> <%=name%>,&nbsp;<%=designation%></span> <br> <b> STARC Intercom No: </b>
+					
 				</p>
 
 		</div>
@@ -356,27 +358,27 @@ tr, th, td {
 				</tr>
 			</table>
 		</div>
-		<div class="sign">
+		<!-- <div class="sign">
 			<b style="margin-right: 50px; ">F&A Dept. / FO </b>
-		</div>
+		</div> -->
 
-		<div class="roww" style="margin-top: 30px;">
+		<div class="roww" style="margin-top: 50px;">
 			<main ali style=" display: inline; float: left; text-align: left; margin-left: 20px;">
-				<% if(NewspaperUserPrintData[16] != null) { %>
-				<%=NewspaperUserPrintData[16] %> <%} %>, <br>
-				<% if(NewspaperUserPrintData[17] != null) { %>
-				<%=NewspaperUserPrintData[17] %> <%} %> <br>
-				<% if(NewspaperUserPrintData[15] != null) { %>
-				[Processed On : <%=rdtf.format(NewspaperUserPrintData[15]) %>] <%} %>
-
-			</main >
-			<main style=" display: inline; float: right; text-align: right;">
 				<% if(NewspaperUserPrintData[19] != null) { %>
 				<%=NewspaperUserPrintData[19] %> <%} %>, <br>
 				<% if(NewspaperUserPrintData[20] != null) { %>
 				<%=NewspaperUserPrintData[20] %> <%} %> <br>
 				<% if(NewspaperUserPrintData[18] != null) { %>
-				[Authorized On :<%=rdtf.format(NewspaperUserPrintData[18]) %>] <%} %>
+				[Processed On : <%=rdtf.format(NewspaperUserPrintData[18]) %>] <%} %>
+
+			</main >
+			<main style=" display: inline; float: right; text-align: right;">
+				<% if(NewspaperUserPrintData[22] != null) { %>
+				<%=NewspaperUserPrintData[22] %> <%} %>, <br>
+				<% if(NewspaperUserPrintData[23] != null) { %>
+				<%=NewspaperUserPrintData[23] %> <%} %> <br>
+				<% if(NewspaperUserPrintData[21] != null) { %>
+				[Authorized On :<%=rdtf.format(NewspaperUserPrintData[21]) %>] <%} %>
 			</main >
 		</div>
 

@@ -97,9 +97,15 @@ String AO=(String) request.getAttribute("AO");
 						<tbody>
 							<%if(NewspaperClaimList!=null&&NewspaperClaimList.size()>0){ 
 							    	for(Object ls[]:NewspaperClaimList){%>
+							    	
 							<tr>
+							<%if ( ls[9].toString().equalsIgnoreCase("CRT") || ls[9].toString().equalsIgnoreCase("SBP") || ls[9].toString().equalsIgnoreCase("SDG") || ls[9].toString().equalsIgnoreCase("SBA") ) {%>
 								<td style="text-align: center;"><input type="radio"
-									name="NewspaperId" value="<%=ls[0]%>" required="required"></td>
+									name="NewspaperId"  value="<%=ls[0]%>" ></td>
+							<%} else { %>
+								<td style="text-align: center;"><input type="radio"
+									name="NewspaperId"  value="<%=ls[0]%>"  disabled="disabled"></td>
+							<%} %>		
 								<td>
 									<%out.println(DateTimeFormatUtil.SqlToRegularDate(ls[8].toString()));%>
 								</td>
@@ -149,7 +155,7 @@ String AO=(String) request.getAttribute("AO");
 								formaction="NewspaperView.htm" name="AddNewspaper"
 								value="AddNewspaper" formnovalidate="formnovalidate">Add</button>
 							<%if(NewspaperClaimList!=null && NewspaperClaimList.size()!=0){%>
-							<button type="submit" class="btn btn-warning"
+							<button type="submit" class="btn btn-warning" onclick="checklength()"
 								formaction="NewspaperEditView.htm">Edit</button>
 							<!-- <button type="submit" class="btn btn-info" formaction="NewspaperPrint.htm" formtarget="_blank">Print</button> -->
 							<%}%>
@@ -176,14 +182,15 @@ String AO=(String) request.getAttribute("AO");
 								</td>
 								<td rowspan="2"><i class="fa fa-long-arrow-right "
 									aria-hidden="true"></i></td>
-
+									<%if (DGM != null) {%>
 								<td class="trup"
 									style="background: linear-gradient(to top, #FBC7F7 10%, transparent 115%);">
-									DGM <br><%if (DGM != null) {%> <%=DGM%> <%} %>
+									DGM <br> <%=DGM%>
 								</td>
-
-								<td rowspan="2"><i class="fa fa-long-arrow-right "
+								
+								<td rowspan="2"><i class="fa fa-long-arrow-right"
 									aria-hidden="true"></i></td>
+									 <%} %>
 								<td class="trup"
 									style="background: linear-gradient(to top, #4DB6AC 10%, transparent 115%);">
 									PO <br> <%if (PO != null) {%> <%=PO%> <%} %>
@@ -205,7 +212,20 @@ String AO=(String) request.getAttribute("AO");
 		</div>
 
 	</div>
+<script type="text/javascript">
+function checklength() {
 
+	if ($("input[name='NewspaperId']").serializeArray().length === 0) {
+		alert('Please Select Atleast One Claim!');
+		event.preventDefault();
+		return false;
+	}
+	else{
+		return true;
+	}
+	
+}
+</script>
 </body>
 
 </html>

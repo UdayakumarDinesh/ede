@@ -1,212 +1,162 @@
-
-<%@page import="com.vts.ems.master.model.LabMaster"%>
-<%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
-<%@page import="com.vts.ems.utils.AmountWordConveration"%>
-<%@page import="java.text.DecimalFormat"%>
-
-<%@ page language="java" %>
-<!DOCTYPE html">
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+<%@ page import="java.util.Date,java.text.SimpleDateFormat"%>
+<%@page import="com.vts.ems.utils.IndianRupeeFormat"%>
+<%@ page import="java.util.List" %>
+<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta charset="ISO-8859-1">
+
 <title>Newspaper Contingent Bill</title>
+
 <style type="text/css">
- @media print {
-  #printPageButton {
-    display: none;
-  }
-}
- 
- 
-
-/* css buttom border */
-h1 {
-    border-bottom: 2px solid black;
-    width:23%;
-}
-p2 {
- 
-    border-bottom: 2px solid black;
-    width: 15%;
-}
-p3 {
-    margin-right: 3;
-    border-bottom: 2px solid black;
-    width: 18%;
-}
-p4 {
-    border-bottom: 2px solid black;
-    width: 100%;
-    border-right: 2px solid black;
-    width: 100%;
-    }
-
-/* css buttom border */
-
-p.ex1 {
-    margin-left: 0;
-}
-/* p.ex2 { */
-/*     margin-right: 330px; */
-/* } */
-div.r {
-    text-align: right;
-    margin-right: 0;
-} 
-
-.vl {
-    border-top: 2px solid black;
-    width: 100%;
-    border-bottom: 2px solid black;
-    width: 100%;
-    border-left: 2px solid black;
-    height: 500px;
-    border-right: 2px solid black;
-    height: 500px;
-   
-}
-.alignleft {
-	float: left;
-}
-.alignright {
-	float: right;
+.break {
+	page-break-after: always;
 }
 
-
-table, th, td {
-    border: 1px solid black;
-    border-collapse: collapse;
+@page {
+	size: 790px 950px;
+	margin-top: 49px;
+	margin-left: 55px;
+	margin-right: 55px;
+	margin-buttom: 49px;
+	border: 2px solid black; @ bottom-right { counter-increment : page;
+	counter-reset: page 2;
+	content: "Page " counter(page) " of " counter(pages);
+	margin-bottom: 30px;
+	margin-right: 10px;
 }
 
+@
+top-right {
+	content: "STARC/F&A/NEWSPAPER/2022-23/";
+	margin-top: 30px;
+	margin-right: 10px;
+}
+
+}
+div {
+	width: 650px !important;
+}
+
+body {
+	font-size: 15px !important;
+}
+table {
+	width: 650px !important;
+	margin-top: 10px; 
+	margin-bottom: 10px;
+	margin-left:10px;
+	border-collapse:collapse;
+}
+
+tr, th, td {
+	border: 1.5px solid black;
+	padding: 4px;
+}
 </style>
-
 </head>
 <body>
-<%
-AmountWordConveration nw = new AmountWordConveration();
-Object[] NewspaperContingentBillPrint=(Object[])request.getAttribute("NewspaperContingentBillPrint");
-String RUPEES="Not Available";
-String PAISA="Not Available";
-String RupeeInWords="Not Available";
+	<%
+	List<Object[]> newsPaperFinalAppro=(List<Object[]>) request.getAttribute("newsPaperFinalAppro");
+	List<Object[]> ContingentBillTrans=(List<Object[]>) request.getAttribute("ContingentBillTrans");
+	String LabLogo = (String) request.getAttribute("LabLogo");
+	SimpleDateFormat rdf = new SimpleDateFormat("dd-MM-yyyy");
+	Date date = new Date();
+	IndianRupeeFormat nfc=new IndianRupeeFormat();
 
-String LabCode =(String)request.getAttribute("LabCode");
+	SimpleDateFormat sdtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	SimpleDateFormat rdtf = new SimpleDateFormat("dd-MM-yyyy hh:mm a");
+	%>
+	<div class="center"">
+		<div style="width: 100%; float: left;">
+			<div
+				style="width: 20%; margin-left: auto; margin-right: auto; border: 0;">
+				<img style="width: 80px; height: 90px; margin: 5px;" align="left"
+					src="data:image/png;base64,<%=LabLogo%>">
+			</div>
+			<div style="margin-left: auto; margin-right: auto; font-family:  Arial, Helvetica, sans-serif">
+				<h3>
+					<i style="font-size: 22px;"> SITAR </i>
+				</h3>
+			</div>
+			<div style="margin-left: auto; margin-right: auto;">
+				<p style="margin: 0; display: inline; float: left; font-family:  Arial, Helvetica, sans-serif">
 
-String NewspaperAuthority =(String)request.getAttribute("NewspaperAuthority");
-LabMaster LabDetails=(LabMaster)request.getAttribute("LabDetails");
+					<b>Ref:&nbsp; STARC/F&A/NEWSPAPER/2022-23/ </b>
+				</p>
+				<p style="margin: 0; display: inline; float: right;">
+					Dt:&nbsp;<%=rdf.format(date) %>
+				</p>
+			</div>
+			<%if(newsPaperFinalAppro != null && newsPaperFinalAppro.size()>0) {%>
+			<div style="margin-left:25px; margin-right: auto; margin-top: 80px; ">
+				<p>
+					The residential newspaper claims for reimbursement received from the following employees for the period <b>
+					<%if(newsPaperFinalAppro != null && newsPaperFinalAppro.get(0)[0].toString().equalsIgnoreCase("JAN-JUN")) {%>JANUARY to JUNE <%}else{  %>JULY to DECEMBER<%}  %> <%if(newsPaperFinalAppro != null){ %><%=newsPaperFinalAppro.get(0)[1] %> <%} %> </b>have been processed and admitted as under:
+				</p>
+			</div>
+		</div>
+		<%int i=0;
+		long totalClaimAmount=0; 
+		long totalAdmittedAm=0;%>
+		<table align="center">
+			<thead>
+				<tr>
+					<th>Sl No</th>
+					<th>Emp No</th>
+					<th>Name</th>
+					<th>Grade</th>
+					<th>Amount Claimed (Rs.)</th>
+					<th>Amount Admitted (Rs.)</th>
+				</tr>
+			</thead>
+			<tbody>
+			<% if(newsPaperFinalAppro != null && newsPaperFinalAppro.size()>0) {%>
+			<% for(Object[] obj : newsPaperFinalAppro) {%>
+			<tr>
+				<%totalClaimAmount +=Math.round(Double.parseDouble(obj[2].toString()));
+				totalAdmittedAm +=Math.round(Double.parseDouble(obj[4].toString()));%>
+				<td style="text-align: center; width: 10%"><%=++i %></td>
+				<td style="text-align: center; width: 15%"><%= obj[8]%></td>
+				<td style="text-align: left; width: 30%"><%= obj[7]%></td>
+				<td style="text-align: center;"><%= obj[6]%></td>
+				<td style="text-align: right;"><%= nfc.rupeeFormat(obj[2].toString().substring(0,obj[2].toString().length()-3))%></td>
+				<td style="text-align: right;"><%= nfc.rupeeFormat(obj[4].toString().substring(0,obj[4].toString().length()-3))%></td>
+				
+			</tr>
+			<%}} %>
+			<tr>
+				<td style="text-align: center;" colspan="4"><b>Total</b></td>
+				<td style="text-align: right;"><%= nfc.rupeeFormat(Long.toString(totalClaimAmount)) %></td>
+				<td style="text-align: right;"><%= nfc.rupeeFormat(Long.toString(totalAdmittedAm))  %></td>
+			</tr>
+			</tbody>
+		</table>
 
-String NewsContingentVoucherNo =(String)request.getAttribute("NewsContingentVoucherNo");
-String PublicFundNo =(String)request.getAttribute("PublicFundNo");
+		<div style="margin-left: 15px; margin-top: 30px;">
+			
+			<p>The claims are accordingly admitted for the above employees and it is requested to condone for those employees who had submitted beyond due date and approve 
+			the reimbursement of residential Newspaper claims.</p>
+			<p style="margin-top: 25px;">Put up for approval please</p>
+			<span style="color: blue">
+			<p style="margin: 0; display: inline; float: left; margin-top: 40px;"> <% if(newsPaperFinalAppro !=null && ContingentBillTrans.size()>1 ) {%><%=ContingentBillTrans.get(1)[2]%>,<br><%=ContingentBillTrans.get(1)[3]%>,<br>	
+            <%=rdtf.format(ContingentBillTrans.get(1)[4])%> <%} %></p>
+			<p style="display: inline; float: right; margin-top: 40px; margin-right: 25px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>2 ) {%><%=ContingentBillTrans.get(2)[2]%> ,<br><%=ContingentBillTrans.get(2)[3]%>,<br>
+			<%=rdtf.format(ContingentBillTrans.get(2)[4]) %> <%} %></p>
+			<p style="margin-top: 130px;"><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>3 ) {%><%=ContingentBillTrans.get(3)[2]%>, <br><%=ContingentBillTrans.get(3)[3]%>,<br>
+			<%=rdtf.format(ContingentBillTrans.get(3)[4]) %> <%} %></p></span>
+			 <p style="text-align:center; margin-top: 30px;"><b>Sanctioned / Not sanctioned	 </b></p>
+			<span style="color: blue">
+			<p style="text-align:center; margin-top: 40px;"><b><% if(ContingentBillTrans !=null && ContingentBillTrans.size()>4 ) {%> <!-- <b>APPROVED <br> <br> </b> --> <%=ContingentBillTrans.get(4)[2]%>, <br><%=ContingentBillTrans.get(4)[3]%>, <br> </b>
+			Approved On: <%=rdtf.format(ContingentBillTrans.get(4)[4]) %> <%} %></p> </span>
+			<p style="text-align:center; margin-top: 10px;"><b>CEO</b></p>
+		</div>
+		
+		<%} else { %> <h1 style="color: red; margin-top: 100px; text-align: center">No Data</h1> <%} %>
+		
+	</div>
 
-if(NewspaperContingentBillPrint!=null)
-{
-	String total=NewspaperContingentBillPrint[2].toString();
-	 String [] totalRsPaisA=total.split("\\.");
-	
-	 String RupeeInNonFormat=totalRsPaisA[0];
-	 PAISA=totalRsPaisA[1];
-	
-	 
-	 double amount = Double.parseDouble(total);
-	 DecimalFormat formatter = new DecimalFormat("#,###.00");//change format 8,999
-     String s=formatter.format(amount);
-     String [] RUPEESInFormat=s.split("\\.");
-     RUPEES=RUPEESInFormat[0];
-	
-
-	
-    RupeeInWords  = nw.convert1(Integer.parseInt(RupeeInNonFormat));
-}
-%>
-
-
-
-
-<center><input type="button"  class="btn btn-sm print-btn"  id="printPageButton" value="Print" onClick="window.print()"></center>
-<center><h1><font size="+1">MISCELLANEOUS</font></h1></center>
-
-<p><font size="+0"><b>Voucher No.:&nbsp;&nbsp;<%=NewsContingentVoucherNo %>&nbsp;&nbsp;&nbsp;&nbsp;/</b></font></p>
-
-<div class="r">
-<p>Minor Head - 800(A)<br>Code Head - 858/01</p>
-</div>
-
-<center><p2>CONTINGENT BILL</p2></center>
-
-<p>
-Amount of Allotment ................................................................................................................. Rs.<br>
-Amount expended existing the amount of this bill..................................................................... Rs.  <br> 
-Balance of allotment existing the amount of this bill................................................................. Rs.<br> 
-Expenditure on account of <h>Re-imbursement of Newspaper bills</h> incurred by <%=LabCode%> CGO's & Service<br> 
-Officers for the period <b>from <h><%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[0].toString()));} %>to <%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[1].toString()));} %>. </b></h><br>
-<%if(NewspaperAuthority != null && !NewspaperAuthority.trim().equalsIgnoreCase("")){ %>
-Authority - <%=NewspaperAuthority %>
-<%} %>
-</p>
-
-
-<table>
-  <tr>
-    <th>&nbsp;SL.&nbsp;&nbsp;<br>&nbsp;NO.&nbsp;&nbsp;</th>
-    <th>Details of items/Expenditure</th>
-    <th>&nbsp;Qty.&nbsp;&nbsp;</th>
-    <th colspan="2">&nbsp;Rate/ A.U&nbsp;&nbsp;<br>&nbsp;RS.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P.&nbsp;&nbsp;&nbsp;&nbsp;</th>
-    <th colspan="2">&nbsp;Amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>Rs.&nbsp;&nbsp; P.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-  </tr>
- <tr>
- <td> </td>
- <td>
- <br>
- &nbsp;&nbsp;Expenditure incurred towards re-imbursement of<br>
- &nbsp;&nbsp;Newspaper bills (Residential & Mobile) to entitled<br>
- &nbsp;&nbsp;GOs and Service Officers of <%=LabCode%> for various <br>
- &nbsp;&nbsp;months as effective during the period <b>from <%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[0].toString()));} %> <br>
- &nbsp;&nbsp;to <%if(NewspaperContingentBillPrint!=null){out.println(DateTimeFormatUtil.SqlToRegularDate(NewspaperContingentBillPrint[1].toString()));} %></b> as per the list attached.<br>
- <br>
- &nbsp;&nbsp;It is certified that the expenditure incurred is for<br>&nbsp;&nbsp; the
- bonafide Government purposes.<br>
- <br>
- &nbsp;&nbsp;MODE OF PAYMENT : ECS Credit to<br>
-&nbsp;&nbsp; <%=LabCode%> Public Fund Account<br>
-&nbsp;&nbsp; No. <%=PublicFundNo %><br>
- <br> 
- </td>
- <td> </td>
- <td> </td>
- <td> </td>
- <td style="text-align: right;"> &nbsp;<b><%=RUPEES%></b>&nbsp;&nbsp;</td>
-  <td style="text-align: right;">&nbsp;<b><%=PAISA%></b>&nbsp;&nbsp; </td>
- </tr>
- 
- <tr>
-    <td colspan="5"><br>&nbsp;&nbsp;Advance received on:.............................................&nbsp;&nbsp;(Date)..................................&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    <br>&nbsp;&nbsp;DEDUCT :
-    <br><br>
-    &nbsp;&nbsp;Net Total
-    
-    </td>
-    <td style="text-align: right;"> &nbsp;<b><%=RUPEES%></b>&nbsp;&nbsp;</td>
-    <td style="text-align: right;">&nbsp;<b><%=PAISA %></b>&nbsp;&nbsp; </td>
-  </tr>
- 
-</table>
-
-
-
-<p2>Reason for deduction</p2>
-<p><b>Net amount (in words): (Rupees <%=RupeeInWords%> only) </b></p>
-<p>Certified that the above charges have been necessarily incurred in the interest of the State.That the rates charges
- are the lowest obtainable and that I have personally checked the progressive total in the bill with that in contingent 
- registers and is found to agree.</p>
- 
- <div id="textbox">
-  <center><p2>Countersigned </p2>
-  <p3 class="alignright"> Received Payment</p3></center>
-</div>
- 
-  <p>
-  Place :<%=LabCode%>, <%=LabDetails.getLabCity() %> <br>
-  Date : 
-  </p>
-  
 </body>
 </html>

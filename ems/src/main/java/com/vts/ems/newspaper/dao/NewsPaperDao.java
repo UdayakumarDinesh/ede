@@ -48,14 +48,17 @@ public interface NewsPaperDao {
 	public long addNotification(EMSNotification notification) throws Exception;
 	public long addNewspaperContingent(NewspaperContingent newspaperContingent) throws Exception;
 	public long addNewspaperContingentTrans(NewspaperContingentTrans newspaperContingentTrans) throws Exception;
-	public List<Object[]> findDGMNewspaperList(String empNo, String LoginType) throws Exception;
+	public List<Object[]> findNewspaperList(String empNo, String LoginType) throws Exception;
 	public List<Object[]> findPONewspaperList() throws Exception;
 	public List<Object[]> findAONewspaperList() throws Exception;
 	public List<Object[]> findApprovedNewspaperList(String todate) throws Exception;
 	public List<Object[]> getNewspaperContingentList(String logintype,String fromdate,String todate) throws Exception;
 	public List<Object[]> NewspaperContingentClaimList(String contingentid) throws Exception;
 	public List<Object[]> newspaperTransaById(long NewspaperId) throws Exception;
+	public List<Object[]> newspaperContingentTransaById(long ContingentId) throws Exception;
 	public Object[] newspaperContingentData(String contingentid) throws Exception;
+	public int getdata(String bill)throws Exception;
+	public List<Object[]> newsContingentRemarksHistory(String contingentId) throws Exception;
 	
 	
 	

@@ -75,6 +75,7 @@ th, td {
 
 	<%
 	List<Object[]> ContingentList = (List<Object[]>) request.getAttribute("ContingentList");
+	List<Object[]> newsPaperRemarksHistory = (List<Object[]>) request.getAttribute("contingentremarks");
 	Object[] contingentdata = (Object[]) request.getAttribute("contingentdata");
 	String logintype = (String) request.getAttribute("logintype");
 
@@ -88,9 +89,9 @@ th, td {
 	if (contingentdata != null) {
 		billstatus = (contingentdata[4].toString());
 	}
-	
+
 	SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-	Date today=new Date();
+	Date today = new Date();
 	%>
 
 	<div class="card-header page-top">
@@ -107,8 +108,8 @@ th, td {
 					<%
 					if (isapproval != null && isapproval.equalsIgnoreCase("Y")) {
 					%>
-					<li class="breadcrumb-item "><a href="NewspaperContingentAppro.htm">Pending
-							Contingent Bills</a></li>
+					<li class="breadcrumb-item "><a
+						href="NewspaperContingentAppro.htm">Pending Contingent Bills</a></li>
 					<%
 					} else {
 					%>
@@ -128,33 +129,21 @@ th, td {
 
 		<div class="card-body">
 
-			<div align="center">
-				<%
-				String ses = (String) request.getParameter("result");
-				String ses1 = (String) request.getParameter("resultfail");
-				if (ses1 != null) {
-				%>
-				<div class="alert alert-danger" role="alert">
-					<%=ses1%>
-				</div>
-
-				<%
-				}
-				if (ses != null) {
-				%>
-
-				<div class="alert alert-success" role="alert">
-					<%=ses%>
-				</div>
-				<%
-				}
-				%>
-			</div>
-
-
 
 			<div class="card">
 				<div class="card-body main-card ">
+	
+						<div class="col-md-12">
+							
+							<%if(billstatus.equalsIgnoreCase("RBV") || billstatus.equalsIgnoreCase("RBA") || billstatus.equalsIgnoreCase("RBD")  ){ %>
+							<span style="font-weight: 600;"> Remark : </span>
+								<span style="font-weight: 600; color: #D82148;"> <%=contingentdata[5] %> </span>					
+							<%}else{ %>    
+							<span style="font-weight: 600;"> Remark : </span>
+								<span style="font-weight: 600; color: #035397;"> <%=contingentdata[5] %> </span>			
+							<%} %>
+						</div>
+
 					<div align="center">
 						<form action="#" method="post" id="view-form">
 							<input type="hidden" name="isapproval" value="Y"> <input
@@ -166,16 +155,34 @@ th, td {
 								<img style="width: 80px; height: 90px; margin: 5px;"
 									align="left" src="data:image/png;base64,<%=LabLogo%>"> <span
 									style="font-size: 20px; font-weight: 600; margin-top: 30px">SITAR</span>
-								<span style="float: right; vertical-align: bottom;">
-									Dt.&nbsp;<%=dateFormat.format(today)%> </span><br> <span
-									style="font-size: 15px; font-weight: 600;">Ref:
-									STARC/F&A/NEWSPAPER/</span>
+								<span style="float: right; vertical-align: bottom; text-align: right;">
+								<% if(contingentdata !=null && contingentdata[2] != null) { %> Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[2].toString()) %>
+								<%} else if(contingentdata !=null && contingentdata[2] != null){ %>	Dt.&nbsp;<%=dateFormat.format(today)%> <%}%><br> 
+								<% if(contingentdata !=null && contingentdata[7] != null){%>Approved on : Dt.&nbsp;<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[7].toString()) %> <%} %>
+								</span><br> <span style="font-size: 15px; font-weight: 600;">Ref:
+									<%if( contingentdata != null ){%><%=contingentdata[1] %> <%} %> </span>
+							</div>
+							<div style="margin-top: 80px; margin-left: 10px; font-size: 14px;">
+								<p>
+									The Newspaper claims received up to
+									<%=DateTimeFormatUtil.SqlToRegularDate(contingentdata[8].toString())%>
+									during the month of
+									<%=" " + LocalDate.parse(contingentdata[8].toString()).getMonth()%>
+									-
+									<%=" " + LocalDate.parse(contingentdata[8].toString()).getYear()%>
+									for reimbursement from the following employees have been
+									processed and admitted at Newspaper rates.
+								</p>
 							</div>
 
 							<table>
 								<tr>
+								<%
+								if ((billstatus.equalsIgnoreCase("CGT") || billstatus.equalsIgnoreCase("RBV") || billstatus.equalsIgnoreCase("RBA")
+										|| billstatus.equalsIgnoreCase("RBD")) && logintype.equalsIgnoreCase("K")) {
+								%>
 									<th style="text-align: center;">Select</th>
-
+									<%} %>
 									<th style="text-align: center;">SN</th>
 									<th style="text-align: center;">Emp. No.</th>
 									<th style="text-align: center;">Name</th>
@@ -197,11 +204,15 @@ th, td {
 									i++;
 								%>
 								<tr>
+								<%
+								if ((billstatus.equalsIgnoreCase("CGT") || billstatus.equalsIgnoreCase("RBV") || billstatus.equalsIgnoreCase("RBA")
+										|| billstatus.equalsIgnoreCase("RBD")) && logintype.equalsIgnoreCase("K")) {
+								%>
 									<td
 										style="text-align: center; padding-top: 5px; padding-bottom: 5px;"><input
 										type="checkbox" name="NewspaperId" value="<%=obj[0]%>">
 									</td>
-
+								<%} %>
 									<td
 										style="text-align: center; padding-top: 5px; padding-bottom: 5px;"><%=i%></td>
 
@@ -240,8 +251,14 @@ th, td {
 								}
 								%>
 								<tr>
-
+									<%
+								if ((billstatus.equalsIgnoreCase("CGT") || billstatus.equalsIgnoreCase("RBV") || billstatus.equalsIgnoreCase("RBA")
+										|| billstatus.equalsIgnoreCase("RBD")) && logintype.equalsIgnoreCase("K")) {
+								%>
 									<td colspan="5" class="right">Total</td>
+									<%}else { %>
+									<td colspan="4" class="right">Total</td>
+									<%} %>
 									<%-- 	<td class="center"><%=billscount %></td> --%>
 									<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(claimamt))%></td>
 									<td class="right">&#8377; <%=nfc.rupeeFormat(String.valueOf(allowedamt))%>
@@ -249,11 +266,49 @@ th, td {
 									</td>
 								</tr>
 							</table>
-							<input
-							type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
-							</form>
-							<form action="NewspaperContingentApprove.htm">
+							<input type="hidden" name="${_csrf.parameterName}"
+								value="${_csrf.token}" />
+						</form>
+						<form action="NewspaperContingentApprove.htm" method="post">
+									<div class="row">
+						<br>
+						<%
+						if (newsPaperRemarksHistory.size() > 0) {
+						%>
+						<div class="col-md-8" align="center"
+							style="margin: 10px 0px 5px 25px; padding: 0px; border: 1px solid black; border-radius: 5px;">
+							<%
+							if (newsPaperRemarksHistory.size() > 0) {
+							%>
+							<table style="margin: 3px; padding: 0px">
+								<tr>
+									<td style="border: none; padding: 0px">
+										<h6 style="text-decoration: underline;">Remarks :</h6>
+									</td>
+								</tr>
+								<%
+								for (Object[] obj : newsPaperRemarksHistory) {
+								%>
+								<tr>
+									<td
+										style="border: none; width: 80%; overflow-wrap: anywhere; padding: 0px">
+										<%=obj[3]%>&nbsp; : <span style="border: none; color: blue;">
+											<%=obj[1]%></span>
+									</td>
+								</tr>
+								<%
+								}
+								%>
+							</table>
+							<%
+							}
+							%>
+						</div>
+						<%
+						}
+						%>
+					</div>
+							
 							<%
 							if (!contingentdata[4].toString().equalsIgnoreCase("CSD")) {
 							%>
@@ -287,7 +342,7 @@ th, td {
 								%>
 								<button type="submit" class="btn btn-sm submit-btn"
 									name="action" id="fwd-btn" value="F"
-									formaction="NewspaperContingentApprove.htm"
+									formaction="NewspaperContingentApprove.htm" formmethod="POST"
 									onclick="return remarkRequired('R')">Forward</button>
 								<button type="submit" class="btn btn-sm submit-btn"
 									style="background-color: #D2001A"
@@ -302,28 +357,40 @@ th, td {
 								<button type="submit" class="btn btn-sm delete-btn"
 									name="action" value="VR" onclick="return remarkRequired('R')">Return</button>
 								<%
+								} else if (billstatus.equalsIgnoreCase("ABV") && logintype.equalsIgnoreCase("W")) {
+								%>
+								<button type="submit" class="btn btn-sm submit-btn"
+									name="action" id="fwd-btn" value="AF"
+									onclick="return confirm('Are You Sure To Recommend?');">Recommend</button>
+								<button type="submit" class="btn btn-sm delete-btn"
+									name="action" value="AR" onclick="return remarkRequired('R')">Return</button>
+								<%
+								} else if (billstatus.equalsIgnoreCase("ABA") && logintype.equalsIgnoreCase("Z")) {
+								%>
+								<button type="submit" class="btn btn-sm submit-btn"
+									name="action" id="fwd-btn" value="CF"
+									onclick="return confirm('Are You Sure To Approve?');">Approve</button>
+								<button type="submit" class="btn btn-sm delete-btn"
+									name="action" value="CR" onclick="return remarkRequired('R')">Return</button>
+								<%
 								}
 								%>
-
+								<%if(billstatus.equalsIgnoreCase("ABD")  && new ArrayList<String>( Arrays.asList("B", "K", "V", "W","Z")).contains(logintype)){ %>
+										<button type="submit" class="btn btn-sm submit-btn" name="action" id="fwd-btn" value="BT" onclick="return remarkRequired('R');" >Bank Transfer Successful</button>
+								<%} %>		
 								<%
 								}
 								%>
 							</div>
 							<input type="hidden" name="view_mode" value=""> <input
-						type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
-							
+								type="hidden" name="contingentid" value="<%=contingentdata[0]%>">
+
 							<input type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
+								value="${_csrf.token}" />
 						</form>
 					</div>
-					
 
-					<form action="CHSSContingentApprove.htm" method="post">
-						<input type="hidden" name="contingentid" value=""> <input
-							type="hidden" name="isapproval" value="Y"> <input
-							type="hidden" name="${_csrf.parameterName}"
-							value="${_csrf.token}" />
-					</form>
+
 
 					<%
 					if (i == 0) {
