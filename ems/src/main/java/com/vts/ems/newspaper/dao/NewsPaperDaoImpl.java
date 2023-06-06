@@ -858,6 +858,7 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			return null;
 		}	
 	}
+	
 
 	private static final String FINDEMPBYEMPNO  ="FROM Employee WHERE EmpNo=:EmpNo";
 
@@ -1131,6 +1132,41 @@ public class NewsPaperDaoImpl implements NewsPaperDao {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	private static final String EMPLOYEESLIST = "SELECT e.empNo, e.empid,e.empname,ed.Designation,e.desigid FROM employee e, employee_desig ed,employee_details edt WHERE e.DesigId = ed.DesigId AND e.EmpNo=edt.EmpNo AND edt.EmpStatus='P' ORDER BY e.srno DESC;";
+	@Override
+	public List<Object[]> EmployeesList()throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(EMPLOYEESLIST);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO EmployeesList " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	private static final String GETCLAIMSLIST = "SELECT a.NewspaperId, a.EmpNo, em.EmpName, des.Designation, a.ClaimMonth, a.ClaimYear, a.NewspaperStatusCode, b.NewsPaperStatus, b.StatusColor, a.ClaimAmount, a.NewsAppliedDate FROM pis_newspaper a, employee em, employee_desig des,  pis_newspaper_status b \r\n"
+			+ "WHERE a.IsActive=1 AND a.EmpNo=em.EmpNo AND em.DesigId=des.DesigId  AND a.NewspaperStatusCode=b.NewsPaperStatusCode AND (a.NewsAppliedDate BETWEEN :fromdate AND :todate)\r\n"
+			+ "AND CASE WHEN :status='A' THEN a.NewspaperStatusCode IN ('CSD','ABD') WHEN :status='I' THEN a.NewspaperStatusCode NOT IN ('CSD','ABD') END AND CASE WHEN :EmpNO='0' THEN a.empNo !='0' WHEN :EmpNO!='0' THEN a.empNo=:EmpNO END";
+
+	public List<Object[]> GetClaimsList(String fromdate ,String todate ,String EmpNO,String status)throws Exception{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query = manager.createNativeQuery(GETCLAIMSLIST);
+			query.setParameter("fromdate", fromdate);
+			query.setParameter("todate", todate);
+			query.setParameter("EmpNO", EmpNO);
+			query.setParameter("status", status);
+			list = (List<Object[]>)query.getResultList();
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO GetClaimsList " + e);
+			e.printStackTrace();
+		}
+		return list;
 	}
 
 	///////////////////////////////////////// Telephone code ///////////////////////////////////////////////
