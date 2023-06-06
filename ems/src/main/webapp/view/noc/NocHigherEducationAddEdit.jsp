@@ -34,6 +34,9 @@ body {
    	   Object[] empData=(Object[])request.getAttribute("EmpData");
    	   
    	  NocHigherEducation noc=(NocHigherEducation)request.getAttribute("HigherEducation");
+   	
+   	
+   	
    	  
    	 /*  System.out.println("year---"+noc.getAcademicYear()); */
   %>

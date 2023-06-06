@@ -139,13 +139,11 @@ th,td
             <div class="center">
 
 				 <div style="width: 100%;float:left;">
-		         <div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 70px; height: 80px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
+		         <div style="width: 20%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 60px; height: 70px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
                  <div style="width: 90%; height: 75px; border: 0; text-align: center;"><h3 style="">NOC FOR HIGHER EDUCATION </h3></div>
 		       </div>
 		       
-	        <br>
-	        <br>
-							<table style="border: 0px; width: 100%;">
+	        <table style="border: 0px;margin-top:0px; width: 100%;">
 								<tr>
 									<td style="width: 5%;text-align: center"><%=++slno%>.</td>
 									<td>Name and Designation</td>
@@ -277,7 +275,7 @@ th,td
 	 
 	 for(Object[] ad :approveddata) {
 		 
-		if(count==1){%>
+		if(count==1 && RecommendStatus.contains(ad[8].toString()) ){%>
 				 <div align="left" style="margin-left:400px !important;">Recommended By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
 	              <div  align="left" style="margin-left:400px !important;">Recommended On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
 	              
@@ -321,6 +319,7 @@ th,td
 	 
 
 
+ 	
  	
 
 

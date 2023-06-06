@@ -1111,7 +1111,7 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 		}		
 	  }
 
-	private static final String PANDANAME= "SELECT e.EmpName,dg.Designation FROM employee e,noc_higher_education_trans trans,employee_desig dg WHERE  e.desigid=dg.desigid AND e.EmpNo=trans.ActionBy AND trans.NocStatusCode IN('VPA') AND trans.NoceducationId=:HigherEducId LIMIT 1";
+	private static final String PANDANAME= "SELECT e.EmpName,dg.Designation FROM employee e,noc_higher_education_trans trans,employee_desig dg WHERE  e.desigid=dg.desigid AND e.EmpNo=trans.ActionBy AND trans.NocStatusCode IN('VPA','FWD') AND trans.NoceducationId=:HigherEducId LIMIT 1";
 	@Override
 	public Object[] getPandAName(String NOCHigherEducId) throws Exception {
 		
@@ -1127,6 +1127,30 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 			
 		} catch (Exception e) {
 			logger.error(new Date()  + "Inside DAO getPandAName " + e);
+			e.printStackTrace();
+			return null;
+		}		
+	}
+
+	public static final String EMPQUALIFICATION="(SELECT  q.quali_id,q.quali_title FROM pis_quali_code q,pis_qualification pis,employee a WHERE \r\n"
+			+ "\r\n"
+			+ "	pis.quali_id=q.quali_id AND a.EmpId=pis.EmpId AND a.EmpNo=:empNo\r\n"
+			+ "	ORDER BY qualification_id DESC LIMIT 1) ";
+	@Override
+	public Object[] getEmpQualification(String empNo) throws Exception {
+		
+		try {
+			Query query= manager.createNativeQuery(EMPQUALIFICATION);
+			query.setParameter("empNo", empNo);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getEmpQualification " + e);
 			e.printStackTrace();
 			return null;
 		}		

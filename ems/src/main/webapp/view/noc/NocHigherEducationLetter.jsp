@@ -2,6 +2,7 @@
 <%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.time.LocalDate"%>  
+<%@page import="java.util.List"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -133,29 +134,31 @@ th,td
   SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
   SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
   LocalDate date = LocalDate.now(); 
-  Object[] emp=(Object[])request.getAttribute("P&ANameDesig");
+  //Object[] emp=(Object[])request.getAttribute("P&ANameDesig");
+  List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
+  Object[] emp = (Object[])request.getAttribute("EmpData");
   
 
   %>
 
 <div style="text-align:center;margin-top:10px;">
-         <div align="left" style="margin-left:10px !important;width:45%;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[14] %></div>
+         <div align="left" style="margin-left:10px !important;width:45%;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[15] %></div>
              <div align="right" style="margin-top:-20px;margin-right:10px;" >Date:&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(date.toString())) %></span></div>
             <br>
             <br>
             
 		    <div align="left" style="margin-left:10px;">
 		    
-		                        <span style=""><%=obj[1] %>. <%=obj[2] %></span><br>
-								<span style="font-weight: 400; font-size: 14px; ">EmpNo : <%=obj[0] %></span><br>
-								<span style="font-weight: 400; font-size: 14px; "><%=obj[3] %></span><br>
-		                        <span style="font-weight: 400; font-size: 14px; ">STARC, Bengaluru</span><br>
+		                        <span style="font-size: 15px;"><%=obj[1] %> <%=obj[2] %></span><br>
+								<span style="font-weight: 400; font-size: 15px; ">EmpNo : <%=obj[0] %></span><br>
+								<span style="font-weight: 400; font-size: 15px; "><%=obj[3] %></span><br>
+		                        <span style="font-weight: 400; font-size: 15px; ">STARC, Bengaluru</span><br>
 		    
 		    </div> 
 	
-	    <h3 style="text-align: center;text-decoration: underline;margin-top:20px;">Permission for pursuing <%=obj[11] %> from  <%=obj[9] %>  </h3>
+	    <h3 style="text-align: center;text-decoration: underline;margin-top:40px;">Permission for pursuing <span class="text-blue" style="font-weight:600"><%=obj[11] %></span> from  <span class="text-blue"  style="font-weight:600"><%=obj[9] %></span> </h3>
 	
-	      <div style="margin-left: 10px;margin-top:40px;text-align: justify;width:650px; text-justify: inter-word;font-size: 16px;" align="left">
+	      <div style="margin-left: 10px;margin-top:40px;text-align: justify;width:650px; text-justify: inter-word;font-size: 16px;line-height:1.7" align="left">
 				
 		    Please refer your application dated  <span class="text-blue"><%=rdf.format(sdf.parse(obj[20].toString())) %></span> on the subject cited above.<br>
             The Component Authority has granted permission for pursuing   <span class="text-blue"><%=obj[11] %></span>   in  <span class="text-blue"><%=obj[12] %></span> from  <span class="text-blue"><%=obj[9] %></span> through
@@ -166,14 +169,15 @@ th,td
 	<br>
 		<br>
 		<br>
+		 <% if(PandAs.contains(emp[0])){ %>
 		 <div style="margin-left:10px !important;margin-top:20px;text-align:left;"> 
-						        <span class="text-blue" ><%=emp[0]%></span><br>
-								<span style="font-weight: 400; font-size: 14px; "><%=emp[1]%></span><br>
-								<span style="font-weight: 400; font-size: 14px; ">for CEO,STARC</span><br>
+						        <span class="text-blue" style="text-transform: uppercase;" ><%=emp[1]%></span><br>
+								<span style="font-weight: 400; font-size: 15px; "><%=emp[2]%></span><br>
+								<span style="font-weight: 400; font-size: 15px; ">for CEO,STARC</span><br>
 								
 		 </div>
 	
-	
+	<%} %> 
 	</div>
 
 

@@ -1614,6 +1614,14 @@ public class NocServiceImpl implements NocService {
 					notification.setNotificationMessage("NOC Higher Education Request Returned");
 					notification.setNotificationBy(empNo);
 				}
+			
+				else if(action.equalsIgnoreCase("D"))
+				{
+					notification.setEmpNo(emp.getEmpNo());
+					notification.setNotificationUrl("HigherEducation.htm");
+					notification.setNotificationMessage("NOC Higher Education Request DisApproved");
+					notification.setNotificationBy(empNo);
+				}
 				
 				notification.setNotificationDate(LocalDate.now().toString());
 				notification.setIsActive(1);
@@ -1713,6 +1721,12 @@ public class NocServiceImpl implements NocService {
 	public Object[] getPandAName(String NOCHigherEducId) throws Exception {
 	
 		return dao.getPandAName(NOCHigherEducId);
+	}
+
+	@Override
+	public Object[] getEmpQualification(String empNo) throws Exception {
+		
+		return dao.getEmpQualification(empNo);
 	}
 
 	

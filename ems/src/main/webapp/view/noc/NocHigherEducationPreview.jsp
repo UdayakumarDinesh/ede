@@ -53,6 +53,7 @@ body {
 	List<Object[]> RemarksHistory = (List<Object[]>)request.getAttribute("HigherEducationRemarks");
 	String isApproval = (String)request.getAttribute("isApproval");
 	
+	 List<Object[]> approveddata=(List<Object[]>)request.getAttribute("HigherEducationApprovalData");
 	 String CEOempno=(String)request.getAttribute("CEOempno");
 	 List<String> PandAs = (List<String>)request.getAttribute("PandAsEmpNos");
 	 
@@ -266,7 +267,55 @@ body {
 					
 			</div>
 			<%} %>
-					
+				
+				
+				       <% int count=1;
+	 
+	 for(Object[] ad :approveddata) {
+		 
+		if(count==1 && RecommendStatus.contains(ad[8].toString())){%>
+				 <div align="left" style="margin-left:600px !important;">Recommended By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
+	              <div  align="left" style="margin-left:600px !important;">Recommended On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
+	              
+	              <br>
+			<%} else if(RecommendStatus.contains(ad[8].toString())){%>
+		
+		<div align="left" style="margin-left:25px !important;">Recommended By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
+	    <div align="left" style="margin-left:25px !important;">Recommended On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
+	    <br>
+	 
+	   <%}
+			else if(ad[8].toString().equalsIgnoreCase("VPA")){%>
+		
+				<div align="left" style="margin-left:25px !important;">Verified By :&nbsp;<span class="text-blue"><%=ad[2] %></span> </div>
+			    <div align="left" style="margin-left:25px !important;">Verified On :&nbsp;<span class="text-blue"><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %> </span></div>
+		
+		
+	<% } 
+		
+			else if(ad[8].toString().equalsIgnoreCase("APR")){%>
+			
+		
+		<div align="center" style="margin-left:0px;text-align:center;"> 
+		                         <span style="font-weight: 600; font-size: 16px;">APPROVED</span><br><br>
+						        <span style="font-weight: 500; font-size: 14px;">Approved By:&nbsp;<span class="text-blue" ><%=ad[2] %></span></span><br>
+								<span style="font-weight: 400; font-size: 14px;">Approved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %></span></span><br>
+		</div>
+		
+		 <%}
+		
+			else if(ad[8].toString().equalsIgnoreCase("DPR")){%>
+		 
+		<br>
+		<div align="center" style="margin-left:0px;text-align:center;"> 
+		                        <span style="font-weight: 600; font-size: 16px;">DISAPPROVED</span><br><br><br>
+						        <span style="font-weight: 500; font-size: 14px;">DisApproved By:&nbsp;<span class="text-blue" ><%=ad[2] %></span></span><br>
+								<span style="font-weight: 400; font-size: 14px;">DisApproved On:&nbsp;<span class="text-blue" ><%=DateTimeFormatUtil.SqlToRegularDate(ad[4].toString().substring(0, 10)) +" "+ad[4].toString().substring(11,19) %></span></span><br>
+		</div> 
+		
+	<%}count++;} %>
+	
+	 	
 					<% if(obj[18]!=null && toUserStatus.contains(obj[18].toString())) { %>
 	  	      <div class="col-md-6" align="center" style="margin-top: 0%;margin-left:48%;">
 				   <div class="col-md-12" align="left" style="margin-bottom: 5px;">Remarks : <br>
@@ -292,7 +341,7 @@ body {
 							Approve
 						</button>
 						
-						<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="NOCHigherEducationForward.htm" name="Action" value="D" onclick="return RemarkMandatory();" >
+						<button type="submit" class="btn btn-sm  update-btn" id="finalSubmission"  formaction="NOCHigherEducationForward.htm" name="Action" value="D" onclick="return RemarkMandatory();" >
 							Disapprove
 						</button>
 						
@@ -332,7 +381,7 @@ function validateTextBox() {
     	return confirm('Are You Sure To Return?');
     	
     } else {
-        alert("Please enter Remarks");
+        alert("Please enter Remarks To Return");
         return false;
     }
     
@@ -343,7 +392,7 @@ function RemarkMandatory(){
 	    	return confirm('Are You Sure To disapproval?');
 	    	
 	    } else {
-	        alert("Please enter Remarks");
+	        alert("Please enter Remarks To DisApprove");
 	        return false;
 	    }
 	

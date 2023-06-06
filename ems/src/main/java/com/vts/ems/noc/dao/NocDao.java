@@ -160,6 +160,8 @@ public interface NocDao {
 
 	public Object[] getPandAName(String NOCHigherEducId)throws Exception;
 
+	public Object[] getEmpQualification(String empNo)throws Exception;
+
 	
 
 

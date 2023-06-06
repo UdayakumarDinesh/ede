@@ -60,6 +60,7 @@ body{
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
+	List<String> SOs = (List<String>)request.getAttribute("SOEmpNos");
 	
 	 Object[] emplist = (Object[])request.getAttribute("NocApprovalFlow"); 
 	
@@ -71,7 +72,7 @@ body{
 	
 	List<Object[]> NOCHigherEducationList=(List<Object[]>)request.getAttribute("NOCHigherEducationList");
 	
-	
+	Object[] empquali=(Object[])request.getAttribute("EmpQuali");
 	
    %>
 
@@ -166,7 +167,17 @@ body{
 							    
 							    <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[0] %>"  formaction="NOCHigherEducationDownload.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 								  <i style="color: #019267" class="fa-solid fa-download"></i>
-								</button>  
+								</button>
+								
+								<% if(PandAs.contains(emp.getEmpNo()) && obj[4].toString().equalsIgnoreCase("A")){ %>  
+								
+								
+								 <button type="submit" class="btn btn-sm" name="EducationId" value="<%=obj[0]%>" formaction="NOCHigherEducationLetter.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Letter">
+											<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+							    </button> 
+								
+								
+								<%} %>
 								 
 								 
 							</td>
@@ -185,7 +196,7 @@ body{
 				<div class="row text-center">
 					<div class="col-md-12">
 						
-						<button type="submit" class="btn btn-sm add-btn" formaction="HigherEducationAdd.htm" >ADD</button>
+						<button type="submit" class="btn btn-sm add-btn" formaction="HigherEducationAdd.htm"  <% if(empquali==null){ %> onclick="message()" <%} %>>ADD</button>
 						<button type="submit" class="btn btn-sm edit-btn" formaction="HigherEducationEdit.htm" name="action" value="EDITCIR" Onclick="Edit(NOCHigherEducation)">EDIT</button>
 						<!-- <button type="submit" class="btn btn-sm add-btn" formaction="NOCHigherEducationLetter.htm"  name="EducationId" value='2' formmethod="GET" formtarget="blank"  >PRINT</button> -->
 						
@@ -240,17 +251,15 @@ body{
 	               		
 	               		
 	               		
-	               		<% if(emplist[3]!=null && !PandAs.contains(emp.getEmpNo()) ){ %>
+	               		<% if(!SOs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
 	               			<td class="trup" style="background: #F99B7D;" >
 	                			SO- <%=emplist[3] %>
 	                		</td>
 	                		
-	                		<%} %>
-	                		
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
-	               		
+	               		<%} %>
 	               		
 	               		
 	               		<% if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
@@ -292,6 +301,14 @@ function Edit(NOCHigherEducation)
 	
 }
 
+
+function message(){
+	
+	alert("Qualification Details Are Not Available.Please contact Admin");
+	event.preventDefault();
+	return false;
+	
+}
 </script>
 
 <script type="text/javascript">

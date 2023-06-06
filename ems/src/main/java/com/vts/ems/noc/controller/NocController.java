@@ -1529,13 +1529,14 @@ public class NocController {
 				List<String> DGMs = service.GetDGMEmpNos();
 				List<String> DHs = service.GetDHEmpNos();
 				List<String> GHs = service.GetGHEmpNos();
-				
+				List<String> Sos = service.GetSosEmpNos();
 				
 				 req.setAttribute("CEOEmpNos", CEO);
 				 req.setAttribute("PandAsEmpNos", PandAs);
 				 req.setAttribute("DGMEmpNos", DGMs);
 				 req.setAttribute("DivisionHeadEmpNos", DHs);
 				 req.setAttribute("GroupHeadEmpNos", GHs);
+				 req.setAttribute("SOEmpNos", Sos);
 				 
 				 req.setAttribute("NocApprovalFlow", service.getNocApprovalFlow(EmpNo));
 				 req.setAttribute("CeoName", service.GetCeoName());
@@ -1551,7 +1552,8 @@ public class NocController {
 				 
 				req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				req.setAttribute("NOCHigherEducationList",service.getNOCHigherEducationList(EmpNo));
-				
+				 req.setAttribute("EmpQuali",service.getEmpQualification(EmpNo));
+				 
 				return "noc/NocHigherEducation";
 						 
 			} catch (Exception e) 
@@ -1576,7 +1578,7 @@ public class NocController {
 				 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 				 req.setAttribute("EmpId", EmpId);
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
-				 
+				
 				 return "noc/NocHigherEducationAddEdit";
 				 
 			}catch (Exception e) {
@@ -1751,6 +1753,7 @@ public class NocController {
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 req.setAttribute("HigherEducationRemarks",service.getNocHigherEducationRemarks(NOCHigherEducId) );
 				 req.setAttribute("NOCHigherEducationDetails", service.getHigherEducationDetails(NOCHigherEducId));
+				 req.setAttribute("HigherEducationApprovalData", service.getHigherEducationApprovalData(NOCHigherEducId) );
 				 req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 				 
 			     return "noc/NocHigherEducationPreview";
@@ -1949,10 +1952,11 @@ public class NocController {
 			try {
 				
 				String NOCHigherEducId=req.getParameter("EducationId");
-				
+				List<String> PandAs = service.GetPandAAdminEmpNos();
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 req.setAttribute("NOCHigherEducationDetails", service.getHigherEducationDetails(NOCHigherEducId));
-				 req.setAttribute("P&ANameDesig", service.getPandAName(NOCHigherEducId));
+				 //req.setAttribute("P&ANameDesig", service.getPandAName(NOCHigherEducId));
+				 req.setAttribute("PandAsEmpNos", PandAs);
 				 req.setAttribute("lablogo",getLabLogoAsBase64());
 				 String path = req.getServletContext().getRealPath("/view/temp");
 			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);

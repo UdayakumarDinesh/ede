@@ -130,6 +130,8 @@ public interface NocService {
 
 	public Object[] getPandAName(String nOCHigherEducId)throws Exception;
 
+	public Object[] getEmpQualification(String empNo)throws Exception;
+
 	
 	
 
