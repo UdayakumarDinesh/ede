@@ -107,14 +107,14 @@
 										slno++; %>
 										<tr>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;" ><%= slno%></td>
-											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[0] %></td>
+											<td style="padding-top:5px; padding-bottom: 5px;"><%=obj[1] %></td>
 											<%if(obj[2]!=null){ %>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(obj[2].toString()))%></td>
 											<%}else{ %>
 											<td style="text-align: center;padding-top:5px; padding-bottom: 5px;"><%=rdf.format(sdf.parse(LocalDate.now().toString()))%></td>
 											<%} %>
 											<td style="padding-top:5px; padding-bottom: 5px;" class="editable-click">
-														 <button class="btn btn-sm btn-link w-100 " formaction="" name="contingentid" value="<%=obj[0]%>" formtarget="_blank" 
+														 <button class="btn btn-sm btn-link w-100 " formaction="NewspaperContingentTransacStatus.htm" name="contingentid" value="<%=obj[0]%>" formtarget="_blank" 
 														 data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color:<%=obj[8] %>; font-weight: 600;" >
 														 
 														  &nbsp;<%=obj[6] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i></button>
@@ -124,7 +124,7 @@
 												<button type="submit" class="btn btn-sm view-icon" name="contingentid" value="<%=obj[0] %>" formaction="NewspaperContingetBill.htm" formmethod="post" data-toggle="tooltip" data-placement="top" title="View">
 													<i class="fa-solid fa-eye"></i>
 												</button>	
-												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="NewsPaperFinalAppPrint.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
+												<button type="submit" class="btn btn-sm" name="contingentid" value="<%=obj[0] %>" formaction="NewspaperContingentBillPrint.htm" formtarget="_blank" data-toggle="tooltip" data-placement="top" title="Download">
 													<i style="color: #019267" class="fa-solid fa-download"></i>
 												</button>
 												<input type="hidden" name="claim_view_mode" value="E">

@@ -63,9 +63,7 @@ table {
 }
 
 .note {
-	
 	margin-top: 30px;
-	
 }
 
 .table3 tr, th, td {
@@ -109,7 +107,7 @@ table {
 }
 
 .borderDiv {
-	align :center;
+	align: center;
 	border: 1.5px solid black;
 	width: 800px;
 	padding-bottom: 20px;
@@ -123,7 +121,7 @@ table {
 
 	<%
 	Object[] NewspaperUserPrintData = (Object[]) request.getAttribute("NewspaperUserPrintData");
-	List<Object[]> newsPaperRemarksHistory = (List<Object[]>)request.getAttribute("newsPaperRemarksHistory");
+	List<Object[]> newsPaperRemarksHistory = (List<Object[]>) request.getAttribute("newsPaperRemarksHistory");
 	String LabLogo = (String) request.getAttribute("LabLogo");
 	String isApproval = (String) request.getAttribute("isApproval");
 	String PayableRupee = "Not Available";
@@ -181,311 +179,348 @@ table {
 		<div class="card">
 			<div class="card-body">
 				<div class="borderDiv" align="center">
-				<div align="center">
-				
-					<table height="110" style="margin-top: 30px;" id="mainTable">
-						<tr>
-							<td rowspan="2"><img
-								style="width: 80px; height: 90px; margin: 0px 0 0 15px;"
-								align="left" src="data:image/png;base64,<%=LabLogo%>"></td>
-							<td class="text-center" width="300px" rowspan="2">CLAIM FORM
-								FOR <br>REIMBURSEMENT <br> OF RESIDENTIAL NEWSPAPERS
-								TO <br> EXECUTIVES
-							</td>
-							<td>SITAR-BNG <br> P&A-057
-							</td>
-							<td>Rev.: 04</td>
-						</tr>
-						<tr>
-							<td>Date of Issue: <br><%=dateFormat.format(today)%>
-							</td>
-							<td>Total<br> Pages-1
-							</td>
-						</tr>
-					</table>
+					<div align="center">
 
-					<div style="margin-top: 50px">
-						<table class="table2">
+						<table height="110" style="margin-top: 30px;" id="mainTable">
 							<tr>
-								<td>1.</td>
-								<td>Name of the Employee</td>
-								<td colspan="2" class="blue"><%=NewspaperUserPrintData[9]%></td>
-							</tr>
-							<tr>
-								<td>2.</td>
-								<td>Emp. No.</td>
-								<td colspan="2" class="blue"><%=NewspaperUserPrintData[8]%></td>
-							</tr>
-							<tr>
-								<td>3.</td>
-								<td>Designation</td>
-								<td colspan="2" class="blue"><%=NewspaperUserPrintData[10]%></td>
-							</tr>
-							<tr>
-								<td>4.</td>
-								<td>Grade & Level in the Pay Matrix</td>
-								<td class="blue" style="text-align: center;">
-									<%
-									if (NewspaperUserPrintData != null) {
-									%><%=NewspaperUserPrintData[6]%> <%
- }
- %>
+								<td rowspan="2"><img
+									style="width: 80px; height: 90px; margin: 0px 0 0 15px;"
+									align="left" src="data:image/png;base64,<%=LabLogo%>"></td>
+								<td class="text-center" width="300px" rowspan="2">CLAIM
+									FORM FOR <br>REIMBURSEMENT <br> OF RESIDENTIAL
+									NEWSPAPERS TO <br> EXECUTIVES
 								</td>
-								<td class="blue" style="text-align: center;">
-									<%
-									if (NewspaperUserPrintData != null) {
-									%><%=NewspaperUserPrintData[5]%> <%
- }
- %>
+								<td>SITAR-BNG <br> P&A-057
+								</td>
+								<td>Rev.: 04</td>
+							</tr>
+							<tr>
+								<td>Date of Issue: <br><%=dateFormat.format(today)%>
+								</td>
+								<td>Total<br> Pages-1
 								</td>
 							</tr>
-							<tr>
-								<td height="40px">5.</td>
-								<td>Bi-annual & Year of claim</td>
-								<td class="exclude" colspan="2" class="blue">
+						</table>
+
+						<div style="margin-top: 50px">
+							<table class="table2">
+								<tr>
+									<td>1.</td>
+									<td>Name of the Employee</td>
+									<td colspan="2" class="blue"><%=NewspaperUserPrintData[9]%></td>
+								</tr>
+								<tr>
+									<td>2.</td>
+									<td>Emp. No.</td>
+									<td colspan="2" class="blue"><%=NewspaperUserPrintData[8]%></td>
+								</tr>
+								<tr>
+									<td>3.</td>
+									<td>Designation</td>
+									<td colspan="2" class="blue"><%=NewspaperUserPrintData[10]%></td>
+								</tr>
+								<tr>
+									<td>4.</td>
+									<td>Grade & Level in the Pay Matrix</td>
+									<td class="blue" style="text-align: center;">
+										<%
+										if (NewspaperUserPrintData != null) {
+										%><%=NewspaperUserPrintData[6]%> <%
+ }
+ %>
+									</td>
+									<td class="blue" style="text-align: center;">
+										<%
+										if (NewspaperUserPrintData != null) {
+										%><%=NewspaperUserPrintData[5]%> <%
+ }
+ %>
+									</td>
+								</tr>
+								<tr>
+									<td height="40px">5.</td>
+									<td>Bi-annual & Year of claim</td>
+									<td class="exclude" colspan="2" class="blue">
+										<%
+										if (NewspaperUserPrintData[0].toString().equalsIgnoreCase("JAN-JUN")) {
+										%> <span class="blue">January-June <%=NewspaperUserPrintData[1]%></span>
+										<%
+										}
+										if (NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")) {
+										%> <span class="blue"> July - December <%=NewspaperUserPrintData[1]%></span>
+										<%
+										}
+										%>
+									</td>
+									<%-- <td class="exclude"><% if(NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")){%>  <%=NewspaperUserPrintData[1]%> <%} else{%>-<%} %></td> --%>
+								</tr>
+								<tr>
+									<td>6.</td>
+									<td>Amount of Reimbursement @ ` 500/- p.m.</td>
 									<%
-									if (NewspaperUserPrintData[0].toString().equalsIgnoreCase("JAN-JUN")) {
-									%> <span class="blue">January-June <%=NewspaperUserPrintData[1]%></span>
+									String amt = PayableRupee;
+									amt = amt.replace(",", "");
+									if (Integer.parseInt(amt) <= 3000) {
+									%>
+									<td colspan="2" class="blue">Rs <%=PayableRupee%> /-
+									</td>
 									<%
-									}
-									if (NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")) {
-									%> <span class="blue"> July - December <%=NewspaperUserPrintData[1]%></span>
+									} else {
+									%>
+									<td colspan="2" class="blue">Rs 3000 /-</td>
 									<%
 									}
 									%>
-								</td>
-								<%-- <td class="exclude"><% if(NewspaperUserPrintData[0].toString().equalsIgnoreCase("JUL-DEC")){%>  <%=NewspaperUserPrintData[1]%> <%} else{%>-<%} %></td> --%>
-							</tr>
-							<tr>
-								<td>6.</td>
-								<td>Amount of Reimbursement @ ` 500/- p.m.</td>
-								<%
-								String amt = PayableRupee;
-								amt = amt.replace(",", "");
-								if (Integer.parseInt(amt) <= 3000) {
-								%>
-								<td colspan="2" class="blue">Rs <%=PayableRupee%> /-
-								</td>
-								<%
-								} else {
-								%>
-								<td colspan="2" class="blue">Rs 3000 /-</td>
-								<%
-								}
-								%>
-							</tr>
-						</table>
-					</div>
+								</tr>
+							</table>
+						</div>
 
-					<div class="declare">
-						I hereby certify that the (i) The newspaper (s) in respect of
-						which reimbursement is claimed, is/are purchased by me. (ii) The
-						subscription amount incurred by me is not less than the amount
-						claimed towards subscription of newspaper / s for the period.
-						(iii) The amount for which the reimbursement is being claimed has
-						actually been paid by me and has not/will not be claimed by any
-						other source.
-						<div class="decDiv">
-							<div class="decDiv1">Date:</div>
+						<div class="declare">
+							I hereby certify that the (i) The newspaper (s) in respect of
+							which reimbursement is claimed, is/are purchased by me. (ii) The
+							subscription amount incurred by me is not less than the amount
+							claimed towards subscription of newspaper / s for the period.
+							(iii) The amount for which the reimbursement is being claimed has
+							actually been paid by me and has not/will not be claimed by any
+							other source.
+							<div class="decDiv">
+								<div class="decDiv1">Date:</div>
 
-							<div style="margin-right: 80px;">
-								Signature of Employee <br> STARC Intercom No:
+								<div style="margin-right: 80px;">
+									Signature of Employee <br> </b>
+					<span style="color: blue"> <%=NewspaperUserPrintData[9]%>,&nbsp;<%=NewspaperUserPrintData[10]%></span> <br> <b> STARC Intercom No: </b>
+								</div>
 							</div>
 						</div>
-					</div>
-					<div class="note" >
-						<div align="left"> <span style="margin-left: 8%"> Note:</span></div>
-						<table class="table3">
-							<tr>
-								<th>Name of the Quarter</th>
-								<th>Due date of claim submission (on or before)</th>
-							</tr>
-							<tr>
-								<td>January - June</td>
-								<td>15th of July</td>
-							</tr>
-							<tr>
-								<td>July - December</td>
-								<td>15th of January</td>
-							</tr>
-						</table>
+						<div class="note">
+							<div align="left">
+								<span style="margin-left: 8%"> Note:</span>
+							</div>
+							<table class="table3">
+								<tr>
+									<th>Name of the Quarter</th>
+									<th>Due date of claim submission (on or before)</th>
+								</tr>
+								<tr>
+									<td>January - June</td>
+									<td>15th of July</td>
+								</tr>
+								<tr>
+									<td>July - December</td>
+									<td>15th of January</td>
+								</tr>
+							</table>
+						</div>
+
+						<div class="accDPT">
+							<div
+								style="text-decoration: underline; font-weight: bold; margin-bottom: 20px;">FOR
+								ACCOUNTS DEPARTMENT USE</div>
+							<table class="table4">
+								<tr>
+									<td>Claimed Amount</td>
+									<td class="blue"><b>Rs <%=ClaimRupee%> /-
+									</b></td>
+								</tr>
+								<tr>
+									<td>Eligible Amount</td>
+									<td class="blue"><b>Rs <%=RistrictedAmt%> /-
+									</b></td>
+								</tr>
+								<tr>
+									<td>Amount passed for payment</td>
+									<%
+									String amt1 = PayableRupee;
+									amt1 = amt1.replace(",", "");
+									if (Integer.parseInt(amt1) <= 3000) {
+									%>
+									<td colspan="2" class="blue"><b>Rs <%=PayableRupee%>
+											/-</td>
+									<%
+									} else {
+									%>
+									<td colspan="2" class="blue">Rs 3000 /-</b></td>
+									<%
+									}
+									%>
+								</tr>
+							</table>
+						</div>
+						<!-- <div class="sign">
+							<b style="margin-right: 50px;">F&A Dept. / FO </b>
+						</div> -->
+
 					</div>
 
-					<div class="accDPT">
-						<div
-							style="text-decoration: underline; font-weight: bold; margin-bottom: 20px;">FOR
-							ACCOUNTS DEPARTMENT USE</div>
-						<table class="table4">
-							<tr>
-								<td>Claimed Amount</td>
-								<td class="blue"><b>Rs <%=ClaimRupee%> /-
-								</b></td>
-							</tr>
-							<tr>
-								<td>Eligible Amount</td>
-								<td class="blue"><b>Rs <%=RistrictedAmt%> /-
-								</b></td>
-							</tr>
-							<tr>
-								<td>Amount passed for payment</td>
+					<br>
+					<div class="row">
+						<br>
+						<%
+						if (newsPaperRemarksHistory.size() > 0) {
+						%>
+						<div class="col-md-8" align="center"
+							style="margin: 10px 0px 5px 25px; padding: 0px; border: 1px solid black; border-radius: 5px;">
+							<%
+							if (newsPaperRemarksHistory.size() > 0) {
+							%>
+							<table style="margin: 3px; padding: 0px">
+								<tr>
+									<td style="border: none; padding: 0px">
+										<h6 style="text-decoration: underline;">Remarks :</h6>
+									</td>
+								</tr>
 								<%
-								String amt1 = PayableRupee;
-								amt1 = amt1.replace(",", "");
-								if (Integer.parseInt(amt1) <= 3000) {
+								for (Object[] obj : newsPaperRemarksHistory) {
 								%>
-								<td colspan="2" class="blue"><b>Rs <%=PayableRupee%> /-</td>
-								<%
-								} else {
-								%>
-								<td colspan="2" class="blue">Rs 3000 /-</b></td>
+								<tr>
+									<td
+										style="border: none; width: 80%; overflow-wrap: anywhere; padding: 0px">
+										<%=obj[3]%>&nbsp; : <span style="border: none; color: blue;">
+											<%=obj[1]%></span>
+									</td>
+								</tr>
 								<%
 								}
 								%>
-							</tr>
-						</table>
+							</table>
+							<%
+							}
+							%>
+						</div>
+						<%
+						}
+						%>
 					</div>
-					<div class="sign">
-						<b style="margin-right: 50px;">F&A Dept. / FO </b>
+					<div class="row">
+					<%
+							if (NewspaperUserPrintData[24] != null) {
+							%>
+						<div class="col-md-8" align="left"
+							style="margin: 10px 0px 5px 25px; padding: 0px; border: 1px solid black; border-radius: 5px;">
+							
+							<p>
+								<span style="color: red">Remarks :</span>
+								<%=NewspaperUserPrintData[24]%>
+							</p>
+							
+
+						</div>
+						<%
+							}
+							%>
 					</div>
+					<form action="#">
+						<%
+						if (NewspaperUserPrintData != null && (NewspaperUserPrintData[11].toString().equalsIgnoreCase("CRT")
+								|| NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG")
+								|| NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA")
+								|| NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP"))) {
+						%>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<div style="text-align: left; width: 580px;">
+								<b>Remarks :</b>
+							</div>
+							<br>
+							<textarea rows="4" cols="70" name="remarks" id="remarksarea"
+								maxlength="250"></textarea>
+							<br>
+
+							<button type="submit" class="btn btn-sm submit-btn"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="FWD"
+								onclick="return confirm('Are You Sure To Submit ?');">
+								<i class="fa-solid fa-forward" style="color: #125B50"></i>
+								Submit for processing
+							</button>
+
+						</div>
+
+						<%
+						} else if (isApproval != null && isApproval.equalsIgnoreCase("Y") && NewspaperUserPrintData != null
+								&& (NewspaperUserPrintData[11].toString().equalsIgnoreCase("FWD"))) {
+						%>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<div style="text-align: left; width: 580px;">
+								<b>Remarks :</b>
+							</div>
+							<br>
+							<textarea rows="4" cols="70" name="remarks" id="remarksarea"
+								maxlength="250"></textarea>
+							<br>
+
+						</div>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<button type="submit" class="btn btn-sm submit-btn"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="DGM-A"
+								onclick="return confirm('Are You Sure To Proceed?');">
+								Process</button>
+
+							<button type="submit" class="btn btn-sm btn-danger"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="DGM-R" onclick="return validateTextBox();">
+								Return</button>
+						</div>
+						<%
+						} else if (isApproval != null && isApproval.equalsIgnoreCase("Y") && NewspaperUserPrintData != null
+								&& (NewspaperUserPrintData[11].toString().equalsIgnoreCase("VDG"))) {
+						%>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<div style="text-align: left; width: 580px;">
+								<b>Remarks :</b>
+							</div>
+							<br>
+							<textarea rows="4" cols="70" name="remarks" id="remarksarea"
+								maxlength="250"></textarea>
+							<br>
+
+						</div>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<button type="submit" class="btn btn-sm submit-btn"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="PO-A"
+								onclick="return confirm('Are You Sure To Proceed?');">
+								Process</button>
+
+							<button type="submit" class="btn btn-sm btn-danger"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="PO-R" onclick="return validateTextBox();">
+								Return</button>
+						</div>
+						<%
+						} else if (isApproval != null && isApproval.equalsIgnoreCase("Y") && NewspaperUserPrintData != null
+								&& (NewspaperUserPrintData[11].toString().equalsIgnoreCase("VBP"))) {
+						%>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<div style="text-align: left; width: 580px;">
+								<b>Remarks :</b>
+							</div>
+							<br>
+							<textarea rows="4" cols="70" name="remarks" id="remarksarea"
+								maxlength="250"></textarea>
+							<br>
+
+						</div>
+						<div align="center" style="margin-leftt: 28.5%;">
+							<button type="submit" class="btn btn-sm submit-btn"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="AO-A"
+								onclick="return confirm('Are You Sure To Proceed?');">
+								Process</button>
+
+							<button type="submit" class="btn btn-sm btn-danger"
+								id="finalSubmission" formaction="NewspaperForward.htm"
+								name="Action" value="AO-R" onclick="return validateTextBox();">
+								Return</button>
+						</div>
+						<%
+						}
+						%>
+						<input type="hidden" name="NewspaperId"
+							value="<%=NewspaperUserPrintData[7]%>">
+					</form>
 
 				</div>
-				
-				<br>
-				<div class="row">
-					  <br>
-						<%if(newsPaperRemarksHistory.size()>0){ %>
-							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
-								<%if(newsPaperRemarksHistory.size()>0){ %>
-									<table style="margin: 3px;padding: 0px">
-										<tr>
-											<td style="border:none;padding: 0px">
-												<h6 style="text-decoration: underline;">Remarks :</h6> 
-											</td>											
-										</tr>
-										<%for(Object[] obj : newsPaperRemarksHistory){%>
-										<tr>
-											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
-												<%=obj[3]%>&nbsp; :
-												<span style="border:none; color: blue;">	<%=obj[1] %></span>
-											</td>
-										</tr>
-										<%} %>
-									</table>
-								<%} %>
-							</div>
-							<%} %>
-					   </div>
-				<form action="#">
-					<%
-					if (NewspaperUserPrintData != null && (NewspaperUserPrintData[11].toString().equalsIgnoreCase("CRT")
-							|| NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG")
-							|| NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA")
-							|| NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP"))) {
-					%>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<div style="text-align: left; width: 580px;">
-							<b>Remarks :</b>
-						</div>
-						<br>
-						<textarea rows="4" cols="70" name="remarks" id="remarksarea"
-							maxlength="250"></textarea>
-						<br>
-
-						<button type="submit" class="btn btn-sm submit-btn"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="FWD"
-							onclick="return confirm('Are You Sure To Submit ?');">
-							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit
-							for processing
-						</button>
-
-					</div>
-					<%
-					} else if (isApproval != null && isApproval.equalsIgnoreCase("Y") && NewspaperUserPrintData != null
-							&& (NewspaperUserPrintData[11].toString().equalsIgnoreCase("FWD"))) {
-					%>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<div style="text-align: left; width: 580px;">
-							<b>Remarks :</b>
-						</div>
-						<br>
-						<textarea rows="4" cols="70" name="remarks" id="remarksarea"
-							maxlength="250"></textarea>
-						<br>
-
-					</div>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<button type="submit" class="btn btn-sm submit-btn"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="DGM-A"
-							onclick="return confirm('Are You Sure To Proceed?');">
-							Process</button>
-
-						<button type="submit" class="btn btn-sm btn-danger"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="DGM-R" onclick="return validateTextBox();">
-							Return</button>
-					</div>
-					<%
-					} else if (isApproval != null && isApproval.equalsIgnoreCase("Y") && NewspaperUserPrintData != null
-							&& (NewspaperUserPrintData[11].toString().equalsIgnoreCase("VDG"))) {
-					%>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<div style="text-align: left; width: 580px;">
-							<b>Remarks :</b>
-						</div>
-						<br>
-						<textarea rows="4" cols="70" name="remarks" id="remarksarea"
-							maxlength="250"></textarea>
-						<br>
-
-					</div>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<button type="submit" class="btn btn-sm submit-btn"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="PO-A"
-							onclick="return confirm('Are You Sure To Proceed?');">
-							Process</button>
-
-						<button type="submit" class="btn btn-sm btn-danger"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="PO-R" onclick="return validateTextBox();">
-							Return</button>
-					</div>
-					<%
-					} else if (isApproval != null && isApproval.equalsIgnoreCase("Y") && NewspaperUserPrintData != null
-							&& (NewspaperUserPrintData[11].toString().equalsIgnoreCase("VBP"))) {
-					%>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<div style="text-align: left; width: 580px;">
-							<b>Remarks :</b>
-						</div>
-						<br>
-						<textarea rows="4" cols="70" name="remarks" id="remarksarea"
-							maxlength="250"></textarea>
-						<br>
-
-					</div>
-					<div align="center" style="margin-leftt: 28.5%;">
-						<button type="submit" class="btn btn-sm submit-btn"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="AO-A"
-							onclick="return confirm('Are You Sure To Proceed?');">
-							Process</button>
-
-						<button type="submit" class="btn btn-sm btn-danger"
-							id="finalSubmission" formaction="NewspaperForward.htm"
-							name="Action" value="AO-R" onclick="return validateTextBox();">
-							Return</button>
-					</div>
-					<%
-					}
-					%>
-					<input type="hidden" name="NewspaperId"
-						value="<%=NewspaperUserPrintData[7]%>">
-				</form>
-
-			</div>
 			</div>
 		</div>
 	</div>

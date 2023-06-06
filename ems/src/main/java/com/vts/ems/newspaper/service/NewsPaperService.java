@@ -31,7 +31,7 @@ public interface NewsPaperService {
 	public long editNewspaper(Newspaper newspaper) throws Exception;
 	public List<Object[]> newspapersByContingentBill(Long ContingentId)throws Exception;
 	public long forwardNewspaper(long newspaperApplyId, String empNo, String remarks, String userName, String Action) throws Exception;
-	public List<Object[]> findDGMNewspaperList(String empNo, String LoginType) throws Exception;
+	public List<Object[]> findNewspaperList(String empNo, String LoginType) throws Exception;
 	public Object[] empOnLogintype(String Logintype) throws Exception;
 	public List<Object[]> findPONewspaperList() throws Exception;
 	public List<Object[]> findAONewspaperList() throws Exception;
@@ -49,6 +49,8 @@ public interface NewsPaperService {
 	public long newspaperClaimsApprove(String contingentid,String Username, String action, String remarks,String LoginType,String EmpNo, Long EmpId ) throws Exception;
 	public List<Object[]> newspaperContningentApprTransById(Long ContingentId)throws Exception;
 	public List<Object[]> newsPaperRemarksHistory(String NewspaperId) throws Exception;
+	public List<Object[]> newspaperContingentTransaById(long ContingentId) throws Exception;
+	public List<Object[]> newsContingentRemarksHistory(String contingentId) throws Exception;
 	
 	
 	

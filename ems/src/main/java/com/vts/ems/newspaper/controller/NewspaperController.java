@@ -97,6 +97,8 @@ public class NewspaperController {
 	EmsFileUtils emsfileutils ;
 
 	private static final Logger logger = LogManager.getLogger(NewspaperController.class);
+	
+	private final String formmoduleid="21";
 
 	@RequestMapping(value = "NewspaperList.htm")
 	public String NewsPaperList(HttpServletRequest req) 
@@ -109,9 +111,14 @@ public class NewspaperController {
 
 			List<Object[]> NewspaperClaimList = service.getNewspaperClaimList(sesEmpNo);
 			req.setAttribute("NewspaperClaimList", NewspaperClaimList);
-			req.setAttribute("DGM", service.findEmpByEmpNo(service.GetDGMEmpNo(sesEmpNo)).getEmpName());
+			String getDGMEmpNo = service.GetDGMEmpNo(sesEmpNo);
+			if(getDGMEmpNo!=null) {
+				req.setAttribute("DGM", service.findEmpByEmpNo(getDGMEmpNo).getEmpName());
+			}
+			
 			req.setAttribute("PO", service.empOnLogintype("K")[1]);
 			req.setAttribute("AO", service.empOnLogintype("W")[1]);
+			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive", "NewspaperList_htm");
 
 			return "newspaper/Newspaperlist";
@@ -135,6 +142,7 @@ public class NewspaperController {
 
 			List<Object[]> NewspaperApprovalList = service.getNewspaperApprovalList();
 			mv.addObject("NewsCount", NewspaperApprovalList.size());
+			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive", "NewspaperApprovedList_htm");
 			return mv;
 		} catch (Exception e) {
@@ -279,25 +287,30 @@ public class NewspaperController {
 		logger.info(new Date() + "Inside NewspaperEditView.htm " + Username);
 
 		ModelAndView mv = new ModelAndView();
+		Date date=new Date();
+		String todayDate=rdf.format(date);
+		int TodayMonth=DateTimeFormatUtil.getMonthFromRegularDate(todayDate);
+		int TodayDate = Integer.parseInt(todayDate.substring(0, 2));
 
 		try {
 			String NewspaperId = request.getParameter("NewspaperId");
-			Object[] CheckApproveOrNot = service.getCheckNewspaperApproveOrNot(NewspaperId);
+			/*Object[] CheckApproveOrNot = service.getCheckNewspaperApproveOrNot(NewspaperId);
 			if (CheckApproveOrNot != null) 
-			{
+			{*/
 				Object[] NewspaperEditDetails = service.getNewspaperEditDetails(NewspaperId);
 				mv.addObject("NewspaperEditDetails", NewspaperEditDetails);
 				mv.addObject("name", name);
 				mv.addObject("desig", designation);
 				mv.addObject("LabDetails", service.getLabDetails());
-				mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
+				mv.addObject("LabCode", ses.getAttribute("LabCode"));
+				mv.addObject("todaymonth", TodayMonth);
+				mv.addObject("TodayDate", TodayDate);
 				mv.setViewName("newspaper/NewspaperClaim");
-			} 
-			else 
-			{
-				mv.addObject("resultfail", "Claim Already Approved You Cannot Edit");
-				mv.setViewName("redirect:/NewspaperList.htm");
-			}
+				/*} 
+			
+			 * else { mv.addObject("resultfail", "Claim Already Forwarded You Cannot Edit");
+			 * mv.setViewName("redirect:/NewspaperList.htm"); }
+			 */
 
 			return mv;
 
@@ -460,6 +473,7 @@ public class NewspaperController {
 
 		ModelAndView mv = new ModelAndView();
 		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive", "NewspaperContingentAppro_htm");
 			
 			String fromdate = req.getParameter("fromdate");
@@ -590,28 +604,120 @@ public class NewspaperController {
 	}
 
 	@RequestMapping(value = "NewspaperContingentBillPrint.htm", method = { RequestMethod.GET, RequestMethod.POST }) 
-	public ModelAndView NewspaperContingentBillPrint(HttpServletRequest request,HttpSession ses) throws Exception
+	public String NewspaperContingentBillPrint(HttpServletRequest req,HttpSession ses, HttpServletResponse res) throws Exception
 	{
-		String Username = (String) ses.getAttribute("Username");
-		logger.info(new Date() + "Inside NewspaperContingentBillPrint.htm " + Username);
+		String Username=(String)ses.getAttribute("Username");
+		String EmpNo = (String) ses.getAttribute("EmpNo");
 
-		ModelAndView mv = new ModelAndView();
 		try {
-			String NewspaperBillId = request.getParameter("NewspaperBillId");
-			Object[] NewspaperContingentBillPrint = service.getNewspaperContingentBillPrintData(NewspaperBillId);
-			mv.addObject("NewspaperContingentBillPrint", NewspaperContingentBillPrint);
-			mv.addObject("LabDetails", service.getLabDetails());
-			mv.addObject("LabCode",(String) ses.getAttribute("LabCode"));
-			mv.addObject("NewspaperAuthority",NewspaperAuthority);
-			mv.addObject("PublicFundNo",PublicFundNo);
-			mv.addObject("NewsContingentVoucherNo",NewsContingentVoucherNo);
-			mv.setViewName("newspaper/NewspaperContingentBillPrint");
 
-			return mv;
+			String contingentid = req.getParameter("contingentid");
+
+
+			String filename="";
+	
+				req.setAttribute("newsPaperFinalAppro", service.newspapersByContingentBill(Long.parseLong(contingentid)));
+				req.setAttribute("ContingentBillTrans", service.newspaperContningentApprTransById(Long.parseLong(contingentid)));
+				req.setAttribute("Bill", "YES");
+				filename="NewsPaper_Contingent_Bill";
+
+			
+			req.setAttribute("pagePart","3" );
+
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",getLabLogoAsBase64());
+
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+
+			CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/newspaper/NewspaperContingentBillPrint.jsp").forward(req, customResponse);
+
+			String html = customResponse.getOutput();        
+
+			HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+
+			res.setContentType("application/pdf");
+			res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+
+
+			emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+
+
+			File f=new File(path +File.separator+ filename+".pdf");
+			FileInputStream fis = new FileInputStream(f);
+			DataOutputStream os = new DataOutputStream(res.getOutputStream());
+			res.setHeader("Content-Length",String.valueOf(f.length()));
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = fis.read(buffer)) >= 0) {
+				os.write(buffer, 0, len);
+			} 
+			os.close();
+			fis.close();
+
+			Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+			Files.delete(pathOfFile);	
+
+			return "redirect:/NewspaperApprovedList.htm";
 		} catch (Exception e) {
 			logger.error(new Date() + " Inside NewspaperContingentBillPrint.htm " + Username, e);
 			e.printStackTrace();
-			return new ModelAndView("static/Error");
+			return "static/Error";
+		}
+
+	}
+	
+	@RequestMapping(value = "NewspaperContingentBillPayReportDownload.htm")
+	public void ContingentBillPayReportDownload(Model model,HttpServletRequest req, HttpSession ses,HttpServletResponse res)throws Exception 
+	{
+		String UserId = (String) ses.getAttribute("Username");
+
+		logger.info(new Date() +"Inside NewspaperContingentBillPayReportDownload.htm "+UserId);
+		
+		try {	
+			String contingentid = req.getParameter("contingentid");
+			
+			req.setAttribute("ContingentList", service.NewspaperContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.newspaperContingentData(contingentid));
+			req.setAttribute("LabLogo",getLabLogoAsBase64());
+			/* req.setAttribute("labdata", service.getLabCode()); */
+			String filename="NewspaperConsolidatedBill";
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+			
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+			req.getRequestDispatcher("/view/newspaper/NewspaperContingentBillPayReport.jsp").forward(req, customResponse);
+			String html1 = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html1,new FileOutputStream(path+File.separator+filename+".pdf")); 
+	        
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        
+	        
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside NewspaperContingentBillPayReportDownload.htm "+UserId, e); 
 		}
 
 	}
@@ -729,20 +835,25 @@ public class NewspaperController {
 
 
 		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
 			ses.setAttribute("SidebarActive", "NewspaperApproval_htm");
 			List<String> DGMs = service.GetEmpDGMEmpNo();
-			String poEmpno=(String) service.empOnLogintype("K")[0];
+	
+			/*	String poEmpno=(String) service.empOnLogintype("K")[0];
 			String aoEmpno=(String) service.empOnLogintype("W")[0];
 			
-			if(aoEmpno.equalsIgnoreCase(EmpNo)) {
-				req.setAttribute("NewspapepApproList", service.findAONewspaperList());
-				return "newspaper/NewspaperApprovalList";
-			} else if( DGMs.contains(EmpNo) || poEmpno.equalsIgnoreCase(EmpNo)) {
-				req.setAttribute("NewspapepApproList", service.findDGMNewspaperList(EmpNo, LoginType));
-				return "newspaper/NewspaperApprovalList";
-			}  else {
-				return "newspaper/NewspaperApprovalList";
-			}
+			
+			  if(aoEmpno.equalsIgnoreCase(EmpNo)) { req.setAttribute("NewspapepApproList",
+			  service.findAONewspaperList()); return "newspaper/NewspaperApprovalList"; }
+			  else if( DGMs.contains(EmpNo) || poEmpno.equalsIgnoreCase(EmpNo) ||
+			  LoginType.equalsIgnoreCase("B")) { req.setAttribute("NewspapepApproList",
+			  service.findDGMNewspaperList(EmpNo, LoginType)); return
+			  "newspaper/NewspaperApprovalList"; } else { return
+			  "newspaper/NewspaperApprovalList"; }
+			 */
+			
+			req.setAttribute("NewspapepApproList", service.findNewspaperList(EmpNo, LoginType));
+			return "newspaper/NewspaperApprovalList";
 		} 
 		catch (Exception e) {
 			e.printStackTrace();
@@ -902,10 +1013,8 @@ public class NewspaperController {
 			
 			req.setAttribute("ContingentList", service.NewspaperContingentClaimList(contingentid));
 			req.setAttribute("contingentdata", service.newspaperContingentData(contingentid));
-			req.setAttribute("ApprovalAuth", "");
 			req.setAttribute("LabLogo", getLabLogoAsBase64());
-			req.setAttribute("labdata", "");
-			req.setAttribute("contingentremarks", "");
+			req.setAttribute("contingentremarks", service.newsContingentRemarksHistory(contingentid));
 			req.setAttribute("onlyview","Y");
 			req.setAttribute("logintype",LoginType);
 			req.setAttribute("view_mode",claim_view_mode);
@@ -915,6 +1024,34 @@ public class NewspaperController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside NewspaperContingetBill.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "NewsContingentBillPayReport.htm", method = {RequestMethod.POST,RequestMethod.GET})
+	public String NewsContingentBillPayReport(Model model,HttpServletRequest req, HttpSession ses, RedirectAttributes redir)throws Exception
+	{
+		String LoginType = (String) ses.getAttribute("LoginType");
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewsContingentBillPayReport.htm "+Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			String claim_view_mode=req.getParameter("claim_view_mode");
+			
+
+			req.setAttribute("ContingentList", service.NewspaperContingentClaimList(contingentid));
+			req.setAttribute("contingentdata", service.newspaperContingentData(contingentid));
+			req.setAttribute("LabLogo", getLabLogoAsBase64());
+			req.setAttribute("contingentremarks", service.newsContingentRemarksHistory(contingentid));
+			req.setAttribute("onlyview","Y");
+			req.setAttribute("logintype",LoginType);
+
+
+			return "newspaper/NewspaperContingentBillPayReport";
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewsContingentBillPayReport.htm "+Username, e);
 			return "static/Error";
 		}
 	}
@@ -931,6 +1068,22 @@ public class NewspaperController {
 		}catch (Exception e) {
 			e.printStackTrace();
 			logger.error(new Date() +" Inside NewspaperApplyTransacStatus.htm "+ Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value = "NewspaperContingentTransacStatus.htm" )
+	public String newspaperContingentTransStatus(Model model,HttpServletRequest req, HttpSession ses)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewspaperContingentTransacStatus.htm "+ Username);
+		try {
+			String contingentid = req.getParameter("contingentid");
+			req.setAttribute("TransactionList", service.newspaperContingentTransaById(Long.parseLong(contingentid)));
+			return "newspaper/NewspaperTransactionStatus";
+		}catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingentTransacStatus.htm "+ Username, e);
 			return "static/Error";
 		}
 	}
@@ -953,7 +1106,7 @@ public class NewspaperController {
 			}	
 			
 			redir.addFlashAttribute("contingentid", String.valueOf(contingentid));
-			return "redirect:/NewspaperContingetBill.htm";		
+			return "redirect:/NewspaperContingentAppro.htm";		
 		} catch (Exception e) {
 			
 			e.printStackTrace();
@@ -1048,7 +1201,7 @@ public class NewspaperController {
 				}
 				
 			}
-			if(action.equalsIgnoreCase("R")) {
+			if(action.equalsIgnoreCase("R") || action.equalsIgnoreCase("VR") || action.equalsIgnoreCase("AR") || action.equalsIgnoreCase("CR")) {
 				if (count > 0) {
 					redir.addAttribute("result", "Claim application(s) Returned Successfully");
 				} else {
@@ -1063,6 +1216,72 @@ public class NewspaperController {
 			logger.error(new Date() +" Inside NewspaperContingentApprove.htm "+Username, e);
 			return "static/Error";
 		}
+	}
+	
+	@RequestMapping(value ="NewspaperContingentBillsList.htm" )
+	public String NewspaperContingentBillsList(Model model,HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		String LoginType = (String) ses.getAttribute("LoginType");
+		logger.info(new Date() +"Inside NewspaperContingentBillsList.htm "+Username);
+		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
+			ses.setAttribute("SidebarActive", "NewspaperContingentBillsList_htm");
+
+			
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			String tab=  req.getParameter("tab");
+			
+			if(fromdate==null) {
+				
+				Map md=model.asMap();
+				fromdate=(String)md.get("fromdate");
+				todate=(String)md.get("todate");
+				tab=(String)md.get("tab");
+			}
+			
+			
+			LocalDate today=LocalDate.now();
+			
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					todate=String.valueOf(today.getYear());
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+					todate=String.valueOf(today.getYear()+1);
+				}
+				fromdate +="-04-01"; 
+				todate +="-03-31";
+							
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+			
+			if(tab==null) {
+				tab="progress";
+			}
+		
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			
+			req.setAttribute("ApprovedBills", service.getNewspaperContingentList("0", fromdate, todate));
+			req.setAttribute("ProgressBills", service.getNewspaperContingentList("1", fromdate, todate));
+			req.setAttribute("logintype", LoginType);
+			req.setAttribute("tab",tab);
+			return "newspaper/NewspaperContingentBillsAll";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperContingentBillsList.htm "+Username, e);
+			return "static/Error";
+		}
+		
 	}
 
 
@@ -1897,6 +2116,7 @@ public class NewspaperController {
 		List<Object[]> TelephoneApprovalList=service.getTelephoneApprovalList();
 		request.setAttribute("TeleCount",TelephoneApprovalList.size());
 
+		
 		ses.setAttribute("SidebarActive", "TelephoneApprovedList_htm");
 
 		return mv;
@@ -1950,18 +2170,13 @@ public class NewspaperController {
 			if( ClaimMonth != null && ClaimYear!= null ) {
 				req.setAttribute("newsPaperFinalAppro", service.NewspaperAllApprovedOrNot(ClaimMonth, ClaimYear));
 				filename="NewsPaper_Final_Approval";
-			} else {
-				req.setAttribute("newsPaperFinalAppro", service.newspapersByContingentBill(Long.parseLong(contingentid)));
-				req.setAttribute("ContingentBillTrans", service.newspaperContningentApprTransById(Long.parseLong(contingentid)));
-				req.setAttribute("Bill", "YES");
-				filename="NewsPaper_Contingent_Bill";
-			}
+			} 
 
 			
 			req.setAttribute("pagePart","3" );
 
 			req.setAttribute("view_mode", req.getParameter("view_mode"));
-			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("LabLogo",getLabLogoAsBase64());
 
 			String path=req.getServletContext().getRealPath("/view/temp");
 			req.setAttribute("path",path);
