@@ -178,14 +178,14 @@ String AO=(String) request.getAttribute("AO");
 							<tr>
 								<td class="trup"
 									style="background: linear-gradient(to top, #3c96f7 10%, transparent 115%);">
-									User <br> <%=session.getAttribute("EmpName")%>
+									User&nbsp;-&nbsp; <%=session.getAttribute("EmpName")%>
 								</td>
 								<td rowspan="2"><i class="fa fa-long-arrow-right "
 									aria-hidden="true"></i></td>
 									<%if (DGM != null) {%>
 								<td class="trup"
 									style="background: linear-gradient(to top, #FBC7F7 10%, transparent 115%);">
-									DGM <br> <%=DGM%>
+									DGM &nbsp;-&nbsp; <%=DGM%>
 								</td>
 								
 								<td rowspan="2"><i class="fa fa-long-arrow-right"
@@ -193,14 +193,14 @@ String AO=(String) request.getAttribute("AO");
 									 <%} %>
 								<td class="trup"
 									style="background: linear-gradient(to top, #4DB6AC 10%, transparent 115%);">
-									PO <br> <%if (PO != null) {%> <%=PO%> <%} %>
+									PO &nbsp;-&nbsp; <%if (PO != null) {%> <%=PO%> <%} %>
 								</td>
 								<td rowspan="2"><i class="fa fa-long-arrow-right "
 									aria-hidden="true"></i></td>
 
 								<td class="trup"
 									style="background: linear-gradient(to top, #6ba5df 10%, transparent 115%);">
-									AO <br> <%if ( AO != null) {%> <%=AO%> <%} %>
+									AO &nbsp;-&nbsp; <%if ( AO != null) {%> <%=AO%> <%} %>
 								</td>
 
 							</tr>
