@@ -1,5 +1,7 @@
+<%@page import="com.vts.ems.utils.DateTimeFormatUtil"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
+<%@page import="java.util.List,com.vts.ems.property.model.PisPropertyConstruction"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,12 +16,13 @@
 <body>
 <%
 Object[] empData=(Object[])request.getAttribute("EmpData");
+PisPropertyConstruction con = (PisPropertyConstruction)request.getAttribute("Construction");
 %>
 
 <div class="card-header page-top">
 		<div class="row">
 				<div class="col-md-7">
-				<h5>Construction Add<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
+				<h5>Construction Edit<small><b>&nbsp;&nbsp; - &nbsp;&nbsp;<%if(empData!=null){%><%=empData[1]%> (<%=empData[2]%>)<%}%>
 						</b></small></h5>
 			   </div>
 			<div class="col-md-5">
@@ -27,7 +30,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 					<li class="breadcrumb-item ml-auto"><a href="MainDashBoard.htm"><i class=" fa-solid fa-house-chimney fa-sm"></i> Home</a></li>
 					<li class="breadcrumb-item "><a href="PropertyDashBoard.htm">Property</a></li>
 					<li class="breadcrumb-item "><a href="ConstructionRenovation.htm">Construction</a></li>
-					<li class="breadcrumb-item active " aria-current="page">Construction Add</li>
+					<li class="breadcrumb-item active " aria-current="page">Construction Edit</li>
 				</ol>
 			</div>	
 		</div>
@@ -37,33 +40,33 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 	<div class="row">
 	  <div class="col-12">
 	  <div class="card">	
-		<form action="ConstructionAdd.htm" method="POST" autocomplete="off" id="myform1">
+		<form action="ConstructionEdit.htm" method="POST" autocomplete="off" id="myform1">
 		 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 			 <div class="card-body">			 
                  <div class="row">
 				   <div class="col-md-4">
 				      <label>Permission for:<span class="mandatory">*</span></label> 
 				      <select name="transaction" class="form-control input-sm select2" required>
-			               <option value="C">Construction of house</option>
-			               <option value="A">Addition of an existing house</option>
-			               <option value="R">Renovation of an existing house</option>
+			               <option value="C" <%if(con!=null && con.getTransactionState().equalsIgnoreCase("C")){%>selected<%}%> >Construction of house</option>
+			               <option value="A" <%if(con!=null && con.getTransactionState().equalsIgnoreCase("A")){%>selected<%}%> >Addition of an existing house</option>
+			               <option value="R" <%if(con!=null && con.getTransactionState().equalsIgnoreCase("R")){%>selected<%}%> >Renovation of an existing house</option>
 			           </select>
 				   </div>
 				   <div class="col-md-2">
 				      <label>Estimated Cost:<span class="mandatory">*</span></label>
-				      <input class="form-control" type="text" name="estimatedCost" id="estimatedCost" placeholder="Enter Estimated Cost">
+				      <input class="form-control" type="text" name="estimatedCost" value="<%if(con!=null && con.getEstimatedCost()!=null){%><%=con.getEstimatedCost()%><%}%>" id="estimatedCost" placeholder="Enter Estimated Cost">
 				   </div>
 				   <div class="col-md-2">
                         <div class="form-group">
                             <label>Completed By:<span class="mandatory">*</span></label>                        
-                            <input type="text" class="form-control input-sm " id="completedBy" name="completedBy" required="required" placeholder="Enter Discipline" readonly>   
+                            <input type="text" class="form-control input-sm " name="completedBy" value="<%if(con!=null && con.getConstrCompletedBy()!=null){%><%=DateTimeFormatUtil.SqlToRegularDate(con.getConstrCompletedBy()+"") %><% }%>" id="completedBy" required="required" placeholder="Enter Discipline" readonly>   
                         </div>
                    </div>
                    <div class="col-md-4">
 				       <label>Construction will be:<span class="mandatory">*</span></label>
 				       <select name="supervisedBy" id="supervisedBy" class="form-control input-sm select2" required>
-			               <option value="Myself">Supervised Myself</option>
-			               <option value="Others">Done by others</option>
+			               <option value="Myself" <%if(con!=null && con.getSupervisedBy()!=null && con.getSupervisedBy().equalsIgnoreCase("Myself")){ %>selected<%} %> >Supervised Myself</option>
+			               <option value="Others" <%if(con!=null && con.getSupervisedBy()!=null && !con.getSupervisedBy().equalsIgnoreCase("Myself")){ %>selected<%} %>>Done by others</option>
 			           </select>
 				   </div>
 				  </div>
@@ -72,26 +75,26 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				    
 				   <div class="col-md-2" id="others">
 				       <label>Others:<span class="mandatory">*</span></label>
-			           <input class="form-control" type="text" id="othersSupervised" name="others" placeholder="Enter Others Details" maxlength="225">
+			           <input class="form-control" type="text" name="others" value="<%if(con!=null && con.getSupervisedBy()!=null && !con.getSupervisedBy().equalsIgnoreCase("Myself")) {%><%=con.getSupervisedBy()%><%} %>" id="othersSupervised" placeholder="Enter Others Details" maxlength="225">
 				   </div> 
 				    <div class="col-md-2" id="official">
 				       <label>Official dealings:<span class="mandatory">*</span></label>
 				       <select name="officialDealings" id="officialDealings" class="form-control input-sm select2" required>
-			               <option value="N">No</option>
-			               <option value="Y">Yes</option>
+			               <option value="N" <%if(con!=null && con.getContractorDealings()!=null && con.getContractorDealings().equalsIgnoreCase("N")) {%>selected<%} %>>No</option>
+			               <option value="Y" <%if(con!=null && con.getContractorDealings()!=null && con.getContractorDealings().equalsIgnoreCase("Y")) {%>selected<%} %>>Yes</option>
 			           </select>
 				   </div> 
 				   <div class="col-md-2" id="dealingNature">
 				      <label>Nature of Dealings:<span class="mandatory">*</span></label>
-			           <input class="form-control" type="text" id="natureOfDealing" name="natureOfDealing" placeholder="Enter Nature of Dealing" maxlength="225" style="width: 105%;">
+			           <input class="form-control" type="text" name="natureOfDealing" value="<%if(con!=null && con.getNatureOfDealings()!=null ) {%><%=con.getNatureOfDealings() %><%} %>" id="natureOfDealing" placeholder="Enter Nature of Dealing" maxlength="225" style="width: 105%;">
 				   </div>
 				   <div class="col-md-2" id="contractorName">
 				      <label>Contractor Name:<span class="mandatory">*</span></label>
-			           <input class="form-control" type="text" name="contractorName" id="NameOfcontractor" placeholder="Enter Contractor Name" maxlength="225" style="width: 105%;">
+			           <input class="form-control" type="text" name="contractorName" value="<%if(con!=null && con.getContractorName()!=null) {%><%=con.getContractorName() %><%} %>" id="NameOfcontractor" placeholder="Enter Contractor Name" maxlength="225" style="width: 105%;">
 				   </div>
 				   <div class="col-md-4" id="contractorAddress">
 				      <label>Contractor Business Place:<span class="mandatory">*</span></label>
-			           <input class="form-control" type="text" name="contractorPlace" id="contractorPlace" placeholder="Enter Contractor Business Place" maxlength="225">
+			           <input class="form-control" type="text" name="contractorPlace" value="<%if(con!=null && con.getContractorPlace()!=null) {%><%=con.getContractorPlace() %><%} %>" id="contractorPlace" placeholder="Enter Contractor Business Place" maxlength="225">
 				   </div>   
 				  </div>
 				  
@@ -99,23 +102,22 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				  <div class="form-group">
 				     <label>The Cost of proposed Construction will be as under:</label>
 				     <div class="row">
-				        
+				      
 				        <div class="col-md-3">
 				           <label>Own Savings:</label>
-				           <input class="form-control" type="text" name="ownSavings" id="ownSavings" placeholder="Enter Own Savings Amount">
-				        </div>
-				        
-				        <div class="col-md-3">
-				           <label>Loans / Advances:</label>
-				           <input class="form-control" type="text" name="loans" id="loans" placeholder="Enter Loans / Advances Amount" maxlength="225">
+				           <input class="form-control" type="text" name="ownSavings" value="<%if(con!=null && con.getOwnSavings()!=null) {%><%=con.getOwnSavings() %><%} %>" id="ownSavings" placeholder="Enter Own Savings">
 				        </div>
 				        <div class="col-md-3">
-				           <label>Other Sources:</label>
-				           <input class="form-control" type="text" name="otherSources" id="otherSources" placeholder="Enter Other Sources Amount" maxlength="225">
+				           <label>Loans / Advances with full details:</label>
+				           <input class="form-control" type="text" name="loans" value="<%if(con!=null && con.getLoans()!=null) {%><%=con.getLoans() %><%} %>" placeholder="Enter Loans / Advances Details" maxlength="225">
+				        </div>
+				        <div class="col-md-3">
+				           <label>Other Sources with full details:</label>
+				           <input class="form-control" type="text" name="otherSources" value="<%if(con!=null && con.getOtherSources()!=null){%><%=con.getOtherSources() %><%} %>" placeholder="Enter Other Sources Details" maxlength="225">
 				        </div>
 				         <div class="col-md-3">
 				            <label>Total Proposed Cost:<span class="mandatory">*</span></label>
-				           <input class="form-control" type="text" id="proposedCost" name="proposedCost" readonly>
+				           <input class="form-control" type="text" name="proposedCost" value="<%if(con!=null && con.getProposedCost()!=null){ %><%=con.getProposedCost() %><%} %>" id="proposedCost" placeholder="Enter Total Cost">
 				        </div>
 				       </div>
 				       <br>
@@ -123,24 +125,25 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				      
 				        <div class="col-md-3">
 				           <label>Own Savings details:</label>
-				           <input class="form-control" type="text" id="ownSavingsDetails" name="ownSavingsDetails" placeholder="Enter Own Savings Details" maxlength="225">
+				           <input class="form-control" type="text" name="ownSavingsDetails" value="<%if(con!=null && con.getOwnSavingsDetails()!=null){ %><%=con.getOwnSavingsDetails() %><%} %>"  id="ownSavingsDetails" placeholder="Enter Own Savings Details" maxlength="225">
 				        </div>
 				        <div class="col-md-3">
 				           <label>Loans / Advances with full details:</label>
-				           <input class="form-control" type="text" name="loansDetails" placeholder="Enter Loans / Advances Details" maxlength="225">
+				           <input class="form-control" type="text" name="loansDetails" value="<%if(con!=null && con.getLoansDetails()!=null){ %><%=con.getLoansDetails()%><%} %>" placeholder="Enter Loans / Advances Details" maxlength="225">
 				        </div>
 				        <div class="col-md-3">
 				           <label>Other Sources with full details:</label>
-				           <input class="form-control" type="text" name="otherSourcesDetails" placeholder="Enter Other Sources Details" maxlength="225">
+				           <input class="form-control" type="text" name="otherSourcesDetails" value="<%if(con!=null && con.getOtherSourcesDetails()!=null){ %><%=con.getOtherSourcesDetails() %><%} %>" placeholder="Enter Other Sources Details" maxlength="225">
 				        </div>				        
 				       </div>
-				    </div>
+				     </div>
 			  
 			         <br>
                      <br>
 		     	     <div class="row">
 					    <div class="col-md-12" align="center">
-						   <div class="form-group">							
+						   <div class="form-group">		
+						       <input type="hidden" name="ConstructionId" value="<%if(con!=null){%><%=con.getConstructionId()%><%}%>">					
 				              <button type="button" class="btn btn-sm submit-btn"	onclick="return CommentsModel();" name="Action" value="ADD">SUBMIT</button>										
 					       </div>
 					    </div>
@@ -251,11 +254,28 @@ function checknegative(str) {
 </script> 
 <script type="text/javascript">
 $(document).ready(function(){
-	$('#official').hide();
-	$('#others').hide();
-	$('#dealingNature').hide();
-	$('#contractorName').hide();
-	$('#contractorAddress').hide();
+	var supervisedBy = $('#supervisedBy').val();
+	var officialDealings = $('#officialDealings').val();
+	var officialDealings = $('#officialDealings').val();
+	
+	if(supervisedBy=="Myself"){
+		$('#official').hide();
+		$('#others').hide();
+		$('#contractorName').hide();
+		$('#contractorAddress').hide();
+	}
+	else{
+		$('#official').show();
+		$('#others').show();
+		$('#contractorName').show();
+		$('#contractorAddress').show();
+	}
+	
+	if(officialDealings=="Y"){
+		$('#dealingNature').show();
+	}else{
+		$('#dealingNature').hide();
+	}
 });
 
 $('#supervisedBy').change(function(){

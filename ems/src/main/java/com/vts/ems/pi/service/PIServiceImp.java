@@ -218,6 +218,12 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PersonalIntimation.htm");
 				notification.setNotificationMessage("Residential Address Change Request Approved");
 				notification.setNotificationBy(ForwardingEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -227,6 +233,12 @@ public class PIServiceImp implements PIService{
 					notification.setNotificationUrl("IntimationApprovals.htm");
 					notification.setNotificationMessage("Recieved Residential Address Change Request From <br>"+emp.getEmpName());
 					notification.setNotificationBy(ForwardingEmpNo);
+					notification.setNotificationDate(LocalDate.now().toString());
+					notification.setIsActive(1);
+					notification.setCreatedBy(username);
+					notification.setCreatedDate(sdtf.format(new Date()));
+				
+					dao.AddNotifications(notification);
 				}
 				
 			}
@@ -236,14 +248,11 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PersonalIntimation.htm");
 				notification.setNotificationMessage("Residential Address Change Request Returned");
 				notification.setNotificationBy(ForwardingEmpNo);
-			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
 			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-		    
-			if( !address.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !address.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
 				dao.AddNotifications(notification);
 			}
 								
@@ -530,6 +539,12 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PersonalIntimation.htm");
 				notification.setNotificationMessage("Permanent Address Change Request Approved");
 				notification.setNotificationBy(ForwardingEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -539,6 +554,12 @@ public class PIServiceImp implements PIService{
 					notification.setNotificationUrl("IntimationApprovals.htm");
 					notification.setNotificationMessage("Recieved Permanent Address Change Request From <br>"+emp.getEmpName());
 					notification.setNotificationBy(ForwardingEmpNo);
+					notification.setNotificationDate(LocalDate.now().toString());
+					notification.setIsActive(1);
+					notification.setCreatedBy(username);
+					notification.setCreatedDate(sdtf.format(new Date()));
+				
+					dao.AddNotifications(notification);
 				}
 								
 			}
@@ -548,17 +569,14 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PersonalIntimation.htm");
 				notification.setNotificationMessage("Permanent Address Change Request Returned");
 				notification.setNotificationBy(ForwardingEmpNo);
-			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
 			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			if( !address.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !address.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
 				dao.AddNotifications(notification);
 			}
-			
+
 			if(action.equalsIgnoreCase("A") )
 			{
 				 if(address.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
@@ -830,6 +848,12 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PIHomeTownMobile.htm");
 				notification.setNotificationMessage("Mobile Number Change Request Approved");
 				notification.setNotificationBy(ApprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -839,6 +863,12 @@ public class PIServiceImp implements PIService{
 				   notification.setNotificationUrl("IntimationApprovals.htm");
 				   notification.setNotificationMessage("Recieved Mobile Number Change Request From <br>"+emp.getEmpName());
 				   notification.setNotificationBy(ApprEmpNo);
+				   notification.setNotificationDate(LocalDate.now().toString());
+					notification.setIsActive(1);
+					notification.setCreatedBy(username);
+					notification.setCreatedDate(sdtf.format(new Date()));
+				
+					dao.AddNotifications(notification);
 				}
 			}
 			else if(action.equalsIgnoreCase("R"))
@@ -847,14 +877,11 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PIHomeTownMobile.htm");
 				notification.setNotificationMessage("Mobile Number Change Request Returned");
 				notification.setNotificationBy(ApprEmpNo);
-			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
 			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			if( !mobile.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
 				dao.AddNotifications(notification);
 			}
 			
@@ -898,7 +925,7 @@ public class PIServiceImp implements PIService{
 					      }
 					   }
 				     }
-			}		
+			}
 			
 			return 1;
 		}catch (Exception e) {
@@ -1108,6 +1135,12 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PIHomeTownMobile.htm");
 				notification.setNotificationMessage("Hometown Change Request Approved");
 				notification.setNotificationBy(ApprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				dao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -1117,11 +1150,13 @@ public class PIServiceImp implements PIService{
 					notification.setNotificationUrl("IntimationApprovals.htm");
 					notification.setNotificationMessage("Recieved Hometown Change Request From <br>"+emp.getEmpName());
 					notification.setNotificationBy(ApprEmpNo);
+					notification.setNotificationDate(LocalDate.now().toString());
+					notification.setIsActive(1);
+					notification.setCreatedBy(username);
+					notification.setCreatedDate(sdtf.format(new Date()));
+				
+					dao.AddNotifications(notification);
 				}
-//				else if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-//				{
-//					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-//				}
 				
 			}
 			else if(action.equalsIgnoreCase("R"))
@@ -1130,17 +1165,14 @@ public class PIServiceImp implements PIService{
 				notification.setNotificationUrl("PIHomeTownMobile.htm");
 				notification.setNotificationMessage("Hometown Change Request Returned");
 				notification.setNotificationBy(ApprEmpNo);
-			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
 			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			if( !hometown.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
 				dao.AddNotifications(notification);
 			}
-			
+
 			if(action.equalsIgnoreCase("A") )
 			{
 				 if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
@@ -1181,7 +1213,9 @@ public class PIServiceImp implements PIService{
 					      }
 					   }
 				     }
-			}		
+			}else {
+				dao.AddNotifications(notification);
+			}
 			
 			return 1;
 		}catch (Exception e) {

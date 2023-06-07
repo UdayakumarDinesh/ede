@@ -373,4 +373,59 @@ public class PropertyDaoImp implements PropertyDao{
 		manager.flush();
 		return transaction.getConstrTransactionId();
 	}
+	
+	private static final String CONSTRUCTIONTRANSLIST = "SELECT tra.ConstrTransactionId,emp.EmpNo,emp.EmpName,des.Designation,tra.ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor FROM pis_property_construction_trans tra,pis_approval_status sta,employee emp,employee_desig des,pis_property_construction par WHERE par.ConstructionId = tra.ConstructionId AND tra.PisStatusCode = sta.PisStatusCode AND tra.ActionBy=emp.EmpNo AND emp.DesigId = des.DesigId AND par.ConstructionId=:ConstructionId ORDER BY tra.ActionDate";
+	@Override
+	public List<Object[]> constructionTransList(String ConstructionId) throws Exception {
+		
+		try {
+			Query query = manager.createNativeQuery(CONSTRUCTIONTRANSLIST);
+			query.setParameter("ConstructionId", ConstructionId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside DAO constructionTransList"+e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+
+	private static final String CONSTRUCTIONTRANSAPPROVALDATA = "SELECT tra.ConstrTransactionId,\r\n"
+			+ "(SELECT empno FROM pis_property_construction_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND t.ConstructionId=par.ConstructionId ORDER BY t.ConstrTransactionId DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM pis_property_construction_trans t , employee e  WHERE e.empno = t.actionby AND t.pisstatuscode =  sta.pisstatuscode AND t.ConstructionId=par.ConstructionId ORDER BY t.ConstrTransactionId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "(SELECT designation FROM pis_property_construction_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.pisstatuscode =  sta.pisstatuscode AND t.ConstructionId=par.ConstructionId ORDER BY t.ConstrTransactionId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.ActionDate) AS ActionDate,tra.Remarks,sta.PisStatus,sta.PisStatusColor,sta.PisStatusCode \r\n"
+			+ "FROM pis_property_construction_trans tra,pis_approval_status sta,employee emp,pis_property_construction par \r\n"
+			+ "WHERE par.ConstructionId=tra.ConstructionId AND tra.PisStatusCode =sta.PisStatusCode AND tra.Actionby=emp.EmpNo AND sta.PisStatusCode IN ('FWD','VDG','VSO','VPA','APR','DPR') AND par.ConstructionId=:ConstructionId GROUP BY sta.PisStatusCode ORDER BY ActionDate ASC";
+	@Override
+	public List<Object[]> constructionTransactionApprovalData(String ConstructionId) {
+		
+		try {
+			Query query = manager.createNativeQuery(CONSTRUCTIONTRANSAPPROVALDATA);
+			query.setParameter("ConstructionId", ConstructionId);
+			return (List<Object[]>)query.getResultList();
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside DAO constructionTransactionApprovalData"+e);
+			e.printStackTrace();
+			return null;
+		}
+		
+	}
+	
+	private static final String CONSTRUCTIONREMARKSHISTORY  ="SELECT cat.ConstructionId,cat.Remarks,cs.PisStatusCode,e.EmpName,ed.Designation FROM pis_approval_status cs,pis_property_construction_trans cat,pis_property_construction ca,employee e,employee_desig ed WHERE cat.ActionBy = e.EmpNo AND e.DesigId = ed.DesigId AND cs.PisStatusCode = cat.PisStatusCode AND ca.ConstructionId = cat.ConstructionId AND TRIM(cat.Remarks)<>'' AND ca.ConstructionId=:ConstructionId ORDER BY cat.ActionDate ASC";
+	@Override
+	public List<Object[]> constructionRemarksHistory(String ConstructionId) throws Exception
+	{
+		List<Object[]> list =new ArrayList<Object[]>();
+		try {
+			Query query= manager.createNativeQuery(CONSTRUCTIONREMARKSHISTORY);
+			query.setParameter("ConstructionId", ConstructionId);
+			list= (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO constructionRemarksHistory " + e);
+			e.printStackTrace();
+		}
+		return list;
+	}
 }

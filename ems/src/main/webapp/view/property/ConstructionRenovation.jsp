@@ -116,8 +116,12 @@
 								<%} %>
 							</td>
 						    <td style="text-align: center;width:8%;"><%if(obj[3]!=null){%><%=obj[3]%><%}else{ %>-<%} %></td>
-						    <td style="text-align: left;width:10%;"><%if(obj[5]!=null){ %> <%=obj[5] %> <%} %> </td>
-						    <td style="text-align: left;width:10%;"><%if(obj[6]!=null){ %> <%=obj[6] %> <%} %> </td>
+						    <td style="text-align: left;width:10%;">
+						    <%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("C")){ %>Construction
+						    <%} else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A")){%>Addition
+						    <%}else{ %>Renovation<%} %>
+						    </td>
+						    <td style="text-align: right;width:10%;"><%if(obj[6]!=null){ %> <%=obj[6] %> <%} %> </td>
 						    <td style="text-align: left;width:10%;"><%if(obj[7]!=null){ %> <%=obj[7] %> <%} %> </td>
 						    <td style="text-align: center;width:11%;"><%if(obj[8]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[8]+"") %> <%} %> </td>
 					   		<td style="width:17%;">
@@ -125,11 +129,11 @@
 								<%if(obj[12]!=null){%>
 								  
 								 	<%if(obj[9]!=null && obj[9].toString().equalsIgnoreCase("A") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="MovablePropTransStatus.htm" value="<%=obj[0] %>" name="movpropertyId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
+							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ConstructionTransStatus.htm" value="<%=obj[0] %>" name="constructionId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: green; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%}else{ %>
-								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="MovablePropTransStatus.htm" value="<%=obj[0] %>" name="movpropertyId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[13] %>; font-weight: 600;" formtarget="_blank">
+								    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ConstructionTransStatus.htm" value="<%=obj[0] %>" name="constructionId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=obj[13] %>; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; <%=obj[12] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								    	</button>
 							    	<%} %>  
@@ -138,10 +142,10 @@
 							</td>
 					   		
 					   		<td style="text-align: left;width:10%;">
-								<button type="submit" class="btn btn-sm view-icon" formaction="MovablePropPreview.htm" name="movPropertyId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Form For Movable Property" style="font-weight: 600;" >
+								<button type="submit" class="btn btn-sm view-icon" formaction="ConstructionPreview.htm" name="constructionId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Application Form For Permission" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
-								<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=obj[0] %>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								<button type="submit" class="btn btn-sm" name="constructionId" value="<%=obj[0] %>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 								   <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>
                             </td>	
@@ -218,26 +222,14 @@
        </div>
      </div>
 </div>		
-<script type="text/javascript">
-$("#myTable2").DataTable({
-    "lengthMenu": [5, 10, 25, 50, 75, 100],
-    "pagingType": "simple"
 
-});
-$("#myTable3").DataTable({
-    "lengthMenu": [5, 10, 25, 50, 75, 100],
-    "pagingType": "simple"
-
-});
-
-</script>
 <script type="text/javascript">
 function EditConstruction(myfrm) {
 
 	var fieldsimmprop = $("input[name='constructionid']").serializeArray();
  
 	if (fieldsimmprop.length === 0) {
-		alert("Please Select Atleast One");
+		alert("Please Select Atleast One Transaction");
 
 		event.preventDefault();
 		return false;
