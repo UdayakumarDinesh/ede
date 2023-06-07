@@ -1103,8 +1103,7 @@ public class NocServiceImpl implements NocService {
 		
 		return dao.IntimatedExam(examId);
 	}
-
-	@Override
+@Override
 	public long IntimationForExamForward(String examId, String username, String action, String remarks, String empNo,
 			String loginType) throws Exception {
 		
