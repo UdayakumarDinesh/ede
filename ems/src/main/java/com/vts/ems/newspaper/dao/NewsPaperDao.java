@@ -59,6 +59,8 @@ public interface NewsPaperDao {
 	public Object[] newspaperContingentData(String contingentid) throws Exception;
 	public int getdata(String bill)throws Exception;
 	public List<Object[]> newsContingentRemarksHistory(String contingentId) throws Exception;
+	public List<Object[]> EmployeesList()throws Exception;
+	public List<Object[]> GetClaimsList(String fromdate ,String todate ,String EmpNO,String status)throws Exception;
 	
 	
 	

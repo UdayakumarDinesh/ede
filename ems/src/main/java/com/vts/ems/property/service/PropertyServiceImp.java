@@ -269,6 +269,12 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("AcquiringDisposing.htm");
 				notification.setNotificationMessage("Immovable Property Request Approved");
 				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -276,10 +282,6 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					notification.setEmpNo(DGMEmpNo);					
 				}
-//				else if(immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-//				{
-//					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-//				}
 				else if( immovable.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
 				{
 					notification.setEmpNo(CEO);					
@@ -288,6 +290,12 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("PropertyApprovals.htm");
 				notification.setNotificationMessage("Recieved Immovable Property Request From <br>"+emp.getEmpName());
 				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("R"))
 			{
@@ -295,6 +303,12 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("AcquiringDisposing.htm");
 				notification.setNotificationMessage("Immovable Property Request Returned");
 				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("D"))
 			{
@@ -302,14 +316,11 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("AcquiringDisposing.htm");
 				notification.setNotificationMessage("Immovable Property Request Disapproved");
 				notification.setNotificationBy(apprEmpNo);
-			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
 			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			if( !immovable.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !immovable.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
 				pidao.AddNotifications(notification);
 			}
 								
@@ -577,6 +588,12 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("AcquiringDisposing.htm");
 				notification.setNotificationMessage("Movable Property Request Approved");
 				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -584,10 +601,6 @@ public class PropertyServiceImp implements PropertyService{
 				{
 					notification.setEmpNo(DGMEmpNo);					
 				}
-//				else if(movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
-//				{
-//					notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
-//				}
 				else if( movable.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
 				{
 					notification.setEmpNo(CEO);					
@@ -596,6 +609,12 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("PropertyApprovals.htm");
 				notification.setNotificationMessage("Recieved Movable Property Request From <br>"+emp.getEmpName());
 				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("R"))
 			{
@@ -603,6 +622,12 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("AcquiringDisposing.htm");
 				notification.setNotificationMessage("Movable Property Request Returned");
 				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
 			}
 			else if(action.equalsIgnoreCase("D"))
 			{
@@ -610,17 +635,14 @@ public class PropertyServiceImp implements PropertyService{
 				notification.setNotificationUrl("AcquiringDisposing.htm");
 				notification.setNotificationMessage("Movable Property Request Disapproved");
 				notification.setNotificationBy(apprEmpNo);
-			}
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
 			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-		
-			if( !movable.getPisStatusCodeNext().equalsIgnoreCase("VSO") && !movable.getPisStatusCodeNext().equalsIgnoreCase("VPA")  ) {
 				pidao.AddNotifications(notification);
 			}
-								
+											
 			if(action.equalsIgnoreCase("A") )
 			{
 				 if(movable.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
@@ -716,12 +738,48 @@ public class PropertyServiceImp implements PropertyService{
 	@Override
 	public Long editPropertyConstruction(PisPropertyConstruction construction) throws Exception {
 		
-		return dao.editPropertyConstruction(construction);
+		PisPropertyConstruction con = dao.getConstructionById(construction.getConstructionId());
+		con.setTransactionState(construction.getTransactionState());
+		con.setEstimatedCost(construction.getEstimatedCost());
+		con.setConstrCompletedBy(construction.getConstrCompletedBy());
+		con.setSupervisedBy(construction.getSupervisedBy());
+		con.setContractorDealings(construction.getContractorDealings());
+		con.setNatureOfDealings(construction.getNatureOfDealings());
+		con.setContractorName(construction.getContractorName());
+		con.setContractorPlace(construction.getContractorPlace());
+		con.setOwnSavings(construction.getOwnSavings());
+		con.setLoans(construction.getLoans());
+		con.setOtherSources(construction.getOtherSources());
+		con.setProposedCost(construction.getProposedCost());
+		con.setOwnSavingsDetails(construction.getOwnSavingsDetails());
+		con.setLoansDetails(construction.getLoansDetails());
+		con.setOtherSourcesDetails(construction.getOtherSourcesDetails());
+		con.setModifiedBy(construction.getModifiedBy());
+		con.setModifiedDate(construction.getModifiedDate());
+		return dao.editPropertyConstruction(con);
 	}
 
 	@Override
 	public Long addPropertyConstructionTransaction(PisPropertyConstructionTrans transaction) throws Exception {
 		
 		return dao.addPropertyConstructionTransaction(transaction);
+	}
+
+	@Override
+	public List<Object[]> constructionTransList(String ConstructionId) throws Exception {
+		
+		return dao.constructionTransList(ConstructionId);
+	}
+
+	@Override
+	public List<Object[]> constructionTransactionApprovalData(String ConstructionId) {
+		
+		return dao.constructionTransactionApprovalData(ConstructionId);
+	}
+
+	@Override
+	public List<Object[]> constructionRemarksHistory(String ConstructionId) throws Exception {
+	
+		return dao.constructionRemarksHistory(ConstructionId);
 	}
 }

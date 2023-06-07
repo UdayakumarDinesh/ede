@@ -79,8 +79,8 @@
 			            
 			             <tr>
 			                    <td style="text-align:left;"><%= ls[2]%>,&nbsp;<%=ls[3]%></td>
-			                    <td><%=ls[4] %></td>
-			                    <td><%=ls[5] %></td>
+			                    <td style="text-align: center;"><%=ls[4] %></td>
+			                    <td style="text-align: center;"><%=ls[5] %></td>
 			                    <td>
 					                    	<button type="submit" class="btn btn-sm btn-link w-100"
 											formaction="NewspaperApplyTransacStatus.htm" value="<%=ls[0]%>"

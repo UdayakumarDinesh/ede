@@ -540,7 +540,9 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		try {
 			NewspaperContingent contingent = dao.findNewspaperContingent(contingentid);
 			NewspaperContingentTrans trans=new NewspaperContingentTrans();
+			
 			EMSNotification notify = new EMSNotification();
+			List<Object[]> list=dao.NewspaperContingentClaimList(contingentid);
 			
 			String poEmpno= (String) dao.empOnLogintype("K")[0];
 			String voEmpno= (String) dao.empOnLogintype("V")[0];
@@ -556,6 +558,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 				
 				notify.setNotificationMessage("Newspaper Claim Contingent Bill Received");
 				notify.setEmpNo(voEmpno);
+				
 				
 			}
 			else if(action.equalsIgnoreCase("VF")) {
@@ -630,7 +633,7 @@ public class NewPaperServiceImpl implements NewsPaperService {
 
 			l=dao.editNewspaperContingent(contingent);
 			
-			List<Object[]> list=dao.NewspaperContingentClaimList(contingentid);
+			
 			
 			for(Object[] ls : list) {
 				Newspaper newspaper= dao.findNewspaperApply(Long.valueOf(ls[0].toString()));
@@ -638,6 +641,14 @@ public class NewPaperServiceImpl implements NewsPaperService {
 				newspaper.setModifiedBy(EmpNo);
 				newspaper.setModifiedDate(sdtf.format(new Date()));
 				dao.editNewspaper(newspaper);
+				
+				NewspaperApplyTransaction tr=new NewspaperApplyTransaction();
+				tr.setNewspaperApplyId(newspaper.getNewspaperId());
+				tr.setNewspapertatusCode(contingent.getContingentStatusCode());
+				tr.setRemark(remarks);
+				tr.setActionBy(EmpNo);
+				tr.setActionDate(sdtf.format(new Date()));
+				dao.addNewspaperTrans(tr);
 				
 			}
 
@@ -664,7 +675,19 @@ public class NewPaperServiceImpl implements NewsPaperService {
 		}
 		return l;
 	}
+	
+	@Override
+	public List<Object[]> EmployeesList()throws Exception{
+		return dao.EmployeesList();
+	}
 
+	@Override
+	public List<Object[]> GetClaimsList(String fromdate ,String todate ,String EmpNO,String status)throws Exception{
+		return dao.GetClaimsList(fromdate, todate, EmpNO, status);
+	}
+	
+	
+	
 	/////////////////////////////////////////////////Telephone///////////////////////////////////////////////
 
 

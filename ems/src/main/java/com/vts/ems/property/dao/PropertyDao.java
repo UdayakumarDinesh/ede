@@ -35,4 +35,7 @@ public interface PropertyDao {
     public Long addPropertyConstruction(PisPropertyConstruction construction) throws Exception;
     public Long editPropertyConstruction(PisPropertyConstruction construction) throws Exception;
     public Long addPropertyConstructionTransaction(PisPropertyConstructionTrans transaction) throws Exception;
+    public List<Object[]> constructionTransList(String ConstructionId) throws Exception;
+    public List<Object[]> constructionTransactionApprovalData(String ConstructionId);
+	public List<Object[]> constructionRemarksHistory(String ConstructionId) throws Exception;
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.newspaper.model.Newspaper;
+import com.vts.ems.newspaper.model.NewspaperApplyTransaction;
 import com.vts.ems.newspaper.model.NewspaperContingent;
 import com.vts.ems.pis.model.Employee;
 
@@ -51,6 +52,9 @@ public interface NewsPaperService {
 	public List<Object[]> newsPaperRemarksHistory(String NewspaperId) throws Exception;
 	public List<Object[]> newspaperContingentTransaById(long ContingentId) throws Exception;
 	public List<Object[]> newsContingentRemarksHistory(String contingentId) throws Exception;
+	public List<Object[]> EmployeesList()throws Exception;
+	public List<Object[]> GetClaimsList(String fromdate ,String todate ,String EmpNO,String status)throws Exception;
+
 	
 	
 	

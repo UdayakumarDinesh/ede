@@ -1498,6 +1498,68 @@ public class NewspaperController {
 		}
 		
 	}
+	
+	@RequestMapping(value ="NewspaperClaimsList.htm" , method = {RequestMethod.POST , RequestMethod.GET } )
+	public String NewspaperClaimsList(HttpServletRequest req, HttpServletResponse response, HttpSession ses,RedirectAttributes redir)throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside NewspaperClaimsList.htm "+Username);
+		try {
+			ses.setAttribute("formmoduleid", formmoduleid);
+			ses.setAttribute("SidebarActive", "NewspaperClaimsList_htm");
+			
+			String EmpNO = req.getParameter("EmpNO");
+			String status =  req.getParameter("status");
+			String fromdate = req.getParameter("fromdate");
+			String todate = req.getParameter("todate");
+			
+//			if(fromdate == null || todate == null) 
+//			{
+//				fromdate = LocalDate.now().minusMonths(1).withDayOfMonth(21).toString();
+//				todate = LocalDate.now().toString();
+//				status = "I";
+//				empid = "0";
+//			}else {
+//				fromdate = sdf.format(rdf.parse(fromdate));
+//				todate = sdf.format(rdf.parse(todate));				
+//			}
+			LocalDate today= LocalDate.now();
+			if(fromdate==null) 
+			{
+				if(today.getMonthValue()<4) 
+				{
+					fromdate = String.valueOf(today.getYear()-1);
+					
+				}else{
+					fromdate = String.valueOf(today.getYear());
+				}
+				status = "I";
+				EmpNO = "0";
+				
+				fromdate +="-04-01"; 
+				todate=today.toString();
+			}else
+			{
+				fromdate=DateTimeFormatUtil.RegularToSqlDate(fromdate);
+				todate=DateTimeFormatUtil.RegularToSqlDate(todate);
+			}
+
+		
+			req.setAttribute("EmpNO", EmpNO);
+			req.setAttribute("status", status);
+			req.setAttribute("fromdate", fromdate);
+			req.setAttribute("todate", todate);
+			req.setAttribute("emplist", service.EmployeesList());
+			req.setAttribute("claimslist", service.GetClaimsList(fromdate , todate , EmpNO,status));
+			return "newspaper/NewspaperClaimsList";
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(new Date() +" Inside NewspaperClaimsList.htm "+Username, e);
+			return "static/Error";
+		}
+		
+	}
+	
 
 
 	////////////////////////////////////////////////////////////////////// Telephone code ///////////////////////////////////////////////////////////////////

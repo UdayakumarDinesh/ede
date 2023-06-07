@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.itextpdf.html2pdf.HtmlConverter;
+import com.vts.ems.master.service.MasterService;
 import com.vts.ems.pi.model.PisAddressResTrans;
 import com.vts.ems.pi.service.PIService;
 import com.vts.ems.pis.service.PisService;
@@ -35,6 +36,8 @@ import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
 import com.vts.ems.property.model.PisMovablePropertyTrans;
+import com.vts.ems.property.model.PisPropertyConstruction;
+import com.vts.ems.property.model.PisPropertyConstructionTrans;
 import com.vts.ems.property.service.PropertyService;
 import com.vts.ems.utils.CharArrayWriterResponse;
 import com.vts.ems.utils.DateTimeFormatUtil;
@@ -61,6 +64,9 @@ public class PropertyController {
 	
 	@Autowired
 	PisService pisservice;
+	
+	@Autowired
+	MasterService masterservice;
 	
     private final String formmoduleid="15";
 	
@@ -420,7 +426,7 @@ public class PropertyController {
 			}
 			return "property/ImmovablePropForm";
 		}catch(Exception e) {
-			logger.info(new Date()+"Inside ImmovablePropPreview.htm"+Username,e);
+			logger.error(new Date()+"Inside ImmovablePropPreview.htm"+Username,e);
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -516,7 +522,7 @@ public class PropertyController {
 			}
 			
 		}catch (Exception e) {
-			logger.info(new Date()+"Inside ImmovablePropFormSubmit.htm"+Username,e);
+			logger.error(new Date()+"Inside ImmovablePropFormSubmit.htm"+Username,e);
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -559,7 +565,7 @@ public class PropertyController {
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			return "property/PropertyApprovals";
 		}catch (Exception e) {
-			logger.info(new Date()+"Inside PropertyApprovals.htm"+Username,e);
+			logger.error(new Date()+"Inside PropertyApprovals.htm"+Username,e);
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -657,7 +663,7 @@ public class PropertyController {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.info(new Date()+"Inside MovablePropAddEdit.htm"+Username,e);
+			logger.error(new Date()+"Inside MovablePropAddEdit.htm"+Username,e);
 			return "static/Error";
 		}
 		
@@ -753,7 +759,7 @@ public class PropertyController {
 			
 		}catch (Exception e) {
 			e.printStackTrace();
-			logger.info(new Date()+"Inside MovablePropAdd.htm"+Username,e);
+			logger.error(new Date()+"Inside MovablePropAdd.htm"+Username,e);
 			return "static/Error";
 		}
 		
@@ -882,7 +888,7 @@ public class PropertyController {
 			}
 			return "property/MovablePropForm";
 		}catch(Exception e) {
-			logger.info(new Date()+"Inside MovablePropPreview.htm"+Username,e);
+			logger.error(new Date()+"Inside MovablePropPreview.htm"+Username,e);
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -978,7 +984,7 @@ public class PropertyController {
 				}
 			
 		}catch (Exception e) {
-			logger.info(new Date()+"Inside MovablePropFormSubmit.htm"+Username,e);
+			logger.error(new Date()+"Inside MovablePropFormSubmit.htm"+Username,e);
 			e.printStackTrace();
 			return "static/Error";
 		}
@@ -1097,11 +1103,11 @@ public class PropertyController {
 		String EmpNo = (String) ses.getAttribute("EmpNo");
 		try {
 			String Action = req.getParameter("Action");
-			String immpropertyid = req.getParameter("immpropertyid");
+			String constructionid = req.getParameter("constructionid");
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			
 			if("EDIT".equalsIgnoreCase(Action)) {
-				req.setAttribute("Construction", service.getImmovablePropertyById(Long.parseLong(immpropertyid)));
+				req.setAttribute("Construction", service.getConstructionById(Long.parseLong(constructionid)));
 				return "property/ConstructionEdit";
 			}else {		
 			    return "property/ConstructionAdd";	
@@ -1110,7 +1116,191 @@ public class PropertyController {
 			logger.error(new Date() +" Inside ConstructionAddEdit.htm"+Username, e);
 			e.printStackTrace();	
 			return "static/Error";
+		}	
+	}
+	
+	@RequestMapping(value="ConstructionAdd.htm")
+	public String constructionAdd(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside ConstructionAdd.htm"+Username);
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		try {
+			String supervisedBy = req.getParameter("supervisedBy");
+			String transactionState = req.getParameter("transaction");
+			
+			PisPropertyConstruction construction = new PisPropertyConstruction();
+			construction.setEmpNo(EmpNo);
+			construction.setPermissionDate(sdf.format(new Date()));
+			construction.setTransactionState(transactionState);
+			construction.setEstimatedCost(Double.parseDouble(req.getParameter("estimatedCost")));
+			construction.setConstrCompletedBy(DateTimeFormatUtil.dateConversionSql(req.getParameter("completedBy")));
+			
+			if(supervisedBy.equalsIgnoreCase("Myself")) {
+				construction.setSupervisedBy(supervisedBy);
+			}else if(supervisedBy.equalsIgnoreCase("Others")) {
+				construction.setSupervisedBy(req.getParameter("others"));
+				construction.setContractorDealings(req.getParameter("officialDealings"));
+				construction.setNatureOfDealings(req.getParameter("natureOfDealing"));
+				construction.setContractorName(req.getParameter("contractorName"));
+				construction.setContractorPlace(req.getParameter("contractorPlace"));
+			}
+			
+			construction.setOwnSavings(Double.parseDouble(req.getParameter("ownSavings")));
+			construction.setLoans(Double.parseDouble(req.getParameter("loans")));
+			construction.setOtherSources(Double.parseDouble(req.getParameter("otherSources")));
+			construction.setProposedCost(Double.parseDouble(req.getParameter("proposedCost")));
+			construction.setOwnSavingsDetails(req.getParameter("ownSavingsDetails"));
+			construction.setLoansDetails(req.getParameter("loansDetails"));
+			construction.setOtherSourcesDetails(req.getParameter("otherSourcesDetails"));
+			construction.setConstrStatus("N");
+			construction.setPisStatusCode("INI");
+			construction.setPisStatusCodeNext("INI");
+			construction.setIsActive(1);
+			construction.setCreatedBy(Username);
+			construction.setCreatedDate(sdtf.format(new Date()));
+			
+			Long result = service.addPropertyConstruction(construction);
+			
+			if(transactionState.equalsIgnoreCase("C")) {
+				transactionState="Construction of house";
+			}else if(transactionState.equalsIgnoreCase("A")) {
+				transactionState="Addition of house";
+			}else {
+				transactionState="Renovation of exisiting house";
+			}
+			
+			if(result>0) {
+				
+				PisPropertyConstructionTrans transaction = PisPropertyConstructionTrans.builder()
+						                                   .ConstructionId(result)
+						                                   .PisStatusCode("INI")
+						                                   .ActionBy(EmpNo)
+						                                   .Remarks("")
+						                                   .ActionDate(sdtf.format(new Date()))
+						                                   .build();
+				service.addPropertyConstructionTransaction(transaction);
+				
+				redir.addAttribute("result", transactionState+" Added Successfully");
+			}else {
+				redir.addAttribute("resultfail", transactionState+" Add Unsuccessful");
+			}
+			redir.addAttribute("constructionId", result);
+			return "redirect:/ConstructionPreview.htm";
+		}catch (Exception e) {
+			logger.error(new Date()+"Inside ConstructionAdd.htm", Username, e);
+			e.printStackTrace();
+			return "static/Error";
 		}
-		
+	}
+	
+	@RequestMapping(value="ConstructionEdit.htm")
+	public String constructionEdit(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside ConstructionEdit.htm"+Username);
+		String EmpNo = (String) ses.getAttribute("EmpNo");
+		try {
+			String supervisedBy = req.getParameter("supervisedBy");
+			String transactionState = req.getParameter("transaction");
+			String ConstructionId = req.getParameter("ConstructionId");
+			
+			PisPropertyConstruction construction = new PisPropertyConstruction();
+			construction.setConstructionId(Long.parseLong(ConstructionId));
+			construction.setTransactionState(transactionState);
+			construction.setEstimatedCost(Double.parseDouble(req.getParameter("estimatedCost")));
+			construction.setConstrCompletedBy(DateTimeFormatUtil.dateConversionSql(req.getParameter("completedBy")));
+			
+			if(supervisedBy.equalsIgnoreCase("Myself")) {
+				construction.setSupervisedBy(supervisedBy);
+			}else if(supervisedBy.equalsIgnoreCase("Others")) {
+				construction.setSupervisedBy(req.getParameter("others"));
+				construction.setContractorDealings(req.getParameter("officialDealings"));
+				construction.setNatureOfDealings(req.getParameter("natureOfDealing"));
+				construction.setContractorName(req.getParameter("contractorName"));
+				construction.setContractorPlace(req.getParameter("contractorPlace"));
+			}
+			
+			construction.setOwnSavings(Double.parseDouble(req.getParameter("ownSavings")));
+			construction.setLoans(Double.parseDouble(req.getParameter("loans")));
+			construction.setOtherSources(Double.parseDouble(req.getParameter("otherSources")));
+			construction.setProposedCost(Double.parseDouble(req.getParameter("proposedCost")));
+			construction.setOwnSavingsDetails(req.getParameter("ownSavingsDetails"));
+			construction.setLoansDetails(req.getParameter("loansDetails"));
+			construction.setOtherSourcesDetails(req.getParameter("otherSourcesDetails"));
+	
+			construction.setModifiedBy(Username);
+			construction.setModifiedDate(sdtf.format(new Date()));
+			
+			Long result = service.editPropertyConstruction(construction);
+			
+			if(transactionState.equalsIgnoreCase("C")) {
+				transactionState="Construction of house";
+			}else if(transactionState.equalsIgnoreCase("A")) {
+				transactionState="Addition of house";
+			}else {
+				transactionState="Renovation of exisiting house";
+			}
+			
+			if(result>0) {
+				redir.addAttribute("result", transactionState+" Edited Successfully");
+			}else {
+				redir.addAttribute("resultfail", transactionState+" Edit Unsuccessful");
+			}
+			
+			redir.addAttribute("constructionId", result);
+			return "redirect:/ConstructionPreview.htm";
+		}catch (Exception e) {
+			logger.error(new Date()+"Inside ConstructionEdit.htm", Username, e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="ConstructionTransStatus.htm")
+	public String constructionTransStatus(HttpServletRequest req, HttpSession ses) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside ConstructionTransStatus.htm"+Username);
+		try {
+			String constructionId = req.getParameter("constructionId");
+			if(constructionId!=null) {
+				req.setAttribute("TransactionList", service.constructionTransList(constructionId));
+			}
+			return "property/PropertyTransStatus";
+		}catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ConstructionTransStatus.htm "+Username, e);
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="ConstructionPreview.htm")
+	public String constructionPreview(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside ConstructionPreview.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		try {
+			String constructionId = req.getParameter("constructionId");
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			if(constructionId!=null) {
+				String isApproval = req.getParameter("isApproval");
+				if(isApproval!=null && isApproval.equalsIgnoreCase("Y")) {
+					req.setAttribute("SidebarActive","PropertyApprovals_htm");
+				}
+				req.setAttribute("isApproval", isApproval);
+				  PisPropertyConstruction construction = service.getConstructionById(Long.parseLong(constructionId.trim()));
+			    req.setAttribute("constructionFormData",construction );	
+			    req.setAttribute("ApprovalEmpData", service.constructionTransactionApprovalData(constructionId.trim()));
+			    req.setAttribute("EmpData", service.getEmpNameDesig(construction.getEmpNo().trim()));
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
+			    req.setAttribute("constructionRemarks", service.constructionRemarksHistory(constructionId));
+			    req.setAttribute("labDetails", masterservice.getLabDetails());
+			}
+			return "property/ConstructionForm";
+		}catch (Exception e) {
+			logger.error(new Date()+"Inside ConstructionPreview.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
 	}
 }

@@ -35,9 +35,13 @@ public class PisPropertyConstruction implements Serializable{
 	private String NatureOfDealings;
 	private String ContractorName;
 	private String ContractorPlace;
-	private String OwnSavings;
-	private String Loans;
-	private String OtherSources;
+	private Double OwnSavings;
+	private String OwnSavingsDetails;
+	private Double Loans;
+	private String LoansDetails;
+	private Double OtherSources;
+	private String OtherSourcesDetails;
+	private Double ProposedCost;
 	private String ConstrStatus;
 	private String Remarks;
 	private String PisStatusCode;
