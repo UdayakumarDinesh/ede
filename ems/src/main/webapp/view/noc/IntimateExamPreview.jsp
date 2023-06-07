@@ -57,7 +57,7 @@ th,td
 	
 	 Object[] obj=(Object[])request.getAttribute("ExamIntimationDetails");
 	 
-	 List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA");
+	 List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA","RSO");
 	
 	 List<Object[]> RemarksHistory=(List<Object[]>)request.getAttribute("RemarksHistory");
 	 

@@ -1120,19 +1120,14 @@ public class NocServiceImpl implements NocService {
 //			List<String> DHs = dao.GetDHEmpNos();
 //			List<String> GHs = dao.GetGHEmpNos();
 			List<String> SOs = dao.GetSOEmpNos();	
-			
 			List<String> PandAs = dao.GetPandAAdminEmpNos();
-			
 			String CEO = dao.GetCEOEmpNo();
 			
 			DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
 			
 			if(action.equalsIgnoreCase("A"))
 			{
-//				if( (pisStatusCode.equalsIgnoreCase("VDG") && pisStatusCodeNext.equalsIgnoreCase("VPA") ) || 
-//				     (pisStatusCode.equalsIgnoreCase("FWD") && pisStatusCodeNext.equalsIgnoreCase("VPA") ) ){
-//					
-//				}
+//				
 				// first time forwarding
 				if(IntimateStatusCode.equalsIgnoreCase("INI") || IntimateStatusCode.equalsIgnoreCase("RDG") || IntimateStatusCode.equalsIgnoreCase("RPA")
 						|| IntimateStatusCode.equalsIgnoreCase("RSO")) 
@@ -1239,6 +1234,13 @@ public class NocServiceImpl implements NocService {
 				notification.setNotificationUrl("IntimateExam.htm");
 				notification.setNotificationMessage("Intimation For Exam Request Approved");
 				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));	
+			
+			  dao.AddNotifications(notification);
+		
 			}
 			else if(action.equalsIgnoreCase("A") )
 			{
@@ -1249,31 +1251,30 @@ public class NocServiceImpl implements NocService {
 					notification.setNotificationUrl("NocApproval.htm");
 					notification.setNotificationMessage("Recieved Intimation For Exam Request From <br>"+emp.getEmpName());
 					notification.setNotificationBy(empNo);
-									
+					notification.setNotificationDate(LocalDate.now().toString());
+					notification.setIsActive(1);
+					notification.setCreatedBy(username);
+					notification.setCreatedDate(sdtf.format(new Date()));	
+				
+				  dao.AddNotifications(notification);				
 				}
+			}
 			else if(action.equalsIgnoreCase("R"))
 			{
 				notification.setEmpNo(emp.getEmpNo());
 				notification.setNotificationUrl("IntimateExam.htm");
 				notification.setNotificationMessage("Intimation For Exam Request Returned");
 				notification.setNotificationBy(empNo);
-			}
-				notification.setNotificationDate(LocalDate.now().toString());
+                notification.setNotificationDate(LocalDate.now().toString());
 				notification.setIsActive(1);
 				notification.setCreatedBy(username);
 				notification.setCreatedDate(sdtf.format(new Date()));	
+			
+			  dao.AddNotifications(notification);
 			}
-			
-			
-			notification.setNotificationDate(LocalDate.now().toString());
-			notification.setIsActive(1);
-			notification.setCreatedBy(username);
-			notification.setCreatedDate(sdtf.format(new Date()));
-			
-			
-			if( !exam.getInitimateStatusCodeNext().equalsIgnoreCase("VSO") && !exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA")  ) {
-				dao.AddNotifications(notification);
-			}
+				
+				
+		
 			
 			if(action.equalsIgnoreCase("A") )
 			{

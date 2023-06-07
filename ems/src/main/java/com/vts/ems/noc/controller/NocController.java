@@ -1563,7 +1563,9 @@ public class NocController {
 				
 				if(action.equalsIgnoreCase("A")) {
 				
-				if(IntimationStatusCode.equalsIgnoreCase("INI") || IntimationStatusCode.equalsIgnoreCase("RDG") || IntimationStatusCode.equalsIgnoreCase("RPA") ) {
+				if(IntimationStatusCode.equalsIgnoreCase("INI") || IntimationStatusCode.equalsIgnoreCase("RDG") || IntimationStatusCode.equalsIgnoreCase("RPA")
+						
+						||  IntimationStatusCode.equalsIgnoreCase("RSO")) {
 					if (count > 0) {
 						redir.addAttribute("result", "Intimation For Exam Forwarded Successful");
 					} else {
@@ -1584,7 +1586,7 @@ public class NocController {
 					   
 				   }
 				   
-				   else if(IntimationStatusCode.equalsIgnoreCase("VSO")) {
+				   else if(IntimationStatusCode.equalsIgnoreCase("VSO") || IntimationStatusCode.equalsIgnoreCase("FWD")) {
 						  
 					   
 					   if (count > 0) {

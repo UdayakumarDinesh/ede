@@ -71,7 +71,7 @@ body{
 	
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA");
+	List<String> toUserStatus  = Arrays.asList("INI","RDG","RPA","RSO");
 	
    %>
 
