@@ -302,7 +302,7 @@ tr, th, td {
 
 				<p style=" display: inline; float: right; margin-top: 40px;  text-align: right; ">
 					Signature of Employee <br> </b>
-					<span style="color: blue"> <%=NewspaperUserPrintData[9]%>,&nbsp;<%=NewspaperUserPrintData[10]%></span> <br> <%if(!NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("")) {%>  <span style="color: blue"> [Forwarded On: <%if (NewspaperUserPrintData[12] !=null) {%> <%=rdtf.format(NewspaperUserPrintData[12]) %> <%} %>] </span> <%} %><br> <b> STARC Intercom No: </b>
+					<span style="color: blue"> <%=NewspaperUserPrintData[9]%>,&nbsp;<%=NewspaperUserPrintData[10]%></span> <br> <%if(!NewspaperUserPrintData[11].toString().equalsIgnoreCase("SDG") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBP") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("SBA") && !NewspaperUserPrintData[11].toString().equalsIgnoreCase("")) {%>  <span style="color: blue"> <%if (NewspaperUserPrintData[12] !=null) {%>[Forwarded On:  <%=rdtf.format(NewspaperUserPrintData[12]) %> ]<%} %> </span> <%} %><br> <b> STARC Intercom No: </b>
 					
 				</p>
 
