@@ -13,7 +13,7 @@
 
 <head>
 <meta charset="ISO-8859-1">
-<jsp:include page="../static/LetterHead.jsp"></jsp:include>
+
 
 
 <style type="text/css">
@@ -87,6 +87,7 @@
 {
 	color: blue;
 	font-weight:400px;
+	font-size:17px;
 }
 /* table {
 	border-collapse: collapse;
@@ -115,59 +116,49 @@
 	   SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
        SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
        LocalDate date = LocalDate.now(); 
-       Object[] title = (Object[])request.getAttribute("Emptitle");
+       Object[] empdetails =(Object[])request.getAttribute("EmpGenderPassport");
+       Object[] empData=(Object[])request.getAttribute("EmpData");
     
 	%>
 
-<!-- <div align="center">
-		<table style="margin-left:10px; margin-top:15px;width:650px;">
-			<tr>
-				<td style="text-align:center;" width="110px"  ><span style="font-size: 10px;margin-left:90px;">TM</span><span
-					style="font-size: 35px; font-style: italic;"> SITAR </span></td>
-				<td style="text-align:center;" width="600px"  ><span style="font-weight:bold;">SOCIETY FOR INTEGRATED CIRCUIT TECHNOLOGY AND APPLIED RESEARCH</span>
-				 
-				<br>
-				<br>
-				
-				<div align="left">&nbsp;<span style="font-weight:bold;">(A Government of India Society)</span><br>&nbsp;Vijinapura Road,<br>&nbsp;Dooravani Nagar P.O.,<br>&nbsp;Bangalore-560016 <br>&nbsp;Karnataka,INDIA</div> 
-				<div style="margin-top:-80px;"align="right">Phone : +91-080-2565 9802 Extn : 9809&nbsp;<br>Direct : +91-80-2565 0356 &nbsp;<br>Telefax : +91-80-2565 0712 &nbsp;<br>e-mail : <span  style="text-decoration: underline;">sitarpurchase.sitar@gov.in</span>&nbsp;</div> 
-				
-				</td>
-				
-			</tr>
-			
-		</table>
-		</div> -->
-      
 
-       <div style="text-align:center;margin-top:60px;">
-         <div align="left" style="margin-left:10px !important;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[11] %></div>
+       <div style="text-align:center;margin-top:180px;">
+         <div align="left" style="margin-left:10px !important;" >Ref:STARC/P&A/PERS(<%=obj[0] %>) :-&nbsp;<span class="text-blue"><%=obj[17] %></span></div>
+          <div align="right" style="margin-top:-20px;margin-right:10px;" >Date:&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(date.toString())) %></span></div>
+          <br>
+          <br>
+           <br>
+            <br>
+          <br>
             <div class="square" style="text-align:center">Applicant photo</div>
             <br>
+            <br>
+            <br>
+            <br>
+            <br>
+           
+            
             
 		      <h3 style="text-align: center;text-decoration: underline;">NO OBJECTION CERTIFICATE</h3>
 	
 	
-	      <div style="margin-left: 10px;text-align: justify;width:650px; text-justify: inter-word;font-size: 18px;" align="left">
+	      <div style="margin-left: 10px;text-align: justify;width:650px; text-justify: inter-word;font-size: 17px;line-height:1.5" align="left">
 				
-		Mr.&nbsp;<span class="text-blue" style="text-decoration: underline;"><%=obj[1] %></span> son of / Daughter of  Mr. <%if(obj[35]!=null){ %> <span class="text-blue" style="text-decoration: underline;"><%=obj[35] %></span><%} else{ %><span class="text-blue"> NA </span> <%} %>&nbsp;who is an Indian national,is employed in this office 
-          as from &nbsp;<span class="text-blue"style="text-decoration: underline;font-size:16px;" ><%=rdf.format(sdf.parse(obj[21].toString())) %></span>&nbsp; till <span class="text-blue" style="text-decoration: underline;font-size:16px;"> <%=rdf.format(sdf.parse(obj[22].toString())) %></span> &nbsp;date.This office has no objection for obtaining his Passport.	   			
+				<% if(empdetails[1].toString().equalsIgnoreCase("M")){ %>Mr<%} else if(empdetails[1].toString().equalsIgnoreCase("F")){ %>Mrs<%} %>.&nbsp;<span class="text-blue" ><%=obj[1] %></span> son of / Daughter of Mr. <%if(empdetails[2]!=null){ %> <span class="text-blue" ><%=empdetails[2] %></span><%} else{ %><span class="text-blue"> NA </span> <%} %>&nbsp;who is an Indian national,is employed in this office 
+          as from &nbsp;<span class="text-blue" style="font-size:16px;" ><%=rdf.format(sdf.parse(obj[27].toString())) %></span>&nbsp; till <span class="text-blue" style="font-size:16px;"> <%=rdf.format(sdf.parse(obj[28].toString())) %></span> .This office has no objection for obtaining his Passport.	   			
 			   			
 				   																			
 	</div>
 		
 		<br>
-		 
-		 <div align="left" style="margin-left:10px !important;" >Date:&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(date.toString())) %></span></div>
-		 	
 		<br>
-		<br>
+         <br>
 		
 		 <div style="margin-right:60px !important;margin-top:20px;text-align:right;"> 
-						        <span class="text-blue" style=" text-transform: uppercase;"><%=obj[33] %></span><br>
-								<span style="font-weight: 400; font-size: 18px; ">Dy.Manager-Personnel & Administration</span><br>
-								<span style="font-weight: 400; font-size: 18px;">TelNo.<%=obj[38] %>/<%=obj[39] %>(Extn-<%=obj[36] %></span>)<br>
-								<span style="font-weight: 400; font-size: 18px;">E-Mail id:&nbsp;<span style="text-decoration: underline;"><%=obj[37] %></span></span><br>
+						        <span class="text-blue" style=" text-transform: uppercase;"><%=empData[1]%></span><br>
+								<span  class="text-blue" style="font-weight: 400; font-size: 16px; "><%=empData[2]%></span><br>
+								<span style="font-weight: 400; font-size: 16px;">TelNo.<%=empData[6] %>/<% if(!empData[7].toString().equalsIgnoreCase("0") || !empData[7].toString().equalsIgnoreCase("")){%><%=empData[7] %><%} %>(Extn-<%=empData[8] %></span>)<br>
+								<span style="font-weight: 400; font-size: 16px;">E-Mail id:&nbsp;<span style="text-decoration: underline;"><%=empData[9] %></span></span><br>
 		 </div>
 	   
 	

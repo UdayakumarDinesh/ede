@@ -74,7 +74,7 @@ public interface NocService {
 	public List<Object[]> NocApprovedList(String empNo, String fromdate, String todate)throws Exception;
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
 
-	public Object[] getEmpTitleDetails(String passportid)throws Exception;
+	
 
 	public  List<Object[]>  getProceedinAbraodRemarksHistory(String procAbrId)throws Exception;
 
@@ -135,6 +135,10 @@ public interface NocService {
 	public ExamIntimation getIntimationById(long  ExamId)throws Exception;
 
 	public List<Object[]> IntimationApprovalData(String examId)throws Exception;
+
+	public Object[] getEmpGenderPassport(String passportid)throws Exception;
+
+	public List<Object[]>  getNOCPassportApprovalData(String passportid)throws Exception;
 
 	
 	

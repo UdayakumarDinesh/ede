@@ -61,14 +61,20 @@ body{
 	List<String> DGMs = (List<String>)request.getAttribute("DGMEmpNos");
 	List<String> DHs = (List<String>)request.getAttribute("DivisionHeadEmpNos");
 	List<String> GHs = (List<String>)request.getAttribute("GroupHeadEmpNos");
+	List<String> SOs = (List<String>)request.getAttribute("SOEmpNos");
 	
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
 	Object[] EmpPassport= (Object[])request.getAttribute("EmpPassport");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
 	
+	Object[] emplist = (Object[])request.getAttribute("NocApprovalFlow"); 
+	
+	
 	List<Object[]> NocProcAbraodList=(List<Object[]>)request.getAttribute("NocProcAbraodList");
-	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RSO","RPA","RCE");
+	
+	
 	
    %>
 
@@ -215,7 +221,7 @@ body{
 	                	<%} %>
 	               		<%if(GroupHeadName!=null && !GHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #B39DDB;">
-	                			Group Head - <%=GroupHeadName[1] %>
+	                			Group Head - <%=emplist[0] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
@@ -224,7 +230,7 @@ body{
 	               		<%} %>
 	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #90CAF9;">
-	                			Division Head - <%=DivisionHeadName[1] %>
+	                			Division Head - <%=emplist[1] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
@@ -233,16 +239,27 @@ body{
 	               		<%} %>
 	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM -  <%=DGMEmpName[1] %>
+	                			DGM -  <%=emplist[2] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
+	               		
+	               		<% if(!SOs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
+	               			<td class="trup" style="background: #F99B7D;" >
+	                			SO- <%=emplist[3] %>
+	                		</td>
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%} %>
+	               		
 	               		<% if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #BCAAA3;" >
-	                			P&A - <%=PandAEmpName[1] %>
+	                			P&A - <%=emplist[4] %>
 	                		</td>
 	                		
 	                		<td rowspan="2">
@@ -251,7 +268,7 @@ body{
 	               		<%} %>
 	               		<% if(CeoName!=null ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
-	                			CEO - <%=CeoName[1] %>
+	                			CEO - <%=emplist[5] %>
 	                		</td>
 	             
 	               		<%} %>

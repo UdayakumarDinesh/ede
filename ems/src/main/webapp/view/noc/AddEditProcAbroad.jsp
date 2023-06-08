@@ -140,7 +140,7 @@ body{
 			            </div>
 			            
 			             <div class="col-md-2">
-			                <label>Relation Of </label>
+			                <label>Details Of </label>
 			                <select name="RelationType" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                    <option value="F" <% if(ProcAbroad!=null){  if(ProcAbroad.getRelationType().toString().equals("F")){ %> selected <%}}%> >Father</option>
@@ -150,20 +150,20 @@ body{
 			            </div> 
 			            
 			              <div class="col-md-2">
-			                <label>Relative Name </label>
+			                <label>Name </label>
 			                <input type="text" id="" name="RelationName"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationName() %><%}  %>"
 			                   class=" form-control input-sm "  required="required" >
 			                    
 			            </div>
 			            <div class="col-md-2">
-			                <label>Relative Occupation </label>
+			                <label>Occupation </label>
 			                <input type="text" id="" name="RelationOccupation"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationOccupation() %><%} %>"
 			                    class="form-control input-sm "  required="required">
 			                   
 			            </div>
 			            
 			             <div class="col-md-3">
-			                <label>Relative Address </label>
+			                <label>Address </label>
 			                <input type="text" id="" name="RelationAddress"  value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationAddress() %><%} %>"  required="required"
 			                    class="form-control input-sm " >
 			             

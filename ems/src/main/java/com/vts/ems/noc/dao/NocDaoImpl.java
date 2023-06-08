@@ -89,6 +89,8 @@ public class NocDaoImpl implements NocDao {
 			e.printStackTrace();
 			return 0L;
 		}
+		
+		
 	}
 
 	private static final String MAXOFNOCPASSPORTID="SELECT IFNULL(MAX(NocPassportId),0) as 'MAX' FROM noc_passport";
@@ -686,7 +688,7 @@ public class NocDaoImpl implements NocDao {
 		return (List<Object[]>)query.getResultList();
 	}
 	
-	private static final String NAMEANDDESIG = "SELECT DISTINCT a.EmpNo,a.EmpName,b.Designation,d.PayLevel,c.BasicPay,c.Title FROM employee a,employee_desig b,employee_details c,pis_pay_level d WHERE a.DesigId=b.DesigId AND a.IsActive=1 AND a.EmpNo=c.EmpNo AND d.PayLevelId=c.PayLevelId AND a.EmpNo=:EmpNo LIMIT 1";
+	private static final String NAMEANDDESIG = "SELECT DISTINCT a.EmpNo,a.EmpName,b.Designation,d.PayLevel,c.BasicPay,c.Title,c.PhoneNo,c.AltPhoneNo,a.ExtNo,a.Email FROM employee a,employee_desig b,employee_details c,pis_pay_level d WHERE a.DesigId=b.DesigId AND a.IsActive=1 AND a.EmpNo=c.EmpNo AND d.PayLevelId=c.PayLevelId AND a.EmpNo=:EmpNo LIMIT 1";
 	@Override
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception
 	{
@@ -708,27 +710,7 @@ public class NocDaoImpl implements NocDao {
 		}		
 	}
 
-	private static final String EMPTITLE="SELECT empd.title FROM employee_details empd,noc_passport n WHERE n.EmpNo = empd.EmpNo AND n.isActive='1' AND  n.NocPassportId=:passportid";
-	@Override
-	public Object[] getEmpTitleDetails(String passportid) throws Exception {
-		
-    try {
-			
-			Query query= manager.createNativeQuery(EMPTITLE);
-			query.setParameter("passportid", passportid);
-			List<Object[]> list =  (List<Object[]>)query.getResultList();
-			if(list.size()>0) {
-				return list.get(0);
-			}else {
-				return null;
-			}
-			
-		} catch (Exception e) {
-			logger.error(new Date()  + "Inside DAO getEmpTitleDetails " + e);
-			e.printStackTrace();
-			return null;
-		}		
-	}
+	
 
 	private static final String NOCPROCEEDINGABROADREMARKHISTORY="SELECT trans.NocProcId,trans.Remarks,e.EmpName,trans.ActionDate,trans.NocStatusCode FROM noc_proc_abroad_trans trans,employee e WHERE trans.ActionBy=e.EmpNo AND trans.NocProcId=:procAbrId ORDER BY trans.ActionDate ASC";
 	@Override
@@ -1204,7 +1186,61 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 		query.setParameter("examId", examId );
 		return (List<Object[]>)query.getResultList();
 	}
+
+	public static final String EMPGENDERPASSPORT="SELECT empd.Title,empd.Gender,\r\n"
+			+ "\r\n"
+			+ "\r\n"
+			+ "(SELECT p.member_name FROM pis_emp_family_details p,pis_emp_family_relation r\r\n"
+			+ " WHERE  p.relation_id = r.relation_id AND r.relation_id=3 AND p.EmpId IN \r\n"
+			+ "(SELECT e.EmpId FROM employee e,noc_passport n,pis_emp_family_details pisf WHERE e.EmpNo=n.EmpNo AND n.NocPassportId=:passportid)) AS'FatherName'\r\n"
+			+ "\r\n"
+			+ "FROM employee_details empd,noc_passport n WHERE n.EmpNo=empd.EmpNo\r\n"
+			+ "AND n.isActive='1'  AND  n.NocPassportId=:passportid";
+	@Override
+	public Object[] getEmpGenderPassport(String passportid) throws Exception {
+		
+
+		try {
+			Query query= manager.createNativeQuery(EMPGENDERPASSPORT);
+			query.setParameter("passportid", passportid);
+			List<Object[]> list =  (List<Object[]>)query.getResultList();
+			if(list.size()>0) {
+				return list.get(0);
+			}else {
+				return null;
+			}
+			
+		} catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO getEmpGenderPassport " + e);
+			e.printStackTrace();
+			return null;
+		}		
 	}
+
+	public static final String NOCPASSPORTAPPROVALDATA="SELECT tra.NocPassportTransId,\r\n"
+			+ "(SELECT empno FROM  noc_passport_trans t , employee e WHERE e.empno = t.actionby AND t.NocStatusCode =  sta.pisstatuscode AND  n.NocPassportId=t.NocPassportId ORDER BY t.NocStatusCode DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM noc_passport_trans t , employee e  WHERE e.empno = t.actionby AND t.NocStatusCode =  sta.pisstatuscode AND n.NocPassportId=t.NocPassportId ORDER BY t.NocPassportTransId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "\r\n"
+			+ "(SELECT designation FROM noc_passport_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.NocStatusCode =  sta.pisstatuscode  AND n.NocPassportId=t.NocPassportId ORDER BY t.NocPassportTransId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode \r\n"
+			+ "FROM  noc_passport_trans tra, pis_approval_status sta,employee emp,noc_passport n\r\n"
+			+ "WHERE n.NocPassportId = tra.NocPassportId AND tra.NocStatusCode = sta.pisstatuscode AND \r\n"
+			+ "tra.actionby=emp.empno AND sta.pisstatuscode IN ('VGI','VDI','VDG','VSO','VPA','APR','DPR') AND n.NocPassportId = :passportid \r\n"
+			+ "GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
+	
+	@Override
+	public List<Object[]> getNOCPassportApprovalData(String passportid) throws Exception {
+		
+		Query query=manager.createNativeQuery(NOCPASSPORTAPPROVALDATA);
+		query.setParameter("passportid", passportid );
+		return (List<Object[]>)query.getResultList();
+	}
+	
+
+}
+		
+	
+	
 
 
 

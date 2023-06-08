@@ -69,10 +69,12 @@ body{
 	
 	 Object[] NocEmpList= (Object[])request.getAttribute("NocEmpList");
 	Employee emp=(Employee)request.getAttribute("EmployeeD");
+	Object[] emplist = (Object[])request.getAttribute("NocApprovalFlow"); 
+	List<String> SOs = (List<String>)request.getAttribute("SOEmpNos");
 	
 	List<Object[]> PassportList=(List<Object[]>)request.getAttribute("NOCPASSPORTLIST");
 	
-	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RSO","RPA","RCE");
 	Object[] empData=(Object[])request.getAttribute("EmpData");
 	
    %>
@@ -150,15 +152,9 @@ body{
 								 	<%if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("A") ){ %>
 							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" formmethod="GET"  name="PassportId" value="<%=obj[0] %>"   data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: blue; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;  Approved <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
-								    	</button>
+								    	</button><%}
 								    	
-							    	<%}else if(obj[2]!=null && obj[2].toString().equalsIgnoreCase("E") ){ %>
-							    		<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[0] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
-								    		&nbsp;Expired<i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
-								    	</button>
-							    		
-							    		
-							    	<%} 
+							    	
 							    	else{%>
 							    	<button type="submit" class="btn btn-sm btn-link w-100" formaction="NOCPassportTransactionStatus.htm" value="<%=obj[0] %>" name="PassportId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: purple; font-weight: 600;" formtarget="_blank">
 								    		&nbsp;<%=obj[5] %><i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
@@ -178,6 +174,16 @@ body{
 							    <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[0]%>" formaction="PassportNOCPrint.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Download">
 												<i style="color: #019267" class="fa-solid fa-download"></i>
 								</button> 
+								
+								<% if(PandAs.contains(emp.getEmpNo()) && obj[2].toString().equalsIgnoreCase("A")){ %>  
+								
+								
+								 <button type="submit" class="btn btn-sm" name="Passportid" value="<%=obj[0]%>" formaction="PassportNOCCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Certificate">
+											<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+							    </button> 
+								
+								
+								<%} %>
 								
 							</td>
 
@@ -223,7 +229,7 @@ body{
 	                	<%} %>
 	               		<%if(GroupHeadName!=null && !GHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #B39DDB;">
-	                			Group Head - <%=GroupHeadName[1] %>
+	                			Group Head - <%=emplist[0] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
@@ -232,25 +238,38 @@ body{
 	               		<%} %>
 	               		<%if(DivisionHeadName!=null && !DHs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #90CAF9;">
-	                			Division Head - <%=DivisionHeadName[1] %>
+	                			Division Head - <%=emplist[1] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
+	               		
 	               		<%if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
-	                			DGM -  <%=DGMEmpName[1] %>
+	                			DGM -  <%=emplist[2] %>
 	                		</td>
 			                		 
 	                		<td rowspan="2">
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
+	               		
+	               		<% if(!SOs.contains(empData[0].toString()) && !PandAs.contains(empData[0].toString()) && !CEO.equalsIgnoreCase(empData[0].toString()) ){ %>
+	               			<td class="trup" style="background: #F99B7D;" >
+	                			SO- <%=emplist[3] %>
+	                		</td>
+	                		
+	                		<td rowspan="2">
+	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+	                		</td>
+	               		<%} %>
+	               		
+	               		
 	               		<%if(PandAEmpName!=null  && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #BCAAA3;" >
-	                			P&A - <%=PandAEmpName[1] %>
+	                			P&A - <%=emplist[4] %>
 	                		</td>
 	                		
 	                		<td rowspan="2">
@@ -259,7 +278,7 @@ body{
 	               		<%} %>
 	               		<%if(CeoName!=null ){ %>
 	                		<td class="trup" style="background: #4DB6AC;" >
-	                			CEO - <%=CeoName[1] %>
+	                			CEO - <%=emplist[5] %>
 	                		</td>
 	             
 	               		<%} %>
