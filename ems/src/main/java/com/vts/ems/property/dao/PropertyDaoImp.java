@@ -1,10 +1,12 @@
 package com.vts.ems.property.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -13,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.pi.dao.PIDaoImp;
 import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
@@ -427,5 +430,48 @@ public class PropertyDaoImp implements PropertyDao{
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	private static final String CONSTRUCTIONAPPROVALSLIST = "CALL Property_Construction_Approval(:EmpNo)";
+	@Override
+	public List<Object[]> propertyConstructionApprovalList(String EmpNo) throws Exception {
+		
+		try {			
+			Query query= manager.createNativeQuery(CONSTRUCTIONAPPROVALSLIST);
+			query.setParameter("EmpNo", EmpNo);
+			return  (List<Object[]>)query.getResultList();
+			
+		}catch (Exception e) {
+			logger.error(new Date()  + "Inside DAO propertyConstructionApprovalList " + e);
+			e.printStackTrace();
+			return new ArrayList<Object[]>();
+		}
+	}
+	
+	private static final String MAXCONSTRUCTIONID="SELECT IFNULL(MAX(ConstructionId),0) AS 'MAX' FROM pis_property_construction";
+	@Override
+	public long getMaxConstructionId() throws Exception {
+		
+		try {
+			Query query =  manager.createNativeQuery(MAXCONSTRUCTIONID);
+			BigInteger constructionId=(BigInteger)query.getSingleResult();
+			return constructionId.longValue();
+		}catch ( NoResultException e ) {
+			logger.error(new Date() +"Inside DAO getMaxConstructionId "+ e);
+			return 0;
+		}
+	}
+	
+	public static final String LABMASTERDETAILS="FROM LabMaster";
+	@Override
+	public List<LabMaster> getLabMasterDetails() throws Exception {
+		
+		
+		Query query=manager.createQuery(LABMASTERDETAILS);
+		List<LabMaster> List=(List<LabMaster>)query.getResultList();
+		return List;
+		
+		
+	
 	}
 }

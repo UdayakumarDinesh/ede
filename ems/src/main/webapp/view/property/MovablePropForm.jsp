@@ -379,7 +379,7 @@ int slno=0;
 				             if(mov!=null && toUserStatus.contains(mov.getPisStatusCode()) && diff<30){ %>				           				   		      
 					          <div align="left">
 						        <b >Remarks :</b><br>
-						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+						        <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
 					          </div>
 				   	
 				   		      <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
@@ -391,7 +391,7 @@ int slno=0;
 						     <% if( CEO.equalsIgnoreCase(empNo)){ %>
 					         <div align="left">
 						        <b >Remarks :</b><br>
-						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+						        <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
 					          </div>
 					          <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Approve?');" >
 							    Approve	
@@ -404,7 +404,7 @@ int slno=0;
 					         <%}else if(PandAs.contains(empNo)) {%>
 					         <div align="left">
 						        <b >Remarks :</b><br>
-						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+						        <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
 					          </div>
 				   		       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
 							     Verify	
@@ -413,7 +413,7 @@ int slno=0;
 					         <%}else{ %>
 					         <div align="left">
 						        <b >Remarks :</b><br>
-						        <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+						        <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
 					          </div>
 				   		       <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="MovablePropFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Recommend?');" >
 							     Recommend	

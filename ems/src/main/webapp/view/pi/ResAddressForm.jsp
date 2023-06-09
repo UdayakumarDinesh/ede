@@ -240,7 +240,7 @@ String empNo = (String)session.getAttribute("EmpNo");
 				   		</div> --%>
 					   <div align="left">
 						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+						   <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
 					   
 					   <button style="margin-top: -9%" type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ResAddressFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
 							<i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
@@ -258,7 +258,7 @@ String empNo = (String)session.getAttribute("EmpNo");
 				   		</div> --%>
 						<div align="left">
 						   <b >Remarks :</b><br>
-						   <textarea rows="5" cols="85" name="remarks" id="remarksarea"></textarea>
+						   <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
 					   </div>
 					   
 					   <%if(PandAs.contains(empNo)) {%>

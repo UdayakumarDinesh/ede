@@ -115,16 +115,16 @@
 									<input type="radio" name="constructionid" value="<%=obj[0]%>" disabled>
 								<%} %>
 							</td>
-						    <td style="text-align: center;width:8%;"><%if(obj[3]!=null){%><%=obj[3]%><%}else{ %>-<%} %></td>
-						    <td style="text-align: left;width:10%;">
+						    <td style="text-align: center;width: 15%;"><%if(obj[3]!=null){%><%=obj[3]%><%}else{ %>-<%} %></td>
+						    <td style="text-align: left;width: 7%;">
 						    <%if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("C")){ %>Construction
 						    <%} else if(obj[5]!=null && obj[5].toString().equalsIgnoreCase("A")){%>Addition
 						    <%}else{ %>Renovation<%} %>
 						    </td>
-						    <td style="text-align: right;width:10%;"><%if(obj[6]!=null){ %> <%=obj[6] %> <%} %> </td>
-						    <td style="text-align: left;width:10%;"><%if(obj[7]!=null){ %> <%=obj[7] %> <%} %> </td>
-						    <td style="text-align: center;width:11%;"><%if(obj[8]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[8]+"") %> <%} %> </td>
-					   		<td style="width:17%;">
+						    <td style="text-align: right;width: 10%;"><%if(obj[6]!=null){ %> <%=obj[6] %> <%} %> </td>
+						    <td style="text-align: left;width: 10%;"><%if(obj[7]!=null){ %> <%=obj[7] %> <%} %> </td>
+						    <td style="text-align: center;width: 10%;"><%if(obj[8]!=null){ %> <%=DateTimeFormatUtil.SqlToRegularDate(obj[8]+"") %> <%} %> </td>
+					   		<td style="width: 17%;">
 													
 								<%if(obj[12]!=null){%>
 								  
@@ -141,11 +141,11 @@
 								<%} %>
 							</td>
 					   		
-					   		<td style="text-align: left;width:10%;">
+					   		<td style="text-align: left;width: 7%;">
 								<button type="submit" class="btn btn-sm view-icon" formaction="ConstructionPreview.htm" name="constructionId" value="<%=obj[0] %>" data-toggle="tooltip" data-placement="top" title="Application Form For Permission" style="font-weight: 600;" >
 								   <i class="fa-solid fa-eye"></i>
 								</button>
-								<button type="submit" class="btn btn-sm" name="constructionId" value="<%=obj[0] %>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								<button type="submit" class="btn btn-sm" name="constructionId" value="<%=obj[0] %>" formaction="ConstructionFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 								   <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>
                             </td>	

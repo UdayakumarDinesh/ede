@@ -33,6 +33,7 @@ hr{
 Object[] approval = (Object[])request.getAttribute("ApprovalList");
 List<Object[]> emplist =(List<Object[]>)request.getAttribute("emplist");
 List<Object[]> list   = (List<Object[]>)request.getAttribute("PandAFandAData");
+
 %>
 
 

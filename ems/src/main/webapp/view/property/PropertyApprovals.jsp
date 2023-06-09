@@ -29,12 +29,18 @@
 <%	
 	
 	List<Object[]> PendingList =(List<Object[]>)request.getAttribute("PendingList");
+	List<Object[]> ConPendingList =(List<Object[]>)request.getAttribute("ConstructionPendingList");
 	List<Object[]> ApprovedList =(List<Object[]>)request.getAttribute("ApprovedList");
-	Object[] empData=(Object[])request.getAttribute("EmpData");
-	String fromdate = (String)request.getAttribute("fromdate");
-	String todate   = (String)request.getAttribute("todate");
 	
+	List<String[]> PandAs =(List<String[]>) request.getAttribute("PandAsEmpNos");
+	List<String[]> SOs = (List<String[]>)request.getAttribute("SOEmpNos");
+	
+	Object[] empData=(Object[])request.getAttribute("EmpData");
+	
+	String fromdate = (String)request.getAttribute("fromdate");
+	String todate   = (String)request.getAttribute("todate");	
 	String tab   = (String)request.getAttribute("tab");
+	String empNo = (String)session.getAttribute("EmpNo");
 	
 	SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat rdf = DateTimeFormatUtil.getRegularDateFormat();
@@ -79,10 +85,10 @@
 		    <div class="nav-link active" style="text-align: center;" id="pills-mov-property-tab" data-toggle="pill" data-target="#pills-mov-property" role="tab" aria-controls="pills-mov-property" aria-selected="true">
 			   <span>Pending</span> 
 				<span class="badge badge-danger badge-counter count-badge" style="margin-left: 0px;">
-				   		 <%if(PendingList.size()>99){ %>
+				   		 <%if(PendingList.size()+ConPendingList.size()>99){ %>
 				   			99+
 				   		<%}else{ %>
-				   			<%=PendingList.size() %>
+				   			<%=PendingList.size()+ConPendingList.size() %>
 						<%} %>			   			
 				  </span> 
 		    </div>
@@ -111,7 +117,7 @@
 					   <th style="width:5%">SN</th>
 					 <!--  <th style="width:15%">EmpNo</th> -->
 					  <th style="width:40%">Employee Name</th>
-                       <th style="width:15%">Type</th>
+                       <th style="width:25%">Type</th>
                        <th style="width:25%">Action</th>
                   	</tr>
 				</thead>
@@ -145,7 +151,45 @@
                             
                         </tr>
                        <%} %>
-                          
+                          <%  for(Object[] form: ConPendingList ){
+                       %>
+                        <tr>
+                             
+                            <td style="text-align: center;"><%=++SN%></td>
+                            <%-- <td style="text-align: center;"><%=form[1]%></td> --%>
+                            <td ><%=form[2] %></td>
+                            <td >
+                            <%if(form[6]!=null){
+                              if(form[6].toString().equalsIgnoreCase("C")){
+                            %>
+                            Permission for Construction
+                            <%}else if(form[6].toString().equalsIgnoreCase("A")) {%>
+                            Permission for Addition
+                            <%} else{%>
+                            Permission for Renovation
+                            <%} }%>
+                            </td>
+                            <td style="text-align: center;">
+                             <%if(form[3]!=null && form[3].toString().equalsIgnoreCase("Permission") ){%>
+                            	<button type="submit" class="btn btn-sm" name="constructionId" value="<%=form[4]%>" formaction="ConstructionPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 			<i class="fa-solid fa-eye"></i>
+						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="constructionId" value="<%=form[4]%>" formaction="ConstructionFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
+							<%} %>	
+						 	<%-- <%}else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Movable Property") ){ %>  
+						 	    <button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4]%>" formaction="MovablePropPreview.htm"  formmethod="post" data-toggle="tooltip" data-placement="top" title="View Form" >
+						 			<i class="fa-solid fa-eye"></i>
+						 		</button>
+						 		<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4]%>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+								   <i style="color: #019267" class="fa-solid fa-download"></i>
+								</button>
+						 	<%} %>    --%>                      
+						 	</td>
+                            
+                        </tr>
+                       <%} %>
                  </tbody>
    
             </table>
@@ -159,7 +203,7 @@
 		<div class="tab-pane fade" id="pills-imm-property" role="tabpanel" aria-labelledby="pills-imm-property-tab">	
 		<div class="card-body main-card " >	
 		
-		<form method="post" action="IntimationApprovals.htm" >
+		<form method="post" action="PropertyApprovals.htm" >
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<input type="hidden" name="tab" value="closed"/>
 					<div class="row w-100" style="margin-top: 10px;margin-bottom: 10px;">
@@ -209,7 +253,17 @@
                              
                             <td style="text-align: center;"><%=++SNA%></td>
                             <td ><%=form[2] %></td>
-                            <td ><%=form[3]%></td>
+                            <td ><%=form[3]%>
+                            <%if(form[10]!=null && form[3].toString().equalsIgnoreCase("Permission")){
+                              if(form[10].toString().equalsIgnoreCase("C")){
+                            %>
+                            for Construction
+                            <%}else if(form[10].toString().equalsIgnoreCase("A")  ) {%>
+                             for Addition
+                            <%} else if(form[10].toString().equalsIgnoreCase("R")){%>
+                            for Renovation
+                            <%} }%>
+                            </td>
                             <td>
                             <%if(form[3]!=null && form[3].toString().equalsIgnoreCase("Immovable Property") ){%>
                             	<button type="submit" class="btn btn-sm btn-link w-100" formaction="ImmovablePropTransStatus.htm" value="<%=form[4]%>" name="immpropertyid"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=form[8]%>; font-weight: 600;" formtarget="_blank">
@@ -217,6 +271,10 @@
 								</button>
 						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Movable Property")){ %>
 						 		<button type="submit" class="btn btn-sm btn-link w-100" formaction="MovablePropTransStatus.htm" value="<%=form[4]%>" name="movpropertyId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=form[8]%>; font-weight: 600;" formtarget="_blank">
+								    		&nbsp; <%=form[7] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
+								</button>						 	
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Permission")){ %>
+						 		<button type="submit" class="btn btn-sm btn-link w-100" formaction="ConstructionTransStatus.htm" value="<%=form[4]%>" name="constructionId"  data-toggle="tooltip" data-placement="top" title="Transaction History" style=" color: <%=form[8]%>; font-weight: 600;" formtarget="_blank">
 								    		&nbsp; <%=form[7] %> <i class="fa-solid fa-arrow-up-right-from-square" style="float: right;" ></i>
 								</button>						 	
 						 	<%} %>
@@ -231,6 +289,17 @@
 						 		<button type="submit" class="btn btn-sm" name="movPropertyId" value="<%=form[4]%>" formaction="MovablePropFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
 									<i style="color: #019267" class="fa-solid fa-download"></i>
 							    </button>						 	
+						 	<%} else if(form[3]!=null && form[3].toString().equalsIgnoreCase("Permission")){ %>
+						 		<button type="submit" class="btn btn-sm" name="constructionId" value="<%=form[4]%>" formaction="ConstructionFormDownload.htm" formtarget="blank" formmethod="post" data-toggle="tooltip" data-placement="top" title="Download">
+									<i style="color: #019267" class="fa-solid fa-download"></i>
+							    </button>
+							    <%if(form[5]!=null && form[5].toString().equalsIgnoreCase("A")) {
+							      if(empNo.equalsIgnoreCase(form[11].toString()) || empNo.equalsIgnoreCase(form[12].toString())){
+							    %>
+							    <button type="submit" class="btn btn-sm" name="constructionId" value="<%=form[4]%>" formaction="ConstructionSanctionOrder.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="Sanction Order">
+									<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+								</button> 	
+								<%} }%>					 	
 						 	<%} %>
 						 	</td>
                         </tr>

@@ -2,6 +2,7 @@ package com.vts.ems.property.service;
 
 import java.util.List;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
@@ -40,5 +41,9 @@ public interface PropertyService {
     public List<Object[]> constructionTransList(String ConstructionId) throws Exception;
     public List<Object[]> constructionTransactionApprovalData(String ConstructionId);
     public List<Object[]> constructionRemarksHistory(String ConstructionId) throws Exception;
-    
+	public long constructionForward(String constructionId, String username, String action, String remarks, String empNo,String loginType) throws Exception;
+	public List<Object[]> propertyConstructionApprovalList(String EmpNo) throws Exception;
+	public List<LabMaster> getLabMasterDetails() throws Exception;
+	
+	
 }

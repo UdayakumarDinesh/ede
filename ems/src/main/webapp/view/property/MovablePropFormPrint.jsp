@@ -130,7 +130,6 @@ input:focus {
 
 </style>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
 </head>
 <body>
 <%
@@ -370,7 +369,8 @@ int slno=0;
 						      <div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 10px;" align="left">Submitted for kind information.</div>	
 						      <%} %>	
 						      <!-- <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A  -->
-				              <br>	
+				              <br>
+				                <%if(mov!=null && !mov.getMovStatus().equalsIgnoreCase("N")){ %>	
 				              <br>
 				              <div style="width:100%;text-align: left;margin-left: 10px;">
 				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
@@ -419,6 +419,7 @@ int slno=0;
 			   			<% break;} %>
 				   		<%} %> </div>
                       </div>
+                      <%} %>
       </div>
 
 </body>
