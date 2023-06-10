@@ -11,11 +11,9 @@
 <jsp:include page="../static/sidebar.jsp"></jsp:include>
 <style type="text/css">
 
-
 </style>
 </head>
 <body>
-
 
 <div class="card-header page-top " >
 		<div class="row">
