@@ -140,7 +140,7 @@ body{
 			            </div>
 			            
 			             <div class="col-md-2">
-			                <label>Details Of </label>
+			                <label>Details of </label>
 			                <select name="RelationType" class="form-control select2"  required="required">
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                    <option value="F" <% if(ProcAbroad!=null){  if(ProcAbroad.getRelationType().toString().equals("F")){ %> selected <%}}%> >Father</option>
@@ -152,20 +152,20 @@ body{
 			              <div class="col-md-2">
 			                <label>Name </label>
 			                <input type="text" id="" name="RelationName"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationName() %><%}  %>"
-			                   class=" form-control input-sm "  required="required" >
+			                   class=" form-control input-sm " placeholder="Enter Name" required="required" >
 			                    
 			            </div>
 			            <div class="col-md-2">
 			                <label>Occupation </label>
 			                <input type="text" id="" name="RelationOccupation"   value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationOccupation() %><%} %>"
-			                    class="form-control input-sm "  required="required">
+			                    class="form-control input-sm "  placeholder="Enter Occupation" required="required">
 			                   
 			            </div>
 			            
 			             <div class="col-md-3">
 			                <label>Address </label>
 			                <input type="text" id="" name="RelationAddress"  value="<%if(ProcAbroad!=null){ %><%=ProcAbroad.getRelationAddress() %><%} %>"  required="required"
-			                    class="form-control input-sm " >
+			                    class="form-control input-sm "  placeholder="Enter Address" >
 			             
 			            </div>
 			            
@@ -360,7 +360,7 @@ body{
 			            <div class="col-md-3" >
 			                <label>Countries proposed to be visited	</label>
 			                
-			                   <input class="form-control input-sm" type="text" id="" name="CountriesProposed"  value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getCountriesProposed() %><%}%>" >
+			                   <input class="form-control input-sm" type="text" id="" name="CountriesProposed"  placeholder="Enter Countries Proposed to be visited" value="<% if(ProcAbroad!=null){%> <%=ProcAbroad.getCountriesProposed() %><%}%>" >
 			                     
 			              </div>
 			             
@@ -376,14 +376,14 @@ body{
 			            <div class="col-md-3" >
 			                <label> Purpose of visit  </label>
 			                
-                               <input class="form-control input-sm"  type="text" id="" name="VisitPurpose"    value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getVisitPurpose() %><%}%>" >
+                               <input class="form-control input-sm"  type="text" id="" name="VisitPurpose"   placeholder="Enter Purpose of Visit" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getVisitPurpose() %><%}%>" >
 			                     
 			                   
 			            </div> 
 			            
-			                <div class="col-md-3" >
+			                <div class="col-md-4" >
 			                <label> Probable duration of stay at each country	 </label>
-			                <input class="form-control input-sm"  type="text" id="" name="StayDuration" placeholder="(In Days)" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getStayDuration() %><%} %>" >
+			                <input class="form-control input-sm"  type="text" id="" name="StayDuration" placeholder="Enter Probable Duration of Stay (in days)" value="<% if(ProcAbroad!=null){%><%=ProcAbroad.getStayDuration() %><%} %>" >
 			                     
 			                   
 			            </div> 
@@ -429,7 +429,7 @@ body{
 			            
 			                <div class="col-md-4" >
 			                <label> Excepted Amount for trip(journey and stay abroad)</label>
-			                <input class="form-control input-sm"  type="number" id="" name="ExpectedAmount" step=".01" min="0" max="9999999"  value="<% if(ProcAbroad!=null){%><%=Double.parseDouble(ProcAbroad.getExpectedAmount().toString()) %><%} else{%>0.00<%} %>"  >
+			                <input class="form-control input-sm"  type="number" id="" name="ExpectedAmount" step=".01" min="0" max="9999999" placeholder="Enter Amount in Rupees" value="<% if(ProcAbroad!=null){%><%=Double.parseDouble(ProcAbroad.getExpectedAmount().toString()) %><%} else{%>0.00<%} %>"  >
 			                     
 			                   
 			            </div> 
@@ -498,22 +498,13 @@ body{
 			             
 			            </div>
 			            
-			            <%--  <div class="col-md-2">
-			                <label> Passport Type Required </label>
-			                <select name="Passporttype" class="form-control select2"  required="required">
-			                <option value="" selected="selected" disabled="disabled">Select</option>
-			                    <option value="Ordinary" <% if(ProcAbroad!=null){  if(ProcAbroad.getPassportType().toString().equals("Ordinary")){ %> selected <%}}%>     >Ordinary</option>
-			                    <option value="Official" <% if(ProcAbroad!=null){  if(ProcAbroad.getPassportType().toString().equals("Official")){ %> selected <%}}%>     >Official</option>
-			                    <option value="Diplomatic" <% if(ProcAbroad!=null){  if(ProcAbroad.getPassportType().toString().equals("Diplomatic")){ %> selected <%}}%> >Diplomatic</option>
-			                </select>
-			             
-			            </div> --%>
+			          
 			            
 			            
 			             <div class="col-md-2">
 			                <label>I certify that</label>
 			                <select name="ContractualObligation" class="form-control select2"  style="width:300%;" id="Certify"  required="required">
-			                 <!-- <option value="" selected="selected" disabled="disabled">Select</option>  -->
+			                
 			                    <option value="N" <% if(ProcAbroad!=null){  if(ProcAbroad.getContractualObligation().toString().equals("N")){ %> selected <%}}%> >I am not under contractual obligation to serve STARC for any specific period </option>
 			                    <option value="Y" <% if(ProcAbroad!=null){  if(ProcAbroad.getContractualObligation().toString().equals("Y")){ %> selected <%}}%> > I am under contractual obligation to serve STARC for a specific period</option>
 			                   

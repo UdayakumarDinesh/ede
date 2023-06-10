@@ -64,7 +64,7 @@ public class NocProceedingAbroad {
     private String LeaveGranted;
     private String InitiatedDate;
     private String ForwardedDate;
-    private String ReturnedDate;
+   
     private String ApprovedDate;
     private String ProcAbroadEntries;
     private String ProcAbroadEntriesDetails;

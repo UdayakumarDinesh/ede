@@ -35,10 +35,7 @@ body {
    	   
      	ExamIntimation exam=(ExamIntimation)request.getAttribute("ExamIntimation");
    	
-   	
-   	
-   	  
-   	 /*  System.out.println("year---"+noc.getAcademicYear()); */
+   	 
   %>
 
 <div class="card-header page-top">
@@ -135,10 +132,6 @@ body {
 			            	
 			            </div>	
 			            
-			            
-			    
-			          
-			          
 			        </div>
 			    </div>
 			
@@ -147,7 +140,7 @@ body {
 			        
 			        
 			         <div class="col-md-3">
-			                <label>Name of Organization</label> 
+			                <label>Name of the Organization</label> 
 			                 <input type="text" name="OrgName" value="<% if(exam!=null && exam.getOrganizationName()!=null){ %><%=exam.getOrganizationName() %><%} %>"
 			                    class=" form-control input-sm " placeholder="Enter Organisation Name"  required="required" >
 			            	
@@ -219,7 +212,14 @@ body {
 			    	
 			    	<%} %>
 			    	</div>
+			    	
+			    	
+			    	 <% if(exam!=null){%>
 			    </form>
+			    <%} else{ %>
+			    
+			     </form>
+			    <%} %>
 			</div>
 		</div>
 		</div>

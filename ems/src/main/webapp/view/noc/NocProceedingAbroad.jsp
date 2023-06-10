@@ -72,7 +72,7 @@ body{
 	
 	
 	List<Object[]> NocProcAbraodList=(List<Object[]>)request.getAttribute("NocProcAbraodList");
-	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RSO","RPA","RCE");
+	List<String> toUserStatus  = Arrays.asList("INI","RGI","RDI","RDG","RSO","RPA","RCE","DPR");
 	
 	
 	
@@ -178,6 +178,15 @@ body{
 								  <i style="color: #019267" class="fa-solid fa-download"></i>
 								</button>  
 								
+								<% if(PandAs.contains(emp.getEmpNo()) && obj[2].toString().equalsIgnoreCase("A")){ %>  
+								
+								
+								 <button type="submit" class="btn btn-sm" name="ProcAbrId" value="<%=obj[0]%>" formaction="NOCProcAbroadCertificate.htm"  formmethod="GET" formtarget="blank" data-toggle="tooltip" data-placement="top" data-original-title="NOC Certificate">
+											<i style="color: #5C469C;font-size:20px;" class="fa fa-envelope-open-text"></i>
+							    </button> 
+								
+								
+								<%} %>
 							</td>
 							<%} %>
 

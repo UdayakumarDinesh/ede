@@ -170,6 +170,8 @@ public interface NocDao {
 
 	public List<Object[]>  getNOCPassportApprovalData(String passportid)throws Exception;
 
+	public List<Object[]> getNocProcAbroadApprovalData(String procAbrId)throws Exception;
+
 	
 
 

@@ -766,9 +766,17 @@ public class NocDaoImpl implements NocDao {
 	@Override
 	public long ExamDetailsAdd(ExamIntimation exam) throws Exception {
 		
-		manager.persist(exam);
-		manager.flush();
-		return exam.getExamId();
+		
+		try {
+			manager.persist(exam);
+			manager.flush();		
+			return exam.getExamId();
+		}	catch (Exception e) {
+			logger.error(new Date() + "Inside DAO ExamDetailsAdd() "+e);
+			e.printStackTrace();
+			return 0L;
+		}
+		
 		
 	}
 
@@ -1233,6 +1241,27 @@ private static final String INTIMATIONEXAMTRANSCATION="SELECT tra.IntimationTran
 		
 		Query query=manager.createNativeQuery(NOCPASSPORTAPPROVALDATA);
 		query.setParameter("passportid", passportid );
+		return (List<Object[]>)query.getResultList();
+	}
+
+	public static final String NOCPROCABROADAPPROVALDATA="\r\n"
+			+ "\r\n"
+			+ "SELECT tra.NocProcAbroadTransId,\r\n"
+			+ "(SELECT empno FROM  noc_proc_abroad_trans t , employee e WHERE e.empno = t.actionby AND t.NocStatusCode =  sta.pisstatuscode AND  n.NocProcId=t.NocProcId ORDER BY t.NocStatusCode DESC LIMIT 1) AS 'empno',\r\n"
+			+ "(SELECT empname FROM noc_proc_abroad_trans t , employee e  WHERE e.empno = t.actionby AND t.NocStatusCode =  sta.pisstatuscode AND n.NocProcId=t.NocProcId ORDER BY t.NocProcAbroadTransId DESC LIMIT 1) AS 'empname',\r\n"
+			+ "			\r\n"
+			+ "(SELECT designation FROM noc_proc_abroad_trans t , employee e,employee_desig des WHERE e.empno = t.actionby AND e.desigid=des.desigid AND t.NocStatusCode =  sta.pisstatuscode  AND n.NocProcId=t.NocProcId ORDER BY t.NocProcAbroadTransId DESC LIMIT 1) AS 'Designation',\r\n"
+			+ "MAX(tra.actiondate) AS actiondate,tra.remarks,sta.PisStatus,sta.PisStatusColor ,sta.pisstatuscode \r\n"
+			+ "FROM  noc_proc_abroad_trans tra, pis_approval_status sta,employee emp,noc_proceeding_abroad n\r\n"
+			+ "WHERE n.NocProcId = tra.NocProcId AND tra.NocStatusCode = sta.pisstatuscode AND \r\n"
+			+ "tra.actionby=emp.empno AND sta.pisstatuscode IN ('VGI','VDI','VDG','VSO','VPA','APR','DPR') AND n.NocProcId = :procAbrId\r\n"
+			+ "GROUP BY sta.pisstatuscode ORDER BY actiondate ASC";
+	@Override
+	public List<Object[]> getNocProcAbroadApprovalData(String procAbrId) throws Exception {
+		
+		
+		Query query=manager.createNativeQuery(NOCPROCABROADAPPROVALDATA);
+		query.setParameter("procAbrId", procAbrId );
 		return (List<Object[]>)query.getResultList();
 	}
 	

@@ -88,6 +88,7 @@ font-size:18px;
 	%>
 
 
+
 		
 
  <div class="card-header page-top "> 
@@ -119,7 +120,6 @@ font-size:18px;
 
 </div>
 
-
 <%	String ses=(String)request.getParameter("result"); 
  	String ses1=(String)request.getParameter("resultfail");
 	if(ses1!=null){ %>
@@ -138,7 +138,8 @@ font-size:18px;
 	<%} %>
 		
 
-   <div class="page card dashboard-card"> 
+
+    <div class="page card dashboard-card"> 
 		<div class="card-body"  >
 			<div class="card" style="padding-top:0px;margin-top: -15px;width:75%;margin-left:160px;">
 				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="left">
@@ -688,7 +689,7 @@ font-size:18px;
     </div>
     </div>
    </div>
- </div>
+  </div> 
 
 		
 </body>
@@ -706,7 +707,7 @@ function validateTextBox() {
 
 function RemarkMandatory(){
 	 if (document.getElementById("remarksarea").value.trim() != "") {
-	    	return confirm('Are You Sure To disapproval?');
+	    	return confirm('Are You Sure To Disapprove?');
 	    	
 	    } else {
 	        alert("Please enter Remarks To DisApprove");

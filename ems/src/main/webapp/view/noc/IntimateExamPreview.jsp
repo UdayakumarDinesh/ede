@@ -116,72 +116,10 @@ th,td
 			  <%} %>
 		 </div>
 		 
-	<%-- <div class="card-body" >
-			 <div class="card"  align="center" style="padding-top:0px;margin-top: -15px;width: 70%;">
-			  <form action="" method="post">
-			  	 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-				<div class="card-body main-card " style="padding-top:0px;margin-top: -15px;"  align="center">
-			        <div class="" style="padding: 0.5rem 1rem;margin:10px 0px 5px 0px;">
-				
-								<div align="center">
-								<div style="width: 100%;">
-									<div style="width: 100%; margin-left:auto; margin-right:auto;border: 0;"><img style="width: 80px; height: 90px; margin: 5px;" align="left"   src="data:image/png;base64,<%=LabLogo%>"></div>
-									 <div ><span style="margin-left: 0px;font-weight: 100;font-size: 22px;">INTIMATION FOR EXAM</span></div> 
-									
-				
-								</div>
-								</div>
-								
-					
-					<table style="margin-top: 9%;;border-collapse: collapse;width:100%;">	
-					  <tbody>
-						<tr>
-						  <td style="border: 0;width:86%">From&emsp;&emsp;&emsp;:&emsp;<span class="text-blue"><%=obj[2] %></span> </td>
-						  <td style="border: 0;width:17%;">To : &nbsp;&nbsp;P&A Dept</td>
-						 </tr>					
-						 <tr>  <td style="border: 0;">Emp. No.&emsp;&nbsp;&nbsp;:&emsp; <span class="text-blue"><%=obj[1] %></span> </tr>
-						  <tr> <td style="border: 0;">Date&emsp;&emsp;&emsp;&nbsp;:&emsp; <span class="text-blue"><%=rdf.format(sdf.parse(obj[5].toString())) %></span>
-						 
-						  </td>	 </tr>	
-						  <tr> <td style="border: 0;"></td> </tr>
-						  <tr> <td style="border: 0;"></td> </tr>
-						   <tr> <td style="border: 0;"></td> </tr>
-						    <tr> <td style="border: 0;"></td> </tr>
-						     <tr> <td style="border: 0;"></td> </tr>
-						      <tr> <td style="border: 0;"></td> </tr>
-						       <tr> <td style="border: 0;"></td> </tr>
-						        <tr> <td style="border: 0;"></td> </tr>
-						         <tr> <td style="border: 0;"></td> </tr>
-						 <tr>
-						 <td style="border: 0;">Exam Name &emsp;&emsp;:&emsp; <span class="text-blue"><%=obj[3] %></span></tr>
-						   <tr><td style="border: 0;">Probable Date &emsp;:&emsp;<span class="text-blue"><%=rdf.format(sdf.parse(obj[4].toString())) %></span>
-						 </td></tr>
-						  	
-						   <td style="border: 0;margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 17px;" align="left">
-						     This is to inform you that I have <span class="text-blue"><%=obj[3] %> </span> on <span class="text-blue"><%=rdf.format(sdf.parse(obj[4].toString())) %></span>. 
-						   </td> 
-						
-						 
-						 	<!-- <tr> <td style="border: 0;"> <input type="text" value="" readonly></td> </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="" readonly></td> </tr>			
-						 	<tr> <td style="border: 0;"> <input type="text" value="" readonly></td> </tr>	
-						 	<tr> <td style="border: 0;"></td> </tr>
-						 	<tr> <td style="border: 0;">The same may be recorded in the office records.</td> </tr>	 -->
-						 						       
-					    </tbody>
-					</table>
-					
-						<br>
-						<br>
-						
-						
-					
-				 
-				</div>  
-				</div> --%>
+
 				
 				<div class="card-body">
-				<div class="card" style="padding-top: 0px; margin-top: -36px; width: 65%;">
+				<div class="card" style="padding-top: 0px; margin-top: -20px; width: 65%;">
 					<form action="" method="post">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="card-body main-card" style="padding-top: 0px; margin-top: -15px;" align="center">
