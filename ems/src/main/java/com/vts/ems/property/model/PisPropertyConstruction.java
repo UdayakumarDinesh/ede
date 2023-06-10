@@ -41,11 +41,14 @@ public class PisPropertyConstruction implements Serializable{
 	private String LoansDetails;
 	private Double OtherSources;
 	private String OtherSourcesDetails;
+	private String Comments;
 	private Double ProposedCost;
 	private String ConstrStatus;
 	private String Remarks;
 	private String PisStatusCode;
 	private String PisStatusCodeNext;
+	private String SOEmpNo;
+	private String PandAEmpNo;
 	private Integer IsActive;
 	private String CreatedBy;
 	private String CreatedDate;

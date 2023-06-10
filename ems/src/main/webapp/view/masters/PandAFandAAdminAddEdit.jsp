@@ -17,6 +17,8 @@
   <%
   List<Object[]> list = (List<Object[]>)request.getAttribute("emplist");
   PisAdmins PandA =(PisAdmins) request.getAttribute("PandA");
+  String fromdate = (String)request.getAttribute("fromdate");
+  String todate = (String)request.getAttribute("todate");
   %>
   
   <div class="card-header page-top">
@@ -180,50 +182,35 @@ function checkEdit(frmid){
 	
 }
 
-$( "#fdate" ).change( function(){
-    
-	$( "#tdate" ).daterangepicker({
+
+
+ $('#fdate').daterangepicker({
 		"singleDatePicker" : true,
-	    "linkedCalendars" : false,
-	    "showCustomRangeLabel" : true,
-	    "minDate" :$("#fdate").val(),  
-	    "cancelClass" : "btn-default",
-	    showDropdowns : true,
-	    	locale : {
-	    	format : 'DD-MM-YYYY'
-	    } 
+		"linkedCalendars" : false,
+		"showCustomRangeLabel" : true,
+		/* "minDate" :datearray,   */
+		 "startDate" : new Date('<%=fromdate%>'), 
+		 "minDate" :$("#fdate").val(), 
+		"cancelClass" : "btn-default",
+		showDropdowns : true,
+		locale : {
+			format : 'DD-MM-YYYY'
+		}
 	});
-
-	
-});
-
-$( "#fdate" ).daterangepicker({
-    "singleDatePicker" : true,
-    "linkedCalendars" : false,
-    "showCustomRangeLabel" : true,
-    /* "minDate" :new Date(),  */ 
-    "cancelClass" : "btn-default",
-    showDropdowns : true,
-    locale : {
-    	format : 'DD-MM-YYYY'
-    }
-});
-
-        
-$( "#tdate" ).daterangepicker({
-	"singleDatePicker" : true,
-    "linkedCalendars" : false,
-    "showCustomRangeLabel" : true,
-    /* "minDate" :$("#fdate").val(),  
-    "startDate" : $("#fdate").val(), */
-    "cancelClass" : "btn-default",
-    showDropdowns : true,
-    	locale : {
-    	format : 'DD-MM-YYYY'
-    } 
-});
-
-
+		
+		
+		$('#tdate').daterangepicker({
+			"singleDatePicker" : true,
+			"linkedCalendars" : false,
+			"showCustomRangeLabel" : true,
+			"startDate" : new Date('<%=todate%>'), 
+			"minDate" :$("#tdate").val(),  
+			"cancelClass" : "btn-default",
+			showDropdowns : true,
+			locale : {
+				format : 'DD-MM-YYYY'
+			}
+		});
 
 
 </script>

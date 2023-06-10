@@ -3,7 +3,9 @@ package com.vts.ems.property.controller;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -21,6 +23,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -68,12 +71,26 @@ public class PropertyController {
 	@Autowired
 	MasterService masterservice;
 	
+	@Value("${ProjectFiles}")
+	private String LabLogoPath;
+	
     private final String formmoduleid="15";
 	
 	SimpleDateFormat rdf= DateTimeFormatUtil.getRegularDateFormat();
 	SimpleDateFormat sdf= DateTimeFormatUtil.getSqlDateFormat();
 	SimpleDateFormat sdtf= DateTimeFormatUtil.getSqlDateAndTimeFormat();
 	
+	public String getLabLogoAsBase64() throws IOException {
+
+		String path = LabLogoPath + "/images/lablogos/lablogo1.png";
+		try {
+			return Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(path)));
+		} catch (FileNotFoundException e) {
+			System.err.println("File Not Found at Path " + path);
+		}
+		return "/print/.jsp";
+	}
+
 	@RequestMapping(value="PropertyDashBoard.htm")
 	public String propertyDashboard(HttpServletRequest req,HttpSession ses,RedirectAttributes redir) throws Exception{
 		
@@ -561,8 +578,11 @@ public class PropertyController {
 			req.setAttribute("tab", req.getParameter("tab"));
 			
 			req.setAttribute("PendingList", service.propertyApprovalList(EmpNo));
+			req.setAttribute("ConstructionPendingList", service.propertyConstructionApprovalList(EmpNo));
 			req.setAttribute("ApprovedList", service.propertyApprovedList(EmpNo, fromdate, todate));
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
+			req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
+			req.setAttribute("SOEmpNos", piservice.GetSOEmpNos());
 			return "property/PropertyApprovals";
 		}catch (Exception e) {
 			logger.error(new Date()+"Inside PropertyApprovals.htm"+Username,e);
@@ -1152,6 +1172,7 @@ public class PropertyController {
 			construction.setOwnSavingsDetails(req.getParameter("ownSavingsDetails"));
 			construction.setLoansDetails(req.getParameter("loansDetails"));
 			construction.setOtherSourcesDetails(req.getParameter("otherSourcesDetails"));
+			construction.setComments(req.getParameter("comments"));
 			construction.setConstrStatus("N");
 			construction.setPisStatusCode("INI");
 			construction.setPisStatusCodeNext("INI");
@@ -1164,7 +1185,7 @@ public class PropertyController {
 			if(transactionState.equalsIgnoreCase("C")) {
 				transactionState="Construction of house";
 			}else if(transactionState.equalsIgnoreCase("A")) {
-				transactionState="Addition of house";
+				transactionState="Addition of exisiting house";
 			}else {
 				transactionState="Renovation of exisiting house";
 			}
@@ -1226,7 +1247,7 @@ public class PropertyController {
 			construction.setOwnSavingsDetails(req.getParameter("ownSavingsDetails"));
 			construction.setLoansDetails(req.getParameter("loansDetails"));
 			construction.setOtherSourcesDetails(req.getParameter("otherSourcesDetails"));
-	
+			construction.setComments(req.getParameter("comments"));
 			construction.setModifiedBy(Username);
 			construction.setModifiedDate(sdtf.format(new Date()));
 			
@@ -1235,7 +1256,7 @@ public class PropertyController {
 			if(transactionState.equalsIgnoreCase("C")) {
 				transactionState="Construction of house";
 			}else if(transactionState.equalsIgnoreCase("A")) {
-				transactionState="Addition of house";
+				transactionState="Addition of exisiting house";
 			}else {
 				transactionState="Renovation of exisiting house";
 			}
@@ -1303,4 +1324,263 @@ public class PropertyController {
 			return "static/Error";
 		}
 	}
+	
+	@RequestMapping(value="ConstructionFormSubmit.htm")
+	public String constructionFormSubmit(HttpServletRequest req, HttpSession ses, RedirectAttributes redir) throws Exception
+	{
+		String Username = (String)ses.getAttribute("Username");
+		logger.info(new Date()+"Inside ConstructionFormSubmit.htm"+Username);
+		String EmpNo = (String)ses.getAttribute("EmpNo");
+		String LoginType=(String)ses.getAttribute("LoginType");
+		try {
+			String constructionId = req.getParameter("constructionId");
+			String remarks = req.getParameter("remarks");
+			String action = req.getParameter("Action");
+			
+			PisPropertyConstruction construction = service.getConstructionById(Long.parseLong(constructionId));			
+			String pisStatusCode = construction.getPisStatusCode();
+			String transactionState = construction.getTransactionState();
+			
+			if(transactionState.equalsIgnoreCase("C")) {
+				transactionState="Construction of house";
+			}else if(transactionState.equalsIgnoreCase("A")) {
+				transactionState="Addition of exisiting house";
+			}else {
+				transactionState="Renovation of exisiting house";
+			}
+			long count = service.constructionForward(constructionId, Username, action, remarks, EmpNo, LoginType);
+			
+		    String CEOEmpNo = piservice.GetCEOEmpNo();
+			if(action.equalsIgnoreCase("A")) {
+
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")|| pisStatusCode.equalsIgnoreCase("RSO")||
+				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE"))
+				{
+					if(count>0 && !CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+						redir.addAttribute("result", transactionState+" Application Sent For Verification Successfully");
+					}
+					else if(count>0 && CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+						redir.addAttribute("result", transactionState+" Approved Successfully");
+					}
+					else if(count<0 && CEOEmpNo.equalsIgnoreCase(EmpNo)) {
+						redir.addAttribute("resultfail", transactionState+" Approve Unsuccessful");
+					}
+					else {
+						redir.addAttribute("resultfail",transactionState+" Application Sent For Verification Unsuccessful");
+					}
+					return "redirect:/ConstructionRenovation.htm";
+				}
+				
+				else if(pisStatusCode.equalsIgnoreCase("FWD") || pisStatusCode.equalsIgnoreCase("VDG") )
+				{
+					  if(count>0) {
+						redir.addAttribute("result", transactionState+" Recommended Successfully");
+					  }else {
+						redir.addAttribute("resultfail", transactionState+" Recommend Unsuccessful");
+					  }
+					
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else if(pisStatusCode.equalsIgnoreCase("VSO")) {
+					
+					  if(count>0) {
+						redir.addAttribute("result", transactionState+" Verification Successful");
+					  }else {
+						redir.addAttribute("resultfail", transactionState+" Verification Unsuccessful");
+					  }
+								
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else if(pisStatusCode.equalsIgnoreCase("VPA")) {
+	    
+						if(count>0) {
+							redir.addAttribute("result", transactionState+" Approved Successfully");
+						   }else {
+							redir.addAttribute("resultfail", transactionState+" Approve Unsuccessful");
+						   }
+					}					
+					return "redirect:/PropertyApprovals.htm";
+				}				
+				
+				else if(action.equalsIgnoreCase("R")) {
+					if(count>0) {
+						redir.addAttribute("result", transactionState+" Returned Successfully");
+					  }else {
+						redir.addAttribute("resultfail", transactionState+" Returned Unsuccessful");
+					  }
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else if(action.equalsIgnoreCase("D")) {
+					if(count>0) {
+						redir.addAttribute("result", transactionState+" Disapproved Successfully");
+					}else {
+						redir.addAttribute("resultfail", transactionState+" Disapprove Unsuccessful");
+					}
+					return "redirect:/PropertyApprovals.htm";
+				}
+				else {
+					return "redirect:/PropertyApprovals.htm";
+				}
+			
+		}catch (Exception e) {
+			logger.error(new Date()+"Inside ConstructionFormSubmit.htm"+Username,e);
+			e.printStackTrace();
+			return "static/Error";
+		}
+	}
+	
+	@RequestMapping(value="ConstructionFormDownload.htm")
+	public void constructionFormDownload( Model model,HttpServletRequest req,HttpSession ses,RedirectAttributes redir,HttpServletResponse res) throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConstructionFormDownload.htm "+Username);
+		
+		try {	
+			String constructionId = req.getParameter("constructionId");
+			String pagePart =  req.getParameter("pagePart");
+			
+			String filename="";
+
+			if(constructionId!=null) {
+				PisPropertyConstruction construction = service.getConstructionById(Long.parseLong(constructionId.trim()));
+			    req.setAttribute("constructionFormData",construction );	
+			    req.setAttribute("ApprovalEmpData", service.constructionTransactionApprovalData(constructionId.trim()));
+			    req.setAttribute("EmpData", service.getEmpNameDesig(construction.getEmpNo().trim()));
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
+			    req.setAttribute("CEOEmpNo",piservice.GetCEOEmpNo() );
+			    req.setAttribute("labDetails", masterservice.getLabDetails());
+			    
+			    String transactionState = construction.getTransactionState();
+				
+				if(transactionState.equalsIgnoreCase("C")) {
+					transactionState="Construction of house";
+				}else if(transactionState.equalsIgnoreCase("A")) {
+					transactionState="Addition of exisiting house";
+				}else {
+					transactionState="Renovation of exisiting house";
+				}
+			    filename=transactionState;
+			}
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			req.setAttribute("pagePart","3" );
+			
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo.png")))));
+			
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+	        req.getRequestDispatcher("/view/property/ConstructionFormPrint.jsp").forward(req, customResponse);
+
+			String html = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+	       
+	       
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
+	        
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+	       	
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ConstructionFormDownload.htm "+Username, e); 
+		}
+
+    }
+	
+	@RequestMapping(value="ConstructionSanctionOrder.htm")
+	public void constructionSanctionOrder( Model model,HttpServletRequest req,HttpSession ses,RedirectAttributes redir,HttpServletResponse res) throws Exception
+	{
+		String Username = (String) ses.getAttribute("Username");
+		logger.info(new Date() +"Inside ConstructionSanctionOrder.htm "+Username);
+		
+		try {	
+			String constructionId = req.getParameter("constructionId");
+			String pagePart =  req.getParameter("pagePart");
+			
+			String filename="";
+
+			if(constructionId!=null) {
+				PisPropertyConstruction construction = service.getConstructionById(Long.parseLong(constructionId.trim()));
+			    req.setAttribute("constructionFormData",construction );	
+			    req.setAttribute("ApprovalEmpData", service.constructionTransactionApprovalData(constructionId.trim()));
+			    req.setAttribute("EmpData", service.getEmpNameDesig(construction.getEmpNo().trim()));
+			    req.setAttribute("PandAData", service.getEmpNameDesig(construction.getPandAEmpNo()));
+			    req.setAttribute("PandAsEmpNos", piservice.GetPandAAdminEmpNos());
+			    req.setAttribute("Labmaster", service.getLabMasterDetails().get(0));
+			    req.setAttribute("lablogo",getLabLogoAsBase64());
+			
+			    String transactionState = construction.getTransactionState();
+				
+				if(transactionState.equalsIgnoreCase("C")) {
+					transactionState="Construction";
+				}else if(transactionState.equalsIgnoreCase("A")) {
+					transactionState="Addition";
+				}else {
+					transactionState="Renovation";
+				}
+			    filename=transactionState;
+			}
+			req.setAttribute("pagePart","3" );			
+			req.setAttribute("view_mode", req.getParameter("view_mode"));
+			String path=req.getServletContext().getRealPath("/view/temp");
+			req.setAttribute("path",path);
+	        
+	        CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
+	        req.getRequestDispatcher("/view/property/ConstructionSanctionOrder.jsp").forward(req, customResponse);
+
+			String html = customResponse.getOutput();        
+	        
+	        HtmlConverter.convertToPdf(html,new FileOutputStream(path+File.separator+filename+".pdf")) ; 
+	         
+	        res.setContentType("application/pdf");
+	        res.setHeader("Content-disposition","inline;filename="+filename+".pdf");
+	       
+	       
+	        emsfileutils.addWatermarktoPdf(path +File.separator+ filename+".pdf",path +File.separator+ filename+"1.pdf",(String) ses.getAttribute("LabCode"));
+	        
+	        
+	        File f=new File(path +File.separator+ filename+".pdf");
+	        FileInputStream fis = new FileInputStream(f);
+	        DataOutputStream os = new DataOutputStream(res.getOutputStream());
+	        res.setHeader("Content-Length",String.valueOf(f.length()));
+	        byte[] buffer = new byte[1024];
+	        int len = 0;
+	        while ((len = fis.read(buffer)) >= 0) {
+	            os.write(buffer, 0, len);
+	        } 
+	        os.close();
+	        fis.close();
+	       
+	       
+	        Path pathOfFile= Paths.get( path+File.separator+filename+".pdf"); 
+	        Files.delete(pathOfFile);		
+	       	
+		}
+		catch (Exception e) {
+			e.printStackTrace();  
+			logger.error(new Date() +" Inside ConstructionSanctionOrder.htm "+Username, e); 
+		}
+
+    }
 }

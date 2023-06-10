@@ -51,7 +51,7 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				   </div>
 				   <div class="col-md-2">
 				      <label>Estimated Cost:<span class="mandatory">*</span></label>
-				      <input class="form-control" type="text" name="estimatedCost" id="estimatedCost" placeholder="Enter Estimated Cost">
+				      <input class="form-control" type="text" name="estimatedCost" id="estimatedCost" placeholder="Enter Estimated Cost"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 				   </div>
 				   <div class="col-md-2">
                         <div class="form-group">
@@ -102,16 +102,16 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				        
 				        <div class="col-md-3">
 				           <label>Own Savings:</label>
-				           <input class="form-control" type="text" name="ownSavings" id="ownSavings" placeholder="Enter Own Savings Amount">
+				           <input class="form-control" type="text" name="ownSavings" id="ownSavings" placeholder="Enter Own Savings Amount" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 				        </div>
 				        
 				        <div class="col-md-3">
 				           <label>Loans / Advances:</label>
-				           <input class="form-control" type="text" name="loans" id="loans" placeholder="Enter Loans / Advances Amount" maxlength="225">
+				           <input class="form-control" type="text" name="loans" id="loans" placeholder="Enter Loans / Advances Amount" maxlength="225" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 				        </div>
 				        <div class="col-md-3">
 				           <label>Other Sources:</label>
-				           <input class="form-control" type="text" name="otherSources" id="otherSources" placeholder="Enter Other Sources Amount" maxlength="225">
+				           <input class="form-control" type="text" name="otherSources" id="otherSources" placeholder="Enter Other Sources Amount" maxlength="225" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');">
 				        </div>
 				         <div class="col-md-3">
 				            <label>Total Proposed Cost:<span class="mandatory">*</span></label>
@@ -132,6 +132,10 @@ Object[] empData=(Object[])request.getAttribute("EmpData");
 				        <div class="col-md-3">
 				           <label>Other Sources with full details:</label>
 				           <input class="form-control" type="text" name="otherSourcesDetails" placeholder="Enter Other Sources Details" maxlength="225">
+				        </div>
+				         <div class="col-md-3" id="commentsSection">
+				           <label>Comments:<span class="mandatory">*</span></label>
+				           <input class="form-control" type="text" name="comments" id="comments" placeholder="Enter Fill Comments" maxlength="225">
 				        </div>				        
 				       </div>
 				    </div>
@@ -163,6 +167,7 @@ function CommentsModel(){
 	var contractorName = $('#NameOfcontractor').val();
 	var contractorPlace = $('#contractorPlace').val();
 	var proposedCost = $('#proposedCost').val();
+	var comments = $('#comments').val();
 
     if(estimatedCost==null || estimatedCost=="" || estimatedCost=="null"){
 		alert('Enter Estimated Cost!');
@@ -182,8 +187,8 @@ function CommentsModel(){
 	}else if(proposedCost==null || proposedCost=="" || proposedCost=="null"){
 		alert('Enter Total Proposed Cost Construction!');
 		return false;
-	}else if(proposedCost!=estimatedCost){
-		alert('Estimated Cost And Total Proposed Cost Should be equal!');
+	}else if(proposedCost!=estimatedCost && (comments==null || comments=="" || comments=="null") ){
+		alert('Estimated Cost And Total Proposed Cost Should be equal.\n Please Fill Comments for reason!');
 		return false;
 	}else{
 		if(confirm('Are You Sure to submit')){
@@ -214,41 +219,7 @@ $('#completedBy').daterangepicker({
 
 </script>
 
-<script type="text/javascript">
 
-setPatternFilter($("#estimatedCost"), /^-?\d*$/);
-setPatternFilter($("#ownSavings"), /^-?\d*$/);
-setPatternFilter($("#loans"), /^-?\d*$/);
-setPatternFilter($("#otherSources"), /^-?\d*$/);
-setPatternFilter($("#proposedCost"), /^-?\d*$/);
-
-function setPatternFilter(obj, pattern) {
-	  setInputFilter(obj, function(value) { return pattern.test(value); });
-	}
-
-function setInputFilter(obj, inputFilter) {
-	  obj.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-	    if (inputFilter(this.value)) {
-	      this.oldValue = this.value;
-	      this.oldSelectionStart = this.selectionStart;
-	      this.oldSelectionEnd = this.selectionEnd;
-	    } else if (this.hasOwnProperty("oldValue")) {
-	      this.value = this.oldValue;
-	      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-	    }
-	  });
-	}
-
-
-function checknegative(str) {
-    if (parseFloat(document.getElementById(str.id).value) < 0) {
-        document.getElementById(str.id).value = "";
-        document.getElementById(str.id).focus();
-        alert('Negative Values Not allowed');
-        return false;
-    }
-}
-</script> 
 <script type="text/javascript">
 $(document).ready(function(){
 	$('#official').hide();
@@ -256,6 +227,7 @@ $(document).ready(function(){
 	$('#dealingNature').hide();
 	$('#contractorName').hide();
 	$('#contractorAddress').hide();
+	
 });
 
 $('#supervisedBy').change(function(){

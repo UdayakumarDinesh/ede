@@ -99,9 +99,7 @@ public interface NocDao {
 	
 	public Object[] getEmpNameDesig(String EmpNo) throws Exception;
 
-	public Object[] getEmpTitleDetails(String passportid) throws Exception;
-
-	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId)throws Exception;
+    public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId)throws Exception;
 
 	public long DeptDetailsUpdate(NocProceedingAbroad nocpa)throws Exception;
 
@@ -167,6 +165,12 @@ public interface NocDao {
 	public ExamIntimation getIntimationById(long examId)throws Exception;
 
 	public List<Object[]> getIntimationApprovalData(String examId)throws Exception;
+
+	public Object[] getEmpGenderPassport(String passportid)throws Exception;
+
+	public List<Object[]>  getNOCPassportApprovalData(String passportid)throws Exception;
+
+	public List<Object[]> getNocProcAbroadApprovalData(String procAbrId)throws Exception;
 
 	
 

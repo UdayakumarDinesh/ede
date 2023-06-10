@@ -129,7 +129,6 @@ input:focus {
 
 </style>
 <meta charset="ISO-8859-1">
-<title>Mobile Form</title>
 </head>
 <body>
 <%

@@ -32,7 +32,7 @@ public class NocPassportDto {
      private String Remarks;
      private String InitiatedDate;
      private String ForwardedDate;
-     private String ReturnedDate;
+     
      private String ApprovedDate ;
      private String PassportEntries; 
      private String PassportEntriesDetails;

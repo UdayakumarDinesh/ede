@@ -107,13 +107,13 @@
        SimpleDateFormat sdf = DateTimeFormatUtil.getSqlDateFormat();
        Object[] obj=(Object[])request.getAttribute("NocProcAbroadDetails");
        Object[] gender=(Object[])request.getAttribute("EmpGender");
-     
+       Object[] empData=(Object[])request.getAttribute("EmpData");
        LocalDate date = LocalDate.now(); 
 
     %>
 
-     <div style="text-align:center;margin-top:10px;">
-         <div align="left" style="margin-left:10px !important;width:45%;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[17] %></div>
+     <div style="text-align:center;margin-top:200px;">
+         <div align="left" style="margin-left:10px !important;width:80%;" >Ref:STARC/P&A/PERS(<%=obj[0] %>):-<%=obj[17] %></div>
              <div align="right" style="margin-top:-20px;margin-right:10px;" >Date:&nbsp;<span class="text-blue"><%=rdf.format(sdf.parse(date.toString())) %></span></div>
             <br>
             
@@ -156,9 +156,9 @@
 		<br>
 		<br>
 		 <div style="margin-left:10px !important;margin-top:20px;text-align:left;"> 
-						        <span class="text-blue" style=" text-transform: uppercase;"><%=obj[52] %></span><br>
-								<span style="font-weight: 400; font-size: 17px; ">Manager - Personnel & Administration</span><br>
-								<span style="font-weight: 400; font-size: 17px; ">for CEO,STARC</span><br>
+						        <span class="text-blue" style=" text-transform: uppercase;"><%=empData[1] %></span><br>
+								<span style="font-weight: 400; font-size: 17px; "><%=empData[2] %></span><br>
+								<!-- <span style="font-weight: 400; font-size: 17px; "></span><br> -->
 								<%-- <span style="font-weight: 400; font-size: 17px;">TelNo.<%=obj[63] %>/<%=obj[64] %>(Extn-<%=obj[61] %></span>)<br>
 								<span style="font-weight: 400; font-size: 17px;">E-Mail id:&nbsp;<span style="text-decoration: underline;"><%=obj[62] %></span></span><br> --%>
 		 </div>

@@ -132,7 +132,6 @@ input:focus {
 
 </style>
 <meta charset="ISO-8859-1">
-<title>Immovable Property Form</title>
 </head>
 <body>
 <%
@@ -392,6 +391,7 @@ int slno=0;
 						      <!-- <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A  -->
 				              <%} %>
 				              <br>	
+				              <%if(imm!=null && !imm.getImmStatus().equalsIgnoreCase("N")){ %>
 				              <br>
 				              <div style="width:100%;text-align: left;margin-left: 10px;">
 				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
@@ -439,6 +439,7 @@ int slno=0;
 			   			<% break;} %>
 				   		<%} %> </div>
                       </div>
+                      <%} %>
        </div>
 </body>
 </html>

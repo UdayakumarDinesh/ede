@@ -2,6 +2,7 @@ package com.vts.ems.property.dao;
 
 import java.util.List;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.property.model.PisImmovableProperty;
 import com.vts.ems.property.model.PisImmovablePropertyTrans;
 import com.vts.ems.property.model.PisMovableProperty;
@@ -38,4 +39,8 @@ public interface PropertyDao {
     public List<Object[]> constructionTransList(String ConstructionId) throws Exception;
     public List<Object[]> constructionTransactionApprovalData(String ConstructionId);
 	public List<Object[]> constructionRemarksHistory(String ConstructionId) throws Exception;
+	public List<Object[]> propertyConstructionApprovalList(String EmpNo) throws Exception;
+	public long getMaxConstructionId() throws Exception;
+	public List<LabMaster> getLabMasterDetails() throws Exception;
+	
 }

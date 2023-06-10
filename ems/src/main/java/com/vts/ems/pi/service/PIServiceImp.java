@@ -278,7 +278,7 @@ public class PIServiceImp implements PIService{
 					  }	    
 										
 					}
-				   if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				   if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA") && !address.getPisStatusCode().equalsIgnoreCase("VPA")) 
 					{
 					   if(PandAs.size()>0) {
 					   for(String PandAEmpNo : PandAs) {
@@ -599,7 +599,7 @@ public class PIServiceImp implements PIService{
 					  }	    
 										
 					}
-				   if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				   if(address.getPisStatusCodeNext().equalsIgnoreCase("VPA") && !address.getPisStatusCode().equalsIgnoreCase("VPA")) 
 					{
 					   if(PandAs.size()>0) {
 					   for(String PandAEmpNo : PandAs) {
@@ -907,7 +907,7 @@ public class PIServiceImp implements PIService{
 					  }	    
 										
 					}
-				   if(mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				   if(mobile.getPisStatusCodeNext().equalsIgnoreCase("VPA") && !mobile.getPisStatusCode().equalsIgnoreCase("VPA")) 
 					{
 					   if(PandAs.size()>0) {
 					   for(String PandAEmpNo : PandAs) {
@@ -1195,7 +1195,7 @@ public class PIServiceImp implements PIService{
 					  }	    
 										
 					}
-				   if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+				   if(hometown.getPisStatusCodeNext().equalsIgnoreCase("VPA") && !hometown.getPisStatusCode().equalsIgnoreCase("VPA")) 
 					{
 					   if(PandAs.size()>0) {
 					   for(String PandAEmpNo : PandAs) {

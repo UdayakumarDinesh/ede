@@ -45,7 +45,7 @@ public class NocPassport {
 	          private String NocStatusCodeNext;
 	          private String InitiatedDate;
 	          private String ForwardedDate;
-	          private String ReturnedDate;
+	         
 	          private String ApprovedDate ;
 	        
               private String PassportEntries; 

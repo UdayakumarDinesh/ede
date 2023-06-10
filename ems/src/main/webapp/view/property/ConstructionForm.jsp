@@ -100,16 +100,16 @@ List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
 		</div>
 		<div class="card-body">
 		   <div class="card" style="padding-top: 0px; margin-top: -15px; width: 100%;">
-		      <form action="" method="post">
+		      <form action="" >
 				 <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 					<div class="card-body main-card" style="padding-top: 0px; margin-top: -15px;" align="center">
 					   <div style="width: 10%; height: 75px; border: 0; display: inline-block;margin:2% 0 10px -90%;"><img style="width: 80px; height: 90px; margin: 5px;" align="left" src="data:image/png;base64,<%=LabLogo%>"></div>									
                           <div style="width: 90%; height: 75px; border: 0; text-align: center;margin-top:-5%;margin-left:5%;">
                             <h4 style="text-decoration: underline">
-                              Form of report / application for permission for 
+                              Form of application for permission for 
                               <%if(con!=null && con.getTransactionState()!=null) {%>
                                 <%if(con.getTransactionState().equalsIgnoreCase("C")) {%>Construction of house
-                                <%}else if(con.getTransactionState().equalsIgnoreCase("A")){ %>Addition of house
+                                <%}else if(con.getTransactionState().equalsIgnoreCase("A")){ %>Addition of an existing house
                                 <%}else{ %>Renovation of an existing house<%} %>
                               <%} %>
                             </h4>
@@ -118,7 +118,16 @@ List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
 					<table style="border: 0px; border-collapse: collapse;width: 100%;">
 					   <tr>
 					     <td style="border: 0;width:80%;"></td>
-					     <td style="border: 0;width:20%;">Date:</td>
+					     <td style="border: 0;width:20%;">Date&emsp;:&emsp;
+					       <label style="color: blue;">
+						      <%for(Object[] apprInfo : ApprovalEmpData){ %>
+							  <%if(apprInfo[8].toString().equalsIgnoreCase("FWD")){ %>				   				
+					   				<%=rdf.format(sdtf.parse(apprInfo[4].toString())) %>
+					   			<%break;
+					   			} %>
+						   		<%} %>
+						   	  </label>
+					     </td>
 					   </tr>
 					   <tr>
 					     <td style="border: 0;width:80%;">From</td>
@@ -129,7 +138,7 @@ List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
 					     <td style="border: 0;width:20%;">P&A Dept.</td>
 					   </tr>
 					   <tr>
-					     <td style="border: 0;width:80%;color: blue;"><%if(emp!=null && emp[0]!=null){%><%=emp[0] %><%} %></td>
+					     <td style="border: 0;width:80%;">EmpNo&nbsp;:&nbsp;<label style="color: blue;"><%if(emp!=null && emp[0]!=null){%><%=emp[0] %><%} %></label></td>
 					     <td style="border: 0;width:20%;"><%if(lab!=null && lab[1]!=null) {%><%=lab[1]%><%} %>,</td>
 					   </tr>
 					    <tr>
@@ -141,15 +150,6 @@ List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
 					   </tr>
 					    <tr>
 					     <td style="border: 0;">Sir,</td>
-					   </tr>
-					   <tr>
-					     <td style="border: 0;">This is to report to you that I propose to 
-					     <%if(con!=null && con.getTransactionState()!=null) {%>
-                                <%if(con.getTransactionState().equalsIgnoreCase("C")) {%>construct a house
-                                <%}else if(con.getTransactionState().equalsIgnoreCase("A")){ %>to make an addition of my house   
-                                <%}else{ %>renovation of my house<%} %>
-                              <%} %>.
-                          </td>
 					   </tr>
 					   <tr>
 					     <td style="border: 0;">This is to request that permission may be granted to me for the 
@@ -172,7 +172,10 @@ List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
 					    <tr>
 					     <td style="border: 0;">2. The construction will be 
 					       <%if(con!=null && con.getSupervisedBy()!=null && con.getSupervisedBy().equalsIgnoreCase("Myself")) {%> supervised by myself
-					       <%}else if(con!=null && con.getSupervisedBy()!=null) {%>done by &nbsp;<label style="color: blue;"><%=con.getSupervisedBy() %></label><%} %>.
+					       <%}else if(con!=null && con.getSupervisedBy()!=null) {%>done by &nbsp;<label style="color: blue;"><%=con.getSupervisedBy() %></label>. <br>
+					          &emsp;Contractor Name&emsp;:&emsp;<label style="color: blue;"><%if(con.getContractorName()!=null) {%><%=con.getContractorName()%><%} else{%>-<%} %></label>  <br>
+					          &emsp;Contractor Business Place&emsp;:&emsp;<label style="color: blue;"><%if(con.getContractorPlace()!=null) {%><%=con.getContractorPlace()%><%} else{%>-<%} %></label> 
+					       <%} %>
                          </td>
 					   </tr>
 					   <%
@@ -190,36 +193,236 @@ List<String> adminRemarks  = Arrays.asList("VDG","VSO","VPA","APR");
                          </td>
 					   </tr>
 					   <tr>
-					     <td style="border: 0;color: blue;">&emsp;&emsp;<%if(con.getNatureOfDealings()!=null) {%><%=con.getNatureOfDealings() %><%} %></td>
+					     <td style="border: 0;color: blue;">&emsp;&emsp;<%if(con.getNatureOfDealings()!=null) {%><%=con.getNatureOfDealings() %><%} else{%>-<%} %></td>
 					   </tr>
 					   <%} }%>
 					   
 					</table>
-					<table style="border: 0px; border-collapse: collapse;width: 100%;">
+					<table style="width: 99% !important;">
 					  <tr>
-					     <td style="border: 0;">3. The cost of the proposed construction will be as under:- </td>
+					     <td style="border: 0;width: 40%;">3. The cost of the proposed construction will be as under:- </td>
+					   </tr>
+					   <tr >
+					     <td style="width: 30%;"></td>
+					     <th style="width: 10%;text-align: center;">Amount(Rs.)</th>
+					     <th style="width: 60%;text-align: center;">Details</th>
 					   </tr>
 					   <tr>
-					     <td style="border: 0;width: 60%;"></td>
-					     <td style="border: 0;width: 40%;">Amount(Rs.)</td>
+					     <th style="" >&emsp;(i) Own savings</th>
+					     <td style="color: blue;text-align: right;"><%if(con!=null && con.getOwnSavings()!=null) {%><%=con.getOwnSavings() %> <%} else{%>-<%} %></td>
+					     <td style="color: blue;text-align: left;"><%if(con!=null && con.getOwnSavingsDetails()!=null) {%><%=con.getOwnSavingsDetails() %><%} else{%>-<%} %></td>
 					   </tr>
 					   <tr>
-					     <td style="border: 0;">&emsp;(i) Own savings</td>
-					     <td style="border: 0;"><%if(con!=null && con.getOwnSavings()!=null) {%><%=con.getOwnSavings() %> <%} %></td>
+					     <th style="">&emsp;(ii) Loans / Advances with full details</th>
+					     <td style="color: blue;text-align: right;"><%if(con!=null && con.getLoans()!=null){ %><%=con.getLoans()%><%} else{%>-<%} %></td>
+					     <td style="color: blue;text-align: left;"><%if(con!=null && con.getLoansDetails()!=null){ %><%=con.getLoansDetails()%><%} else{%>-<%} %></td>
 					   </tr>
 					   <tr>
-					     <td style="border: 0;">&emsp;(ii) Loans / Advances with full details</td>
-					     <td style="border: 0;"></td>
+					     <th style="">&emsp;(i) Other sources with full details</th>
+					     <td style="color: blue;text-align: right;"><%if(con!=null && con.getOtherSources()!=null) {%><%=con.getOtherSources() %><%} else{%>-<%} %></td>
+					     <td style="color: blue;text-align: left;"><%if(con!=null && con.getOtherSourcesDetails()!=null) {%><%=con.getOtherSourcesDetails() %><%} else{%>-<%} %></td>
 					   </tr>
 					   <tr>
-					     <td style="border: 0;">&emsp;(i) Other sources with full details</td>
-					     <td style="border: 0;"></td>
+					     <th style="text-align: right;">Total</th>
+					     <td style="color: blue;text-align: right;"><b><%if(con!=null && con.getProposedCost()!=null) {%><%=con.getProposedCost() %><%} else{%>-<%} %></b></td>
+					     <td></td>
+					   </tr>
+					   <tr> <td style="border: 0;"></td></tr>
+					   <tr> <td style="border: 0;"></td></tr>
+					   <tr> <td style="border: 0;"></td></tr>
+					   <tr>
+					     <td style="border: 0;"></td><td style="border: 0;"></td>
+					     <td style="border: 0;text-align: right;">Yours faithfully</td>
+					   </tr>
+					    <tr>
+					     <td style="border: 0;"></td> <td style="border: 0;"></td>
+					     <td style="border: 0;text-align: right;color: blue;"><%if(emp!=null && emp[1]!=null){%><%=emp[1] %><%} %> </td>
+					   </tr>
+					   <tr>
+					     <td style="border: 0;"></td> <td style="border: 0;"></td>
+					     <td style="border: 0;text-align: right;">Signature of the applicant</td>
 					   </tr>
 					</table>
+					<!--Remarks of Administration  -->
+					<% if(  CEO.equalsIgnoreCase(empNo) || PandAs.contains(empNo) || con!=null && adminRemarks.contains(con.getPisStatusCode()) ){ %>	
+					<hr style="border: solid 1px;">				     
+					<div style="width: 100%;border: 0;text-align: center;margin-top:5%;"> <b style="font-size:18px;text-decoration:underline">Remarks of Administration</b> </div>	
+					<br>
+					<div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;" align="left">
+						 1. The details of proposed 
+						 <%if(con!=null && con.getTransactionState()!=null) {%>
+                                <%if(con.getTransactionState().equalsIgnoreCase("C")) {%>Construction of house
+                                <%}else if(con.getTransactionState().equalsIgnoreCase("A")){ %>Addition of an existing house
+                                <%}else{ %>Renovation of an existing house<%} %>
+                              <%} %>
+						  furnished above by <%if(emp!=null && emp[5]!=null) {%><%=emp[5]%><%} %><input type="text" style="width: 20%;color: blue;text-align: center;" value="<%if(emp!=null && emp[1]!=null){%> <%=emp[1]%><%} %>" readonly>, Emp No <input type="text" style="width: 10%;color: blue;text-align: center;" value="<%if(emp!=null && emp[0]!=null){%> <%=emp[0]%><%} %>" readonly> has been perused and filed in <%if(emp!=null && emp[5]!=null && (emp[5].toString().equalsIgnoreCase("Mr.") || (emp[5].toString().equalsIgnoreCase("Dr.") ) ) ) {%>his <%}else {%>her <%} %> service records.
+					</div>
+				
+					<div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">
+						 2. As per Sl. No. 2 above, the applicant is proposing construction with a person having official dealing with the employee, which may be permitted. 
+					</div>	
+				
+					<div style="margin-left: 10px;text-align: justify; text-justify: inter-word;font-size: 14px;margin-top: 2%;" align="left">Submitted for kind information.</div>	
+						      
+					 <%if(con!=null && !con.getConstrStatus().equalsIgnoreCase("N")){ %>
+					         <br>
+				              <div style="width:100%;text-align: left;margin-left: 10px;">
+				               <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			    <%if(apprInfo[8].toString().equalsIgnoreCase("VDG")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			    <%} %>
+				   		        <%} %> 
+				             </div>
+				             <br>
+				             <div style="width:100%;text-align: left;margin-left: 10px;">
+				             <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VSO")){ %>
+				   				Recommended By : <label style="color: blue;"><%=apprInfo[2]+", "+apprInfo[3] %></label><br>
+				   				Recommended On : <label style="color: blue;"><%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %></label>
+				   			  <%} %>
+				   		     <%} %> 
+				            </div>
+				             				             				          
+                       <br> <br>
+					       <%} %>
+						      <div style="border:0px;width: 100%; text-align: right;"> Incharge-P&A 
+				              <br>	
+				              <br>
+				              <label style="color: blue;">
+				   		     <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			 <%if(apprInfo[8].toString().equalsIgnoreCase("VPA")){ %>
+				   				<%=apprInfo[2] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			 <% break;} %>
+				   		     <%} %> 
+				   		     </label>
+				             </div>
+				             <%} %>
+				             
+				             <br>
+				             <div class="row">
+					  <br>
+						<%if(constructionRemarks!=null && constructionRemarks.size()>0){ %>
+							<div class="col-md-8" align="center" style="margin: 10px 0px 5px 25px; padding:0px;border: 1px solid black;border-radius: 5px;">
+								<%if(constructionRemarks.size()>0){ %>
+									<table style="margin: 3px;padding: 0px">
+										<tr>
+											<td style="border:none;padding: 0px">
+												<h6 style="text-decoration: underline;">Remarks :</h6> 
+											</td>											
+										</tr>
+										<%for(Object[] obj : constructionRemarks){%>
+										<tr>
+											<td style="border:none;width: 80%;overflow-wrap: anywhere;padding: 0px">
+												<%=obj[3]%>&nbsp; :
+												<span style="border:none; color: blue;">	<%=obj[1] %></span>
+											</td>
+										</tr>
+										<%} %>
+									</table>
+								<%} %>
+							</div>
+							<%} %>
+					   </div>
+				       <% if(con!=null && toUserStatus.contains(con.getPisStatusCode())){ %>				           				   		      
+					   <div align="left">
+						  <b >Remarks :</b><br>
+						   <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
+					    </div>
+				   	
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ConstructionFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Submit?');" >
+							     <i class="fa-solid fa-forward" style="color: #125B50"></i> Submit for verification	
+						</button>
+					   <%} %>
+
+					   <% if(isApproval!=null && isApproval.equalsIgnoreCase("Y")){%>						     
+					   <% if( CEO.equalsIgnoreCase(empNo)){ %>
+					    <div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
+					    </div>
+					    <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ConstructionFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Approve?');" >
+						    Approve	
+						</button>
+						      						
+						<button type="submit" class="btn btn-sm delete-btn" id="finalSubmission" formaction="ConstructionFormSubmit.htm" name="Action" value="D" onclick="return disapprove();" >
+							Disapprove	
+						</button>
+						      
+					    <%}else if(PandAs.contains(empNo)) {%>
+					    <div align="left">
+						   <b >Remarks :</b><br>
+						   <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
+					    </div>
+				   		<button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ConstructionFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Verify?');" >
+							 Verify	
+						 </button>
+						       
+					     <%}else{ %>
+					     <div align="left">
+						     <b >Remarks :</b><br>
+						     <textarea rows="3" cols="65" name="remarks" id="remarksarea"></textarea>
+					     </div>
+				   		 <button type="submit" class="btn btn-sm submit-btn" id="finalSubmission" formaction="ConstructionFormSubmit.htm" name="Action" value="A" onclick="return confirm('Are You Sure To Recommend?');" >
+							 Recommend	
+						 </button>
+						       
+						  <%} %>	
+				   		  <button type="submit" class="btn btn-sm btn-danger" id="finalSubmission" formaction="ConstructionFormSubmit.htm" name="Action" value="R" onclick="return validateTextBox();">
+							  Return
+						  </button>	
+						    				       							   		  
+					  <%} %>
+					<%if( CEO.equalsIgnoreCase(empNo)  && (con!=null && con.getPisStatusCode().equalsIgnoreCase("VPA"))) {%> 
+                       <div class="row" style="margin-top: 5%;">
+                         <div class="col-md-12"><b style="color: black"> APPROVED / NOT APPROVED <br>CEO</b><br></div>
+                      </div> 
+                      <%} %>
+                      <div class="row">
+                         <div class="col-md-12" style="color: blue;">
+                         <%for(Object[] apprInfo : ApprovalEmpData){ %>
+				   			<%if(apprInfo[8].toString().equalsIgnoreCase("APR")){ %>
+				   			<b style="color: black">APPROVED</b><br>
+				   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
+				   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+				   			<% break;
+				   			}else if(apprInfo[8].toString().equalsIgnoreCase("DPR")){ %>
+				   			<b style="color: black">NOT APPROVED</b><br>
+			   				<%=apprInfo[2]+", "+apprInfo[3] %><br>
+			   				<%=rdtf.format(sdtf.parse(apprInfo[4].toString())) %>
+			   			<% break;} %>
+				   		<%} %> </div>
+				   		<br>
+                      </div>	
+                      <input type="hidden" name="constructionId" value="<%if(con!=null){ %><%=con.getConstructionId()%><%}%>">
 			  </form>
 		   </div>
 		</div>
     </div>
 </div> 
+
+<script>
+
+function validateTextBox() {
+    if (document.getElementById("remarksarea").value.trim() != "") {
+    	return confirm('Are You Sure To Return?');
+    	
+    } else {
+        alert("Please enter Remarks to Return");
+        return false;
+    }
+}
+function disapprove() {
+    if (document.getElementById("remarksarea").value.trim() != "") {
+    	return confirm('Are You Sure To Disappove?');
+    	
+    } else {
+        alert("Please enter Remarks to Disapprove");
+        return false;
+    }
+}
+</script>
+
 </body>
 </html>

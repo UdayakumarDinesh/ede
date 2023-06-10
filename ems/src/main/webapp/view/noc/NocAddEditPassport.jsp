@@ -165,7 +165,7 @@ body{
 			            </div>
 			            
 			             <div class="col-md-2">
-			                <label>Relation Of </label>
+			                <label>Details of </label>
 			                <select  name="RelationType" class="form-control select2"  id="reltype" >
 			                <option value="" selected="selected" disabled="disabled">Select</option>
 			                    <option value="F" <%if(passport!=null){ if(passport.getRelationType().toString().equals("F")){%> selected  <% }}%>>Father</option>
@@ -175,20 +175,20 @@ body{
 			            </div> 
 			            
 			              <div class="col-md-2">
-			                <label>Relative Name </label>
+			                <label> Name </label>
 			                <input type="text" id="relativename" name="RelationName"   value="<%if(passport!=null){ %><%=passport.getRelationName() %><%} %>"
 			                   class=" form-control input-sm "  required="required" >
 			                    
 			            </div>
 			            <div class="col-md-2">
-			                <label>Relative Occupation </label>
+			                <label> Occupation </label>
 			                <input type="text" id="relativeoccup" name="RelationOccupation"   value="<%if(passport!=null){ %><%=passport.getRelationOccupation()%><%} %>"
 			                    class="form-control input-sm "  required="required">
 			                   
 			            </div>
 			            
 			             <div class="col-md-3">
-			                <label>Relative Address </label>
+			                <label> Address </label>
 			                <input type="text" id="relativeaddres" name="RelationAddress"  value="<%if(passport!=null){ %><%=passport.getRelationAddress()%><%} %>"  required="required"
 			                    class="form-control input-sm " >
 			             
@@ -311,7 +311,7 @@ body{
 			       
 			       
 			         
-			    	  <%--  <a type="button"  class="btn btn-sm add-btn"  style="margin-bottom:28px;margin-top:28px;margin-left:28px" href="AddEditPassport.htm?empid=<%=Empid %>&NOC=noc">Add Passport</a>  --%>
+			    	 
 			    	
 			        <div class="col-md-3" style="margin-left:25px;">
 			                <label> Details of passport lost,if any</label>
@@ -343,7 +343,7 @@ body{
 			        <div class="col-md-2">
 			                <label>I certify that</label>
 			                <select name="ContractualObligation" class="form-control select2"  style="width:320%;" id="Certify"  required="required">
-			                 <!-- <option value="" selected="selected" disabled="disabled">Select</option>  -->
+			                
 			                    <option value="N" <%if(passport!=null){ if(passport.getContractualObligation().toString().equalsIgnoreCase("N")){%> selected  <% }}%>>I am not under contractual obligation to serve STARC for any specific period </option>
 			                    <option value="Y" <%if(passport!=null){ if(passport.getContractualObligation().toString().equalsIgnoreCase("Y")){%> selected  <% }}%>> I am under contractual obligation to serve STARC for a specific period</option>
 			                   
@@ -355,36 +355,40 @@ body{
 			            
 			             <div class="col-md-2"  style="margin-left:420px;" id="showfromdate">
 			                <label>From Date  <span class="mandatory"	style="color: red;">*</span></label>
-			               <!-- <div class=" input-group"> -->
+			              
 							    <input type="text"  style="width:110px;" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getFromDate()))%><%} %>"   id="fromdate" name="fromdate"  required="required"  > 
-							    <!-- <label class="input-group-addon btn" for="testdate">
-							      
-							    </label>  -->                   
-							<!-- </div> -->
-			                    
-			            </div>
+							</div>
 			           
 			            <div class="col-md-2" style="margin-left:-76px;"  id="showtodate">
 			                <label>To Date <span class="mandatory"	style="color: red;">*</span></label>
-			              <!--  <div class=" input-group"> -->
+			            
 							    <input type="text" style="width:110px;" class="form-control input-sm mydate"  value="<% if(passport!=null){%><%=rdf.format(sdf.parse(passport.getToDate()))%><%} %>"   id="todate" name="todate"  required="required"  > 
-							    <!-- <label class="input-group-addon btn" for="testdate">
-							      
-							    </label>  -->                   
-							<!-- </div> -->
-			            </div>
+						 </div>
 			            
 			           </div>
 			     </div>
 			     
 			 <div class="col-12" align="center">
 			       
+			       <% if(passport!=null){ %>
 			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit"  onclick=" return message()"  >Submit</button>
-			    	<input type="hidden" name="NocPassportId" value="<% if(passport!=null){%><%=passport.getNocPassportId() %><%} %>">
+			    	<input type="hidden" name="Passportid" value="<%=passport.getNocPassportId() %>">
 			    	
-			</div>
+			    	<%}else{ %>
+			    	
+			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit"  onclick=" return message()"  >Submit</button>
+			    	
+			    	<%} %>
+			       
+			  </div>
 			    
+			  <% if(passport!=null){ %>  
 			  </form>
+			  
+			  <%}
+			  else{%>
+			  </form>
+			 <%} %>
 			</div>
 		</div>
 	 </div>
@@ -395,34 +399,12 @@ body{
 <script type="text/javascript">
 
 
-
-/*  $('#fromdate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,	 
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-});
-
-$('#todate').daterangepicker({
-	"singleDatePicker" : true,
-	"linkedCalendars" : false,
-	"showCustomRangeLabel" : true,	 
-	"cancelClass" : "btn-default",
-	showDropdowns : true,
-	locale : {
-		format : 'DD-MM-YYYY'
-	}
-}); */
  
 $('#fromdate').daterangepicker({
 	"singleDatePicker" : true,
 	"linkedCalendars" : false,
 	"showCustomRangeLabel" : true,
-	//"minDate" :new Date(), 
+	
 	<%if(passport!=null && passport.getFromDate()!=null){ %>
 	"startDate" : new Date("<%=passport.getFromDate()%>"),
 	<%}%>
@@ -527,7 +509,7 @@ window.onload = function() {
 		"singleDatePicker" : true,
 		"linkedCalendars" : false,
 		"showCustomRangeLabel" : true,
-		//"minDate" :new Date(), 
+		
 		<% if(pispassport!=null && pispassport.getValidFrom()!=null){ %>
 		"startDate" : new Date("<%=pispassport.getValidFrom()%>"),
 		<% } %>
@@ -638,23 +620,23 @@ function message()
 		 
 		 
 		 if(relationtype==null || relationtype=="" || relationtype=="null"){
-			 alert("Enter Relation Of");
+			 alert("Enter Details Of");
 		       event.preventDefault();
 		       return false;
 		}
 		if(relativename==null || relativename=="" || relativename=="null"){
-			 alert("Enter Relative Name!");
+			 alert("Enter Name!");
 		       event.preventDefault();
 		       return false;
 		}
 		if(relativeoccupation==null || relativeoccupation=="" || relativeoccupation=="null"){
-			 alert("Enter Relative Occupation!");
+			 alert("Enter Occupation!");
 		       event.preventDefault();
 		       return false;
 		}
 	
 		if(relativeaddres==null || relativeaddres=="" || relativeaddres=="null"){
-			 alert("Enter Relative Address!");
+			 alert("Enter Address!");
 		       event.preventDefault();
 		       return false;
 		}

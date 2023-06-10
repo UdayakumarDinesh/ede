@@ -277,6 +277,8 @@ public class NocServiceImpl implements NocService {
 		List<String> DGMs = dao.GetDGMEmpNos();
 		List<String> DHs = dao.GetDHEmpNos();
 		List<String> GHs = dao.GetGHEmpNos();
+		List<String> SOs = dao.GetSOEmpNos();	
+		
 		
 		DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
 		
@@ -292,7 +294,7 @@ public class NocServiceImpl implements NocService {
 				noc.setForwardedDate(sdf1.format(new Date()));
 				if(CEO.equalsIgnoreCase(formempno) ) 
 				{ 
-				    //dao.HometownStatusUpdate(noc.getEmpNo());
+				    
 
 					noc.setNocStatusCode("APR");
 					noc.setNocStatusCodeNext("APR");
@@ -305,9 +307,13 @@ public class NocServiceImpl implements NocService {
 				{
 					noc.setNocStatusCodeNext("APR");
 				}
-				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				else if(SOs.contains(formempno) ) 
 				{
 					noc.setNocStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					noc.setNocStatusCodeNext("VSO");
 				}
 				else if(DHs.contains(formempno) || emp.getDivisionId()==0)
 				{
@@ -338,16 +344,23 @@ public class NocServiceImpl implements NocService {
 				{
 					noc.setNocStatusCodeNext("VDG");
 				}
+				
 				else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					noc.setNocStatusCodeNext("VSO");
+				}
+				
+				else if(NocStatusCodeNext.equalsIgnoreCase("VSO")) 
 				{
 					noc.setNocStatusCodeNext("VPA");
 				}
+				
 				else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					noc.setNocStatusCodeNext("APR");
 				}
 				else if(NocStatusCodeNext.equalsIgnoreCase("APR")) {	
-					//dao.HometownStatusUpdate(noc.getEmpNo());
+					
 					noc.setIsActive(1);
 					noc.setPassportStatus("A");
 					noc.setApprovedDate(sdf1.format(new Date()));
@@ -375,6 +388,10 @@ public class NocServiceImpl implements NocService {
 			{
 				noc.setNocStatusCode("RDG");	
 			}
+			else if(NocStatusCodeNext.equalsIgnoreCase("VSO")) 
+			{
+				noc.setNocStatusCode("RSO");	
+			}
 			else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
 			{
 				noc.setNocStatusCode("RPA");	
@@ -393,9 +410,13 @@ public class NocServiceImpl implements NocService {
 			{
 				noc.setNocStatusCodeNext("APR");
 			}
-			else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+			if(SOs.contains(formempno)) 
 			{
 				noc.setNocStatusCodeNext("VPA");
+			}
+			else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+			{
+				noc.setNocStatusCodeNext("VSO");
 			}
 			else if(DHs.contains(formempno) || emp.getDivisionId()==0)
 			{
@@ -409,10 +430,20 @@ public class NocServiceImpl implements NocService {
 			{
 				noc.setNocStatusCodeNext("VGI");
 			}
-			noc.setReturnedDate(sdf1.format(new Date()));
+			
 			noc.setRemarks(remarks);
 			dao.EditNoc(noc);
 		}
+		
+		else if(action.equalsIgnoreCase("D")) {
+			
+			noc.setNocStatusCode("DPR");
+			noc.setNocStatusCodeNext("DPR");
+			noc.setRemarks(remarks);
+			dao.EditNoc(noc);
+		}
+		
+		
 		
 		NocPassportTrans transaction = NocPassportTrans.builder()	
 				                           .NocPassportId(noc.getNocPassportId())
@@ -427,16 +458,17 @@ public class NocServiceImpl implements NocService {
 		    String DGMEmpNo = dao.GetEmpDGMEmpNo(formempno);
 			String DIEmpNo = dao.GetEmpDHEmpNo(formempno);
 			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
+			
+			
 	
 		//Notification
 			EMSNotification notification1 = new EMSNotification();
 			if(action.equalsIgnoreCase("A") && noc.getPassportStatus().equalsIgnoreCase("A"))
 			{
-				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification1.setEmpNo(PandAs.size()>0 ? PandAs.get(0):null);
 				notification1.setNotificationUrl("NocApproval.htm?tab=closed");
 				notification1.setNotificationMessage("NOC Passpaort Request Approved For <br>"+emp.getEmpName());
 				notification1.setNotificationBy(EmpNo);
-				
 				notification1.setNotificationDate(LocalDate.now().toString());
 				notification1.setIsActive(1);
 				notification1.setCreatedBy(userId);
@@ -452,8 +484,13 @@ public class NocServiceImpl implements NocService {
 		{
 			notification.setEmpNo(emp.getEmpNo());
 			notification.setNotificationUrl("Passport.htm");
-			notification.setNotificationMessage("NOC Passpaort Request Approved");
+			notification.setNotificationMessage("NOC Passport Request Approved");
 			notification.setNotificationBy(EmpNo);
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(userId);
+			notification.setCreatedDate(sdtf.format(new Date()));
+			dao.AddNotifications(notification);
 		}
 		
 		
@@ -461,44 +498,128 @@ public class NocServiceImpl implements NocService {
 		{
 			if( noc.getNocStatusCodeNext().equalsIgnoreCase("VGI")) 
 			{
-				notification.setEmpNo(GIEmpNo);					
+				notification.setEmpNo(GIEmpNo);	
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Passport Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDI")) 
 			{
-				notification.setEmpNo(DIEmpNo);					
+				notification.setEmpNo(DIEmpNo);
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Passport Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDG")) 
 			{
-				notification.setEmpNo(DGMEmpNo);					
-			}
-			else if(noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")) 
-			{
-				notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification.setEmpNo(DGMEmpNo);
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Passport Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			else if(noc.getNocStatusCodeNext().equalsIgnoreCase("APR")) 
 			{
 				notification.setEmpNo(CEO);
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Passport Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			
-			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved NOC Passport Change Request From <br>"+emp.getEmpName());
-			notification.setNotificationBy(EmpNo);
+			
 		}
-		else if(action.equalsIgnoreCase("R"))
-		{
-			notification.setEmpNo(emp.getEmpNo());
-			notification.setNotificationUrl("Passport.htm");
-			notification.setNotificationMessage("NOC Passport Request Returned");
-			notification.setNotificationBy(EmpNo);
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("Passport.htm");
+				notification.setNotificationMessage("NOC Passport Request Returned");
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
+			}
+		
+			else if(action.equalsIgnoreCase("D"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("Passport.htm");
+				notification.setNotificationMessage("NOC Passport Request DisApproved");
+				notification.setNotificationBy(EmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
+				
+			}
+			
+		if(action.equalsIgnoreCase("A")) {
+			 if( noc.getNocStatusCodeNext().equalsIgnoreCase("VSO")) 
+			{
+				
+			if(SOs.size()>0) {
+				  for(String SOEMpNo : SOs) {
+					  EMSNotification notification2 = new EMSNotification();
+					  notification2.setEmpNo(SOEMpNo);
+					  notification2.setNotificationUrl("NocApproval.htm");
+					  notification2.setNotificationMessage("Recieved NOC Passport Request <br> From "+emp.getEmpName());
+					  notification2.setNotificationBy(EmpNo);
+					  notification2.setNotificationDate(LocalDate.now().toString());
+					  notification2.setIsActive(1);
+					  notification2.setCreatedBy(userId);
+					  notification2.setCreatedDate(sdtf.format(new Date()));
+								
+					  dao.AddNotifications(notification2);  
+				 
+				   }
+			}
+			
+    		}
+		 
+			if(noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")) 
+			{
+				{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification3 = new EMSNotification();
+						   notification3.setEmpNo(PandAEmpNo);
+						   notification3.setNotificationUrl("NocApproval.htm");
+						   notification3.setNotificationMessage("Recieved NOC Passport Request <br> From"+emp.getEmpName());
+						   notification3.setNotificationBy(EmpNo);
+						   notification3.setNotificationDate(LocalDate.now().toString());
+						   notification3.setIsActive(1);
+						   notification3.setCreatedBy(userId);
+						   notification3.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification3);  
+					      }
+					   }
+				     }
+				
+			}
+			
 		}
-		
-		notification.setNotificationDate(LocalDate.now().toString());
-		notification.setIsActive(1);
-		notification.setCreatedBy(userId);
-		notification.setCreatedDate(sdtf.format(new Date()));
-	
-		dao.AddNotifications(notification);		
-		
 		return 1;
 	}catch (Exception e) {
 		logger.error(new Date() +" Inside NOCPassportForward "+ e);
@@ -701,6 +822,7 @@ public class NocServiceImpl implements NocService {
 		List<String> DGMs = dao.GetDGMEmpNos();
 		List<String> DHs = dao.GetDHEmpNos();
 		List<String> GHs = dao.GetGHEmpNos();
+		List<String> SOs = dao.GetSOEmpNos();	
 		
 		DivisionMaster formEmpDivisionMaster = dao.GetDivisionData(emp.getDivisionId());
 		
@@ -729,9 +851,13 @@ public class NocServiceImpl implements NocService {
 				{
 					noc.setNocStatusCodeNext("APR");
 				}
-				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				else if(SOs.contains(formempno) ) 
 				{
 					noc.setNocStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					noc.setNocStatusCodeNext("VSO");
 				}
 				else if(DHs.contains(formempno) || emp.getDivisionId()==0)
 				{
@@ -752,7 +878,7 @@ public class NocServiceImpl implements NocService {
 			else
 			{
 			   
-				noc.setNocStatusCode(NocStatusCodeNext);
+                 noc.setNocStatusCode(NocStatusCodeNext);
 				
 				if(NocStatusCodeNext.equalsIgnoreCase("VGI"))
 				{
@@ -762,16 +888,23 @@ public class NocServiceImpl implements NocService {
 				{
 					noc.setNocStatusCodeNext("VDG");
 				}
+				
 				else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					noc.setNocStatusCodeNext("VSO");
+				}
+				
+				else if(NocStatusCodeNext.equalsIgnoreCase("VSO")) 
 				{
 					noc.setNocStatusCodeNext("VPA");
 				}
+				
 				else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
 				{
 					noc.setNocStatusCodeNext("APR");
 				}
 				else if(NocStatusCodeNext.equalsIgnoreCase("APR")) {	
-					//dao.HometownStatusUpdate(noc.getEmpNo());
+					
 					noc.setIsActive(1);
 					noc.setProcAbroadStatus("A");
 					noc.setApprovedDate(sdf1.format(new Date()));
@@ -783,6 +916,13 @@ public class NocServiceImpl implements NocService {
 					
 		}
 		
+      else if(action.equalsIgnoreCase("D")) {
+			
+			noc.setNocStatusCode("DPR");
+			noc.setNocStatusCodeNext("DPR");
+			noc.setRemarks(remarks);
+			dao.EditNocpa(noc);
+		}
 		//Returned
 		else if(action.equalsIgnoreCase("R")) 
 		{
@@ -798,6 +938,10 @@ public class NocServiceImpl implements NocService {
 			else if(NocStatusCodeNext.equalsIgnoreCase("VDG")) 
 			{
 				noc.setNocStatusCode("RDG");	
+			}
+			else if(NocStatusCodeNext.equalsIgnoreCase("VSO")) 
+			{
+				noc.setNocStatusCode("RSO");	
 			}
 			else if(NocStatusCodeNext.equalsIgnoreCase("VPA")) 
 			{
@@ -817,9 +961,13 @@ public class NocServiceImpl implements NocService {
 			{
 				noc.setNocStatusCodeNext("APR");
 			}
-			else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+			if(SOs.contains(formempno)) 
 			{
 				noc.setNocStatusCodeNext("VPA");
+			}
+			else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+			{
+				noc.setNocStatusCodeNext("VSO");
 			}
 			else if(DHs.contains(formempno) || emp.getDivisionId()==0)
 			{
@@ -833,7 +981,8 @@ public class NocServiceImpl implements NocService {
 			{
 				noc.setNocStatusCodeNext("VGI");
 			}
-			noc.setReturnedDate(sdf1.format(new Date()));
+			
+			
 			noc.setRemarks(remarks);
 			dao.EditNocpa(noc);
 		}
@@ -854,15 +1003,13 @@ public class NocServiceImpl implements NocService {
 			String GIEmpNo = dao.GetEmpGHEmpNo(formempno);
 	
 		//Notification
-			
 			EMSNotification notification1 = new EMSNotification();
 			if(action.equalsIgnoreCase("A") && noc.getProcAbroadStatus().equalsIgnoreCase("A"))
 			{
-				notification1.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification1.setEmpNo(PandAs.size()>0 ? PandAs.get(0):null);
 				notification1.setNotificationUrl("NocApproval.htm?tab=closed");
 				notification1.setNotificationMessage("NOC Passpaort Request Approved For <br>"+emp.getEmpName());
 				notification1.setNotificationBy(empNo);
-				
 				notification1.setNotificationDate(LocalDate.now().toString());
 				notification1.setIsActive(1);
 				notification1.setCreatedBy(userId);
@@ -873,59 +1020,153 @@ public class NocServiceImpl implements NocService {
 			}
 			
 			
+			
 		EMSNotification notification = new EMSNotification();
 		if(action.equalsIgnoreCase("A") && noc.getProcAbroadStatus().equalsIgnoreCase("A"))
 		{
 			notification.setEmpNo(emp.getEmpNo());
-			notification.setNotificationUrl("ProceedingAbroad.htm");
+			notification.setNotificationUrl("Passport.htm");
 			notification.setNotificationMessage("NOC Proceeding Abroad Request Approved");
 			notification.setNotificationBy(empNo);
+			notification.setNotificationDate(LocalDate.now().toString());
+			notification.setIsActive(1);
+			notification.setCreatedBy(userId);
+			notification.setCreatedDate(sdtf.format(new Date()));
+			dao.AddNotifications(notification);
 		}
+		
+		
 		else if(action.equalsIgnoreCase("A") )
 		{
 			if( noc.getNocStatusCodeNext().equalsIgnoreCase("VGI")) 
 			{
-				notification.setEmpNo(GIEmpNo);					
+				notification.setEmpNo(GIEmpNo);	
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Proceeding Abroad Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDI")) 
 			{
-				notification.setEmpNo(DIEmpNo);					
+				notification.setEmpNo(DIEmpNo);
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Proceeding Abroad Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			else if( noc.getNocStatusCodeNext().equalsIgnoreCase("VDG")) 
 			{
-				notification.setEmpNo(DGMEmpNo);					
-			}
-			else if(noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")) 
-			{
-				notification.setEmpNo( PandAs.size()>0 ? PandAs.get(0):null);
+				notification.setEmpNo(DGMEmpNo);
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Proceeding Abroad Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			else if(noc.getNocStatusCodeNext().equalsIgnoreCase("APR")) 
 			{
 				notification.setEmpNo(CEO);
+				notification.setNotificationUrl("NocApproval.htm");
+				notification.setNotificationMessage("Recieved NOC Proceeding Abroad Request <br> From "+emp.getEmpName());
+				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
 			}
 			
-			notification.setNotificationUrl("NocApproval.htm");
-			notification.setNotificationMessage("Recieved NOC Proceeding Abroad Change Request <br> From "+emp.getEmpName());
-			notification.setNotificationBy(empNo);
+			
 		}
-		else if(action.equalsIgnoreCase("R"))
-		{
-			notification.setEmpNo(emp.getEmpNo());
-			notification.setNotificationUrl("ProceedingAbroad.htm");
-			notification.setNotificationMessage("NOC Proceeding Abroad Request Returned");
-			notification.setNotificationBy(empNo);
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("Passport.htm");
+				notification.setNotificationMessage("NOC Proceeding Abroad Request Returned");
+				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
+			}
+		
+			else if(action.equalsIgnoreCase("D"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("Passport.htm");
+				notification.setNotificationMessage("NOC Proceeding Abroad Request DisApproved");
+				notification.setNotificationBy(empNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(userId);
+				notification.setCreatedDate(sdtf.format(new Date()));
+				dao.AddNotifications(notification);
+				
+			}
+			
+		if(action.equalsIgnoreCase("A")) {
+			 if( noc.getNocStatusCodeNext().equalsIgnoreCase("VSO")) 
+			{
+				
+			if(SOs.size()>0) {
+				  for(String SOEMpNo : SOs) {
+					  EMSNotification notification2 = new EMSNotification();
+					  notification2.setEmpNo(SOEMpNo);
+					  notification2.setNotificationUrl("NocApproval.htm");
+					  notification2.setNotificationMessage("Recieved NOC Proceeding Abroad Request <br> From "+emp.getEmpName());
+					  notification2.setNotificationBy(empNo);
+					  notification2.setNotificationDate(LocalDate.now().toString());
+					  notification2.setIsActive(1);
+					  notification2.setCreatedBy(userId);
+					  notification2.setCreatedDate(sdtf.format(new Date()));
+								
+					  dao.AddNotifications(notification2);  
+				 
+				   }
+			}
+			
+    		}
+		 
+			if(noc.getNocStatusCodeNext().equalsIgnoreCase("VPA")) 
+			{
+				{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification3 = new EMSNotification();
+						   notification3.setEmpNo(PandAEmpNo);
+						   notification3.setNotificationUrl("NocApproval.htm");
+						   notification3.setNotificationMessage("Recieved NOC Proceeding Abroad Request <br> From"+emp.getEmpName());
+						   notification3.setNotificationBy(empNo);
+						   notification3.setNotificationDate(LocalDate.now().toString());
+						   notification3.setIsActive(1);
+						   notification3.setCreatedBy(userId);
+						   notification3.setCreatedDate(sdtf.format(new Date()));
+									
+							dao.AddNotifications(notification3);  
+					      }
+					   }
+				     }
+				
+			}
+			
 		}
 		
-		notification.setNotificationDate(LocalDate.now().toString());
-		notification.setIsActive(1);
-		notification.setCreatedBy(userId);
-		notification.setCreatedDate(sdtf.format(new Date()));
-	
-		dao.AddNotifications(notification);	
 		
 		return 1;
 	}catch (Exception e) {
-		logger.error(new Date() +" Inside NOCPassportForward "+ e);
+		logger.error(new Date() +" Inside NOCProcAbraodForward "+ e);
 		e.printStackTrace();
 		return 0;
 	
@@ -956,12 +1197,7 @@ public class NocServiceImpl implements NocService {
 		return dao.getEmpNameDesig(EmpNo);
 	}
 
-	@Override
-	public Object[] getEmpTitleDetails(String passportid) throws Exception {
-		
-		return dao.getEmpTitleDetails(passportid) ;
-	}
-
+	
 	@Override
 	public List<Object[]> getProceedinAbraodRemarksHistory(String procAbrId) throws Exception {
 		
@@ -1017,8 +1253,18 @@ public class NocServiceImpl implements NocService {
 		String IntimationExamNo="";
 		IntimationExamNo="INT/EXAM-"+year+"/"+maxIntimationId;
 		
+		ExamIntimationTrans transaction = ExamIntimationTrans.builder()	
+				.ExamId(maxIntimationId)
+				.IntimateStatusCode("INI")
+				.ActionBy(dto.getEmpNo())
+				.ActionDate(sdtf.format(new Date()))
+				.build();
+		
+		 dao.ExamIntimationTransAdd(transaction);
 	
 		ExamIntimation exam = new ExamIntimation();
+		
+		
 		
 		exam.setEmpNo(dto.getEmpNo());
 		exam.setIntimationExamNo(IntimationExamNo);
@@ -1039,16 +1285,9 @@ public class NocServiceImpl implements NocService {
 		exam.setCreatedBy(userId);
 		exam.setCreatedDate(sdf1.format(new Date()));
 		exam.setIsActive(1);
-		dao.ExamDetailsAdd(exam);
+		return dao.ExamDetailsAdd(exam);
 		
-		ExamIntimationTrans transaction = ExamIntimationTrans.builder()	
-				.ExamId(exam.getExamId())
-				.IntimateStatusCode("INI")
-				.ActionBy(dto.getEmpNo())
-				.ActionDate(sdtf.format(new Date()))
-				.build();
 		
-		return  dao.ExamIntimationTransAdd(transaction);
 		
 		
 	}
@@ -1297,7 +1536,7 @@ public class NocServiceImpl implements NocService {
 					  }	    
 										
 					}
-				   if(exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA")) 
+				   if(exam.getInitimateStatusCodeNext().equalsIgnoreCase("VPA") && !exam.getIntimateStatusCode().equalsIgnoreCase("VPA")) 
 					{
 					   if(PandAs.size()>0) {
 					   for(String PandAEmpNo : PandAs) {
@@ -1717,7 +1956,7 @@ public class NocServiceImpl implements NocService {
 					dao.AddNotifications(notification);
 				}
 				
-				
+				if(action.equalsIgnoreCase("A") ) {
 				
 			 if( noc.getNocStatusCodeNext().equalsIgnoreCase("VSO")) 
 				{
@@ -1764,7 +2003,7 @@ public class NocServiceImpl implements NocService {
 				}
 				
 				
-			
+				}
 			return 1;
 			
 		}catch (Exception e) {
@@ -1823,6 +2062,24 @@ public class NocServiceImpl implements NocService {
 	public List<Object[]> IntimationApprovalData(String examId) throws Exception {
 		
 		return dao.getIntimationApprovalData(examId);
+	}
+
+	@Override
+	public Object[] getEmpGenderPassport(String passportid) throws Exception {
+		
+		return dao.getEmpGenderPassport(passportid);
+	}
+
+	@Override
+	public List<Object[]> getNOCPassportApprovalData(String passportid) throws Exception {
+		
+		return dao.getNOCPassportApprovalData(passportid);
+	}
+
+	@Override
+	public List<Object[]> getNocProcAbroadApprovalData(String procAbrId) throws Exception {
+	
+		return dao.getNocProcAbroadApprovalData(procAbrId);
 	}
 
 	

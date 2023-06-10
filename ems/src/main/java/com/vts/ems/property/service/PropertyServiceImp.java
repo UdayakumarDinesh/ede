@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.vts.ems.master.model.LabMaster;
 import com.vts.ems.model.EMSNotification;
 import com.vts.ems.pi.dao.PIDao;
 import com.vts.ems.pis.dao.PisDao;
@@ -754,6 +755,7 @@ public class PropertyServiceImp implements PropertyService{
 		con.setOwnSavingsDetails(construction.getOwnSavingsDetails());
 		con.setLoansDetails(construction.getLoansDetails());
 		con.setOtherSourcesDetails(construction.getOtherSourcesDetails());
+		con.setComments(construction.getComments());
 		con.setModifiedBy(construction.getModifiedBy());
 		con.setModifiedDate(construction.getModifiedDate());
 		return dao.editPropertyConstruction(con);
@@ -781,5 +783,306 @@ public class PropertyServiceImp implements PropertyService{
 	public List<Object[]> constructionRemarksHistory(String ConstructionId) throws Exception {
 	
 		return dao.constructionRemarksHistory(ConstructionId);
+	}
+
+	@Override
+	public long constructionForward(String constructionId, String username, String action, String remarks, String apprEmpNo,String loginType) throws Exception 
+	{
+		
+		try {
+			PisPropertyConstruction construction = dao.getConstructionById(Long.parseLong(constructionId));	
+			Employee emp = pidao.getEmpDataByEmpNo(construction.getEmpNo());
+			String formempno = emp.getEmpNo();
+			String pisStatusCode = construction.getPisStatusCode();
+			String pisStatusCodeNext = construction.getPisStatusCodeNext();
+			String transactionState = construction.getTransactionState();
+			if(transactionState.equalsIgnoreCase("C")) {
+				transactionState="Construction of house";
+			}else if(transactionState.equalsIgnoreCase("A")) {
+				transactionState="Addition of exisiting house";
+			}else {
+				transactionState="Renovation of exisiting house";
+			}
+			String CEO = pidao.GetCEOEmpNo();
+			List<String> PandAs = pidao.GetPandAAdminEmpNos();
+			List<String> SOs = pidao.GetSOEmpNos();
+            List<String> DGMs = pidao.GetDGMEmpNos();
+			
+			DivisionMaster formEmpDivisionMaster = pidao.GetDivisionData(emp.getDivisionId());
+			
+			if(action.equalsIgnoreCase("A"))
+			{
+				// First time forwarding
+				if(pisStatusCode.equalsIgnoreCase("INI") || pisStatusCode.equalsIgnoreCase("RDG")|| pisStatusCode.equalsIgnoreCase("RSO")||
+				   pisStatusCode.equalsIgnoreCase("RPA") || pisStatusCode.equalsIgnoreCase("RCE") )
+				{
+					construction.setPisStatusCode("FWD");
+					if(CEO.equalsIgnoreCase(formempno)) 
+					{
+						construction.setPisStatusCode("APR");
+						construction.setPisStatusCodeNext("APR");					
+						construction.setIsActive(1);
+						construction.setConstrStatus("A");
+					}
+					else if(PandAs.contains(formempno)) 
+					{
+						construction.setPisStatusCodeNext("APR");
+					}
+					else if(SOs.contains(formempno) ) 
+					{
+						construction.setPisStatusCodeNext("VPA");
+					}
+					else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+					{
+						construction.setPisStatusCodeNext("VSO");
+					}
+					else
+					{
+						construction.setPisStatusCodeNext("VDG");
+					}
+				}
+				
+				//Approving Flow
+				else
+				{
+					construction.setPisStatusCode(pisStatusCodeNext);					
+					if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+					{
+						construction.setPisStatusCodeNext("VSO");
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VSO"))
+					{
+						construction.setPisStatusCodeNext("VPA");
+						construction.setSOEmpNo(apprEmpNo);
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
+					{
+						construction.setPisStatusCodeNext("APR");
+						construction.setPandAEmpNo(apprEmpNo);
+					}
+					else if(pisStatusCodeNext.equalsIgnoreCase("APR"))
+					{
+						construction.setIsActive(1);
+						construction.setConstrStatus("A");
+						
+						LocalDate today= LocalDate.now();
+//						String year="";
+//						year=String.valueOf(today.getYear()).substring(2, 4);
+											
+						long constructionid = dao.getMaxConstructionId();
+						String letterNo="";
+						letterNo="STARC/P&A/PERS-"+constructionid+"/"+today.getYear();
+						construction.setLetterNo(letterNo);
+						construction.setLetterDate(sdf.format(new Date()));
+					}
+					
+				}
+				construction.setRemarks(remarks);
+				dao.editPropertyConstruction(construction);								
+			}
+			
+			//Returned
+			else if(action.equalsIgnoreCase("R"))
+			{
+				// Setting PisStatusCode
+				if(pisStatusCodeNext.equalsIgnoreCase("VDG")) 
+				{
+					construction.setPisStatusCode("RDG");	
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VSO"))
+				{
+					construction.setPisStatusCode("RSO");
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("VPA"))
+				{
+					construction.setPisStatusCode("RPA");
+				}
+				else if(pisStatusCodeNext.equalsIgnoreCase("APR")) 
+				{
+					construction.setPisStatusCode("RCE");	
+				}
+				
+				//Setting PisStatusCodeNext
+				if(CEO.equalsIgnoreCase(formempno) || PandAs.contains(formempno) || loginType.equalsIgnoreCase("P") ) 
+				{ 
+					construction.setPisStatusCodeNext("APR");					
+				}
+				else if(SOs.contains(formempno) ) 
+				{
+					construction.setPisStatusCodeNext("VPA");
+				}
+				else if(DGMs.contains(formempno) || formEmpDivisionMaster.getDGMId()==0) 
+				{
+					construction.setPisStatusCodeNext("VSO");
+				}
+				else
+				{
+					construction.setPisStatusCodeNext("VDG");
+				}
+				construction.setRemarks(remarks);
+				dao.editPropertyConstruction(construction);
+			}
+			// Disapproved By CEO
+			else if(action.equalsIgnoreCase("D")) {
+							
+				construction.setPisStatusCode("DPR");
+				construction.setPisStatusCodeNext("DPR");					
+				construction.setIsActive(1);
+				construction.setConstrStatus("D");	
+				construction.setRemarks(remarks);
+				dao.editPropertyConstruction(construction);	
+			}
+			
+			// Transaction		
+			PisPropertyConstructionTrans transaction = PisPropertyConstructionTrans.builder()
+					                              .ConstructionId(construction.getConstructionId())
+					                              .PisStatusCode(construction.getPisStatusCode())
+					                              .ActionBy(apprEmpNo)
+					                              .Remarks(remarks)
+					                              .ActionDate(sdtf.format(new Date()))
+					                              .build();
+			dao.addPropertyConstructionTransaction(transaction);
+			
+			String DGMEmpNo = pidao.GetEmpDGMEmpNo(formempno);
+			
+			//Notification
+			EMSNotification notification = new EMSNotification();
+			if(action.equalsIgnoreCase("A") && construction.getConstrStatus().equalsIgnoreCase("A"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("ConstructionRenovation.htm");
+				notification.setNotificationMessage(transactionState+" Request Approved");
+				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
+				
+				if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("PropertyApprovals.htm");
+						   notification1.setNotificationMessage(transactionState+" Request Approved for <br>"+emp.getEmpName());
+						   notification1.setNotificationBy(apprEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							pidao.AddNotifications(notification1);  
+					      }
+					   }
+			}
+			else if(action.equalsIgnoreCase("A") )
+			{
+				if( construction.getPisStatusCodeNext().equalsIgnoreCase("VDG")) 
+				{
+					notification.setEmpNo(DGMEmpNo);					
+				}
+				else if( construction.getPisStatusCodeNext().equalsIgnoreCase("APR")) 
+				{
+					notification.setEmpNo(CEO);					
+				}
+				
+				notification.setNotificationUrl("PropertyApprovals.htm");
+				notification.setNotificationMessage("Recieved "+transactionState+" Request<br>From "+emp.getEmpName());
+				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
+			}
+			else if(action.equalsIgnoreCase("R"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("ConstructionRenovation.htm");
+				notification.setNotificationMessage(transactionState+" Request Returned");
+				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
+			}
+			else if(action.equalsIgnoreCase("D"))
+			{
+				notification.setEmpNo(emp.getEmpNo());
+				notification.setNotificationUrl("ConstructionRenovation.htm");
+				notification.setNotificationMessage(transactionState+" Request Disapproved");
+				notification.setNotificationBy(apprEmpNo);
+				notification.setNotificationDate(LocalDate.now().toString());
+				notification.setIsActive(1);
+				notification.setCreatedBy(username);
+				notification.setCreatedDate(sdtf.format(new Date()));
+			
+				pidao.AddNotifications(notification);
+			}
+											
+			if(action.equalsIgnoreCase("A") )
+			{
+				 if(construction.getPisStatusCodeNext().equalsIgnoreCase("VSO")) 
+					{
+					 if(SOs.size()>0) {
+					  for(String SOEMpNo : SOs) {
+						  EMSNotification notification1 = new EMSNotification();
+						  notification1.setEmpNo(SOEMpNo);
+						  notification1.setNotificationUrl("PropertyApprovals.htm");
+						  notification1.setNotificationMessage("Recieved "+transactionState+" Request<br> From "+emp.getEmpName());
+						  notification1.setNotificationBy(apprEmpNo);
+						  notification1.setNotificationDate(LocalDate.now().toString());
+						  notification1.setIsActive(1);
+						  notification1.setCreatedBy(username);
+						  notification1.setCreatedDate(sdtf.format(new Date()));
+									
+						  pidao.AddNotifications(notification1);  
+					 
+					   }
+					  }	    
+										
+					}
+				   if(construction.getPisStatusCodeNext().equalsIgnoreCase("VPA")) 
+					{
+					   if(PandAs.size()>0) {
+					   for(String PandAEmpNo : PandAs) {
+						   EMSNotification notification1 = new EMSNotification();
+						   notification1.setEmpNo(PandAEmpNo);
+						   notification1.setNotificationUrl("PropertyApprovals.htm");
+						   notification1.setNotificationMessage("Recieved "+transactionState+" Request<br> From "+emp.getEmpName());
+						   notification1.setNotificationBy(apprEmpNo);
+						   notification1.setNotificationDate(LocalDate.now().toString());
+						   notification1.setIsActive(1);
+						   notification1.setCreatedBy(username);
+						   notification1.setCreatedDate(sdtf.format(new Date()));
+									
+							pidao.AddNotifications(notification1);  
+					      }
+					   }
+				     }
+			}		
+			
+			return 1L;
+		}catch (Exception e) {
+			logger.info(new Date()+"Inside constructionForward"+username,e);
+			e.printStackTrace();
+			return 0L;
+		}
+	}
+
+	@Override
+	public List<Object[]> propertyConstructionApprovalList(String EmpNo) throws Exception {
+		
+		return dao.propertyConstructionApprovalList(EmpNo);
+	}
+
+	@Override
+	public List<LabMaster> getLabMasterDetails() throws Exception {
+		
+		return dao.getLabMasterDetails();
 	}
 }

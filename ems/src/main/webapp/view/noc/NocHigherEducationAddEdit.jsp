@@ -66,7 +66,8 @@ body {
 	</div>
 	
 	
-		
+	<div class=" page card dashboard-card">	
+	<div align="center">	
  <%	String ses=(String)request.getParameter("result"); 
  	String ses1=(String)request.getParameter("resultfail");
 	if(ses1!=null){%>
@@ -83,9 +84,10 @@ body {
 		</div>
 		<%} %>
 	
+	</div>
 	
-	<div class=" page card dashboard-card">
-   <!--  <div class="card-body" > -->
+	
+    <div class="card-body" > 
 		<div class="card" >
 			<div class="card-body" >
 			<% if(noc!=null){ %>
@@ -95,7 +97,7 @@ body {
 			<%} else{ %>
 				<form action="HigherEducationAddSubmit.htm" method="post" autocomplete="off" id="form" >
 				<%} %>
-				<!-- <form action="" method="post" autocomplete="off" > -->
+				
 				
 				
 				<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -171,26 +173,51 @@ body {
 			       </div>
 			     </div>
 			   
-			  
+			   
+			   <div style="line-height:1.7;font-size:16px;">
+			   
+			  <span style="font-weight:bold;">Declaration :</span> <br>
+			   
+			                        a)&nbsp; All expenses for the course shall be borne by me.<br>
+									b)&nbsp;  No official / special leave / flexible working hours will use for attending classes
+									
+									    or for appearing in examinations / Projects etc.<br>
+									
+									c)&nbsp;  I will not refuse any official duty / outstation duty during the period.<br>
+									
+									d)&nbsp;  Pursuing the course will not hamper date - to - day official activities.<br>
+									
+									e)&nbsp;  Publication of research papers ,if any will be with the prior approval of CEO.<br>
+									
+									f)&nbsp;&nbsp; I will not utilize Society resources for research purposes.<br>
+									
+									g)&nbsp; I will obtain prior permission for visiting abroad for course work.<br>
+									
+									
+			  </div>
 			    
 			<div class="col-12" align="center">
 			         <%if(noc!=null){%>
 			    	<button type="submit" class="btn btn-sm update-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Update')">Update</button>
 			    	<input type="hidden" name="EducationId" value="<%=noc.getNocEducationId() %>">
 			    	
-			    	<%}else{ %> -
+			    	<%}else{ %> 
 			    	<button type="submit" class="btn btn-sm submit-btn"  name="action" value="submit" onclick="return confirm('Are You Sure To Submit')">SUBMIT</button>
 			    	
 			    	<%} %>
 			    	</div>
 			    
-			    
+			    <%if(noc!=null){%>  
 			    
 			 </form>
+			 <%} else{%>
+			 
+			 	 </form>
+			 <%} %>
 			</div>
 		</div>
 		</div>
-	<!-- </div> -->
+	</div> 
 	
 	
 

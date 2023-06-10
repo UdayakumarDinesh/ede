@@ -96,8 +96,8 @@ body {
 
 </div>
 
-<div class="page card dashboard-card" >
-  <div class="card-body" align="center">
+  <div class="page card dashboard-card" > 
+ <!--  <div class="card-body" align="center"> -->
 		<div align="center">
 		   <% String ses=(String)request.getParameter("result"); 
 			  String ses1=(String)request.getParameter("resultfail");
@@ -112,8 +112,9 @@ body {
 			  <%} %>
 		 </div>
 
-			<div class="card-body">
-				<div class="card" style="padding-top: 0px; margin-top: -36px; width: 75%;">
+         
+			<div class="card-body" align="center" >
+				<div class="card" style="padding-top: 0px; margin-top: -15px; width: 75%;">
 					<form action="" method="post">
 						<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 						<div class="card-body main-card" style="padding-top: 0px; margin-top: -15px;" align="center">
@@ -371,8 +372,8 @@ body {
 					</form>
 				</div>
 			</div>
-		</div>
-</div>
+	 	</div>
+<!--  </div>  -->
 
 <script>
 

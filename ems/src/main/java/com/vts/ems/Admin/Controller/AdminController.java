@@ -307,8 +307,15 @@ private static final Logger logger = LogManager.getLogger(AdminController.class)
 		    	String action = (String)req.getParameter("Action");
 		    	ses.setAttribute("SidebarActive", "ChssApproval_htm");
 		    	try {
-		    		
-                    String Admins = req.getParameter("Admins");
+					LocalDate fromday=LocalDate.now();
+					
+					String fromdate=fromday.toString();
+					String todate = fromday.plusYears(1).toString();
+
+					req.setAttribute("fromdate", fromdate);
+					req.setAttribute("todate", todate);
+					
+                    String Admins = req.getParameter("Admins");                  
 		    		
 		    		if("Y".equalsIgnoreCase(Admins)) {
 		    		String adminsId = req.getParameter("adminsId");

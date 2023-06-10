@@ -142,12 +142,14 @@ public class NocController {
 			List<String> DGMs = service.GetDGMEmpNos();
 			List<String> DHs = service.GetDHEmpNos();
 			List<String> GHs = service.GetGHEmpNos();
+			 List<String> Sos = service.GetSosEmpNos();
 			
 			 req.setAttribute("CEOEmpNos", CEO);
 			 req.setAttribute("PandAsEmpNos", PandAs);
 			 req.setAttribute("DGMEmpNos", DGMs);
 			 req.setAttribute("DivisionHeadEmpNos", DHs);
 			 req.setAttribute("GroupHeadEmpNos", GHs);
+			 req.setAttribute("SOEmpNos", Sos);
 			 
 			 req.setAttribute("CeoName", service.GetCeoName());
 			 req.setAttribute("PandAEmpName", service.GetPandAEmpName());
@@ -159,11 +161,14 @@ public class NocController {
 			 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
 			 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 			 
+			 req.setAttribute("NocApprovalFlow", service.getNocApprovalFlow(EmpNo));
+			
 			 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 			 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 			 
+			
 			req.setAttribute("NOCPASSPORTLIST",service.getnocPassportList(EmpNo) );
-			return "noc/Passport";
+			return "noc/NocPassport";
 					 
 		} catch (Exception e) 
 		 { 
@@ -190,7 +195,7 @@ public class NocController {
 			  
 			 req.setAttribute("EmpId", EmpId);
 			 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
-			  return "noc/AddEditPassport";
+			  return "noc/NocAddEditPassport";
 					 
 		} catch (Exception e) 
 		 { 
@@ -220,7 +225,7 @@ public class NocController {
 			  req.setAttribute("passport",passport);
 			  req.setAttribute("pispassport",pispassport);
 			  
-			  return "noc/AddEditPassport";
+			  return "noc/NocAddEditPassport";
 					 
 		} catch (Exception e) 
 		 { 
@@ -279,8 +284,8 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "NOC Passport Add Unsuccessful");
 	 			}
 				  
-				  
-				  return "redirect:/Passport.htm";
+				  redir.addAttribute("Passportid",save);
+				  return "redirect:/PassportPreview.htm";
 						 
 			} catch (Exception e) 
 			 { 
@@ -313,7 +318,7 @@ public class NocController {
 				pport.setCreatedDate(sdf.format(new Date()));
 				
 				
-				String NocPassportId = req.getParameter("NocPassportId");
+				String NocPassportId = req.getParameter("Passportid");
 				NocPassportDto dto=  NocPassportDto.builder()
 						 .NocPassportId(Long.parseLong(NocPassportId))
 						 .PassportExist(req.getParameter("PassportExist"))
@@ -341,8 +346,8 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "NOC Passport Edited Unsuccessful");
 	 			}
 				  
-				  
-				  return "redirect:/Passport.htm";
+				  redir.addAttribute("Passportid",save);
+				  return "redirect:/PassportPreview.htm";
 						 
 			} catch (Exception e) 
 			 { 
@@ -377,15 +382,14 @@ public class NocController {
 			req.setAttribute("passport",passport);
 			req.setAttribute("isApproval", isApproval);
 			req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
-//			req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
-//			req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));	
-			req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
+			req.setAttribute("NOCPassportApprovalData", service.getNOCPassportApprovalData(passportid));
+            req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 			req.setAttribute("NocPassportFormDetails", service.getPassportFormDetails(passportid));
 			req.setAttribute("LoginType", LoginType);
 			req.setAttribute("CEOempno", CEO);
 			req.setAttribute("PandAsEmpNos", PandAs);
 			 
-			 return "noc/passportpreview";
+			 return "noc/NocPassportPreview";
 					 
 		} catch (Exception e) 
 		 { 
@@ -411,9 +415,10 @@ public class NocController {
 			req.setAttribute("CeoName", service.GetCeoName());		
 			req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
 		    req.setAttribute("lablogo",getLabLogoAsBase64());
+		    req.setAttribute("NOCPassportApprovalData", service.getNOCPassportApprovalData(passportid));
 		    String path = req.getServletContext().getRealPath("/view/temp");
 		    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-			req.getRequestDispatcher("/view/noc/PassportPrint.jsp").forward(req, customResponse);
+			req.getRequestDispatcher("/view/noc/NocPassportPrint.jsp").forward(req, customResponse);
 			String html = customResponse.getOutput();
 			byte[] data = html.getBytes();
 			InputStream fis1 = new ByteArrayInputStream(data);
@@ -481,7 +486,7 @@ public class NocController {
 			logger.info(new Date() +"Inside NOCPassportForward.htm "+UserId);
 			try {
 				
-				String passportid=req.getParameter("passportid");
+				String passportid=req.getParameter("Passportid");
 				
 				String action = req.getParameter("Action");
 				String remarks = req.getParameter("remarks");
@@ -491,8 +496,11 @@ public class NocController {
 				
 			
 				long save=service.NOCPassportForward(passportid,UserId,action,remarks,EmpNo,LoginType);
+				if(action.equalsIgnoreCase("A")) {
+					
+				
 				if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI") || 
-						NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE")) {
+						NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RSO") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE")) {
 							if (save > 0) {
 								redir.addAttribute("result", "NOC Passport Forwarded Successfully");
 							} else {
@@ -500,16 +508,69 @@ public class NocController {
 							}	
 							return "redirect:/Passport.htm";
 						}
-						else  
-						{
-							if (save > 0) {
-								redir.addAttribute("result", "NOC Passport verification Successfull");
-							} else {
-								redir.addAttribute("resultfail", "NOC Passport verification Unsuccessful");	
-							}	
-							return "redirect:/NocApproval.htm";
-						}
-						
+				
+				
+
+				   else if(NocStatusCode.equalsIgnoreCase("FWD") || NocStatusCode.equalsIgnoreCase("VGI")  || NocStatusCode.equalsIgnoreCase("VDI") || NocStatusCode.equalsIgnoreCase("VDG") ) { 
+						   
+					   
+					   if (save > 0) {
+							redir.addAttribute("result", "NOC Passport Recommended Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC Passport Recommend Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+				   else if(NocStatusCode.equalsIgnoreCase("VSO")) {
+						  
+					   
+					   if (save > 0) {
+							redir.addAttribute("result", "NOC Passport Verified Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC Passport Verify Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+                   else if(NocStatusCode.equalsIgnoreCase("VPA")) {
+						  
+					     if (save > 0) {
+							redir.addAttribute("result", "NOC Passport Approved  Successful");
+						} else {
+							redir.addAttribute("resultfail", "NOC Passport Approve Unsuccessful");	
+						}	
+						return "redirect:/NocApproval.htm"; 
+					   
+				   }
+				   
+				}
+				
+				if(action.equalsIgnoreCase("D")) 
+				{
+					if (save > 0) {
+						redir.addAttribute("result", "NOC Passport DisApprove Successfull");
+					} else {
+						redir.addAttribute("resultfail", "NOC Passport DisApprove Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm";
+				}
+				
+				
+				if(action.equalsIgnoreCase("R")) 
+				{
+					if (save > 0) {
+						redir.addAttribute("result", "NOC Passport Returned Successful");
+					} else {
+						redir.addAttribute("resultfail", "NOC Passport Return Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm";
+				}
+				
+				
+				return "redirect:/NocApproval.htm";	
 			}catch (Exception e) {
 				e.printStackTrace();
 				logger.error(new Date() +" Inside NOCPassportForward.htm "+UserId, e);
@@ -599,7 +660,7 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "Details Update Unsuccessful");
 	 			}
 				  redir.addAttribute("Passportid", passportid);
-				  redir.addAttribute("isApproval","Y");
+				 // redir.addAttribute("isApproval","Y");
 				return "redirect:/PassportPreview.htm";
 			}catch (Exception e) {
 				e.printStackTrace();
@@ -622,9 +683,10 @@ public class NocController {
 				    String passportid=req.getParameter("Passportid");
 				    req.setAttribute("Labmaster", service.getLabMasterDetails().get(0));
 				    req.setAttribute("lablogo",getLabLogoAsBase64());
-				    req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
+				    req.setAttribute("EmpGenderPassport",service.getEmpGenderPassport(passportid) );
+				  
+				    req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				    req.setAttribute("NocPassportDetails", service.getPassportFormDetails(passportid));
-				    req.setAttribute("Emptitle", service.getEmpTitleDetails(passportid));
 				    String path = req.getServletContext().getRealPath("/view/temp");
 				    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 					req.getRequestDispatcher("/view/noc/NocPassportCertificate.jsp").forward(req, customResponse);
@@ -686,13 +748,14 @@ public class NocController {
 				List<String> DGMs = service.GetDGMEmpNos();
 				List<String> DHs = service.GetDHEmpNos();
 				List<String> GHs = service.GetGHEmpNos();
-				
+				List<String> Sos = service.GetSosEmpNos();
+				 
 				 req.setAttribute("CEOEmpNos", CEO);
 				 req.setAttribute("PandAsEmpNos", PandAs);
 				 req.setAttribute("DGMEmpNos", DGMs);
 				 req.setAttribute("DivisionHeadEmpNos", DHs);
 				 req.setAttribute("GroupHeadEmpNos", GHs);
-				 
+				 req.setAttribute("SOEmpNos", Sos);
 				 req.setAttribute("CeoName", service.GetCeoName());
 				 req.setAttribute("PandAEmpName", service.GetPandAEmpName());
 				 
@@ -702,13 +765,13 @@ public class NocController {
 				 req.setAttribute("DivisionHeadName", service.GetDivisionHeadName(EmpNo));
 				 req.setAttribute("GroupHeadName", service.GetGroupHeadName(EmpNo));
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
-				 
 				 req.setAttribute("NocEmpList", service.getNocEmpList(EmpId));
 				 req.setAttribute("EmpPassport", service.getEmpPassportData(EmpId));
 				 req.setAttribute("EmployeeD", service.getEmpData(EmpId));
 				 req.setAttribute("NocProcAbraodList",service.getProcAbroadList(EmpNo));
+				 req.setAttribute("NocApprovalFlow", service.getNocApprovalFlow(EmpNo));
 				
-				return "noc/ProceedingAbroad";
+				return "noc/NocProceedingAbroad";
 						 
 			} catch (Exception e) 
 			 { 
@@ -734,7 +797,7 @@ public class NocController {
 				 req.setAttribute("EmpId", EmpId);
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 
-				 return "noc/AddEditProcAbroad";
+				 return "noc/NocAddEditProcAbroad";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside ProcAbroadAdd.htm"+Username, e);
 				e.printStackTrace();	
@@ -762,7 +825,7 @@ public class NocController {
 				 req.setAttribute("ProcAbroad", ProcAbroad);
 				 req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				 
-				 return "noc/AddEditProcAbroad";
+				 return "noc/NocAddEditProcAbroad";
 			}catch (Exception e) {
 				logger.error(new Date() +" Inside ProcAbroadEdit.htm"+Username, e);
 				e.printStackTrace();	
@@ -826,8 +889,8 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "NOC Proceeding Abroad Add Unsuccessful");
 	 			}
 				  
-				  
-				  return "redirect:/ProceedingAbroad.htm";
+				  redir.addAttribute("ProcAbrId",save);
+				  return "redirect:/ProcAbroadPreview.htm";
 						 
 			} catch (Exception e) 
 			 { 
@@ -896,8 +959,8 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "NOC Proceeding Abroad Updated Unsuccessful");
 	 			}
 				  
-				  
-				  return "redirect:/ProceedingAbroad.htm";
+				  redir.addAttribute("ProcAbrId",save);
+				  return "redirect:/ProcAbroadPreview.htm";
 						 
 			} catch (Exception e) 
 			 { 
@@ -946,6 +1009,7 @@ public class NocController {
 		List<String> GHs = service.GetGHEmpNos();
 		List<String> DGMs = service.GetDGMEmpNos();
 		List<String> DHs = service.GetDHEmpNos();
+		 List<String> Sos = service.GetSosEmpNos();
 		String CEO = service.GetCEOEmpNo();
 		List<String> PandAs = service.GetPandAAdminEmpNos();
 		String ProcAbrId=req.getParameter("ProcAbrId");
@@ -962,13 +1026,15 @@ public class NocController {
 		req.setAttribute("EmpData",service.getEmpNameDesig(EmpNo));
 		req.setAttribute("LabLogo",Base64.getEncoder().encodeToString(FileUtils.readFileToByteArray(new File(req.getServletContext().getRealPath("view\\images\\lablogo1.png")))));
 		req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId) );
+		req.setAttribute("ApprovalData", service.getNocProcAbroadApprovalData(ProcAbrId));
 		req.setAttribute("EmpNo",EmpNo);
 		req.setAttribute("ProcAbroad", ProcAbroad);
 		req.setAttribute("CEOempno", CEO);
+		req.setAttribute("SOEmpNos", Sos);
 		req.setAttribute("PandAsEmpNos", PandAs);
 		 req.setAttribute("CeoName", service.GetCeoName());
 		
-		 return "noc/ProcAbroadPreview";
+		 return "noc/NocProcAbroadPreview";
 				 
 	} catch (Exception e) 
 	 { 
@@ -995,9 +1061,10 @@ public class NocController {
 			    req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
 			    req.setAttribute("NOCProceedingAbroadRemarkHistory",service.getProceedinAbraodRemarksHistory(ProcAbrId));
 			    req.setAttribute("lablogo",getLabLogoAsBase64());
+				req.setAttribute("ApprovalData", service.getNocProcAbroadApprovalData(ProcAbrId));
 			    String path = req.getServletContext().getRealPath("/view/temp");
 			    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
-				req.getRequestDispatcher("/view/noc/ProcAbroadPrint.jsp").forward(req, customResponse);
+				req.getRequestDispatcher("/view/noc/NocProcAbroadPrint.jsp").forward(req, customResponse);
 				String html = customResponse.getOutput();
 				byte[] data = html.getBytes();
 				InputStream fis1 = new ByteArrayInputStream(data);
@@ -1058,31 +1125,82 @@ public class NocController {
 			NocProceedingAbroad Noc=service.getNocProceedingAbroadById(Long.parseLong(ProcAbroadId));
 			String NocStatusCode = Noc.getNocStatusCode();
 			
-//			NocPassportDto dto=  NocPassportDto.builder()
-//					.NocPassportId(Long.parseLong(passportid))
-//					.NocStatusCode(NocStatusCode)
-//					.Remarks(req.getParameter("remarks"))
-//			        .build();
-			
-			long save=service.NOCProcAbraodForward(ProcAbroadId,UserId,action,remarks,EmpNo,LoginType);
+            long save=service.NOCProcAbraodForward(ProcAbroadId,UserId,action,remarks,EmpNo,LoginType);
+            
+			if(action.equalsIgnoreCase("A")) {
+				
 			if(NocStatusCode.equalsIgnoreCase("INI") || NocStatusCode.equalsIgnoreCase("RGI") || NocStatusCode.equalsIgnoreCase("RDI") || 
-					NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE")) {
+					NocStatusCode.equalsIgnoreCase("RDG") || NocStatusCode.equalsIgnoreCase("RSO") || NocStatusCode.equalsIgnoreCase("RPA") || NocStatusCode.equalsIgnoreCase("RCE")) {
 						if (save > 0) {
-							redir.addAttribute("result", "NOC Proceeding Abroad  Forwarded Successfully");
+							redir.addAttribute("result", "NOC Proceeding Abroad Forwarded Successfull");
 						} else {
-							redir.addAttribute("resultfail", "NOC Proceeding Abroad  Forward Unsuccessful");	
+							redir.addAttribute("resultfail", "NOC Proceeding Abroad Forward Unsuccessful");	
 						}	
 						return "redirect:/ProceedingAbroad.htm";
 					}
-					else  
-					{
-						if (save > 0) {
-							redir.addAttribute("result", "NOC Proceeding Abroad verification Successfull");
-						} else {
-							redir.addAttribute("resultfail", "NOC Proceeding Abroad verification Unsuccessful");	
-						}	
-						return "redirect:/NocApproval.htm";
-					}
+			
+			
+			
+			   else if(NocStatusCode.equalsIgnoreCase("FWD") || NocStatusCode.equalsIgnoreCase("VGI")  || NocStatusCode.equalsIgnoreCase("VDI") || NocStatusCode.equalsIgnoreCase("VDG") ) { 
+					   
+				   
+				   if (save > 0) {
+						redir.addAttribute("result", "NOC Proceeding Abroad Recommended Successful");
+					} else {
+						redir.addAttribute("resultfail", "NOC Proceeding Abroad Recommend Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm"; 
+				   
+			   }
+			   
+			   else if(NocStatusCode.equalsIgnoreCase("VSO")) {
+					  
+				   
+				   if (save > 0) {
+						redir.addAttribute("result", "NOC Proceeding Abroad Verified Successful");
+					} else {
+						redir.addAttribute("resultfail", "NOC Proceeding Abroad Verify Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm"; 
+				   
+			   }
+			   
+               else if(NocStatusCode.equalsIgnoreCase("VPA")) {
+					  
+				     if (save > 0) {
+						redir.addAttribute("result", "NOC Proceeding Abroad Approved  Successful");
+					} else {
+						redir.addAttribute("resultfail", "NOC Proceeding Abroad Approve Unsuccessful");	
+					}	
+					return "redirect:/NocApproval.htm"; 
+				   
+			   }
+			   
+			}
+			
+			if(action.equalsIgnoreCase("D")) 
+			{
+				if (save > 0) {
+					redir.addAttribute("result", "NOC Proceeding Abroad DisApprove Successfull");
+				} else {
+					redir.addAttribute("resultfail", "NOC Proceeding Abroad DisApprove Unsuccessful");	
+				}	
+				return "redirect:/NocApproval.htm";
+			}
+			
+			
+			if(action.equalsIgnoreCase("R")) 
+			{
+				if (save > 0) {
+					redir.addAttribute("result", "NOC Proceeding Abroad Returned Successful");
+				} else {
+					redir.addAttribute("resultfail", "NOC Proceeding Abroad Return Unsuccessful");	
+				}	
+				return "redirect:/NocApproval.htm";
+			}
+			
+			return "redirect:/ProceedingAbroad.htm";
+					
 					
 		}catch (Exception e) {
 			e.printStackTrace();
@@ -1184,6 +1302,7 @@ public class NocController {
 				    req.setAttribute("ApprovalList", service.NocApprovalsList(EmpNo));
 				    req.setAttribute("NocProcAbroadDetails",service.getNocProcAbroadDetails(ProcAbrId));
 				    req.setAttribute("EmpGender", service.getEmpGender(ProcAbrId));
+				    req.setAttribute("EmpData", service.getEmpNameDesig(EmpNo));
 				    String path = req.getServletContext().getRealPath("/view/temp");
 				    CharArrayWriterResponse customResponse = new CharArrayWriterResponse(res);
 					req.getRequestDispatcher("/view/noc/NocProcAbroadCertificate.jsp").forward(req, customResponse);
@@ -1324,7 +1443,6 @@ public class NocController {
 						dto.setPostCode(req.getParameter("PostCode"));
 						dto.setPayLevel(req.getParameter("PayLevel"));
 						dto.setApplicationThrough(req.getParameter("ApplThrough"));
-						
 						dto.setExamName(req.getParameter("ExamName"));
 						dto.setProbableDate(sdf.format(rdf.parse(req.getParameter("ProbableDate"))));
 				
@@ -1338,7 +1456,8 @@ public class NocController {
 			                  redir.addAttribute("resultfail", "Intimation For Exam Add Unsuccessful");
 			 			}
 						 
-			        return "redirect:/IntimateExam.htm";
+						 redir.addAttribute("ExamId",save);
+			        return "redirect:/ExamIntimationPreview.htm";
 				
 					 
 			} catch (Exception e) 
@@ -1416,7 +1535,9 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "Intimation For Exam Update Unsuccessful");
 	 			}
 	 
-			        return "redirect:/IntimateExam.htm";
+				 
+				    redir.addAttribute("ExamId",update);
+			        return "redirect:/ExamIntimationPreview.htm";
 				
 					 
 			} catch (Exception e) 
@@ -1458,6 +1579,7 @@ public class NocController {
 				
 				 List<String> PandAs = service.GetPandAAdminEmpNos();
 				 String ExamId=req.getParameter("ExamId");
+				 System.out.println("examid------"+ExamId);
 				 String isApproval = req.getParameter("isApproval");
 				 
 				 req.setAttribute("PandAsEmpNos", PandAs);
@@ -1735,8 +1857,8 @@ public class NocController {
 			 			}
 						 
 						 
-						 
-			        return "redirect:/HigherEducation.htm";
+						redir.addAttribute("EducationId",save) ;
+			        return "redirect:/NOCHigherEducationPreview.htm";
 				
 					 
 			} catch (Exception e) 
@@ -1812,7 +1934,9 @@ public class NocController {
 	                  redir.addAttribute("resultfail", "NOC for Higher Education Update Unsuccessful");
 	 			}
 	 
-			        return "redirect:/HigherEducation.htm";
+				 
+				 redir.addAttribute("EducationId",update) ;
+			        return "redirect:/NOCHigherEducationPreview.htm";
 				
 					 
 			} catch (Exception e) 

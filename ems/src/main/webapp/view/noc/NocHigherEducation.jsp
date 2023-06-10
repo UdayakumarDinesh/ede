@@ -235,6 +235,8 @@ body{
 	                			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 	                		</td>
 	               		<%} %>
+	               		
+	               		
 	               		<% if(DGMEmpName!=null && !DGMs.contains(emp.getEmpNo()) && !PandAs.contains(emp.getEmpNo()) && !CEO.contains(emp.getEmpNo()) ){ %>
 	                		<td class="trup" style="background: #FBC7F7;">
 	                			DGM -  <%=emplist[2] %>
